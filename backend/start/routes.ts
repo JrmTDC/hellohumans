@@ -1,5 +1,6 @@
 import router from '@adonisjs/core/services/router'
 import { HttpContext } from '@adonisjs/core/http'
+import Env from "#start/env";
 
 //  Importation correcte des contrôleurs
 
@@ -22,21 +23,43 @@ router.group(() => {
       status: 'online'
     }
   })
-
   router.post('/chat', async ({ request, response }: HttpContext) => {
-    const body = request.all() // Récupère tout le body
-    const message = body.message?.trim() // Vérifie et nettoie la donnée
+    const body = request.all()
+    const message = body.message?.trim()
+    const location = body.location?.trim() // Récupération de la ville envoyée par le frontend
 
     if (!message) {
       return response.badRequest({ error: "Le champ 'message' est requis." })
     }
 
-    const responses: Record<string, string> = {
-      "bonjour": "Bonjour ! Comment puis-je vous aider ?",
-      "qui es-tu ?": "Je suis un chatbot MVP basé sur AdonisJS et Nuxt.",
-      "au revoir": "Au revoir ! À bientôt."
-    }
+    try {
+      // Construire le prompt avec la localisation
+      let prompt = `Réponds de manière naturelle et compréhensible. Si l'utilisateur parle mal, essaye de deviner son intention.\n`
+      if (location) {
+        prompt += `L'utilisateur est actuellement à ${location}. Fournis des informations locales si nécessaire.\n`
+      }
+      prompt += `Message: ${message}\nRéponse:`
 
-    return { response: responses[message.toLowerCase()] || "Je ne comprends pas encore cette question." }
+      // Appel à l'API Mistral AI
+      const mistralResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Env.get('MISTRAL_API_KEY')}`
+        },
+        body: JSON.stringify({
+          model: "mistral-medium",
+          messages: [{ role: "user", content: prompt }]
+        })
+      })
+
+      const mistralData = await mistralResponse.json()
+
+      return { response: mistralData.choices?.[0]?.message?.content || "Je ne peux pas répondre pour l’instant." }
+    } catch (error) {
+      console.error("Erreur API Mistral:", error)
+      return response.internalServerError({ error: "Impossible de récupérer une réponse pour le moment." })
+    }
   })
+
 }).prefix('/api/v1')
