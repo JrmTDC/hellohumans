@@ -1,16 +1,31 @@
 ﻿<script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted, watch } from 'vue'
 
+// Récupération de l'API et des configurations
 const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}/chat`
 
 const message = ref("")
 const location = ref("Brioude") // Localisation par défaut
-const messages = ref([]) // Stocke l'historique des messages
-const isLoading = ref(false) // Gère l'état de chargement
+const messages = ref([]) // Historique des messages
+const isLoading = ref(false) // Animation de chargement
 const chatContainer = ref(null) // Référence à la zone de chat
 
-// Fonction pour scroller automatiquement
+// Charger l'historique des messages depuis localStorage
+onMounted(() => {
+  const savedMessages = localStorage.getItem("chat_history")
+  if (savedMessages) {
+    messages.value = JSON.parse(savedMessages)
+  }
+  scrollToBottom()
+})
+
+// Sauvegarder automatiquement les messages dans localStorage
+watch(messages, (newMessages) => {
+  localStorage.setItem("chat_history", JSON.stringify(newMessages))
+}, { deep: true })
+
+// Fonction pour scroller automatiquement vers le dernier message
 const scrollToBottom = () => {
   nextTick(() => {
     if (chatContainer.value) {
@@ -19,10 +34,11 @@ const scrollToBottom = () => {
   })
 }
 
+// Envoi d'un message
 const sendMessage = async () => {
   if (!message.value.trim()) return
 
-  // Ajouter le message de l'utilisateur
+  // Ajouter le message utilisateur
   messages.value.push({ text: message.value, sender: "user" })
   scrollToBottom()
 
@@ -38,23 +54,32 @@ const sendMessage = async () => {
     })
     const data = await res.json()
 
-    // Ajouter un délai pour une animation de "saisie"
+    // Délai simulé pour une animation de saisie
     setTimeout(() => {
       messages.value.push({ text: data.response, sender: "bot" })
       scrollToBottom()
       isLoading.value = false
-    }, 1000) // Délai simulant la saisie du chatbot
+    }, 1000)
   } catch (error) {
     messages.value.push({ text: "Erreur : Impossible de contacter le chatbot.", sender: "bot" })
     scrollToBottom()
     isLoading.value = false
   }
 }
+
+// Fonction pour vider l'historique
+const clearChat = () => {
+  messages.value = []
+  localStorage.removeItem("chat_history")
+}
 </script>
 
 <template>
   <div class="max-w-lg mx-auto bg-gray-100 shadow-lg rounded-lg p-4">
-    <h2 class="text-xl font-bold mb-2 text-center">ChatDataSense</h2>
+    <h2 class="text-xl font-bold mb-2 text-center flex justify-between">
+      Chat
+      <button @click="clearChat" class="text-red-500 text-sm">🗑 Vider</button>
+    </h2>
 
     <!-- Localisation -->
     <div class="mb-4">
@@ -64,12 +89,23 @@ const sendMessage = async () => {
 
     <!-- Zone de discussion -->
     <div ref="chatContainer" class="bg-white h-96 overflow-y-auto p-4 rounded-md shadow-inner">
-      <div v-for="(msg, index) in messages" :key="index"
-           :class="msg.sender === 'user' ? 'text-right' : 'text-left'">
+      <div v-for="(msg, index) in messages" :key="index" class="flex items-center mb-2"
+           :class="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
+
+        <!-- Icône Utilisateur -->
+        <div v-if="msg.sender === 'user'" class="ml-2">
+          <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">👤</span>
+        </div>
+
         <p :class="msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
            class="inline-block rounded-lg px-3 py-2 my-1 max-w-xs">
           {{ msg.text }}
         </p>
+
+        <!-- Icône Chatbot -->
+        <div v-if="msg.sender === 'bot'" class="mr-2">
+          <span class="bg-gray-300 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center">🤖</span>
+        </div>
       </div>
 
       <!-- Animation de "saisie" du chatbot -->
