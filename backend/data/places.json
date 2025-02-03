@@ -1,0 +1,16 @@
+﻿{
+  "brioude": {
+    "restaurants": [
+      {
+        "name": "Le Saint Julien",
+        "type": "Gastronomique",
+        "address": "Place Lafayette, 43100 Brioude"
+      },
+      {
+        "name": "La Table du Saint-Flour",
+        "type": "Brasserie",
+        "address": "Rue de la République, 43100 Brioude"
+      }
+    ]
+  }
+}
