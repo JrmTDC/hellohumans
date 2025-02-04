@@ -2,7 +2,9 @@ import router from '@adonisjs/core/services/router'
 import { HttpContext } from '@adonisjs/core/http'
 import Env from "#start/env";
 
-//  Importation correcte des contrôleurs
+interface MistralResponse {
+  choices?: { message?: { content?: string } }[];
+}
 
 // Route principale
 router.get('/', async () => {
@@ -23,6 +25,7 @@ router.group(() => {
       status: 'online'
     }
   })
+
   router.post('/chat', async ({ request, response }: HttpContext) => {
     const body = request.all()
     const message = body.message?.trim()
@@ -53,9 +56,10 @@ router.group(() => {
         })
       })
 
-      const mistralData = await mistralResponse.json()
+      // 🔥 Typage + validation
+      const mistralData = await mistralResponse.json() as MistralResponse;
 
-      return { response: mistralData.choices?.[0]?.message?.content || "Je ne peux pas répondre pour l’instant." }
+      return { response: mistralData.choices?.[0]?.message?.content || "Je ne peux pas répondre pour l’instant." };
     } catch (error) {
       console.error("Erreur API Mistral:", error)
       return response.internalServerError({ error: "Impossible de récupérer une réponse pour le moment." })
