@@ -2,9 +2,11 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
+  "build": "nuxi build",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -17,5 +19,8 @@
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@pinia/nuxt": "^0.9.0"
+  },
+  "engines": {
+    "node": "^22.13.1"
   }
 }
