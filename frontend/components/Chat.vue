@@ -1,31 +1,50 @@
 ﻿<script setup>
 import { ref, nextTick, onMounted, watch } from 'vue'
 
-// Récupération de l'API et des configurations
+// Config
 const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}/chat`
 
 const message = ref("")
-const location = ref("Brioude") // Localisation par défaut
+const clientKey = ref("550e8400-e29b-41d4-a716-446655440000") // Clé client
 const messages = ref([]) // Historique des messages
 const isLoading = ref(false) // Animation de chargement
 const chatContainer = ref(null) // Référence à la zone de chat
+const isOpen = ref(false) // Gère l'ouverture du chatbot
+const isMobile = ref(false) // Détecte si l'utilisateur est sur mobile
+const isNewVisitor = ref(true) // Nouveau visiteur
 
-// Charger l'historique des messages depuis localStorage
+const isBrowser = typeof window !== "undefined"
+
+// Détecte si l'utilisateur est sur mobile
 onMounted(() => {
-  const savedMessages = localStorage.getItem("chat_history")
-  if (savedMessages) {
-    messages.value = JSON.parse(savedMessages)
+  isMobile.value = window.innerWidth <= 768
+
+  if (isBrowser) {
+    const savedMessages = localStorage.getItem("chat_history")
+    if (savedMessages) {
+      messages.value = JSON.parse(savedMessages)
+    }
+    isNewVisitor.value = !localStorage.getItem("hasVisited")
+
+    if (isNewVisitor.value) {
+      setTimeout(() => {
+        messages.value.push({ text: "👋 Besoin d'aide ?", sender: "bot" })
+        localStorage.setItem("hasVisited", "true")
+        scrollToBottom()
+      }, 5000)
+    }
   }
-  scrollToBottom()
 })
 
-// Sauvegarder automatiquement les messages dans localStorage
+// Sauvegarde l'historique en localStorage (uniquement côté client)
 watch(messages, (newMessages) => {
-  localStorage.setItem("chat_history", JSON.stringify(newMessages))
+  if (isBrowser) {
+    localStorage.setItem("chat_history", JSON.stringify(newMessages))
+  }
 }, { deep: true })
 
-// Fonction pour scroller automatiquement vers le dernier message
+// Scroll automatique
 const scrollToBottom = () => {
   nextTick(() => {
     if (chatContainer.value) {
@@ -34,11 +53,14 @@ const scrollToBottom = () => {
   })
 }
 
+// Formater le message reçu
+const formatMessage = (text) => {
+  return text ? text.replace(/\n/g, "<br>") : "⚠️ Réponse invalide du chatbot."
+}
 // Envoi d'un message
 const sendMessage = async () => {
   if (!message.value.trim()) return
 
-  // Ajouter le message utilisateur
   messages.value.push({ text: message.value, sender: "user" })
   scrollToBottom()
 
@@ -50,13 +72,14 @@ const sendMessage = async () => {
     const res = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userMessage, location: location.value })
+      body: JSON.stringify({ message: userMessage, clientKey: clientKey.value })
     })
     const data = await res.json()
 
-    // Délai simulé pour une animation de saisie
     setTimeout(() => {
-      messages.value.push({ text: data.response, sender: "bot" })
+      console.log(data.response);
+      const botResponse = data.response || "⚠️ Le chatbot n'a pas pu répondre."
+      messages.value.push({ text: formatMessage(botResponse), sender: "bot" })
       scrollToBottom()
       isLoading.value = false
     }, 1000)
@@ -70,57 +93,64 @@ const sendMessage = async () => {
 // Fonction pour vider l'historique
 const clearChat = () => {
   messages.value = []
-  localStorage.removeItem("chat_history")
+  if (isBrowser) {
+    localStorage.removeItem("chat_history")
+  }
+}
+
+// Fonction pour ouvrir/fermer le chatbot
+const toggleChat = () => {
+  isOpen.value = !isOpen.value
 }
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto bg-gray-100 shadow-lg rounded-lg p-4">
-    <h2 class="text-xl font-bold mb-2 text-center flex justify-between">
-      Chat
-      <button @click="clearChat" class="text-red-500 text-sm">🗑 Vider</button>
-    </h2>
+  <!-- Bouton flottant -->
+  <button @click="toggleChat" class="fixed bottom-6 right-6 bg-blue-500 text-white p-3 rounded-full shadow-lg">
+    {{ isOpen ? '❌' : '💬' }}
+  </button>
 
-    <!-- Localisation -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-600">Localisation :</label>
-      <input v-model="location" class="border p-2 w-full rounded-md" placeholder="Entrez votre ville..." />
+  <!-- Chatbot -->
+  <div v-if="isOpen" class="fixed bottom-6 right-6 bg-white shadow-lg rounded-lg transition-all border border-gray-200"
+       :class="isMobile ? 'w-full h-full top-0 left-0 flex flex-col' : 'w-96 h-[75vh] flex flex-col'">
+
+    <!-- Header -->
+    <div class="p-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex justify-between items-center">
+      <h2 class="text-lg font-bold">Chat avec ChatDataSense</h2>
+      <button @click="toggleChat" class="text-white">❌</button>
     </div>
 
-    <!-- Zone de discussion -->
-    <div ref="chatContainer" class="bg-white h-96 overflow-y-auto p-4 rounded-md shadow-inner">
-      <div v-for="(msg, index) in messages" :key="index" class="flex items-center mb-2"
+    <!-- Messages -->
+    <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+      <div v-for="(msg, index) in messages" :key="index" class="flex items-center"
            :class="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
 
-        <!-- Icône Utilisateur -->
         <div v-if="msg.sender === 'user'" class="ml-2">
           <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">👤</span>
         </div>
 
-        <p :class="msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
-           class="inline-block rounded-lg px-3 py-2 my-1 max-w-xs">
-          {{ msg.text }}
+        <p :class="msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-white text-gray-800'"
+           class="inline-block rounded-xl px-4 py-2 shadow-md max-w-xs leading-relaxed"
+           v-html="msg.text">
         </p>
 
-        <!-- Icône Chatbot -->
         <div v-if="msg.sender === 'bot'" class="mr-2">
           <span class="bg-gray-300 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center">🤖</span>
         </div>
       </div>
 
-      <!-- Animation de "saisie" du chatbot -->
-      <div v-if="isLoading" class="text-left">
-        <p class="bg-gray-300 text-gray-700 inline-block rounded-lg px-3 py-2 my-1 max-w-xs animate-pulse">
+      <div v-if="isLoading" class="text-left animate-pulse">
+        <p class="bg-gray-300 text-gray-700 inline-block rounded-lg px-3 py-2 my-1 max-w-xs">
           Chatbot est en train d'écrire...
         </p>
       </div>
     </div>
 
     <!-- Saisie utilisateur -->
-    <div class="mt-4 flex">
-      <input v-model="message" class="border p-2 w-full rounded-md" placeholder="Écrivez un message..."
+    <div class="p-4 bg-white border-t flex">
+      <input v-model="message" class="border p-2 w-full rounded-md focus:outline-none focus:ring focus:border-blue-400" placeholder="Écrivez un message..."
              @keyup.enter="sendMessage" />
-      <button @click="sendMessage" class="ml-2 bg-blue-500 text-white p-2 rounded-md">Envoyer</button>
+      <button @click="sendMessage" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">Envoyer</button>
     </div>
   </div>
 </template>

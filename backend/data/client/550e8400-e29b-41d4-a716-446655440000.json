@@ -1,0 +1,252 @@
+{
+  "office_name": "Office de Tourisme de Brioude",
+  "city": "Brioude",
+  "country": "France",
+  "restaurants": [
+    {
+      "name": "Lard Dans L'Assiette",
+      "address": "27 Rue du 4 Septembre, 43100, Brioude France",
+      "cuisine": "Cuisine traditionnelle revisitée",
+      "rating": 5,
+      "website": "https://www.facebook.com/larddanslassiette/",
+      "tel": "04 71 74 82 76"
+    },
+    {
+      "name": "Restaurant de La Sapinière",
+      "address": "10 avenue Paul Chambriard, 43100, Brioude France\n",
+      "cuisine": "Cuisine classique",
+      "rating": 4.5,
+      "website": "http://www.hotel-sapiniere-brioude.com/",
+      "tel":"04 71 50 87 30"
+    },
+    {
+      "name": "Les 3 Petits Points",
+      "address": "62 Boulevard Vercingétorix, 43100, Brioude France",
+      "cuisine": "Cuisine raffinée et créative",
+      "rating": 5,
+      "website": null,
+      "tel":null
+    },
+    {
+      "name": "Restaurant Poste et Champanne",
+      "address": "1 Boulevard Du Docteur Devins, 43100, Brioude France\n",
+      "cuisine": "Cuisine raffinée et créative",
+      "rating": 4.5,
+      "website": "http://www.hotel-de-la-poste-brioude.com/",
+      "tel":"04 71 50 14 62"
+    },
+    {
+      "name": "Restaurant La Vieille Auberge",
+      "address": "Adresse non spécifiée",
+      "cuisine": "Cuisine simple",
+      "rating": null,
+      "website": null,
+      "tel":null
+    },
+    {
+      "name": "Le Saint-Laurent",
+      "address": "33 boulevard du Docteur Devins, Brioude",
+      "cuisine": "Non spécifiée",
+      "rating": null,
+      "website": null,
+      "tel":null
+    },
+    {
+      "name": "Artemis Restaurant",
+      "address": "Rocade RN 102 Parc des Conchettes, 43100, Brioude",
+      "cuisine": "Non spécifiée",
+      "rating": 4,
+      "website": "http://www.artemis-hotel.com/fr/",
+      "tel":"04 71 50 45 04"
+    },
+    {
+      "name": " Café Restaurant Orfenor",
+      "address": "18 boulevard Aristide Briand, 43100, Brioude France\n",
+      "cuisine": "Cuisine maison, Fusion, Restaurants de bière",
+      "rating": 4.5,
+      "website": "http://hostelorfenor.com/",
+      "tel":"04 71 50 04 01"
+    },
+    {
+      "name": "Le Campagnard",
+      "address": "7 rue d'Assas, Brioude",
+      "cuisine": "Cuisine maison, traditionnelle",
+      "rating": 4.5,
+      "website": "http://www.facebook.com/",
+      "tel":"04 71 50 00 03"
+    },
+    {
+      "name": "Le Cardi",
+      "address": "Place Lafayette, 43100, Brioude",
+      "cuisine": "Cuisine bonne et originale",
+      "rating": 4,
+      "website": "https://www.lecardibrioude.fr/",
+      "tel":"04 71 50 06 16"
+    },
+    {
+      "name": "La Clef",
+      "address": "53 rue de la Pardige, 43100, Brioude France\n",
+      "cuisine": "Française, Saine",
+      "rating": 5,
+      "website": "http://www.cafelecturebrioude.fr/",
+      "tel":"04 71 50 48 36"
+    },
+    {
+      "name": "La Bageasse Bar Grill Cocktails",
+      "address": "Rue de la Chaud, 43100, Brioude",
+      "cuisine": "Cuisine bonne et originale",
+      "rating": 4,
+      "website": "https://www.facebook.com/La-Bageasse-bar-grill-cocktails-1879627082249794/",
+      "tel":"06 98 03 19 90"
+    },
+    {
+      "name": " Le Mistral",
+      "address": "17 rue Savaron, 43100, Brioude",
+      "cuisine": "Cuisine bonne et originale",
+      "rating": 4,
+      "website": "http://www.facebook.com/le.mistral.brioude",
+      "tel":"06 12 15 50 08"
+    },
+    {
+      "name": "Mamma Pizza",
+      "address": "12 Place De La Liberté, 43100, Brioude",
+      "cuisine": "Cuisine bonne et originale",
+      "rating": 3.5,
+      "website": null,
+      "tel":"04 71 50 68 64"
+    },
+    {
+      "name": "Le Viet Nam",
+      "address": "44 Rue Du 4 Septembre, 43100, Brioude",
+      "cuisine": "Chinoise, Japonaise, Asiatique, Vietnamienne",
+      "rating": 3,
+      "website": null,
+      "tel":"04 71 50 03 93"
+    },
+    {
+      "name": "Babylon",
+      "address": "7 boulevard Vercingetorix, 43100, Brioude",
+      "cuisine": "Marocaine",
+      "rating": 4.5,
+      "website": null,
+      "tel":"04 71 50 22 75"
+    },
+    {
+      "name": "Le Saint-Laurent",
+      "address": "33 boulevard du Docteur Devins, 43100, Brioude",
+      "cuisine": "Petit déjeuner, Française, Européenne",
+      "rating": 4.5,
+      "website": "https://www.facebook.com/Le-Saint-Laurent-1017259851648812/",
+      "tel":"04 71 50 43 08"
+    },
+    {
+      "name": "Restaurant La Vieille Auberge",
+      "address": "6 Place Champanne, 43100, Brioude France",
+      "cuisine": "Française, Européenne",
+      "rating": 4.5,
+      "website": null,
+      "tel":"04 71 50 15 93"
+    },
+    {
+      "name": "Le Saint Julien",
+      "address": "1 Place Gregoire de Tours, 43100, Brioude",
+      "cuisine": "Italienne, Pizza",
+      "rating": 4,
+      "website": "http://le-saint-julien.edan.io/",
+      "tel":"04 71 50 20 10"
+    },
+    {
+      "name": "Les 400 Coups",
+      "address": "16 Place St Jean, 43100, Brioude",
+      "cuisine": "Française, Bar à bières, Bar",
+      "rating": 4,
+      "website": "https://www.facebook.com/400CoupsBrioude/",
+      "tel":"06 08 86 56 21"
+    },
+    {
+      "name": "L'étoile D'olindina",
+      "address": "16 Rue Savaron, 43100, Brioude",
+      "cuisine": "Européenne, Saine, Portugaise",
+      "rating": 4.5,
+      "website": "https://www.restaurant-portugais.com/",
+      "tel":"06 08 86 56 21"
+    },
+    {
+      "name": "Pizzeria Et Caetera",
+      "address": "18 Rue Savaron, 43100, Brioude",
+      "cuisine": "Italienne, Pizza  ",
+      "rating": 4.5,
+      "website": "http://pizzeriaetc.wixsite.com/pizzeriaetcaetera43",
+      "tel":"04 63 78 01 72"
+    }
+  ],
+  "tourist_places": [
+    {
+      "name": "Basilique Saint-Julien",
+      "address": "Place de la Basilique, 43100 Brioude",
+      "description": "La plus grande église romane d'Auvergne, véritable trésor de couleurs.",
+      "website": "https://www.brioude.fr/visiter-brioude-et-ses-alentours.html"
+    },
+    {
+      "name": "Le Doyenné",
+      "address": "Adresse non spécifiée",
+      "description": "Centre d'art moderne et contemporain proposant des expositions d'envergure internationale.",
+      "website": "https://www.brioude.fr/visiter-brioude-et-ses-alentours.html"
+    },
+    {
+      "name": "Hôtel de la Dentelle",
+      "address": "Adresse non spécifiée",
+      "description": "Espace culturel et d'exposition dédié à l'art de la dentelle aux fuseaux.",
+      "website": "https://www.brioude.fr/visiter-brioude-et-ses-alentours.html"
+    },
+    {
+      "name": "Aquarium Maison du Saumon et de la Rivière",
+      "address": "Adresse non spécifiée",
+      "description": "Musée dédié au saumon et à la rivière Allier, avec un espace aquarium.",
+      "website": "https://www.brioude.fr/visiter-brioude-et-ses-alentours.html"
+    },
+    {
+      "name": "Maison de Mandrin",
+      "address": "Adresse non spécifiée",
+      "description": "Lieu historique lié au célèbre contrebandier Louis Mandrin.",
+      "website": "https://www.brioude.fr/visiter-brioude-et-ses-alentours.html"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Randonnée au Mont Bar",
+      "description": "Randonnée de 10 km avec vue panoramique sur les volcans d’Auvergne.",
+      "difficulty": "Modérée"
+    },
+    {
+      "name": "Descente en canoë sur l'Allier",
+      "description": "Parcours de 15 km en canoë pour découvrir les gorges sauvages de l’Allier.",
+      "difficulty": "Facile"
+    },
+    {
+      "name": "Marché de Brioude",
+      "description": "Marché traditionnel avec produits locaux chaque samedi matin.",
+      "schedule": "Samedi 8h-13h"
+    }
+  ],
+  "events": [
+    {
+      "name": "Festival de la Chaise-Dieu",
+      "date": "2025-08-15",
+      "location": "Brioude & La Chaise-Dieu",
+      "description": "Festival international de musique classique."
+    },
+    {
+      "name": "Fête de la Saint-Julien",
+      "date": "2025-07-25",
+      "location": "Centre-ville de Brioude",
+      "description": "Animations, concerts et feux d’artifice en l'honneur du saint patron de la ville."
+    },
+    {
+      "name": "Salon des vins et saveurs",
+      "date": "2025-10-10",
+      "location": "Halle aux grains, Brioude",
+      "description": "Dégustation de vins et produits du terroir."
+    }
+  ]
+}
