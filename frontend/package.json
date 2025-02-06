@@ -9,7 +9,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "mkdir -p build/data/client && cp -r data/clients.json build/data/ && cp -r data/client/*.json build/data/client/"
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "nuxt": "^3.15.4",
