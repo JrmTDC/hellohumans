@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "postinstall": "mkdir -p build/data/client && cp -r data/clients.json build/data/ && cp -r data/client/*.json build/data/client/"
+    "postinstall": "mkdir -p build/data && cp -r data/clients.json build/data/ && mkdir -p build/data/client && cp -r data/client build/data/"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
