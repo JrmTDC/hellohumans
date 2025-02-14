@@ -14,7 +14,7 @@ interface MistralResponse {
 }
 
 // Chargement des clients depuis JSON
-const clientsFilePath = path.join(__dirname, '../data/clients.json')
+const clientsFilePath = path.join(process.cwd(), 'build/data/clients.json')
 const clientsData = JSON.parse(fs.readFileSync(clientsFilePath, 'utf-8').replace(/^\uFEFF/, ''))
 
 // Route principale
