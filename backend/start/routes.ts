@@ -3,18 +3,18 @@ import { HttpContext } from '@adonisjs/core/http'
 import Env from "#start/env";
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
+//import { fileURLToPath } from 'url'
 
 // 🔹 Définition manuelle de `__dirname` en ESM
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+//const __filename = fileURLToPath(import.meta.url)
+//const __dirname = path.dirname(__filename)
 
 interface MistralResponse {
   choices?: { message?: { content?: string } }[];
 }
 
 // Chargement des clients depuis JSON
-const clientsFilePath = path.join(process.cwd(), 'build/data/clients.json')
+const clientsFilePath = path.join(process.cwd(), 'data/clients.json')
 const clientsData = JSON.parse(fs.readFileSync(clientsFilePath, 'utf-8').replace(/^\uFEFF/, ''))
 
 // Route principale
@@ -63,7 +63,9 @@ router.group(() => {
     try {
 
       // Charger les données locales JSON selon le client
-      const dataPath = path.join(__dirname, `../data/client/${clientKey}.json`)
+      const dataPath = path.join(process.cwd(), `data/client/${clientKey}.json`)
+
+
       const data = fs.existsSync(dataPath) ? JSON.parse(fs.readFileSync(dataPath, 'utf-8')) : {}
 
 
