@@ -10,9 +10,6 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import ClientForm from '@/components/ClientForm.vue';
-import ClientList from '@/components/ClientList.vue';
-import SearchBar from '@/components/SearchBar.vue';
 
 const clients = ref([
   { id: 1, name: 'Jean Dupont', email: 'jean.dupont@email.com' },
