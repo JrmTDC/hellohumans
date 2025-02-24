@@ -15,12 +15,24 @@ const isMobile = ref(false) // Détecte si l'utilisateur est sur mobile
 const isChatActive = ref(false) // Gère l'affichage entre Home & Chat
 const showOptions = ref(false) // Affiche les options
 
+
+// Fonction pour jouer un son lorsqu'un message du chatbot arrive
+const playNotificationSound = () => {
+     const audio = new Audio("/sounds/notification.mp3") // Charger le son
+     audio.volume = 0.5 // Ajuste le volume si nécessaire (0.0 - 1.0)
+     audio.play().catch(error => console.warn("Impossible de jouer le son :", error)) // Gestion d'erreur
+}
+
+
 // Exemples de questions suggérées
 const suggestedQuestions = [
-  "Quels sont les meilleurs restaurants ?",
-  "Quels sont les événements à venir ?",
-  "Quels sites touristiques visiter ?",
-  "Où trouver un hôtel ?"
+     "Quels sont les meilleurs restaurants ?",
+     "Quels sont les événements à venir ?",
+     "Quels sites touristiques visiter ?",
+     "Où trouver un hôtel ?",
+     "Quels sont les meilleurs cafés ?",
+     "Quels sont les moyens de transport ?",
+     "Quels sont les horaires de la mairie ?"
 ]
 
 // Fonction pour envoyer une question pré-remplie
@@ -71,34 +83,35 @@ const clearChat = () => {
 
 // Envoi d'un message
 const sendMessage = async () => {
-  if (!message.value.trim()) return
+     if (!message.value.trim()) return
 
-  messages.value.push({ text: message.value, sender: "user" })
-  isChatActive.value = true
-  scrollToBottom()
+     messages.value.push({ text: message.value, sender: "user" })
+     isChatActive.value = true
+     scrollToBottom()
 
-  isLoading.value = true
-  const userMessage = message.value
-  message.value = ""
+     isLoading.value = true
+     const userMessage = message.value
+     message.value = ""
 
-  try {
-    const res = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userMessage, clientKey: clientKey.value })
-    })
-    const data = await res.json()
+     try {
+          const res = await fetch(apiUrl, {
+               method: "POST",
+               headers: { "Content-Type": "application/json" },
+               body: JSON.stringify({ message: userMessage, clientKey: clientKey.value })
+          })
+          const data = await res.json()
 
-    setTimeout(() => {
-      messages.value.push({ text: data.response, sender: "bot" })
-      scrollToBottom()
-      isLoading.value = false
-    }, 1000)
-  } catch (error) {
-    messages.value.push({ text: "Erreur : Impossible de contacter le chatbot.", sender: "bot" })
-    scrollToBottom()
-    isLoading.value = false
-  }
+          setTimeout(() => {
+               messages.value.push({ text: data.response, sender: "bot" })
+               playNotificationSound() // 🔊 Joue le son quand le chatbot répond
+               scrollToBottom()
+               isLoading.value = false
+          }, 1000)
+     } catch (error) {
+          messages.value.push({ text: "Erreur : Impossible de contacter le chatbot.", sender: "bot" })
+          scrollToBottom()
+          isLoading.value = false
+     }
 }
 
 // Fonction pour ouvrir/fermer le chatbot
