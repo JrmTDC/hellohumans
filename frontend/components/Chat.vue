@@ -36,13 +36,11 @@ const playNotificationSound = () => {
 
 // Exemples de questions suggérées
 const suggestedQuestions = [
-     "Quels sont les meilleurs restaurants ?",
+     "Quels sont les restaurants ?",
      "Quels sont les événements à venir ?",
      "Quels sites touristiques visiter ?",
      "Où trouver un hôtel ?",
-     "Quels sont les meilleurs cafés ?",
-     "Quels sont les moyens de transport ?",
-     "Quels sont les horaires de la mairie ?"
+     "Quels sont les transport ?"
 ]
 
 // Fonction pour envoyer une question pré-remplie
@@ -215,7 +213,7 @@ watch(isChatActive, (newVal) => {
                     <div class="flex flex-col w-full items-center overflow-y-auto bg-[#fff]">
                          <div v-for="(question, index) in suggestedQuestions" :key="index" class="w-full">
                               <button @click="sendSuggestedMessage(question)" class="flex scroll-px-[16px] items-center gap-[8px] justify-between w-full hover:bg-[#EFF2F6] p-[16px]">
-                                   <span class="text-[14px] font-medium text-left text-[#06132b] overflow-hidden text-ellipsis">{{ question }}</span>
+                                   <span class="text-[15px] font-medium text-left text-[#06132b] overflow-hidden text-ellipsis">{{ question }}</span>
                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="directional-icon"><path d="M7.5 6.175L8.675 5L13.675 10L8.675 15L7.5 13.825L11.3167 10L7.5 6.175Z"></path></svg>
                               </button>
                               <hr class="ml-[15px] mr-[15px]" v-if="index !== suggestedQuestions.length - 1">
