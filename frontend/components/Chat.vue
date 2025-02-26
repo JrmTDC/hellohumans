@@ -103,7 +103,7 @@ const clearChatAndClose = () => {
   showOptions.value = false
 }
 
-// Fonction pour activer/désactiver les notifications
+// Fonction pour ouvrire/fermer les options
 const toggleOptions = () => {
      showOptions.value = !showOptions.value
 }
@@ -184,7 +184,14 @@ watch(isChatActive, (newVal) => {
 
 <template>
      <!-- Bouton flottant -->
-     <button v-if="!isOpen" @click="toggleChat" class="fixed bottom-6 right-6 shadow-lg w-[60px] h-[60px] rounded-[28px] flex items-center justify-center text-white bg-[#007dfc] shadow-[rgba(2,6,16,0.2)_0px_4px_24px] hover:scale-110 focus:scale-110 transition-transform duration-200" v-html="buttonIconChat"></button>
+     <div class="absolute w-[112px] h-[140px] bottom-[12px] flex items-center justify-center pointer-events-none z-[1] right-0">
+          <button v-if="!isOpen" @click="toggleChat" class="w-[60px] h-[60px] rounded-[28px] flex items-center justify-center pointer-events-auto transition duration-150 ease-in-out relative text-[#007dfc] bg-[#0566ff] shadow-[0px_4px_24px_#02061033] hover:scale-110 transition duration-150 ease-in-out" v-html="buttonIconChat"></button>
+          <div v-if="!isOpen && !notificationsEnabled" class="absolute top-[37px] right-[23px] font-bold pointer-events-none rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px] bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1">
+               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.53332 12.3233V11.4568H4.20516V7.14893C4.20516 6.74893 4.27055 6.3652 4.40132 5.99776C4.5321 5.6302 4.70605 5.28448 4.92316 4.96059L7.11149 7.14893H5.85649L1.92316 3.21559L2.54232 2.57976L13.4705 13.5246L12.8513 14.1438L11.0437 12.3233H3.53332ZM11.7948 10.1361L5.75516 4.07976C5.99016 3.89854 6.24443 3.75259 6.51799 3.64193C6.79143 3.53126 7.07432 3.45026 7.36666 3.39893V2.56693C7.36666 2.3917 7.42843 2.24237 7.55199 2.11893C7.67543 1.99537 7.82477 1.93359 7.99999 1.93359C8.17521 1.93359 8.32455 1.99537 8.44799 2.11893C8.57155 2.24237 8.63332 2.3917 8.63332 2.56693V3.39893C9.56066 3.53826 10.3194 3.96176 10.9097 4.66943C11.4998 5.37721 11.7948 6.2037 11.7948 7.14893V10.1361ZM7.99999 14.1951C7.70088 14.1951 7.44749 14.0913 7.23982 13.8836C7.03205 13.6759 6.92816 13.4225 6.92816 13.1233H9.07182C9.07182 13.4225 8.96793 13.6759 8.76016 13.8836C8.55249 14.0913 8.2991 14.1951 7.99999 14.1951Z" fill="#080F1A"></path></svg>
+          </div>
+     </div>
+
+
 
      <!-- Chatbot -->
 
