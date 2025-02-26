@@ -1,5 +1,5 @@
 ﻿<script setup>
-import { ref, nextTick, onMounted, watch } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue'
 import logoHelloHumanMini from '@/assets/svg/logoHelloHumansMini.svg?raw'
 import logoHelloHumanFull from 'assets/svg/logoHelloHumansFull.svg?raw'
 import buttonIconChat from 'assets/svg/buttonIconChat.svg?raw'
@@ -23,8 +23,8 @@ const chatContainer = ref(null) // Référence à la zone de chat
 const isOpen = ref(false) // Gère l'ouverture du chatbot
 const isMobile = ref(false) // Détecte si l'utilisateur est sur mobile
 const isChatActive = ref(false) // Gère l'affichage entre Home & Chat
-const showOptions = ref(false) // Affiche les options
-
+const showOptions = ref(false)
+const optionsBox = ref(null)
 
 // Fonction pour jouer un son lorsqu'un message du chatbot arrive
 const playNotificationSound = () => {
@@ -183,7 +183,7 @@ watch(isChatActive, (newVal) => {
                     </div>
                     <div class="flex">
                          <!-- Open options -->
-                         <button @click="toggleOptions" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center">
+                         <button @click.stop="toggleOptions" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center">
                               <span v-html="iconOption"></span>
                               <span v-if="!showOptions"  class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Ouvrir les options</span>
                               <span v-if="showOptions" class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Fermer les options</span>
