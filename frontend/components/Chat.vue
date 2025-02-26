@@ -291,9 +291,13 @@ watch(isChatActive, (newVal) => {
                <div v-for="(msg, index) in messages" :key="index" class="flex items-center"  :class="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
                     <p v-html="formatMessage(msg.text)" :class="msg.sender === 'user' ? 'bg-[#0566FF] text-white' : 'bg-white text-[#606060] border border-[#777676]'" class="inline-block rounded-[20px] px-4 py-3  max-w-xs leading-relaxed text-sm"></p>
                </div>
-               <div v-if="isLoading" class="text-left animate-pulse">
-                         <p class="rounded-[20px] text-[#798096] text-sm bg-white"
-                         >En train d'écrire...</p>
+               <div v-if="isLoading" class="hhcss_messageLoading">
+                    <span>En train d'écrire</span>
+                    <div class="hhcss_puceAnimation">
+                         <span></span>
+                         <span></span>
+                         <span></span>
+                    </div>
                </div>
           </div>
 
@@ -324,7 +328,7 @@ watch(isChatActive, (newVal) => {
 
           </div>
           <!-- Options -->
-          <div v-if="showOptions" ref="optionsBox" class="absolute top-[72px] right-[24px] bg-white rounded-[8px] shadow-[0px_6px_32px_0px_rgba(0,18,46,0.16)] p-[12px_6px] z-[6] transition duration-200 ease-in-out">
+          <div v-if="showOptions" ref="optionsBox" class="absolute top-[72px] right-[24px] bg-white rounded-[8px] shadow-[0px_6px_32px_0px_rgba(0,18,46,0.16)] p-[12px_6px] z-[6]">
                <ul class="m-0 p-0">
                     <li class="rounded-[6px] flex">
                          <button  @click="toggleNotifications" class="p-2 px-4 flex m-0 w-full rounded-[6px] hover:bg-[#eff2f6]">
@@ -341,7 +345,5 @@ watch(isChatActive, (newVal) => {
                     </li>
                </ul>
           </div>
-
-
      </div>
 </template>
