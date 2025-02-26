@@ -237,19 +237,22 @@ watch(isChatActive, (newVal) => {
           </div>
 
           <!-- Navigation en bas -->
-          <div v-if="!isChatActive" class="p-[24px] flex border-t bg-white h-[75px]">
-               <!-- Home -->
-               <button @click="isChatActive = false" class="flex-1 flex flex-col items-center justify-center">
-                    <span v-html="iconHome"></span>
-                    <span class="text-sm text-gray-700">Home</span>
-               </button>
+          <div v-if="!isChatActive" class="bg-white flex flex-col px-[24px]">
+               <div class="px-5 py-3 flex justify-center items-start gap-1 self-stretch border-t border-[#e2e8ef] bg-white">
+                    <!-- Home -->
+                    <button @click="isChatActive = false" class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold">
+                         <span v-html="iconHome"></span>
+                         <span class="text-sm text-gray-700">Home</span>
+                    </button>
 
-               <!-- Chat -->
-               <button @click="isChatActive = true" class="flex-1 flex flex-col items-center justify-center">
-                    <span v-html="iconChat"></span>
-                    <span class="text-sm text-gray-700">Chat</span>
-               </button>
+                    <!-- Chat -->
+                    <button @click="isChatActive = true" class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700">
+                         <span v-html="iconChat" class="h-7 w-7"></span>
+                         <span class="text-sm">Chat</span>
+                    </button>
+               </div>
           </div>
+
           <!-- Messages -->
           <div ref="chatContainer"  v-auto-animate v-if="isChatActive" class="flex-1 overflow-y-auto p-[24px] space-y-3 bg-withe">
                <div v-for="(msg, index) in messages" :key="index" class="flex items-center"  :class="msg.sender === 'user' ? 'justify-end' : 'justify-start'">

@@ -96,3 +96,6 @@ svg.directional-icon{
     bottom: calc(100% - 4px);
     left: 50%;
 }
+button:hover .hhcss_iconChatFillPath{
+    fill: #0566ff;
+}
