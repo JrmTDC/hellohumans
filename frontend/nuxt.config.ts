@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@formkit/auto-animate'],
   css: [
+    '@/assets/css/fonts.css', // ✅ Importation des polices
     '@/assets/css/main.css' // ✅ Importation du CSS global
   ],
   runtimeConfig: {
