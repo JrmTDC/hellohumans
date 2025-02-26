@@ -111,9 +111,9 @@ const sendMessage = async () => {
           })
           const data = await res.json()
 
-          setTimeout(() => {
-               messages.value.push({ text: data.response, sender: "bot" })
+          setTimeout(() => {1
                playNotificationSound() // 🔊 Joue le son quand le chatbot répond
+               messages.value.push({ text: data.response, sender: "bot" })
                scrollToBottom()
                isLoading.value = false
           }, 1000)
@@ -176,7 +176,7 @@ watch(isChatActive, (newVal) => {
                     <div v-if="isChatActive">
                          <div class="flex space-x-2 items-center">
                               <button @click="isChatActive = false" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center ml-[-15px]">
-                                   <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] start-full ms-[10px] translate-x-[-5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Go Back</span>
+                                   <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] start-full ms-[10px] translate-x-[-5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Retour</span>
                                    <span v-html="iconBack"></span>
                               </button>
                               <div v-html="logoHelloHumanMini"></div>
@@ -187,13 +187,13 @@ watch(isChatActive, (newVal) => {
                          <!-- Open options -->
                          <button @click="toggleOptions" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] testddd w-10 h-10 flex items-center justify-center">
                               <span v-html="iconOption"></span>
-                              <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Open options</span>
+                              <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Ouvrir les options</span>
                          </button>
 
                          <!-- Minimize -->
                          <button @click="toggleChat" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center mr-[-15px]">
                               <span v-html="iconMinimize"></span>
-                              <span v-auto-animate class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Minimize</span>
+                              <span v-auto-animate class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Réduire</span>
                          </button>
                     </div>
                </div>
@@ -241,13 +241,13 @@ watch(isChatActive, (newVal) => {
                     <!-- Home -->
                     <button @click="isChatActive = false" class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold">
                          <span v-html="iconHome"></span>
-                         <span class="text-sm text-gray-700">Home</span>
+                         <span class="text-sm text-gray-700">Accueil</span>
                     </button>
 
                     <!-- Chat -->
                     <button @click="isChatActive = true" class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700">
                          <span v-html="iconChat" class="h-7 w-7"></span>
-                         <span class="text-sm">Chat</span>
+                         <span class="text-sm">Discussion</span>
                     </button>
                </div>
           </div>
@@ -258,24 +258,36 @@ watch(isChatActive, (newVal) => {
                     <p v-html="formatMessage(msg.text)" :class="msg.sender === 'user' ? 'bg-[#0566FF] text-white' : 'bg-white text-[#606060] border border-[#777676]'" class="inline-block rounded-[20px] px-4 py-3  max-w-xs leading-relaxed text-sm"></p>
                </div>
                <div v-if="isLoading" class="text-left animate-pulse">
-                    <p class="bg-gray-300 text-gray-700 inline-block rounded-lg px-3 py-2 my-1 max-w-xs">Chatbot est en train d'écrire...</p>
+                         <p class="rounded-[20px] text-[#798096] text-sm bg-white"
+                         >En train d'écrire...</p>
                </div>
           </div>
 
           <div v-if="isChatActive">
-               <!-- Ligne de séparation -->
-               <div class="border-t border-gray-300"></div>
 
                <!-- Saisie utilisateur -->
-               <div class="p-[24px] bg-white flex items-center">
-                    <input v-model="message" class="w-full rounded-md focus:outline-none" placeholder="Écrivez un message..." @keyup.enter="sendMessage" />
-                    <button @click="sendMessage" class="relative group p-2 rounded-full transition hover:bg-[#dce9ff] w-10 h-10 flex items-center justify-center ml-2">
-                         <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap z-1 text-[#06132B] bottom-[calc(100%-4px)] left-1/2 translate-x-[-50%] translate-y-[10px] opacity-0 transition-opacity transition-transform duration-[160ms] ease-in-out gap-2 bottom-[calc(100%-4px)] left-1/2 translate-x-[-50%] translate-y-[-10px] opacity-0 group-hover:opacity-100 transition">Envoyer
-                              <div class="flex items-center gap-1 text-xs text-[rgb(100,116,145)]">Shortcut <svg xmlns="http://www.w3.org/2000/svg" width="11" height="10" viewBox="0 0 11 10"><path d="M2.1665 6.25033L4.6665 8.75033L5.25817 8.15866L3.76234 6.66699H8.4165V1.66699H7.58317V5.83366H3.76234L5.25817 4.34199L4.6665 3.75033L2.1665 6.25033Z" fill="#647491"></path></svg></div>
-                         </span>
-                         <span v-html="iconSend"></span>
-                    </button>
+               <div class="px-6 w-full relative bg-white z-3 flex-none">
+                    <div class="transition-opacity duration-500 ease-in-out opacity-100 translate-y-0">
+                         <hr>
+                         <div class="flex items-center gap-3">
+                             <textarea rows="1" v-model="message" placeholder="Écrivez un message..." class="py-4 border-0 w-full text-[17px] py-[16px] resize-none leading-6 overflow-x-hidden focus:outline-none" @keyup.enter="sendMessage"></textarea>
+
+                              <button v-show="message.trim() !== ''" @click="sendMessage" class="relative group p-2 rounded-full transition hover:bg-[#dce9ff] w-10 h-10 flex items-center justify-center ml-2">
+                                   <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap z-1 text-[#06132B] bottom-[calc(100%-4px)] left-1/2 translate-x-[-50%] translate-y-[10px] opacity-0 transition-opacity transition-transform duration-[160ms] ease-in-out gap-2 bottom-[calc(100%-4px)] left-1/2 translate-x-[-50%] translate-y-[-10px] opacity-0 group-hover:opacity-100 transition">Envoyer
+                                        <div class="flex items-center gap-1 text-xs text-[rgb(100,116,145)]">Raccourci <svg xmlns="http://www.w3.org/2000/svg" width="11" height="10" viewBox="0 0 11 10"><path d="M2.1665 6.25033L4.6665 8.75033L5.25817 8.15866L3.76234 6.66699H8.4165V1.66699H7.58317V5.83366H3.76234L5.25817 4.34199L4.6665 3.75033L2.1665 6.25033Z" fill="#647491"></path></svg></div>
+                                   </span>
+                                   <span v-html="iconSend"></span>
+                              </button>
+                         </div>
+                    </div>
+                    <div class="h-[30px] relative">
+                         <div>
+                              <a href="https://hellohumans.fr" target="_blank" class="mr-0 float-right flex no-underline text-[#bfc3cb] text-xs font-normal uppercase ltr"
+                              >Propulsé par HelloHumans</a>
+                         </div>
+                    </div>
                </div>
+
           </div>
           <!-- Options -->
           <div v-if="showOptions" class="absolute top-14 right-4 bg-white shadow-lg rounded-md p-3 border border-gray-200 w-56">
