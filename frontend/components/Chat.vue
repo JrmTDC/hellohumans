@@ -23,6 +23,7 @@ const chatContainer = ref(null) // Référence à la zone de chat
 const isOpen = ref(false) // Gère l'ouverture du chatbot
 const isMobile = ref(false) // Détecte si l'utilisateur est sur mobile
 const isChatActive = ref(false) // Gère l'affichage entre Home & Chat
+const notificationsEnabled = ref(true) // True = Notifications activées
 const showOptions = ref(false)
 const optionsBox = ref(null)
 
@@ -33,6 +34,11 @@ const playNotificationSound = () => {
      audio.play().catch(error => console.warn("Impossible de jouer le son :", error)) // Gestion d'erreur
 }
 
+// Fonction pour activer/désactiver les notifications
+const toggleNotifications = () => {
+     notificationsEnabled.value = !notificationsEnabled.value
+     localStorage.setItem("notifications_enabled", notificationsEnabled.value)
+}
 
 // Exemples de questions suggérées
 const suggestedQuestions = [
@@ -54,7 +60,19 @@ const isBrowser = typeof window !== "undefined"
 
 // Détecte si l'utilisateur est sur mobile
 onMounted(() => {
-  isMobile.value = window.innerWidth <= 768
+     document.addEventListener("click", handleClickOutside)
+     isMobile.value = window.innerWidth <= 768
+     const savedNotifications = localStorage.getItem("notifications_enabled")
+     if (savedNotifications !== null) {
+          notificationsEnabled.value = savedNotifications === "true"
+     }
+     if (isBrowser) {
+          const savedMessages = localStorage.getItem("chat_history")
+          if (savedMessages) {
+               messages.value = JSON.parse(savedMessages)
+          }
+     }
+})
 
   if (isBrowser) {
     const savedMessages = localStorage.getItem("chat_history")
@@ -62,6 +80,8 @@ onMounted(() => {
       messages.value = JSON.parse(savedMessages)
     }
   }
+onUnmounted(() => {
+     document.removeEventListener("click", handleClickOutside)
 })
 
 // Sauvegarde l'historique en localStorage
@@ -88,6 +108,17 @@ const clearChat = () => {
   }
 }
 
+// Fonction pour activer/désactiver les notifications
+const toggleOptions = () => {
+     showOptions.value = !showOptions.value
+}
+
+// Fonction pour fermer les options quand on clique en dehors
+const handleClickOutside = (event) => {
+     if (optionsBox.value && !optionsBox.value.contains(event.target)) {
+          showOptions.value = false
+     }
+}
 
 // Envoi d'un message
 const sendMessage = async () => {
@@ -109,8 +140,10 @@ const sendMessage = async () => {
           })
           const data = await res.json()
 
-          setTimeout(() => {1
-               playNotificationSound() // 🔊 Joue le son quand le chatbot répond
+          setTimeout(() => {
+               if (notificationsEnabled.value) {
+                    playNotificationSound()
+               }
                messages.value.push({ text: data.response, sender: "bot" })
                scrollToBottom()
                isLoading.value = false
@@ -133,10 +166,6 @@ const toggleChat = () => {
                scrollToBottom()
           })
      }
-}
-// Fonction pour activer/désactiver les notifications
-const toggleOptions = () => {
-     showOptions.value = !showOptions.value
 }
 
 const formatMessage = (text) => {
