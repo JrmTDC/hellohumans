@@ -213,9 +213,13 @@ watch(isChatActive, (newVal) => {
                <!-- Questions suggérées -->
                <div class="flex rounded-[12px] divide-solid overflow-y-hidden mb-[16px] w-full border border-[#EFF2F6]">
                     <div class="flex flex-col w-full items-center overflow-y-auto bg-[#fff]">
-                         <button v-for="(question, index) in suggestedQuestions" :key="index" @click="sendSuggestedMessage(question)" class="flex scroll-px-[16px] items-center gap-[8px] justify-between w-full hover:bg-[#EFF2F6] p-[16px] border-b border-solid">
-                              <span class="text-[15px] font-medium text-left text-[#06132b] overflow-hidden text-ellipsis">{{ question }}</span>
-                         </button>
+                         <div v-for="(question, index) in suggestedQuestions" :key="index" class="w-full">
+                              <button @click="sendSuggestedMessage(question)" class="flex scroll-px-[16px] items-center gap-[8px] justify-between w-full hover:bg-[#EFF2F6] p-[16px]">
+                                   <span class="text-[14px] font-medium text-left text-[#06132b] overflow-hidden text-ellipsis">{{ question }}</span>
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="directional-icon"><path d="M7.5 6.175L8.675 5L13.675 10L8.675 15L7.5 13.825L11.3167 10L7.5 6.175Z"></path></svg>
+                              </button>
+                              <hr class="ml-[15px] mr-[15px]" v-if="index !== suggestedQuestions.length - 1">
+                         </div>
                     </div>
                </div>
 
@@ -224,7 +228,7 @@ watch(isChatActive, (newVal) => {
                <button @click="isChatActive = true" class="flex px-4 py-3 items-center gap-2 w-full rounded-xl border border-[#e2e8ef] bg-white hover:bg-[#EFF2F6]">
                     <div class="flex flex-col items-start gap-[2px] flex-grow">
                          <span class="font-semibold text-[15px] leading-[19px] leading-norma">Parlez à notre assistant</span>
-                         <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2 leading-norma">Obtenez des réponses rapides et personnalisées en un instant !</span>
+                         <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2 leading-norma">Je suis là pour vous aider !</span>
                     </div>
                     <span v-html="iconSend"></span>
                </button>
