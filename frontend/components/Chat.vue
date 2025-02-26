@@ -74,12 +74,6 @@ onMounted(() => {
      }
 })
 
-  if (isBrowser) {
-    const savedMessages = localStorage.getItem("chat_history")
-    if (savedMessages) {
-      messages.value = JSON.parse(savedMessages)
-    }
-  }
 onUnmounted(() => {
      document.removeEventListener("click", handleClickOutside)
 })
@@ -101,11 +95,12 @@ const scrollToBottom = () => {
 }
 
 // Fonction pour vider l'historique
-const clearChat = () => {
+const clearChatAndClose = () => {
   messages.value = []
   if (isBrowser) {
     localStorage.removeItem("chat_history")
   }
+  showOptions.value = false
 }
 
 // Fonction pour activer/désactiver les notifications
@@ -327,7 +322,14 @@ watch(isChatActive, (newVal) => {
                     <svg fill="black" height="24" viewBox="0 0 24 24" width="24"> <path d="M0 0h24v24H0z" fill="none"></path> <path d="M20 18.69L7.84 6.14 5.27 3.49 4 4.76l2.8 2.8v.01c-.52.99-.8 2.16-.8 3.42v5l-2 2v1h13.73l2 2L21 19.72l-1-1.03zM12 22c1.11 0 2-.89 2-2h-4c0 1.11.89 2 2 2zm6-7.32V11c0-3.08-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68c-.15.03-.29.08-.42.12-.1.03-.2.07-.3.11h-.01c-.01 0-.01 0-.02.01-.23.09-.46.2-.68.31 0 0-.01 0-.01.01L18 14.68z"></path></svg>
                     <span> {{ notificationsEnabled ? "Désactiver" : "Activer" }} les notifications</span>
                </button>
+
+               <button  @click="clearChatAndClose" class="w-full bg-white shadow rounded-md p-2 flex items-center space-x-2 hover:bg-gray-100 transition">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                         <path d="M13.625 1.875H10.838L10.5333 0.961313C10.4401 0.681239 10.2611 0.437625 10.0217 0.265061C9.78223 0.0924975 9.4945 -0.000245665 9.19934 4.88728e-07H6.80066C6.50546 -0.000195446 6.2177 0.0925603 5.97818 0.265111C5.73867 0.437661 5.55957 0.681246 5.46628 0.961313L5.16194 1.875H2.375C1.59956 1.875 0.96875 2.50581 0.96875 3.28125V4.21875C0.96875 4.74088 1.43878 4.6875 1.94322 4.6875H14.5625C14.8216 4.6875 15.0312 4.47784 15.0312 4.21875V3.28125C15.0312 2.50581 14.4004 1.875 13.625 1.875ZM6.15041 1.875L6.35572 1.25794C6.38684 1.16457 6.44657 1.08337 6.52643 1.02585C6.60629 0.968337 6.70224 0.937425 6.80066 0.9375H9.19934C9.40122 0.9375 9.58022 1.06613 9.64384 1.25794L9.84937 1.875H6.15041ZM2.02081 5.6875L2.76822 14.721C2.83459 15.4502 3.43656 16 4.16853 16H11.8315C12.5635 16 13.1654 15.4502 13.2323 14.7169L13.9792 5.6875H2.02081ZM5.65625 13.6563C5.65625 14.2742 4.71875 14.2767 4.71875 13.6563V7.09375C4.71875 6.47584 5.65625 6.47331 5.65625 7.09375V13.6563ZM8.46875 13.6563C8.46875 14.2742 7.53125 14.2767 7.53125 13.6563V7.09375C7.53125 6.47584 8.46875 6.47331 8.46875 7.09375V13.6563ZM11.2812 13.6563C11.2812 14.2742 10.3438 14.2767 10.3438 13.6563V7.09375C10.3438 6.83466 10.5534 6.625 10.8125 6.625C11.0716 6.625 11.2812 6.83466 11.2812 7.09375V13.6563Z" fill="#FF1A1A"/>
+                    </svg>
+                    <span> Effacer l'historique</span>
                </button>
+
           </div>
 
      </div>
