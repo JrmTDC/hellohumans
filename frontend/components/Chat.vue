@@ -183,9 +183,10 @@ watch(isChatActive, (newVal) => {
                     </div>
                     <div class="flex">
                          <!-- Open options -->
-                         <button @click="toggleOptions" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] testddd w-10 h-10 flex items-center justify-center">
+                         <button @click="toggleOptions" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center">
                               <span v-html="iconOption"></span>
-                              <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Ouvrir les options</span>
+                              <span v-if="!showOptions"  class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Ouvrir les options</span>
+                              <span v-if="showOptions" class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Fermer les options</span>
                          </button>
 
                          <!-- Minimize -->
@@ -292,10 +293,11 @@ watch(isChatActive, (newVal) => {
 
           </div>
           <!-- Options -->
-          <div v-if="showOptions" class="absolute top-14 right-4 bg-white shadow-lg rounded-md p-3 border border-gray-200 w-56">
-               <button v-if="notificationsEnabled" @click="toggleNotifications" class="w-full bg-white shadow rounded-md p-2 flex items-center space-x-2 hover:bg-gray-100 transition"><svg fill="black" height="24" viewBox="0 0 24 24" width="24"> <path d="M0 0h24v24H0z" fill="none"></path> <path d="M20 18.69L7.84 6.14 5.27 3.49 4 4.76l2.8 2.8v.01c-.52.99-.8 2.16-.8 3.42v5l-2 2v1h13.73l2 2L21 19.72l-1-1.03zM12 22c1.11 0 2-.89 2-2h-4c0 1.11.89 2 2 2zm6-7.32V11c0-3.08-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68c-.15.03-.29.08-.42.12-.1.03-.2.07-.3.11h-.01c-.01 0-.01 0-.02.01-.23.09-.46.2-.68.31 0 0-.01 0-.01.01L18 14.68z"></path></svg><span>Turn off notifsications</span>
+          <div v-if="showOptions" ref="optionsBox" class="absolute top-14 right-4 bg-white shadow-lg rounded-md p-3 border border-gray-200 w-56">
+               <button  @click="toggleNotifications" class="w-full bg-white shadow rounded-md p-2 flex items-center space-x-2 hover:bg-gray-100 transition">
+                    <svg fill="black" height="24" viewBox="0 0 24 24" width="24"> <path d="M0 0h24v24H0z" fill="none"></path> <path d="M20 18.69L7.84 6.14 5.27 3.49 4 4.76l2.8 2.8v.01c-.52.99-.8 2.16-.8 3.42v5l-2 2v1h13.73l2 2L21 19.72l-1-1.03zM12 22c1.11 0 2-.89 2-2h-4c0 1.11.89 2 2 2zm6-7.32V11c0-3.08-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68c-.15.03-.29.08-.42.12-.1.03-.2.07-.3.11h-.01c-.01 0-.01 0-.02.01-.23.09-.46.2-.68.31 0 0-.01 0-.01.01L18 14.68z"></path></svg>
+                    <span> {{ notificationsEnabled ? "Désactiver" : "Activer" }} les notifications</span>
                </button>
-               <button v-if="!notificationsEnabled" @click="toggleNotifications" class="w-full bg-white shadow rounded-md p-2 flex items-center space-x-2 hover:bg-gray-100 transition"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <g clip-path="url(#clip0_12_385)"> <path d="M7.58003 4.08L6.15003 2.65C3.75003 4.48 2.17003 7.3 2.03003 10.5H4.03003C4.18003 7.85 5.54003 5.53 7.58003 4.08ZM19.97 10.5H21.97C21.82 7.3 20.24 4.48 17.85 2.65L16.43 4.08C18.45 5.53 19.82 7.85 19.97 10.5ZM18 11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63003 5.36 6.00003 7.92 6.00003 11V16L4.00003 18V19H20V18L18 16V11ZM12 22C12.14 22 12.27 21.99 12.4 21.96C13.05 21.82 13.58 21.38 13.84 20.78C13.94 20.54 13.99 20.28 13.99 20H9.99003C10 21.1 10.89 22 12 22Z" fill="black"/> </g> <defs> <clipPath id="clip0_12_385"> <rect width="24" height="24" fill="white"/> </clipPath> </defs> </svg><span>Turn on notifications</span>
                </button>
           </div>
 
