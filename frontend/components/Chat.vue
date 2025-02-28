@@ -26,6 +26,11 @@ const isChatActive = ref(false) // Gère l'affichage entre Home & Chat
 const notificationsEnabled = ref(true) // True = Notifications activées
 const showOptions = ref(false)
 const optionsBox = ref(null)
+const customScrollbar = ref(null)
+const scrollbarContainer = ref(null)
+let isDragging = false
+let startY = 0
+let startScrollTop = 0
 
 // Fonction pour jouer un son lorsqu'un message du chatbot arrive
 const playNotificationSound = () => {
@@ -72,6 +77,14 @@ onMounted(() => {
                messages.value = JSON.parse(savedMessages)
           }
      }
+     if (chatContainer.value) {
+          chatContainer.value.addEventListener("scroll", updateScrollbar)
+          updateScrollbar()
+     }
+
+     if (customScrollbar.value) {
+          customScrollbar.value.addEventListener("mousedown", startDrag)
+     }
 })
 
 onUnmounted(() => {
@@ -85,14 +98,71 @@ watch(messages, (newMessages) => {
   }
 }, { deep: true })
 
-// Scroll automatique
-const scrollToBottom = () => {
-  nextTick(() => {
-    if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
-    }
-  })
+
+// Met à jour la position de la scrollbar custom
+const updateScrollbar = () => {
+     if (chatContainer.value && customScrollbar.value) {
+          const scrollHeight = chatContainer.value.scrollHeight
+          const scrollTop = chatContainer.value.scrollTop
+          const clientHeight = chatContainer.value.clientHeight
+
+          // Si pas besoin de scrollbar, la cacher
+          if (scrollHeight <= clientHeight) {
+               chatContainer.value.classList.remove('has-scroll')
+               return
+          }
+
+          chatContainer.value.classList.add('has-scroll')
+
+          // Calcul de la hauteur et de la position de la scrollbar custom
+          const scrollbarHeight = (clientHeight / scrollHeight) * 100
+          const scrollbarPosition = (scrollTop / scrollHeight) * 100
+
+          customScrollbar.value.style.height = `${scrollbarHeight}%`
+          customScrollbar.value.style.top = `${scrollbarPosition}%`
+     }
 }
+
+// Gestion du "drag" de la scrollbar custom
+const startDrag = (event) => {
+     isDragging = true
+     startY = event.clientY
+     startScrollTop = chatContainer.value.scrollTop
+     document.addEventListener("mousemove", onDrag)
+     document.addEventListener("mouseup", stopDrag)
+}
+
+// Fonction pour scroller automatiquement en bas avec effet fluide
+const scrollToBottom = () => {
+     nextTick(() => {
+          if (chatContainer.value) {
+               chatContainer.value.scrollTo({
+                    top: chatContainer.value.scrollHeight,
+                    behavior: "smooth"
+               })
+               updateScrollbar()
+          }
+     })
+}
+
+const onDrag = (event) => {
+     if (!isDragging || !chatContainer.value || !customScrollbar.value) return
+
+     const scrollHeight = chatContainer.value.scrollHeight
+     const clientHeight = chatContainer.value.clientHeight
+     const deltaY = event.clientY - startY
+     const scrollMove = (deltaY / clientHeight) * scrollHeight
+
+     chatContainer.value.scrollTop = startScrollTop + scrollMove
+     updateScrollbar()
+}
+
+const stopDrag = () => {
+     isDragging = false
+     document.removeEventListener("mousemove", onDrag)
+     document.removeEventListener("mouseup", stopDrag)
+}
+
 
 // Fonction pour vider l'historique
 const clearChatAndClose = () => {
@@ -119,7 +189,12 @@ const handleClickOutside = (event) => {
 const sendMessage = async () => {
      if (!message.value.trim()) return
 
-     messages.value.push({ text: message.value, sender: "user" })
+     messages.value.push({
+          text: message.value,
+          datetime: new Date().toISOString(),
+          status: "success",
+          sender: "user"
+     })
      isChatActive.value = true
      scrollToBottom()
 
@@ -139,12 +214,22 @@ const sendMessage = async () => {
                if (notificationsEnabled.value) {
                     playNotificationSound()
                }
-               messages.value.push({ text: data.response, sender: "bot" })
+               messages.value.push({
+                    text: data.response,
+                    datetime: new Date().toISOString(),
+                    status: data.status,
+                    sender: "bot"
+               })
                scrollToBottom()
                isLoading.value = false
           }, 1000)
      } catch (error) {
-          messages.value.push({ text: "Erreur : Impossible de contacter le chatbot.", sender: "bot" })
+          messages.value.push({
+               text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+               datetime: new Date().toISOString(),
+               status: "error",
+               sender: "bot"
+          })
           scrollToBottom()
           isLoading.value = false
      }
@@ -291,7 +376,14 @@ watch(isChatActive, (newVal) => {
           <!-- Messages -->
           <div id="conversation-group" ref="chatContainer"  v-auto-animate v-if="isChatActive" class="w-full overflow-hidden overflow-y-auto bg-white transition duration-300 min-h-[160px] h-[487px] px-6 flex-1">
                <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
-                    <div v-for="(msg, index) in messages" :key="index" :class="msg.sender === 'user' ? 'hhcss_message-visitor mt-[9px] bg-[#0566ff] text-white float-right' : 'hhcss_message-operator mt-[9px] text-[rgb(6,19,43)] float-left border border-transparent'" class="hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out">
+                    <div v-for="(msg, index) in messages" :key="index"
+                         :class="[
+                    msg.sender === 'user'
+                    ? 'hhcss_message-visitor mt-[9px] bg-[#0566ff] text-white float-right'
+                    : 'hhcss_message-operator mt-[9px] text-[rgb(6,19,43)] float-left border border-transparent',
+                    msg.status === 'error' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
+                    'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
+                    ]">
                          <span v-html="formatMessage(msg.text)" class="whitespace-pre-line"></span>
                     </div>
                     <div v-if="isLoading" class="hhcss_messageLoading text-[#00a9ff] float-left border border-transparent py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out">
@@ -303,12 +395,12 @@ watch(isChatActive, (newVal) => {
                          </div>
                     </div>
                </div>
-               <div id="hhcss_conversation-scroll" class="w-[16px] h-[313px] absolute right-0 px-[4px]">
-                    <div class="w-[8px] mx-[1px] bg-[#00173b] opacity-0 top-0 absolute rounded-[4px] cursor-pointer transition-[opacity,width,margin] duration-100 ease-in-out z-[2] select-none"></div>
+               <div id="conversation-scroll" ref="scrollbarContainer">
+                    <div ref="customScrollbar"></div>
                </div>
           </div>
 
-          <div v-if="isChatActive">
+          <div v-if="isChatActive" id="conversation-input">
 
                <!-- Saisie utilisateur -->
                <div class="px-6 w-full relative bg-white z-3 flex-none">

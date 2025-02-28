@@ -118,11 +118,20 @@ router.group(() => {
                })
 
                const mistralData = await mistralResponse.json() as MistralResponse;
-               return { response: mistralData.choices?.[0]?.message?.content || "Je ne peux pas répondre pour l’instant." };
+
+               const responseMessage = mistralData.choices?.[0]?.message?.content?.trim();
+
+               return {
+                    response: responseMessage || "Je ne peux pas répondre pour l’instant.",
+                    status: responseMessage ? 'success' : 'error'
+               };
 
                } catch (error) {
                     console.error("Erreur API Mistral:", error)
-                    return response.internalServerError({ error: "Impossible de récupérer une réponse pour le moment." })
+                    return response.internalServerError({
+                         error: "Impossible de récupérer une réponse pour le moment.",
+                         status: 'error'
+                    })
           }
      })
 

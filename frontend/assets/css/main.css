@@ -45,3 +45,58 @@ button:hover .hhcss_iconChatFillPath{
 .hhcss_message-operator{
     background: linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, #00a9ff, #01ccff) border-box border-box;
 }
+.hhcss_message-operator.hhcss_chat-error{
+     color: #06132b;
+     background: #f0f2f7;
+}
+
+/* Cacher complètement la scrollbar native */
+#conversation-input,#conversation-input textarea, #conversation-group{
+     scrollbar-width: none; /* Pour Firefox */
+     -ms-overflow-style: none; /* Pour Edge */
+     overflow-y: auto;
+     position: relative; /* Assurez-vous que le parent peut contenir l'élément enfant */
+     &::-webkit-scrollbar {
+          display: none; /* Pour Chrome, Safari et Opera */
+     }
+}
+
+
+
+
+
+#conversation-group #conversation-scroll {
+     width: 16px;
+     height: calc(339px - 26px);
+     position: absolute;
+     right: 0;
+     padding: 0 4px;
+}
+#conversation-group #conversation-scroll div {
+     width: 8px;
+     margin: 0 1px;
+     background: #00173b;
+     opacity: 0;
+     top: 0;
+     position: absolute;
+     border-radius: 4px;
+     cursor: pointer;
+     transition: opacity 0.1s ease-in-out, width 0.1s ease-in-out,
+     margin 0.1s ease-in-out;
+     z-index: 2;
+     user-select: none;
+}
+#conversation-group:hover #conversation-scroll div {
+     body:not(.mobile) &,
+     #body:not(.mobile) & {
+          opacity: 0.16;
+     }
+}
+#conversation-group #conversation-scroll div:hover {
+     body:not(.mobile) &,
+     #body:not(.mobile) & {
+          opacity: 0.32;
+          width: 10px;
+          margin: 0;
+     }
+}
