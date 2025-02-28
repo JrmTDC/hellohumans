@@ -302,10 +302,9 @@ watch(isChatActive, (newVal) => {
                               <span></span>
                          </div>
                     </div>
-                    <div id="hhcss_conversation-scroll" class="w-[16px] h-[313px] absolute right-0 px-[4px]">
-                         <div class="w-[8px] mx-[1px] bg-[#00173b] opacity-0 top-0 absolute rounded-[4px] cursor-pointer transition-[opacity,width,margin] duration-100 ease-in-out z-[2] select-none"></div>
-                    </div>
-
+               </div>
+               <div id="hhcss_conversation-scroll" class="w-[16px] h-[313px] absolute right-0 px-[4px]">
+                    <div class="w-[8px] mx-[1px] bg-[#00173b] opacity-0 top-0 absolute rounded-[4px] cursor-pointer transition-[opacity,width,margin] duration-100 ease-in-out z-[2] select-none"></div>
                </div>
           </div>
 
