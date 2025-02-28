@@ -9,7 +9,7 @@ interface MistralResponse {
 }
 
 // Fonction pour charger les fichiers JSON d'un client
-const loadClientData = (clientKey) => {
+const loadClientData = (clientKey: string) => {
      const clientDir = path.join(process.cwd(), `data/client/${clientKey}`);
      const files = fs.readdirSync(clientDir);
 
@@ -103,8 +103,6 @@ router.group(() => {
                prompt += `Si une demande sort du cadre du site, indique poliment que tu ne peux pas répondre.`+ '\n'
                prompt += `Adapte ton ton et ton langage en fonction du contexte pour offrir une expérience fluide et agréable aux utilisateurs.`+ '\n'
                prompt += `Message: ${message}\nRéponse:` + '\n'
-
-               console.error("Prompt:", prompt)
 
                // Appel à l'API Mistral AI
                const mistralResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
