@@ -10,21 +10,7 @@ button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
 }
 .hhcss_messageLoading{
-    padding-block: 10px;
-    padding-inline: 16px;
-    border-radius: 20px;
-    margin: 2px 0px;
-    font-size: 15px;
-    line-height: 20px;
-    overflow-wrap: break-word;
-    display: inline-block;
-    max-width: 85%;
-    clear: both;
-    position: relative;
-    transition: margin 0.28sease-in-out;
-    border: 1px solid transparent;
     background: linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, #00a9ff, #01ccff) border-box border-box;
-    color: #00a9ff;
 }
 .hhcss_puceAnimation{
     display: inline-block;
@@ -52,4 +38,10 @@ button:hover .hhcss_iconChatFillPath{
 }
 .hhcss_puceAnimation span:nth-child(3) {
     animation-delay: -0.9s;
+}
+#hellohumans-chat-iframe{
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+.hhcss_message-operator{
+    background: linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, #00a9ff, #01ccff) border-box border-box;
 }
