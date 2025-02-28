@@ -1,6 +1,6 @@
 {
      "name": "Restaurants à Brioude",
-     "prompt": "Voici la listes des restaurants sur Brioude avec leurs informations, contact et horaire d'ouverture.",
+     "prompt": "Listes des restaurants sur Brioude avec leurs informations, contact et horaire d'ouverture :",
      "lists": [
          {
            "nom": "Lard Dans L'Assiette",

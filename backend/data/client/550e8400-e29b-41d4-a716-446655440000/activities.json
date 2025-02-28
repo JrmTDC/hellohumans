@@ -1,6 +1,6 @@
 {
      "name": "Activités à Brioude",
-     "prompt": "Voici la listes des activités sur Brioude et ses alentours avec leurs informations",
+     "prompt": "Listes des activités sur Brioude et ses alentours avec leurs informations :",
      "lists": [
           {
                "name": "Randonnée au Mont Bar",

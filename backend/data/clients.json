@@ -1,6 +1,16 @@
 {
      "550e8400-e29b-41d4-a716-446655440000": {
           "name": "Office de Tourisme de la ville de Brioude",
+          "activity": "Tourism, Travel, Hospitality, Culture, Events, Leisure, City Brioude, Activities",
+          "files": [
+               "activities.json",
+               "events.json",
+               "restaurants.json",
+               "tourism.json",
+               "hotels.json",
+               "museums.json",
+               "shops.json"
+          ],
           "city": "Brioude",
           "country": "France",
           "allowed_domains": ["localhost:3333", "hellohumans-backend.up.railway.app"]

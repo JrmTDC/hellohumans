@@ -1,6 +1,6 @@
 {
      "name": "Lieu touristiques à Brioude",
-     "prompt": "Voici la listes des lieux touristique sur Brioude et ses alentours avec leurs informations",
+     "prompt": "Listes des lieux touristique sur Brioude et ses alentours avec leurs informations :",
      "lists": [
           {
                "name": "Basilique Saint-Julien",

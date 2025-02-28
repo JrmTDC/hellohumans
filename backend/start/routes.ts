@@ -3,105 +3,129 @@ import { HttpContext } from '@adonisjs/core/http'
 import Env from "#start/env";
 import fs from 'fs'
 import path from 'path'
-//import { fileURLToPath } from 'url'
-
-// 🔹 Définition manuelle de `__dirname` en ESM
-//const __filename = fileURLToPath(import.meta.url)
-//const __dirname = path.dirname(__filename)
 
 interface MistralResponse {
   choices?: { message?: { content?: string } }[];
 }
 
-// Chargement des clients depuis JSON
-const clientsFilePath = path.join(process.cwd(), 'data/clients.json')
-const clientsData = JSON.parse(fs.readFileSync(clientsFilePath, 'utf-8').replace(/^\uFEFF/, ''))
+// Fonction pour charger les fichiers JSON d'un client
+const loadClientData = (clientKey) => {
+     const clientDir = path.join(process.cwd(), `data/client/${clientKey}`);
+     const files = fs.readdirSync(clientDir);
+
+     // Initialiser une structure pour le contenu global
+     let globalPrompt = '';
+
+     // Parcourir chaque fichier JSON du client
+     files.forEach((file) => {
+          // Vérifier que c'est un fichier JSON
+          if (file.endsWith('.json')) {
+               // Charger le contenu du fichier
+               const filePath = path.join(clientDir, file);
+               const fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+               // Ajouter le prompt et les listes à la structure globale
+               if (fileContent.prompt) {
+                    globalPrompt += fileContent.prompt + '\n'; // Ajout du prompt du fichier
+               }
+
+               if (fileContent.lists && Array.isArray(fileContent.lists)) {
+                    globalPrompt += JSON.stringify(fileContent.lists) + '\n'; // Ajouter les listes du fichier
+               }
+          }
+     });
+
+     // Retourner l'ensemble des données combinées
+     return { prompt: globalPrompt };
+};
 
 // Route principale
 router.get('/', async () => {
-  return {
-    name: 'ChataDataSense API',
-    version: '1.0.0',
-    status: 'online'
-  }
+     return {
+          name: 'ChataDataSense API',
+          version: '1.0.0',
+          status: 'online'
+     }
 })
 
 // Routes API v1
 router.group(() => {
 
-  router.get('/', async () => {
-    return {
-      name: 'ChataDataSense API',
-      version: '1.0.0',
-      status: 'online'
-    }
-  })
+     router.get('/', async () => {
+          return {
+               name: 'ChataDataSense API',
+               version: '1.0.0',
+               status: 'online'
+          }
+     })
 
-  router.post('/chat', async ({ request, response }: HttpContext) => {
-    const body = request.all()
-    const message = body.message?.trim()
-    const clientKey = body.clientKey?.trim() // Clé du client
-    const requestHost = request.header('host') // Récupère le domaine du client
+     router.post('/chat', async ({ request, response }: HttpContext) => {
+          const body = request.all()
+          const message = body.message?.trim()
+          const clientKey = body.clientKey?.trim() // Clé du client
+          const requestHost = request.header('host') // Récupère le domaine du client
 
-    // Vérification de la clé client
-    if (!clientKey || !clientsData[clientKey]) {
-      return response.badRequest({ error: "Clé client invalide." })
-    }
+          // Chargement des clients depuis JSON
+          const clientsFilePath = path.join(process.cwd(), 'data/clients.json')
+          const clientsData = JSON.parse(fs.readFileSync(clientsFilePath, 'utf-8').replace(/^\uFEFF/, ''))
 
-    const client = clientsData[clientKey]
+          // Vérification de la clé client
+          if (!clientKey || !clientsData[clientKey]) {
+               return response.badRequest({ error: "Clé client invalide." })
+          }
+          const client = clientsData[clientKey]
 
-    // Vérification du domaine
-    if (!requestHost || !client.allowed_domains.includes(requestHost)) {
-      return response.unauthorized({ error: `Accès interdit : Domaine non autorisé (${requestHost}).` })
-    }
+          // Vérification du domaine
+          if (!requestHost || !client.allowed_domains.includes(requestHost)) {
+               return response.unauthorized({ error: `Accès interdit : Domaine non autorisé (${requestHost}).` })
+          }
 
-    // Vérification du message
-    if (!message) {
-      return response.badRequest({ error: "Le champ 'message' est requis." })
-    }
+          // Vérification du message
+          if (!message) {
+               return response.badRequest({ error: "Le champ 'message' est requis." })
+          }
 
-    try {
+          try {
+               const clientData = loadClientData(clientKey);
 
-      // Charger les données locales JSON selon le client
-      const dataPath = path.join(process.cwd(), `data/client/${clientKey}.json`)
+               // Préparation du prompt pour l'API (Ohoh)
+               let prompt = `Tu es un agent conversationnel (chatbot) intégré au site web de ${client.name}.`+ '\n'
+               prompt += `Ta mission est d’aider les visiteurs en répondant à leurs questions, uniquement si elles sont en lien avec l’activité du site ${client.activity}.`+ '\n'
 
 
-      const data = fs.existsSync(dataPath) ? JSON.parse(fs.readFileSync(dataPath, 'utf-8')) : {}
+               if(clientData.prompt){
+                    prompt += `Voici les données :`+ '\n'
+                    prompt += clientData.prompt+ '\n'
+               }
 
+               prompt += `Ne fournis pas trop d’informations, pose plutôt des questions supplémentaires si nécessaire pour affiner ta réponse.`+ '\n'
+               prompt += `Priorise des réponses concises et utiles, tout en restant naturel et engageant.`+ '\n'
+               prompt += `Si une demande sort du cadre du site, indique poliment que tu ne peux pas répondre.`+ '\n'
+               prompt += `Adapte ton ton et ton langage en fonction du contexte pour offrir une expérience fluide et agréable aux utilisateurs.`+ '\n'
+               prompt += `Message: ${message}\nRéponse:` + '\n'
 
-      // Construire le prompt avec la localisation
-      let prompt = `Tu es un agent conversationnel (chatbot) intégré au site web Office de Tourisme de la ville de Brioude`
-        prompt += `Ta mission est d’aider les visiteurs en répondant à leurs questions, uniquement si elles sont en lien avec l’activité du site.`
-      if (data) {
-        prompt += `Pour les sujets suivants : restaurants, activités et événements, tu peux t’appuyer sur ces données :\n${JSON.stringify(data)}\n`
-      }
-      prompt += `Ne fournis pas trop d’informations, pose plutôt des questions supplémentaires si nécessaire pour affiner ta réponse.`
-      prompt += `Priorise des réponses concises et utiles, tout en restant naturel et engageant.`
-      prompt += `Si une demande sort du cadre du site, indique poliment que tu ne peux pas répondre.`
-      prompt += `Adapte ton ton et ton langage en fonction du contexte pour offrir une expérience fluide et agréable aux utilisateurs.`
-      prompt += `Message: ${message}\nRéponse:`
+               console.error("Prompt:", prompt)
 
-      // Appel à l'API Mistral AI
-      const mistralResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Env.get('MISTRAL_API_KEY')}`
-        },
-        body: JSON.stringify({
-          model: "mistral-medium",
-          messages: [{ role: "user", content: prompt }]
-        })
-      })
+               // Appel à l'API Mistral AI
+               const mistralResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
+                    method: 'POST',
+                         headers: {
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${Env.get('MISTRAL_API_KEY')}`
+                         },
+                         body: JSON.stringify({
+                         model: "mistral-medium",
+                         messages: [{ role: "user", content: prompt }]
+                    })
+               })
 
-      // 🔥 Typage + validation
-      const mistralData = await mistralResponse.json() as MistralResponse;
+               const mistralData = await mistralResponse.json() as MistralResponse;
+               return { response: mistralData.choices?.[0]?.message?.content || "Je ne peux pas répondre pour l’instant." };
 
-      return { response: mistralData.choices?.[0]?.message?.content || "Je ne peux pas répondre pour l’instant." };
-    } catch (error) {
-      console.error("Erreur API Mistral:", error)
-      return response.internalServerError({ error: "Impossible de récupérer une réponse pour le moment." })
-    }
-  })
+               } catch (error) {
+                    console.error("Erreur API Mistral:", error)
+                    return response.internalServerError({ error: "Impossible de récupérer une réponse pour le moment." })
+          }
+     })
 
 }).prefix('/api/v1')

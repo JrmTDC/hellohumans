@@ -1,6 +1,6 @@
 {
      "name": "Evenements à Brioude",
-     "prompt": "Voici la listes des evenements sur Brioude et ses alentours avec leurs informations",
+     "prompt": "Listes des evenements sur Brioude et ses alentours avec leurs informations : ",
      "lists": [
           {
                "name": "Repas dansant",
