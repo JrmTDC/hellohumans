@@ -63,74 +63,123 @@ const sendSuggestedMessage = (question) => {
 // Vérifie si c'est un nouveau visiteur
 const isBrowser = typeof window !== "undefined"
 
-// Détecte si l'utilisateur est sur mobile
-onMounted(() => {
-     document.addEventListener("click", handleClickOutside)
-     isMobile.value = window.innerWidth <= 768
-     const savedNotifications = localStorage.getItem("notifications_enabled")
-     if (savedNotifications !== null) {
-          notificationsEnabled.value = savedNotifications === "true"
-     }
+// Watch pour sauvegarder l'historique des messages
+watch(messages, (newMessages) => {
      if (isBrowser) {
-          const savedMessages = localStorage.getItem("chat_history")
-          if (savedMessages) {
-               messages.value = JSON.parse(savedMessages)
+          localStorage.setItem("chat_history", JSON.stringify(newMessages));
+     }
+}, { deep: true });
+
+// Watch pour gérer le comportement de l'interface utilisateur
+watch(isChatActive, (newVal) => {
+     if (newVal) {
+          nextTick(() => {
+               scrollToBottom();
+               if (chatContainer.value) {
+                    chatContainer.value.addEventListener("scroll", updateScrollbar);
+               }
+               if (customScrollbar.value) {
+                    customScrollbar.value.addEventListener("mousedown", startDrag);
+               }
+          });
+     } else {
+          // Détacher l'événement scroll lorsque isChatActive devient false
+          if (chatContainer.value) {
+               chatContainer.value.removeEventListener("scroll", updateScrollbar);
+          }
+          if (customScrollbar.value) {
+               customScrollbar.value.removeEventListener("mousedown", startDrag);
           }
      }
-     if (chatContainer.value) {
-          chatContainer.value.addEventListener("scroll", updateScrollbar)
-          updateScrollbar()
-     }
+});
 
+
+
+// Détecte si l'utilisateur est sur mobile
+onMounted(async () => {
+     document.addEventListener("click", handleClickOutside);
+     isMobile.value = window.innerWidth <= 768;
+     const savedNotifications = localStorage.getItem("notifications_enabled");
+     if (savedNotifications !== null) {
+          notificationsEnabled.value = savedNotifications === "true";
+     }
+     if (isBrowser) {
+          const savedMessages = localStorage.getItem("chat_history");
+          if (savedMessages) {
+               messages.value = JSON.parse(savedMessages);
+          }
+     }
+     await nextTick();
+     if (chatContainer.value) {
+          chatContainer.value.addEventListener("scroll", updateScrollbar);
+     }
      if (customScrollbar.value) {
-          customScrollbar.value.addEventListener("mousedown", startDrag)
+          console.log('dd');
+          customScrollbar.value.addEventListener("mousedown", startDrag);
      }
 })
 
 onUnmounted(() => {
-     document.removeEventListener("click", handleClickOutside)
+     document.removeEventListener("click", handleClickOutside);
+     if (chatContainer.value) {
+          chatContainer.value.removeEventListener("scroll", updateScrollbar);
+     }
+     if (customScrollbar.value) {
+          customScrollbar.value.removeEventListener("mousedown", startDrag);
+     }
 })
-
-// Sauvegarde l'historique en localStorage
-watch(messages, (newMessages) => {
-  if (isBrowser) {
-    localStorage.setItem("chat_history", JSON.stringify(newMessages))
-  }
-}, { deep: true })
 
 
 // Met à jour la position de la scrollbar custom
 const updateScrollbar = () => {
-     if (chatContainer.value && customScrollbar.value) {
-          const scrollHeight = chatContainer.value.scrollHeight
-          const scrollTop = chatContainer.value.scrollTop
-          const clientHeight = chatContainer.value.clientHeight
+     if (!chatContainer.value) return;
 
-          // Si pas besoin de scrollbar, la cacher
-          if (scrollHeight <= clientHeight) {
-               chatContainer.value.classList.remove('has-scroll')
-               return
-          }
+     const scrollHeight = chatContainer.value.scrollHeight;
+     const scrollTop = chatContainer.value.scrollTop;
+     const clientHeight = chatContainer.value.clientHeight;
 
-          chatContainer.value.classList.add('has-scroll')
-
-          // Calcul de la hauteur et de la position de la scrollbar custom
-          const scrollbarHeight = (clientHeight / scrollHeight) * 100
-          const scrollbarPosition = (scrollTop / scrollHeight) * 100
-
-          customScrollbar.value.style.height = `${scrollbarHeight}%`
-          customScrollbar.value.style.top = `${scrollbarPosition}%`
+     if (scrollHeight <= clientHeight) {
+          // Masquer la barre de défilement si le contenu ne dépasse pas
+          customScrollbar.value.style.display = "none";
+          return;
      }
-}
 
-// Gestion du "drag" de la scrollbar custom
+     // Afficher et mettre à jour la barre de défilement
+     customScrollbar.value.style.display = "block";
+     const scrollbarHeight = Math.max((clientHeight / scrollHeight) * clientHeight, 30);
+     const scrollbarPosition = (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - scrollbarHeight);
+     customScrollbar.value.style.height = `${scrollbarHeight}px`;
+     customScrollbar.value.style.transform = `translateY(${scrollbarPosition}px)`;
+};
+
 const startDrag = (event) => {
-     isDragging = true
-     startY = event.clientY
-     startScrollTop = chatContainer.value.scrollTop
-     document.addEventListener("mousemove", onDrag)
-     document.addEventListener("mouseup", stopDrag)
-}
+     isDragging = true;
+     startY = event.clientY;
+     startScrollTop = chatContainer.value.scrollTop;
+     console.log('oo');
+     document.addEventListener("mousemove", onDrag);
+     document.addEventListener("mouseup", stopDrag);
+};
+
+const onDrag = (event) => {
+     console.log('oo');
+     if (!isDragging || !chatContainer.value || !customScrollbar.value) return;
+
+     const scrollHeight = chatContainer.value.scrollHeight;
+     const clientHeight = chatContainer.value.clientHeight;
+     const deltaY = event.clientY - startY;
+
+     const scrollMove = (deltaY / clientHeight) * scrollHeight;
+
+     chatContainer.value.scrollTop = startScrollTop + scrollMove;
+     updateScrollbar();
+};
+
+const stopDrag = () => {
+     isDragging = false;
+     document.removeEventListener("mousemove", onDrag);
+     document.removeEventListener("mouseup", stopDrag);
+};
 
 // Fonction pour scroller automatiquement en bas avec effet fluide
 const scrollToBottom = () => {
@@ -139,38 +188,20 @@ const scrollToBottom = () => {
                chatContainer.value.scrollTo({
                     top: chatContainer.value.scrollHeight,
                     behavior: "smooth"
-               })
-               updateScrollbar()
+               });
+               setTimeout(updateScrollbar, 200); // Mise à jour après le scroll
           }
-     })
-}
-
-const onDrag = (event) => {
-     if (!isDragging || !chatContainer.value || !customScrollbar.value) return
-
-     const scrollHeight = chatContainer.value.scrollHeight
-     const clientHeight = chatContainer.value.clientHeight
-     const deltaY = event.clientY - startY
-     const scrollMove = (deltaY / clientHeight) * scrollHeight
-
-     chatContainer.value.scrollTop = startScrollTop + scrollMove
-     updateScrollbar()
-}
-
-const stopDrag = () => {
-     isDragging = false
-     document.removeEventListener("mousemove", onDrag)
-     document.removeEventListener("mouseup", stopDrag)
-}
-
+     });
+};
 
 // Fonction pour vider l'historique
 const clearChatAndClose = () => {
-  messages.value = []
-  if (isBrowser) {
-    localStorage.removeItem("chat_history")
-  }
-  showOptions.value = false
+     messages.value = []
+     if (isBrowser) {
+          localStorage.removeItem("chat_history")
+     }
+     showOptions.value = false
+     updateScrollbar(); // Mettre à jour la barre de défilement
 }
 
 // Fonction pour ouvrire/fermer les options
@@ -188,7 +219,11 @@ const handleClickOutside = (event) => {
 // Envoi d'un message
 const sendMessage = async () => {
      if (!message.value.trim()) return
-
+     // Scroll en bas et mettre à jour la barre de défilement
+     nextTick(() => {
+          scrollToBottom();
+          updateScrollbar();
+     });
      messages.value.push({
           text: message.value,
           datetime: new Date().toISOString(),
@@ -196,8 +231,6 @@ const sendMessage = async () => {
           sender: "user"
      })
      isChatActive.value = true
-     scrollToBottom()
-
      isLoading.value = true
      const userMessage = message.value
      message.value = ""
@@ -220,7 +253,6 @@ const sendMessage = async () => {
                     status: data.status,
                     sender: "bot"
                })
-               scrollToBottom()
                isLoading.value = false
           }, 1000)
      } catch (error) {
@@ -230,14 +262,16 @@ const sendMessage = async () => {
                status: "error",
                sender: "bot"
           })
-          scrollToBottom()
           isLoading.value = false
      }
+     // Scroll en bas et mettre à jour la barre de défilement
+     nextTick(() => {
+          scrollToBottom();
+          updateScrollbar();
+     });
 }
 
 // Fonction pour ouvrir/fermer le chatbot
-
-
 const toggleChat = () => {
      isOpen.value = !isOpen.value
      if (!isOpen.value) {
@@ -245,7 +279,6 @@ const toggleChat = () => {
      }
 
 }
-
 
 const formatMessage = (text) => {
   // Gérer les sauts de ligne et les listes
@@ -256,14 +289,6 @@ const formatMessage = (text) => {
       .replace(/\*(.*?)\*/g, "<em>$1</em>") // Formatage en italique *Texte*
       .replace(/- (.*?)<br>/g, "• $1<br>"); // Convertir les listes en puces
 }
-
-watch(isChatActive, (newVal) => {
-     if (newVal) {
-          nextTick(() => {
-               scrollToBottom()
-          })
-     }
-})
 </script>
 
 <template>
@@ -321,7 +346,7 @@ watch(isChatActive, (newVal) => {
                </div>
                <div v-if="isChatActive" class="mt-[15px] text-white text-[15px] font-normal">Je suis là pour vous aider !</div>
           </div>
-         <div class="relative">
+          <div class="relative">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 372 15" class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]"
               ><path d="M349.8 1.4C334.5.4 318.5 0 302 0h-2.5c-9.1 0-18.4.1-27.8.4-34.5 1-68.3 3-102.3 4.7-14 .5-28 1.2-41.5 1.6C84 7.7 41.6 5.3 0 2.2v8.4c41.6 3 84 5.3 128.2 4.1 13.5-.4 27.5-1.1 41.5-1.6 33.9-1.7 67.8-3.6 102.3-4.7 9.4-.3 18.7-.4 27.8-.4h2.5c16.5 0 32.4.4 47.8 1.4 8.4.3 15.6.7 22 1.2V2.2c-6.5-.5-13.8-.5-22.3-.8z" fill="#fff"></path></svg>
          </div>
@@ -374,8 +399,8 @@ watch(isChatActive, (newVal) => {
           </div>
 
           <!-- Messages -->
-          <div id="conversation-group" ref="chatContainer"  v-auto-animate v-if="isChatActive" class="w-full overflow-hidden overflow-y-auto bg-white transition duration-300 min-h-[160px] h-[487px] px-6 flex-1">
-               <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
+          <div id="conversation-group" ref="chatContainer"  v-auto-animate v-if="isChatActive" class="w-full overflow-y-auto bg-white transition duration-300 min-h-[160px] h-[487px] px-6 flex-1 max-h-full static">
+               <div id="messages" class="relative mt-[10px] w-full pb-6 float-left" >
                     <div v-for="(msg, index) in messages" :key="index"
                          :class="[
                     msg.sender === 'user'

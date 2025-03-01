@@ -49,22 +49,17 @@ button:hover .hhcss_iconChatFillPath{
      color: #06132b;
      background: #f0f2f7;
 }
-
-/* Cacher complètement la scrollbar native */
+#conversation-group{
+     position: static !important;
+ }
 #conversation-input,#conversation-input textarea, #conversation-group{
      scrollbar-width: none; /* Pour Firefox */
      -ms-overflow-style: none; /* Pour Edge */
      overflow-y: auto;
-     position: relative; /* Assurez-vous que le parent peut contenir l'élément enfant */
      &::-webkit-scrollbar {
           display: none; /* Pour Chrome, Safari et Opera */
      }
 }
-
-
-
-
-
 #conversation-group #conversation-scroll {
      width: 16px;
      height: calc(339px - 26px);
@@ -97,6 +92,15 @@ button:hover .hhcss_iconChatFillPath{
      #body:not(.mobile) & {
           opacity: 0.32;
           width: 10px;
+          margin: 0;
+     }
+}
+
+#conversation-group #conversation-scroll div:active{
+     body:not(.mobile) &,
+     #body:not(.mobile) & {
+          opacity: 0.32;
+          width: 8px;
           margin: 0;
      }
 }
