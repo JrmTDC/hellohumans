@@ -1,5 +1,5 @@
 ﻿<script setup>
-import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted, watch, computed } from 'vue'
 import logoHelloHumanMini from '@/assets/svg/logoHelloHumansMini.svg?raw'
 import logoHelloHumanFull from 'assets/svg/logoHelloHumansFull.svg?raw'
 import buttonIconChat from 'assets/svg/buttonIconChat.svg?raw'
@@ -129,6 +129,10 @@ onUnmounted(() => {
      }
 })
 
+// Filtrer les messages pour ne pas afficher les messages d'erreur
+const filteredMessages = computed(() => {
+     return messages.value.filter(msg => msg.status && msg.status !== 'error')
+})
 
 // Met à jour la position de la scrollbar custom
 const updateScrollbar = () => {
@@ -238,8 +242,15 @@ const sendMessage = async () => {
      try {
           const res = await fetch(apiUrl, {
                method: "POST",
-               headers: { "Content-Type": "application/json" },
-               body: JSON.stringify({ message: userMessage, clientKey: clientKey.value })
+               headers:
+                    {
+                         "Content-Type": "application/json",
+                         "x-api-key": clientKey.value
+                    },
+               body: JSON.stringify(
+                    {
+                         message: userMessage
+                    })
           })
           const data = await res.json()
 
@@ -247,19 +258,22 @@ const sendMessage = async () => {
                if (notificationsEnabled.value) {
                     playNotificationSound()
                }
-               messages.value.push({
-                    text: data.response,
-                    datetime: new Date().toISOString(),
-                    status: data.status,
-                    sender: "bot"
-               })
+               if (!data.status || data.status != "error") {
+                    messages.value.push({
+                         text: data.response,
+                         datetime: new Date().toISOString(),
+                         status: data.status,
+                         sender: "bot"
+                    })
+               }
+
                isLoading.value = false
           }, 1000)
      } catch (error) {
           messages.value.push({
                text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
                datetime: new Date().toISOString(),
-               status: "error",
+               status: "unavailable",
                sender: "bot"
           })
           isLoading.value = false
@@ -399,16 +413,17 @@ const formatMessage = (text) => {
           </div>
 
           <!-- Messages -->
+
           <div id="conversation-group" ref="chatContainer"  v-auto-animate v-if="isChatActive" class="w-full overflow-y-auto bg-white transition duration-300 min-h-[160px] h-[487px] px-6 flex-1 max-h-full static">
                <div id="messages" class="relative mt-[10px] w-full pb-6 float-left" >
-                    <div v-for="(msg, index) in messages" :key="index"
+                    <div v-for="(msg, index) in filteredMessages" :key="index"
                          :class="[
                     msg.sender === 'user'
                     ? 'hhcss_message-visitor mt-[9px] bg-[#0566ff] text-white float-right'
                     : 'hhcss_message-operator mt-[9px] text-[rgb(6,19,43)] float-left border border-transparent',
-                    msg.status === 'error' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
+                    msg.status === 'unavailable' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
                     'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
-                    ]">
+                    ]" >
                          <span v-html="formatMessage(msg.text)" class="whitespace-pre-line"></span>
                     </div>
                     <div v-if="isLoading" class="hhcss_messageLoading text-[#00a9ff] float-left border border-transparent py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out">
