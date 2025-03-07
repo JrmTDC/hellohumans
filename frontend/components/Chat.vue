@@ -28,6 +28,8 @@ const showOptions = ref(false)
 const optionsBox = ref(null)
 const customScrollbar = ref(null)
 const scrollbarContainer = ref(null)
+const isSending = ref(false) // Empêche l'envoi multiple
+
 let isDragging = false
 let startY = 0
 let startScrollTop = 0
@@ -223,6 +225,7 @@ const handleClickOutside = (event) => {
 // Envoi d'un message
 const sendMessage = async () => {
      if (!message.value.trim()) return
+
      // Scroll en bas et mettre à jour la barre de défilement
      nextTick(() => {
           scrollToBottom();
@@ -238,52 +241,55 @@ const sendMessage = async () => {
      isLoading.value = true
      const userMessage = message.value
      message.value = ""
+     if(!isSending.value){
+          isSending.value = true // Désactive l'envoi
+          try {
+               const res = await fetch(apiUrl, {
+                    method: "POST",
+                    headers:
+                         {
+                              "Content-Type": "application/json",
+                              "x-client-key": clientKey.value
+                         },
+                    body: JSON.stringify(
+                         {
+                              message: userMessage
+                         })
+               })
+               const data = await res.json()
 
-     try {
-          const res = await fetch(apiUrl, {
-               method: "POST",
-               headers:
-                    {
-                         "Content-Type": "application/json",
-                         "x-client-key": clientKey.value
-                    },
-               body: JSON.stringify(
-                    {
-                         message: userMessage
-                    })
-          })
-          const data = await res.json()
-
-          setTimeout(() => {
-               if (notificationsEnabled.value) {
-                    playNotificationSound()
-               }
-               if (data.status && (data.status === "success" || data.status === "unavailable") ) {
-                    messages.value.push({
-                         text: data.response,
-                         datetime: new Date().toISOString(),
-                         status: data.status,
-                         sender: "bot"
-                    })
-               }else{
-                    messages.value.push({
-                         text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
-                         datetime: new Date().toISOString(),
-                         status: "unavailable",
-                         sender: "bot"
-                    })
-               }
-
+               setTimeout(() => {
+                    if (notificationsEnabled.value) {
+                         playNotificationSound()
+                    }
+                    if (data.status && (data.status === "success" || data.status === "unavailable") ) {
+                         messages.value.push({
+                              text: data.response,
+                              datetime: new Date().toISOString(),
+                              status: data.status,
+                              sender: "bot"
+                         })
+                    }else{
+                         messages.value.push({
+                              text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+                              datetime: new Date().toISOString(),
+                              status: "unavailable",
+                              sender: "bot"
+                         })
+                    }
+                    isLoading.value = false
+                    isSending.value = false // Réactive l'envoi après la réponse du chatbot
+               }, 1000)
+          } catch (error) {
+               messages.value.push({
+                    text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+                    datetime: new Date().toISOString(),
+                    status: "unavailable",
+                    sender: "bot"
+               })
                isLoading.value = false
-          }, 1000)
-     } catch (error) {
-          messages.value.push({
-               text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
-               datetime: new Date().toISOString(),
-               status: "unavailable",
-               sender: "bot"
-          })
-          isLoading.value = false
+               isSending.value = false // Réactive l'envoi après la réponse du chatbot
+          }
      }
      // Scroll en bas et mettre à jour la barre de défilement
      nextTick(() => {
