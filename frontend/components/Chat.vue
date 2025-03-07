@@ -337,9 +337,9 @@ const formatMessage = (text) => {
                     </div>
                     <div v-if="isChatActive">
                          <div class="flex space-x-2 items-center">
-                              <button @click="isChatActive = false" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center ml-[-15px]">
+                              <button @click="isChatActive = false" class="hhcss_btnOption group ml-[-15px]">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.6312 17.7375L14.8687 19.5L7.36865 12L14.8687 4.5L16.6312 6.2625L10.9062 12L16.6312 17.7375Z" fill="#fff"></path></svg>
                                    <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] start-full ms-[10px] translate-x-[-5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Retour</span>
-                                   <span v-html="iconBack"></span>
                               </button>
                               <div v-html="logoHelloHumanMini"></div>
                               <div class="flex space-x-2 items-center"><span>Bonjour !</span> <span v-html="emojiHello" class="hhcss_emojiHelloChat"></span></div>
@@ -347,15 +347,15 @@ const formatMessage = (text) => {
                     </div>
                     <div class="flex">
                          <!-- Open options -->
-                         <button @click.stop="toggleOptions" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center">
-                              <span v-html="iconOption"></span>
+                         <button @click.stop="toggleOptions" class="hhcss_btnOption group">
+                              <svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"> <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path> </svg>
                               <span v-if="!showOptions"  class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Ouvrir les options</span>
                               <span v-if="showOptions" class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Fermer les options</span>
                          </button>
 
                          <!-- Minimize -->
-                         <button @click="toggleChat" class="relative group p-2 rounded-full transition hover:bg-[#00245c29] w-10 h-10 flex items-center justify-center mr-[-15px]">
-                              <span v-html="iconMinimize"></span>
+                         <button @click="toggleChat" class="hhcss_btnOption group">
+                              <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <path d="M17.7375 7.36914L19.5 9.13164L12 16.6316L4.5 9.13164L6.2625 7.36914L12 13.0941L17.7375 7.36914Z"></path> </svg>
                               <span v-auto-animate class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition">Réduire</span>
                          </button>
                     </div>
@@ -484,7 +484,7 @@ const formatMessage = (text) => {
                          </button>
                     </li>
                     <li class="rounded-[6px] flex">
-                         <button  @click="clearChatAndClose" class="p-2 px-4 flex m-0 w-full rounded-[6px] hover:bg-[#eff2f6]">
+                         <button  @click="clearChatAndClose" class="p-2 px-4 flex m-0 w-full rounded-[6px] hover:bg-[#eff2f6] ">
                               <svg class="fill-[#8894ab] h-[22px] w-[22px]" width="22" height="22" viewBox="0 0 14 15" xmlns="http://www.w3.org/2000/svg"> <path d="M0.956952 3.62988C0.956952 3.74707 1.34953 10.4238 1.54875 13.5908C1.60441 14.4668 2.18449 14.9971 3.07219 14.9971H9.97453C10.9853 14.9971 11.5185 14.4785 11.58 13.4736C11.7441 10.7666 12.1425 4.16602 12.1718 3.62695L0.956952 3.62988ZM8.91105 10.2949C9.28898 10.6729 9.28898 11.2852 8.91105 11.6631C8.53312 12.041 7.92082 12.041 7.54289 11.6631L6.56437 10.6846L5.58586 11.6631C5.20793 12.041 4.59562 12.041 4.21769 11.6631C3.83976 11.2852 3.83976 10.6729 4.21769 10.2949L5.19621 9.31641L4.21769 8.33496C3.83976 7.95703 3.83976 7.34473 4.21769 6.9668C4.59562 6.58887 5.20793 6.58887 5.58586 6.9668L6.56437 7.94531L7.54289 6.9668C7.92082 6.58887 8.53312 6.58887 8.91105 6.9668C9.28898 7.34473 9.28898 7.95703 8.91105 8.33496L7.93254 9.31641L8.91105 10.2949ZM12.1601 0.963867C11.3661 0.958008 10.5751 0.952148 9.7841 0.966797C9.73723 0.421875 9.28019 0 8.73234 0H4.37883C3.83098 0 3.37394 0.421875 3.33 0.966797C2.51555 0.952148 1.69816 0.958008 0.88371 0.963867C0.455976 0.969727 0.145429 1.20703 0.0428899 1.58203C-0.135821 2.23535 0.259687 2.77441 0.936444 2.77734C2.81437 2.7832 4.68937 2.78027 6.56437 2.78027H12.1542C12.7607 2.78027 13.1093 2.44043 13.1122 1.875C13.1152 1.30957 12.7636 0.966797 12.1601 0.963867Z"/> </svg>
                               <span class="ml-[10px] text-[#06132b]">Effacer l'historique</span>
                          </button>

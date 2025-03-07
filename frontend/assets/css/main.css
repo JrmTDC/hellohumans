@@ -104,3 +104,34 @@ button:hover .hhcss_iconChatFillPath{
           margin: 0;
      }
 }
+
+.hhcss_btnOption{
+     z-index: 2;
+     width: 40px;
+     height: 40px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     position: relative;
+     outline: none;
+}
+.hhcss_btnOption:hover span {
+     opacity: 1;
+     transform: translate(0px, -50%);
+}
+.hhcss_btnOption:hover:before {
+     transform: scale(1);
+}
+.hhcss_btnOption:before {
+     content: "";
+     position: absolute;
+     background: rgba(8, 15, 26, 0.16);
+     width: 40px;
+     height: 40px;
+     border-radius: 50%;
+     z-index: -1;
+     transition: 0.16s ease-in-out;
+     transform: scale(0);
+     top: calc(50% - 20px);
+     left: calc(50% - 20px);
+}
