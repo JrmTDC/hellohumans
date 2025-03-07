@@ -16,7 +16,7 @@ const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}/chat`
 
 const message = ref("")
-const clientKey = ref("550e8400-e29b-41d4-a716-446655440000") // Clé client
+const clientKey = ref(`${config.public.apiClientKey}`) // Clé client
 const messages = ref([]) // Historique des messages
 const isLoading = ref(false) // Animation de chargement
 const chatContainer = ref(null) // Référence à la zone de chat
@@ -131,7 +131,7 @@ onUnmounted(() => {
 
 // Filtrer les messages pour ne pas afficher les messages d'erreur
 const filteredMessages = computed(() => {
-     return messages.value.filter(msg => msg.status && msg.status !== 'error')
+     return messages.value.filter(msg => msg.status && (msg.status === 'success' || msg.status === 'unavailable'))
 })
 
 // Met à jour la position de la scrollbar custom
@@ -245,7 +245,7 @@ const sendMessage = async () => {
                headers:
                     {
                          "Content-Type": "application/json",
-                         "x-api-key": clientKey.value
+                         "x-client-key": clientKey.value
                     },
                body: JSON.stringify(
                     {
@@ -258,11 +258,18 @@ const sendMessage = async () => {
                if (notificationsEnabled.value) {
                     playNotificationSound()
                }
-               if (!data.status || data.status != "error") {
+               if (data.status && (data.status === "success" || data.status === "unavailable") ) {
                     messages.value.push({
                          text: data.response,
                          datetime: new Date().toISOString(),
                          status: data.status,
+                         sender: "bot"
+                    })
+               }else{
+                    messages.value.push({
+                         text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+                         datetime: new Date().toISOString(),
+                         status: "unavailable",
                          sender: "bot"
                     })
                }
