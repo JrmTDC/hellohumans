@@ -1,8 +1,4 @@
 <template>
-     <!--
-       Le composant parent principal gère la logique de votre chatbot (state, watchers, appels API, etc.)
-       et délègue l'affichage à des sous-composants: ChatHeader, ChatHome, ChatMessages, ChatInput, ChatOptions.
-     -->
      <div class="absolute w-[112px] h-[140px] bottom-[12px] flex items-center justify-center pointer-events-none z-[1] right-0">
           <button
                v-if="!isOpen"
@@ -22,12 +18,12 @@
 
      <!-- Conteneur principal du chatbot -->
      <div
-          v-if="isOpen"
+          v-if="isOpen || isVisible"
           id="hellohumans-chat-iframe"
-          class="transition-all max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200 ease-in-out absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto shadow-lg overflow-hidden z-1 bg-white transform scale-85 opacity-0"
+          class="max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200 absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto shadow-lg overflow-hidden z-1 bg-white scale-85 opacity-0 transform transition-transform duration-300 ease-in-out"
           :class="[
             isExpanded ? 'w-[593px]' : 'w-[372px]',
-            { 'scale-100 opacity-100': isOpen }
+            isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
           ]"
      >
           <!-- Zone de contenu avec animation -->
@@ -110,9 +106,9 @@ import ChatOptions from '@/components/chat/ChatOptions.vue';
 
 // --- État global du chatbot ---
 const config = useRuntimeConfig();
-const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}/chat`;
+const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}/`;
 
-const message = ref('');
+const message = ref(''); // Message en cours
 const clientKey = ref(`${config.public.apiClientKey}`); // Clé client
 const messages = ref<any[]>([]); // Historique des messages
 const isLoading = ref(false); // Animation de chargement
@@ -120,8 +116,9 @@ const isOpen = ref(false); // Gère l'ouverture du chatbot
 const isChatActive = ref(false); // Gère l'affichage entre Home & Chat
 const notificationsEnabled = ref(true); // True = Notifications activées
 const isExpanded = ref(false); // True = Chatbox agrandie
-const showOptions = ref(false);
+const showOptions = ref(false); // Gère l'ouverture des options
 const isSending = ref(false); // Empêche l'envoi multiple
+const isVisible = ref(false); // Gère l'animation d'ouverture
 
 // Modal RGPD
 const acceptedRGPD = ref(false);
@@ -153,6 +150,7 @@ watch(
      },
      { deep: true }
 );
+
 
 // Fonction pour jouer un son lorsqu'un message du chatbot arrive
 const playNotificationSound = () => {
@@ -238,7 +236,7 @@ const sendMessage = async () => {
      if (!isSending.value) {
           isSending.value = true; // Désactive l'envoi
           try {
-               const res = await fetch(apiUrl, {
+               const res = await fetch(apiUrl+'/chat', {
                     method: 'POST',
                     headers: {
                          'Content-Type': 'application/json',
@@ -305,6 +303,10 @@ const clearChatAndClose = () => {
 // Fonction pour ouvrir/fermer le chatbot
 const toggleChat = () => {
      isOpen.value = !isOpen.value;
+     setTimeout(() => {
+          isVisible.value = !isVisible.value;
+     }, 90);
+
      if (!isOpen.value) {
           setTimeout(() => {
                isChatActive.value = false;
@@ -325,34 +327,58 @@ const filteredMessages = computed(() => {
 });
 
 // Modal RGPD : l'utilisateur accepte
-async function onAcceptRGPD(userEmail: string) {
+async function onAcceptRGPD(userData: string) {
      try {
           // Appel API pour enregistrer le consentement RGPD
           // (à adapter avec votre URL / fetch)
-          await fetch('https://exemple.com/api/consent', {
+          /*
+          const res = await fetch(apiUrl+'/user', {
                method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email: userEmail }),
+               headers: {
+                    'Content-Type': 'application/json',
+                    'x-client-key': clientKey.value,
+               },
+               body: JSON.stringify({
+                    user: userData,
+               }),
           });
+          const data = await res.json();
+          */
+
+
+          // envoie email à api, recupère uuid
+          // email: localEmail.value,
+          // Stocker les données RGPD dans `localStorage`
+          localStorage.setItem(
+               'user',
+               JSON.stringify({
+                    uuid: '123456',
+                    rgpd: 'accepted'
+               })
+          );
+
+
      } catch (err) {
-          console.error('Erreur enregistrement RGPD:', err);
+          console.error("Erreur enregistrement de l'utilisateur:", err);
           // Gérer un éventuel message d'erreur
      }
+     setTimeout(() => {
 
-     // On marque la RGPD comme acceptée
-     acceptedRGPD.value = true;
+          // On marque la RGPD comme acceptée
+          acceptedRGPD.value = true;
 
-     // On ferme la modal
-     showRGPDModal.value = false;
+          // On ferme la modal
+          showRGPDModal.value = false;
+          // On envoie immédiatement le pendingMessage s'il y en a un
+          if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
+               // On place la valeur dans message
+               message.value = pendingMessage.value;
+               pendingMessage.value = null;
+               // On envoie
+               sendMessage();
+          }
 
-     // On envoie immédiatement le pendingMessage s'il y en a un
-     if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
-          // On place la valeur dans message
-          message.value = pendingMessage.value;
-          pendingMessage.value = null;
-          // On envoie
-          sendMessage();
-     }
+     }, 2000);
 }
 
 // Modal RGPD : l'utilisateur clique sur la croix pour fermer
