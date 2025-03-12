@@ -1,9 +1,9 @@
-﻿<script setup>
-import Chat from '~/components/Chat.vue'
-</script>
-
-<template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-200">
-    <Chat />
-  </div>
+﻿<template>
+     <div>
+          <Chat />
+     </div>
 </template>
+
+<script setup lang="ts">
+import Chat from '@/components/chat/Chat.vue'
+</script>
