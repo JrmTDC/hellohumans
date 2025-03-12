@@ -83,24 +83,3 @@ const props = defineProps<{
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
 
 </script>
-
-<style scoped>
-/* Animation Slide-Up (Apparition de bas en haut) */
-[v-auto-animate] > div {
-     transform: translateY(100%);
-     opacity: 0;
-     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-}
-
-/* Une fois affiché, on remet l'élément en position normale */
-[v-auto-animate] > div.auto-animated {
-     transform: translateY(0);
-     opacity: 1;
-}
-
-/* Effet inverse quand il disparaît */
-[v-auto-animate] > div.leaving {
-     transform: translateY(100%);
-     opacity: 0;
-}
-</style>

@@ -25,10 +25,12 @@
                     <div class="relative left-0 p-[15px]">
                          <svgoIconInput class="w-[24px] h-[24px] fill-[#0566ff] rotate-45 absolute top-[28px] left-[25px]" />
                          <input
-                              v-model="localEmail"
+                              v-model="localUser"
                               type="email"
                               placeholder="Entrez votre email"
                               class="border border-[rgba(108,125,159,0.24)] text-[15px] p-[9px_12px_10px_40px] leading-normal m-0 w-full rounded-[10px] focus:outline-none h-[50px]"
+                              :disabled="isLoading"
+                              @keydown.enter.prevent="onAccept"
                          />
                     </div>
                     <p class="text-[13px] mt-[10px] mb-[35px] text-[#9B9B9B] leading-[18px]">
@@ -38,9 +40,15 @@
                          @click="onAccept"
                          :disabled="!isEmailValid"
                          class="flex-shrink-0 w-full h-[50px] text-[16px] text-white rounded-[6px] relative"
-                         :class="isEmailValid ? 'bg-[#0566ff]' : 'bg-gray-400 cursor-not-allowed'"
+                         :class="[
+                              isEmailValid ? 'bg-[#0566ff]' : 'bg-gray-400 cursor-not-allowed',
+                              isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0566ff]'
+                         ]"
                     >
-                         J’accepte et je continue
+                         <span v-if="!isLoading">J’accepte et je continue</span>
+                         <span v-else class="flex items-center text-center justify-center">
+                              Chargement...
+                         </span>
                     </button>
                </div>
           </div>
@@ -48,20 +56,32 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import autoAnimate from '@formkit/auto-animate'
 
 const props = defineProps<{
      show: boolean; // True si on doit afficher la modal
 }>();
 
-const emits = defineEmits(['accept', 'close']);
-const localEmail = ref('');
-const modalContainer = ref(null);
+const emits = defineEmits(['accept', 'close', 'loading']);
+const localUser = ref('');
 const isVisible = ref(false); // Pour contrôler l'animation proprement
+const isLoading = ref(false); // Gère le loading du bouton
+
+// Vérifier si l'utilisateur a déjà accepté le RGPD
+onMounted(() => {
+     const storedUserData = localStorage.getItem('user');
+     if (storedUserData) {
+          const userData = JSON.parse(storedUserData);
+          if (userData.rgpd === 'accepted' && userData.uuid) {
+               localUser.value = userData.email;
+               emits('accept', userData.email, 'isLoading', false);
+          }
+     }
+});
+
 
 // Vérifier si l'email est valide
 const isEmailValid = computed(() => {
-     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(localEmail.value);
+     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(localUser.value);
 });
 
 // Activer l'animation avec un petit délai
@@ -79,7 +99,9 @@ watch(() => props.show, (newVal) => {
 
 // Quand l’utilisateur clique “J’accepte”
 function onAccept() {
-     emits('accept', localEmail.value);
+     if (!isEmailValid.value || isLoading.value) return;
+     isLoading.value = true;
+     emits('accept', localUser.value);
 }
 
 // Quand l’utilisateur clique sur “Fermer” (croix en haut)
