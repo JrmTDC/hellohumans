@@ -38,10 +38,8 @@
                          @click="$emit('toggleExpend')"
                          class="p-2 px-4 flex m-0 w-full rounded-[6px] hover:bg-[#eff2f6] items-center"
                     >
-                         <svgoIconExpand class="fill-[#8894ab] h-[16px] w-[16px]" v-if="!isExpanded" />
-                         <svgoIconCollapse class="strock-[#8894ab] h-[16px] w-[16px]" v-if="isExpanded"/>
-
-
+                         <svgoIconExpand class="fill-[#474747] h-[20px] w-[20px]" v-if="!isExpanded" />
+                         <svgoIconCollapse class="fill-[#474747] h-[20px] w-[20px]" v-if="isExpanded"/>
                          <span class="ml-[10px] text-[#06132b]">{{ isExpanded ? "Réduire" : "Agrendir" }} la discution</span>
                     </button>
                </li>
@@ -50,7 +48,7 @@
                          @click="$emit('clearChatAndClose')"
                          class="p-2 px-4 flex m-0 w-full rounded-[6px] hover:bg-[#eff2f6] items-center"
                     >
-                         <svgoIconTrash class="fill-[#8894ab] h-[20px] w-[20px]" />
+                         <svgoIconTrash class="fill-[#474747] h-[22px] w-[22px]" />
                          <span class="ml-[10px] text-[#06132b]">Effacer l'historique</span>
                     </button>
                </li>

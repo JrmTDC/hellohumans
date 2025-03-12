@@ -1,7 +1,7 @@
 <template>
-     <div class="p-[24px] pt-[0] pb-[0] max-h-[434px] mt-[-40px] overflow-y-auto flex flex-col z-10 scroll-px-[24px] flex-[1_1_0%]">
+     <div class="p-[24px] pt-[0] pb-[0] max-h-[434px] mt-[-40px] overflow-y-auto flex flex-col z-30 scroll-px-[24px] flex-[1_1_0%]">
           <!-- Questions suggérées -->
-          <div class="flex rounded-[12px] divide-solid overflow-y-hidden mb-[16px] w-full border border-[#EFF2F6]">
+          <div class="flex rounded-[12px] divide-solid overflow-y-hidden mb-[16px] w-full border border-[#EFF2F6] z-20">
                <div class="flex flex-col w-full items-center overflow-y-auto bg-[#fff]">
                     <div
                          v-for="(question, index) in suggestedQuestions"
@@ -83,3 +83,24 @@ const props = defineProps<{
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
 
 </script>
+
+<style scoped>
+/* Animation Slide-Up (Apparition de bas en haut) */
+[v-auto-animate] > div {
+     transform: translateY(100%);
+     opacity: 0;
+     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Une fois affiché, on remet l'élément en position normale */
+[v-auto-animate] > div.auto-animated {
+     transform: translateY(0);
+     opacity: 1;
+}
+
+/* Effet inverse quand il disparaît */
+[v-auto-animate] > div.leaving {
+     transform: translateY(100%);
+     opacity: 0;
+}
+</style>

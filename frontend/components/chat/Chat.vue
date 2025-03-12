@@ -24,52 +24,55 @@
      <div
           v-if="isOpen"
           id="hellohumans-chat-iframe"
-          v-auto-animate
           class="transition-all max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200 ease-in-out absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto shadow-lg overflow-hidden z-1 bg-white transform scale-85 opacity-0"
           :class="[
             isExpanded ? 'w-[593px]' : 'w-[372px]',
             { 'scale-100 opacity-100': isOpen }
           ]"
      >
-          <!-- Header -->
-          <ChatHeader
-               :isChatActive="isChatActive"
-               :isOpen="isOpen"
-               :notificationsEnabled="notificationsEnabled"
-               :showOptions="showOptions"
-               @goToHome="goToHome"
-               @toggleChat="toggleChat"
-               @toggleOptions="toggleOptions"
-          />
+          <!-- Zone de contenu avec animation -->
+          <div v-auto-animate class="flex-1 overflow-hidden">
 
-          <!-- Vague décorative -->
-          <div class="relative">
-               <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]"/>
+               <!-- Header -->
+               <ChatHeader
+                    :isChatActive="isChatActive"
+                    :isOpen="isOpen"
+                    :notificationsEnabled="notificationsEnabled"
+                    :showOptions="showOptions"
+                    @goToHome="goToHome"
+                    @toggleChat="toggleChat"
+                    @toggleOptions="toggleOptions"
+               />
+
+               <!-- Vague décorative -->
+               <div class="relative z-10">
+                    <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]"/>
+               </div>
+
+               <!-- Écran d'accueil (Home) -->
+               <ChatHome
+                    v-if="!isChatActive"
+                    :suggestedQuestions="suggestedQuestions"
+                    @sendSuggestedMessage="sendSuggestedMessage"
+                    @openChat="() => (isChatActive = true)"
+               />
+
+               <!-- Conteneur des messages -->
+               <ChatMessages
+                    v-if="isChatActive"
+                    :messages="messages"
+                    :isLoading="isLoading"
+                    :isChatActive="isChatActive"
+               />
+
+               <!-- Zone de saisie -->
+               <ChatInput
+                    v-if="isChatActive"
+                    v-model:currentMessage="message"
+                    @sendMessage="sendMessage"
+                    :acceptedRGPD="acceptedRGPD"
+               />
           </div>
-
-          <!-- Écran d'accueil (Home) -->
-          <ChatHome
-               v-if="!isChatActive"
-               :suggestedQuestions="suggestedQuestions"
-               @sendSuggestedMessage="sendSuggestedMessage"
-               @openChat="() => (isChatActive = true)"
-          />
-
-          <!-- Conteneur des messages -->
-          <ChatMessages
-               v-if="isChatActive"
-               :messages="messages"
-               :isLoading="isLoading"
-               :isChatActive="isChatActive"
-          />
-
-          <!-- Zone de saisie -->
-          <ChatInput
-               v-if="isChatActive"
-               v-model:currentMessage="message"
-               @sendMessage="sendMessage"
-               :acceptedRGPD="acceptedRGPD"
-          />
 
           <!-- RGPD Modal -->
           <ChatModal

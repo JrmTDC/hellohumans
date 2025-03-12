@@ -4,18 +4,20 @@
                class="fixed top-0 left-0 w-full h-full z-[1000] flex justify-center items-end pointer-events-auto"
           >
                <!-- Overlay semi-transparent -->
-               <div class="absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)]"></div>
+               <div class="absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] transition-opacity duration-300"
+                    :class="isVisible ? 'opacity-100' : 'opacity-0'"></div>
 
                <!-- Conteneur de la boîte en bas -->
                <div
-                    class="absolute bottom-0 left-[22px] right-[22px] w-[calc(100%-44px)] max-h-[calc(100%-8px)] p-[32px_20px] pt-[45px] bg-white rounded-t-[12px] z-[1001] overflow-hidden"
+                    class="absolute bottom-0 left-[22px] right-[22px] w-[calc(100%-44px)] max-h-[calc(100%-8px)] p-[32px_20px] pt-[45px] bg-white rounded-t-[12px] z-[1001] overflow-hidden transform transition-transform duration-300 ease-in-out"
+                    :class="isVisible ? 'translate-y-0' : 'translate-y-full'"
                >
                     <!-- Bouton Fermer (top right) -->
                     <button
                          @click="closeModal"
-                         class="absolute top-[20px] right-[20px] text-gray-500 hover:text-gray-700"
+                         class="absolute top-[20px] right-[20px] group"
                     >
-                         <svgoIconMinimize class="w-[24px] h-[24px] fill-[#6D7E9E]" />
+                         <svgoIconMinimize class="w-[24px] h-[24px] fill-[#6D7E9E] group-hover:fill-[#0566ff]" />
                     </button>
 
                     <!-- Titre + formulaire RGPD -->
@@ -45,22 +47,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import autoAnimate from '@formkit/auto-animate'
 
 const props = defineProps<{
      show: boolean; // True si on doit afficher la modal
 }>();
 
 const emits = defineEmits(['accept', 'close']);
-
-// E-mail local, tapé par l’utilisateur dans le champ
 const localEmail = ref('');
+const modalContainer = ref(null);
+const isVisible = ref(false); // Pour contrôler l'animation proprement
 
 // Vérifier si l'email est valide
 const isEmailValid = computed(() => {
      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(localEmail.value);
 });
 
+// Activer l'animation avec un petit délai
+watch(() => props.show, (newVal) => {
+     if (newVal) {
+          setTimeout(() => {
+               isVisible.value = true;
+          }, 50);
+     } else {
+          setTimeout(() => {
+               isVisible.value = false;
+          }, 50);
+     }
+});
 
 // Quand l’utilisateur clique “J’accepte”
 function onAccept() {
@@ -69,7 +84,7 @@ function onAccept() {
 
 // Quand l’utilisateur clique sur “Fermer” (croix en haut)
 function closeModal() {
-     // On émet un event 'close' pour signaler qu’on veut fermer la modal
-     emits('close');
+     isVisible.value = false; // Animation de fermeture
+     setTimeout(() => emits('close'), 300); // Attendre 300ms avant de cacher complètement
 }
 </script>
