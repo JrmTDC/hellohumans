@@ -131,3 +131,7 @@ button:hover .hhcss_iconChatFillPath{
      top: calc(50% - 20px);
      left: calc(50% - 20px);
 }
+/* Transition fluide de la largeur */
+#hellohumans-chat-iframe{
+     transition: width 0.3s ease-in-out;
+}
