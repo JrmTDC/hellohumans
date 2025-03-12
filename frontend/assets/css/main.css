@@ -2,10 +2,6 @@
     font-family: Mulish;
     letter-spacing: -0.24px;
 }
-.hhcss_emojiHelloChat svg{
-    width:15px;
-    height:15px;
-}
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
 }
@@ -55,7 +51,7 @@ button:hover .hhcss_iconChatFillPath{
 #conversation-input,#conversation-input textarea, #conversation-group{
      scrollbar-width: none; /* Pour Firefox */
      -ms-overflow-style: none; /* Pour Edge */
-     overflow-y: auto;
+
      &::-webkit-scrollbar {
           display: none; /* Pour Chrome, Safari et Opera */
      }
