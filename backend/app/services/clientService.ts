@@ -1,21 +1,24 @@
 import { supabase } from '#services/supabaseClient'
-import { ClientEntity } from '#contracts/interfaces'
+
+interface ClientEntity {
+     uuid: string
+     client_key: string
+     name: string
+     activity: string
+     allowed_domains: string[]
+     has_nature_pack: boolean
+     config: any
+}
 
 class ClientService {
-     /**
-      * Récupère les infos du client depuis la table clients
-      */
-     public async getClient(clientKey: string): Promise<ClientEntity | null> {
+     public async getClientByKey(clientKey: string): Promise<ClientEntity | null> {
           const { data, error } = await supabase
                .from('clients')
                .select('*')
                .eq('client_key', clientKey)
                .single()
 
-          if (error) {
-               if (error.code !== 'PGRST116') {
-                    console.error('Erreur getClient:', error)
-               }
+          if (error || !data) {
                return null
           }
 

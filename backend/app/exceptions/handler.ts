@@ -1,28 +1,55 @@
+// app/exceptions/handler.ts
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
-  /**
-   * In debug mode, the exception handler will display verbose errors
-   * with pretty printed stack traces.
-   */
-  protected debug = !app.inProduction
+     protected debug = !app.inProduction
 
-  /**
-   * The method is used for handling errors and returning
-   * response to the client
-   */
-  async handle(error: unknown, ctx: HttpContext) {
-    return super.handle(error, ctx)
-  }
+     public async handle(error: any, ctx: HttpContext) {
+          const statusCode = error.status || 500
 
-  /**
-   * The method is used to report error to the logging service or
-   * the third party error monitoring service.
-   *
-   * @note You should not attempt to send a response from this method.
-   */
-  async report(error: unknown, ctx: HttpContext) {
-    return super.report(error, ctx)
-  }
+          // Erreurs spécifiques
+          if (error.code === 'E_ROUTE_NOT_FOUND') {
+               return ctx.response.status(404).send({
+                    error: {
+                         name: 'not_found',
+                         description: 'The requested route does not exist.',
+                    },
+                    request: ctx.request.id(),
+               })
+          }
+
+          if (statusCode === 403) {
+               return ctx.response.status(403).send({
+                    error: {
+                         name: 'forbidden',
+                         description: 'You do not have permission to access this resource.',
+                    },
+                    request: ctx.request.id(),
+               })
+          }
+
+          if (statusCode === 422) {
+               return ctx.response.status(422).send({
+                    error: {
+                         name: 'validation_error',
+                         description: error.message || 'Invalid input data.',
+                    },
+                    request: ctx.request.id(),
+               })
+          }
+
+          // Par défaut
+          return ctx.response.status(statusCode).send({
+               error: {
+                    name: 'internal_server_error',
+                    description: 'An unexpected error occurred.',
+               },
+               request: ctx.request.id(),
+          })
+     }
+
+     public async report(error: any, ctx: HttpContext) {
+          console.error(`[ERROR] ${error.message} /n [CTX] ${ctx}`, error)
+     }
 }

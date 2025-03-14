@@ -1,13 +1,4 @@
-/*
-|--------------------------------------------------------------------------
-| HTTP kernel file
-|--------------------------------------------------------------------------
-|
-| The HTTP kernel file is used to register the middleware with the server
-| or the router.
-|
-*/
-
+// start/kernel.ts
 import router from '@adonisjs/core/services/router'
 import server from '@adonisjs/core/services/server'
 
@@ -18,26 +9,32 @@ import server from '@adonisjs/core/services/server'
 server.errorHandler(() => import('#exceptions/handler'))
 
 /**
- * The server middleware stack runs middleware on all the HTTP
- * requests, even if there is no route registered for
- * the request URL.
+ * The server middleware stack runs on all HTTP requests.
  */
 server.use([
-  () => import('#middleware/container_bindings_middleware'),
-  () => import('#middleware/force_json_response_middleware'),
-  () => import('@adonisjs/cors/cors_middleware'),
+     // Middleware pour forcer les réponses JSON
+     () => import('#middleware/force_json_response_middleware'),
+
+     // CORS
+     () => import('@adonisjs/cors/cors_middleware'),
+
+     // FormatResponseMiddleware
+     () => import('#middleware/format_response_middleware'),
 ])
 
 /**
- * The router middleware stack runs middleware on all the HTTP
- * requests with a registered route.
+ * Le middleware du router (s’exécute sur les routes existantes).
  */
-router.use([() => import('@adonisjs/core/bodyparser_middleware'), () => import('@adonisjs/auth/initialize_auth_middleware')])
+router.use([
+     // BodyParser pour JSON / form data
+     () => import('@adonisjs/core/bodyparser_middleware'),
+])
 
 /**
- * Named middleware collection must be explicitly assigned to
- * the routes or the routes group.
+ * Named middleware accessible via router.group().middleware('security')
  */
 export const middleware = router.named({
-  auth: () => import('#middleware/auth_middleware')
+     security: () => import('#middleware/security_middleware'),
 })
+
+

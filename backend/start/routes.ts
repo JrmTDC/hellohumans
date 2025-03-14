@@ -1,26 +1,16 @@
 import router from '@adonisjs/core/services/router'
-import chatController from '#controllers/chatController'
+import SecurityMiddleware from '#middleware/security_middleware'
 
-// Route simple pour la racine
-router.get('/', async () => {
-     return {
-          name: 'HelloHuman API',
-          status: 'online',
-     }
-})
+import ClientsController from '#controllers/ClientsController'
+import UsersController from '#controllers/UsersController'
+import MessagesController from '#controllers/MessagesController'
 
 router.group(() => {
-     // Health-check de l'API V1
-     router.get('/', async () => {
-          return {
-               name: 'HelloHuman API',
-               version: '1.0.0',
-               status: 'online',
-          }
-     })
-
-     // Route pour le chatbot
-     router.post('/chat', (ctx) => {
-          return chatController.chat(ctx)
-     })
-}).prefix('/api/v1')
+     router.get('/clients', (ctx) => ClientsController.show(ctx))
+     router.post('/users', (ctx) => UsersController.store(ctx))
+     router.post('/messages', (ctx) => MessagesController.sendMessage(ctx))
+})
+     .prefix('/api/v1')
+     .middleware([
+          SecurityMiddleware,
+     ])
