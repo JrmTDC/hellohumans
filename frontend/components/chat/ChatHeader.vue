@@ -73,7 +73,7 @@
 const props = defineProps<{
      isChatActive: boolean;
      isOpen: boolean;
-     notificationsEnabled: boolean;
+     notificationSound: boolean;
      showOptions: boolean;
 }>();
 

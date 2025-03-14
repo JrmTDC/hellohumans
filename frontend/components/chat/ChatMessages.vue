@@ -6,7 +6,7 @@
           class="w-full overflow-y-auto bg-white transition duration-300 min-h-[160px] h-[487px] px-6 flex-1 max-h-full static"
      >
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
-               <!-- Boucle des messages -->
+               <!-- Boucle sur tous les messages -->
                <div
                     v-for="(msg, index) in messages"
                     :key="index"
@@ -18,7 +18,20 @@
           'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
         ]"
                >
+                    <!-- Affichage du texte du message -->
                     <span v-html="formatMessage(msg.text)" class="whitespace-pre-line"></span>
+
+                    <!-- Si le message contient des choices, on affiche des boutons -->
+                    <div v-if="msg.choices" class="mt-2 flex flex-wrap gap-2">
+                         <button
+                              v-for="choice in msg.choices"
+                              :key="choice"
+                              class="px-3 py-2 border rounded cursor-pointer hover:bg-[#0566ff] hover:text-white"
+                              @click="$emit('choiceSelected', choice)"
+                         >
+                              {{ choice }}
+                         </button>
+                    </div>
                </div>
 
                <!-- État d'écriture (isLoading) -->
@@ -45,12 +58,15 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 
+const emits = defineEmits(['choiceSelected']);
+
 const props = defineProps<{
      messages: Array<{
           text: string;
           datetime: string;
           status: string;
           sender: string;
+          choices?: string[];
      }>;
      isLoading: boolean;
      isChatActive: boolean;

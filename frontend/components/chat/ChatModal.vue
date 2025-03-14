@@ -58,13 +58,13 @@
 import { ref, onMounted } from 'vue';
 
 const props = defineProps<{
-     show: boolean; // True si on doit afficher la modal
+     show: boolean;
+     isLoading : boolean;
 }>();
 
 const emits = defineEmits(['accept', 'close', 'loading']);
 const localUser = ref('');
 const isVisible = ref(false); // Pour contrôler l'animation proprement
-const isLoading = ref(false); // Gère le loading du bouton
 
 // Vérifier si l'utilisateur a déjà accepté le RGPD
 onMounted(() => {
@@ -99,8 +99,7 @@ watch(() => props.show, (newVal) => {
 
 // Quand l’utilisateur clique “J’accepte”
 function onAccept() {
-     if (!isEmailValid.value || isLoading.value) return;
-     isLoading.value = true;
+     if (!isEmailValid.value || props.isLoading) return;
      emits('accept', localUser.value);
 }
 

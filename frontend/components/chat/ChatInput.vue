@@ -50,7 +50,6 @@ const emits = defineEmits(['update:currentMessage', 'sendMessage']);
 
 const props = defineProps<{
      currentMessage: string;
-     acceptedRGPD: boolean;
 }>();
 
 // On crée un modèle local pour pouvoir utiliser v-model

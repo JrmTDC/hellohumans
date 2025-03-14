@@ -12,24 +12,24 @@
                          <svgoIconHpOff
                               class="fill-[#abb3c3] h-[20px] w-[20px]"
                               id="ic_notificationsOn"
-                              v-if="!notificationsEnabled"
+                              v-if="!notificationSound"
                          />
                          <svgoIconHpOn
                               class="fill-[#0566ff] h-[20px] w-[20px]"
                               v-else
                          />
-                         <span class="ml-[10px] text-[#06132b]">Son {{ notificationsEnabled ? "activé" : "désactivé" }}</span>
+                         <span class="ml-[10px] text-[#06132b]">Son {{ notificationSound ? "activé" : "désactivé" }}</span>
                          <input
                               type="checkbox"
                               id="audio-switch"
                               class="hidden"
-                              :checked="notificationsEnabled"
+                              :checked="notificationSound"
                               disabled
                          />
                          <label
                               for="audio-switch"
-                              class="flex items-center cursor-pointer w-10 h-5 bg-[#2f3941] rounded-full transition-colors duration-300 m-auto" :style="{ backgroundColor: notificationsEnabled ? '#0566ff' : '#abb3c3' }">
-                              <svgoBtnPuce class="fill-[#fff] h-[16px] w-[16px] transition-transform duration-300" :style="{ transform: notificationsEnabled ? 'translateX(20px)' : 'translateX(3px)', }"/>
+                              class="flex items-center cursor-pointer w-10 h-5 bg-[#2f3941] rounded-full transition-colors duration-300 m-auto" :style="{ backgroundColor: notificationSound ? '#0566ff' : '#abb3c3' }">
+                              <svgoBtnPuce class="fill-[#fff] h-[16px] w-[16px] transition-transform duration-300" :style="{ transform: notificationSound ? 'translateX(20px)' : 'translateX(3px)', }"/>
                          </label>
                     </button>
                </li>
@@ -60,7 +60,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps<{
-     notificationsEnabled: boolean;
+     notificationSound: boolean;
      isExpanded: boolean;
      optionsBox: HTMLElement | null;
 }>();

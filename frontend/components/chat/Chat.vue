@@ -1,35 +1,41 @@
 <template>
+     <!-- BOUTON FLOTANT POUR OUVRIR -->
      <div class="absolute w-[112px] h-[140px] bottom-[12px] flex items-center justify-center pointer-events-none z-[1] right-0">
           <button
                v-if="!isOpen"
                @click="toggleChat"
-               class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto transition duration-150 ease-in-out relative text-[#007dfc] bg-[#0566ff] shadow-[0px_4px_24px_#02061033] hover:scale-110 transition duration-150 ease-in-out"
+               class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto
+             transition duration-150 ease-in-out relative text-[#007dfc] bg-[#0566ff]
+             shadow-[0px_4px_24px_#02061033] hover:scale-110"
           >
-               <svgoButtonIconChat class="w-[24px] h-[24px]"/>
+               <svgoButtonIconChat class="w-[24px] h-[24px]" />
           </button>
           <!-- Icône de notifications désactivées (optionnel) -->
           <div
                v-if="!isOpen && !notificationSound"
-               class="absolute top-[37px] right-[23px] font-bold pointer-events-none rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px] bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1"
+               class="absolute top-[37px] right-[23px] font-bold pointer-events-none
+             rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px]
+             bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1"
           >
-               <svgoIconNotificationDisabled class="w-[16px] h-[16px]"/>
+               <svgoIconNotificationDisabled class="w-[16px] h-[16px]" />
           </div>
      </div>
 
-     <!-- Conteneur principal du chatbot -->
+     <!-- CONTENEUR PRINCIPAL DU CHAT -->
      <div
           v-if="isOpen || isVisible"
           id="hellohumans-chat-iframe"
-          class="max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200 absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto shadow-lg overflow-hidden z-1 bg-white scale-85 opacity-0 transform transition-transform duration-300 ease-in-out"
+          class="max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200
+           absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto
+           shadow-lg overflow-hidden z-1 bg-white scale-85 opacity-0
+           transform transition-transform duration-300 ease-in-out"
           :class="[
-            isExpanded ? 'w-[593px]' : 'w-[372px]',
-            isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
-          ]"
+      isExpanded ? 'w-[593px]' : 'w-[372px]',
+      isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
+    ]"
      >
-          <!-- Zone de contenu avec animation -->
           <div v-auto-animate class="flex-1 overflow-hidden">
-
-               <!-- Header -->
+               <!-- HEADER -->
                <ChatHeader
                     :isChatActive="isChatActive"
                     :isOpen="isOpen"
@@ -42,10 +48,10 @@
 
                <!-- Vague décorative -->
                <div class="relative z-10">
-                    <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]"/>
+                    <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]" />
                </div>
 
-               <!-- Écran d'accueil (Home) -->
+               <!-- ÉCRAN D'ACCUEIL -->
                <ChatHome
                     v-if="!isChatActive"
                     :suggestedQuestions="suggestedQuestions"
@@ -53,23 +59,25 @@
                     @openChat="() => (isChatActive = true)"
                />
 
-               <!-- Conteneur des messages -->
+               <!-- LISTE DES MESSAGES -->
                <ChatMessages
                     v-if="isChatActive"
                     :messages="messages"
                     :isLoading="isLoading"
                     :isChatActive="isChatActive"
+                    @choiceSelected="onChoiceSelected"
                />
 
-               <!-- Zone de saisie -->
+               <!-- CHAMP DE SAISIE -->
                <ChatInput
-                    v-if="isChatActive"
+                    v-if="isChatActive && !disableInput"
                     v-model:currentMessage="message"
+                    :disableInput="disableInput"
                     @sendMessage="sendMessage"
                />
           </div>
 
-          <!-- RGPD Modal -->
+          <!-- MODAL RGPD -->
           <ChatModal
                :show="showRGPDModal"
                @accept="onAcceptRGPD"
@@ -77,7 +85,7 @@
                :isLoading="onLoadingRGPD"
           />
 
-          <!-- Options -->
+          <!-- OPTIONS -->
           <ChatOptions
                v-if="showOptions"
                :notificationSound="notificationSound"
@@ -92,162 +100,140 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
-import { useRuntimeConfig } from '#imports';
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { useRuntimeConfig } from '#imports'
 
-import ChatHeader from '@/components/chat/ChatHeader.vue';
-import ChatHome from '@/components/chat/ChatHome.vue';
-import ChatMessages from '@/components/chat/ChatMessages.vue';
-import ChatInput from '@/components/chat/ChatInput.vue';
-import ChatOptions from '@/components/chat/ChatOptions.vue';
+// SOUS-COMPOSANTS
+import ChatHeader from '@/components/chat/ChatHeader.vue'
+import ChatHome from '@/components/chat/ChatHome.vue'
+import ChatMessages from '@/components/chat/ChatMessages.vue'
+import ChatInput from '@/components/chat/ChatInput.vue'
+import ChatOptions from '@/components/chat/ChatOptions.vue'
+import ChatModal from '@/components/chat/ChatModal.vue'
 
-// Vous pouvez adapter les chemins d'import en fonction de votre arborescence de fichiers.
-// Assurez-vous que ces composants se trouvent réellement à ces emplacements.
+// --- ÉTAT PRINCIPAL DU CHAT ---
+const config = useRuntimeConfig()
+const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`
 
-// --- État global du chatbot ---
-const config = useRuntimeConfig();
-const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`;
+// Variables / Refs principales
+const message = ref('')         // Message en cours de saisie
+const clientKey = ref(`${config.public.apiClientKey}`)
+const messages = ref<any[]>([]) // Historique des messages
+const isLoading = ref(false)    // Indicateur de chargement
+const isOpen = ref(false)       // Gère l'ouverture du chatbot
+const isChatActive = ref(false) // Vue "home" vs "chat"
+const notificationSound = ref(true)
+const isExpanded = ref(false)
+const showOptions = ref(false)
+const isSending = ref(false)
+const isVisible = ref(false)
 
-const message = ref(''); // Message en cours
-const clientKey = ref(`${config.public.apiClientKey}`); // Clé client
-const messages = ref<any[]>([]); // Historique des messages
-const isLoading = ref(false); // Animation de chargement
-const isOpen = ref(false); // Gère l'ouverture du chatbot
-const isChatActive = ref(false); // Gère l'affichage entre Home & Chat
-const notificationSound = ref(true); // True = Notifications activées
-const isExpanded = ref(false); // True = Chatbox agrandie
-const showOptions = ref(false); // Gère l'ouverture des options
-const isSending = ref(false); // Empêche l'envoi multiple
-const isVisible = ref(false); // Gère l'animation d'ouverture
+// Désactiver le champ de saisie s'il y a des `choices`
+const disableInput = ref(false)
 
-// Modal RGPD
-const showRGPDModal = ref(false);
-const onLoadingRGPD = ref(false);
-const pendingMessage = ref<string | null>(null);
+// RGPD
+const showRGPDModal = ref(false)
+const onLoadingRGPD = ref(false)
+const pendingMessage = ref<string | null>(null)
 
-// Référence pour la zone d'options
-const optionsBox = ref<HTMLElement | null>(null);
+// Pour cliquer en dehors des options
+const optionsBox = ref<HTMLElement | null>(null)
 
-// Exemples de questions suggérées
+// Questions suggérées
 const suggestedQuestions = [
      'Quels sont les restaurants ?',
      'Quels sont les événements à venir ?',
      'Quels sites touristiques visiter ?',
      'Où trouver un hôtel ?',
      'Quels sont les transport ?',
-];
+]
 
-// Vérifie si on est dans le navigateur
-const isBrowser = typeof window !== 'undefined';
+// Vérifie si on est dans le navigateur (pour localStorage)
+const isBrowser = typeof window !== 'undefined'
 
-// Watch pour sauvegarder l'historique des messages
+// Sauvegarder l'historique des messages dans localStorage
 watch(
      messages,
-     (newMessages) => {
+     newMessages => {
           if (isBrowser) {
-               localStorage.setItem('user_messages', JSON.stringify(newMessages));
+               localStorage.setItem('user_messages', JSON.stringify(newMessages))
           }
      },
      { deep: true }
-);
+)
 
-
-// Fonction pour jouer un son lorsqu'un message du chatbot arrive
-const playNotificationSound = () => {
-     const audio = new Audio('/sounds/notification.mp3');
-     audio.volume = 0.5;
-     audio.play().catch((error) => console.warn('Impossible de jouer le son :', error));
-};
-
-// Fonction pour activer/désactiver l'agrandissement de la chatbox
-const toggleExpend = () => {
-     isExpanded.value = !isExpanded.value;
-};
-
-// Fonction pour activer/désactiver les notifications
-const toggleNotifications = () => {
-     notificationSound.value = !notificationSound.value;
-     if (isBrowser) {
-          localStorage.setItem('user_settings',
-               JSON.stringify({
-                    notificationSound: notificationSound.value.toString()
-               })
-          );
-     }
-     showOptions.value = false;
-};
-
-// Fonction pour envoyer une question pré-remplie
-const sendSuggestedMessage = (question: string) => {
-     message.value = question;
-     isChatActive.value = true;
-     sendMessage();
-};
-
-// Chargement initial
+// --- MONTAGE & DEMONTAGE ---
 onMounted(() => {
-     document.addEventListener('click', handleClickOutside);
+     document.addEventListener('click', handleClickOutside)
 
      if (isBrowser) {
-          // Récupération de l'état des notifications
-          const userLocalStorage = localStorage.getItem('user_settings');
+          // Récupérer l'état de notifications
+          const userLocalStorage = localStorage.getItem('user_settings')
           if (userLocalStorage !== null) {
                const userLS = JSON.parse(userLocalStorage)
-               notificationSound.value = userLS.notificationSound === 'true';
+               notificationSound.value = userLS.notificationSound === 'true'
           }
 
-          // Récupération des messages
-          const savedMessages = localStorage.getItem('user_messages');
+          // Récupérer l'historique
+          const savedMessages = localStorage.getItem('user_messages')
           if (savedMessages) {
-               messages.value = JSON.parse(savedMessages);
+               messages.value = JSON.parse(savedMessages)
           }
      }
-});
+})
 
 onUnmounted(() => {
-     document.removeEventListener('click', handleClickOutside);
-});
+     document.removeEventListener('click', handleClickOutside)
+})
 
 // Fermer le menu d'options si on clique en dehors
-const handleClickOutside = (event: any) => {
+function handleClickOutside(event: any) {
      if (optionsBox.value && !optionsBox.value.contains(event.target)) {
-          showOptions.value = false;
+          showOptions.value = false
      }
-};
+}
+
+// Envoyer une question pré-remplie
+function sendSuggestedMessage(question: string) {
+     message.value = question
+     isChatActive.value = true
+     sendMessage()
+}
 
 // Envoi d'un message
-const sendMessage = async () => {
-     if (!message.value.trim()) return;
+async function sendMessage() {
+     if (!message.value.trim()) return
 
-     const userSettingsLocalStorage = localStorage.getItem('user_settings');
-     let userSetting = {};
-
+     // Vérification RGPD
+     const userSettingsLocalStorage = localStorage.getItem('user_settings')
+     let userSetting: any = {}
      try {
-          userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {};
+          userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {}
      } catch (error) {
-          userSetting = {};
+          userSetting = {}
      }
 
+     // Si pas accepté RGPD => forcer la modal
      if (userSetting.rgpd !== 'accepted') {
-          // Pas accepté, on stocke le message et on ouvre la modal
-          pendingMessage.value = message.value;
-          showRGPDModal.value = true;
-          return;
+          pendingMessage.value = message.value
+          showRGPDModal.value = true
+          return
      }
 
+     // On push d'abord le message user dans la conversation
      messages.value.push({
           text: message.value,
           datetime: new Date().toISOString(),
           status: 'success',
           sender: 'user',
-     });
-     isLoading.value = true;
+     })
 
-     const userMessage = message.value;
-     message.value = '';
+     isLoading.value = true
+     const userMessage = message.value
+     message.value = ''
 
      if (userSetting.uuid || !isSending.value) {
-          isSending.value = true;
+          isSending.value = true
           try {
                const res = await fetch(apiUrl + '/messages', {
                     method: 'POST',
@@ -259,127 +245,176 @@ const sendMessage = async () => {
                          user_uuid: userSetting.uuid,
                          message: userMessage,
                     }),
-               });
-               const resUserMessage = await res.json();
+               })
+               const resUserMessage = await res.json()
+
                if (!res.ok) {
                     messages.value.push({
-                         text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+                         text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
                          datetime: new Date().toISOString(),
                          status: 'unavailable',
                          sender: 'bot',
-                    });
-               }else{
+                    })
+               } else {
+                    // Notification audio ?
                     if (userSetting.notificationAudio) {
-                         playNotificationSound();
+                         playNotificationSound()
                     }
-                    if(resUserMessage.success.choices) {
-
-                         // return exemple :
-                         /*
-                                "VTT",
-                                "Randonnée",
-                                "Trail",
-                                "Équitation",
-                                "Grande Randonnée"
-                          */
-
-                         // Doit afficher des bouttons pour les choix
-                         // Désactivé le input de l'utilisateur
-
-                    }else{
+                    // SI L'API RETOURNE DES CHOICES
+                    if (resUserMessage.success?.choices) {
+                         messages.value.push({
+                              text: resUserMessage.success.response,
+                              datetime: new Date().toISOString(),
+                              status: 'success',
+                              sender: 'bot',
+                              choices: resUserMessage.success.choices, // <-- On stocke les choix
+                         })
+                         // On désactive l'input tant que l'utilisateur n'a pas choisi
+                         disableInput.value = true
+                    } else {
+                         // Réponse classique
                          messages.value.push({
                               text: resUserMessage.success.response,
                               datetime: new Date().toISOString(),
                               status: "success",
                               sender: 'bot',
-                         });
+                         })
+                         disableInput.value = false
                     }
-
-                    isLoading.value = false;
-                    isSending.value = false;
                }
+
+               isLoading.value = false
+               isSending.value = false
           } catch (error) {
                if (userSetting.notificationAudio) {
-                    playNotificationSound();
+                    playNotificationSound()
                }
                messages.value.push({
-                    text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+                    text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
                     datetime: new Date().toISOString(),
                     status: 'unavailable',
                     sender: 'bot',
-               });
-               isLoading.value = false;
-               isSending.value = false;
+               })
+               isLoading.value = false
+               isSending.value = false
           }
      }
-};
+}
 
-// Fonction pour ouvrir/fermer les options
-const toggleOptions = () => {
-     showOptions.value = !showOptions.value;
-};
+// Quand l'utilisateur **clique un choix** renvoyé par l'API
+function onChoiceSelected(choice: string) {
 
-// Fonction pour vider l'historique
-const clearChatAndClose = () => {
-     messages.value = [];
-     if (isBrowser) {
-          localStorage.removeItem('user_messages');
+     // On récupère le dernier message du bot qui possède des choices
+     const lastBotMsg = messages.value
+     .slice()
+     .reverse()
+     .find(msg => msg.sender === 'bot' && msg.choices);
+
+     // On vide les choices pour les supprimer de l'interface
+     if (lastBotMsg) {
+          lastBotMsg.choices = [];
      }
-     showOptions.value = false;
-};
 
-// Fonction pour ouvrir/fermer le chatbot
-const toggleChat = () => {
-     isOpen.value = !isOpen.value;
+     // On réactive l'input
+     disableInput.value = false
+     // On relance l'appel API
+     message.value = choice
+     sendMessage()
+}
+
+// Fonction pour jouer un son (notifications)
+function playNotificationSound() {
+     const audio = new Audio('/sounds/notification.mp3')
+     audio.volume = 0.5
+     audio.play().catch((error) => console.warn('Impossible de jouer le son :', error))
+}
+
+// Ouvrir/Fermer l'onglet "Options"
+function toggleOptions() {
+     showOptions.value = !showOptions.value
+}
+
+// Vider l'historique
+function clearChatAndClose() {
+     messages.value = []
+     if (isBrowser) {
+          localStorage.removeItem('user_messages')
+     }
+     showOptions.value = false
+}
+
+// Ouvrir/Fermer le chatbot
+function toggleChat() {
+     isOpen.value = !isOpen.value
      setTimeout(() => {
-          isVisible.value = !isVisible.value;
-     }, 90);
+          isVisible.value = !isVisible.value
+     }, 90)
 
      if (!isOpen.value) {
+          // On repasse en mode "Accueil" après la fermeture
           setTimeout(() => {
-               isChatActive.value = false;
-          }, 300); // Attendre la fin de l'animation
+               isChatActive.value = false
+          }, 300)
      }
-};
+}
 
-// Permet de retourner à l'accueil
-const goToHome = () => {
-     isChatActive.value = false;
-};
+// Revenir à l'accueil
+function goToHome() {
+     isChatActive.value = false
+}
 
-// Filtrer les messages (exemple si besoin, non utilisé directement ici)
-const filteredMessages = computed(() => {
-     return messages.value.filter(
-          (msg) => msg.status && (msg.status === 'success' || msg.status === 'unavailable')
-     );
-});
+// Activer/désactiver l'agrandissement
+function toggleExpend() {
+     isExpanded.value = !isExpanded.value
+}
 
-// Modal RGPD : l'utilisateur accepte
+// Activer/désactiver les notifications
+function toggleNotifications() {
+     notificationSound.value = !notificationSound.value
+     if (isBrowser) {
+          const userSettingsLocalStorage = localStorage.getItem('user_settings');
+          let userSetting = {};
+
+          try {
+               userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {};
+          } catch (error) {
+               userSetting = {};
+          }
+
+          localStorage.setItem(
+               'user_settings',
+               JSON.stringify({
+                    ...userSetting,
+                    notificationSound: notificationSound.value.toString(),
+               })
+          );
+     }
+     showOptions.value = false
+}
+
+// RGPD : accepter
 async function onAcceptRGPD(userData: string) {
      try {
-          onLoadingRGPD.value = true;
-          // Appel API pour enregistrer le consentement RGPD
-          const res = await fetch(apiUrl+'/users', {
+          onLoadingRGPD.value = true
+          const res = await fetch(apiUrl + '/users', {
                method: 'POST',
                headers: {
                     'Content-Type': 'application/json',
                     'x-client-key': clientKey.value,
                },
                body: JSON.stringify({
-                    email : userData,
-                    rgpd: 'accepted'
+                    email: userData,
+                    rgpd: 'accepted',
                }),
-          });
-          const resData = await res.json();
+          })
+          const resData = await res.json()
           if (res.status === 200) {
-
-               const userSettingsLocalStorage = localStorage.getItem('user_settings');
-               let userSetting = {};
-
+               const userSettingsLocalStorage = localStorage.getItem('user_settings')
+               let userSetting: any = {}
                try {
-                    userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {};
+                    userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {}
                } catch (error) {
-                    userSetting = {};
+                    userSetting = {}
                }
 
                localStorage.setItem(
@@ -390,37 +425,30 @@ async function onAcceptRGPD(userData: string) {
                          notificationSound: userSetting.notificationSound ?? true,
                          rgpd: 'accepted',
                     })
-               );
+               )
 
                setTimeout(() => {
-                    // On ferme la modal
-                    showRGPDModal.value = false;
-                    // On envoie immédiatement le pendingMessage s'il y en a un
+                    showRGPDModal.value = false
+                    // On envoie immédiatement le pendingMessage
                     if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
-                         // On place la valeur dans message
-                         message.value = pendingMessage.value;
-                         pendingMessage.value = null;
-                         // On envoie
-                         sendMessage();
+                         message.value = pendingMessage.value
+                         pendingMessage.value = null
+                         sendMessage()
                     }
-                    onLoadingRGPD.value = false;
-               }, 2000);
+                    onLoadingRGPD.value = false
+               }, 2000)
           }
      } catch (err) {
-          console.error("Erreur enregistrement de l'utilisateur:", err);
-          onLoadingRGPD.value = false;
-          // Gérer un éventuel message d'erreur
+          console.error("Erreur enregistrement de l'utilisateur:", err)
+          onLoadingRGPD.value = false
      }
 }
 
-// Modal RGPD : l'utilisateur clique sur la croix pour fermer
+// RGPD : fermer
 function onCloseRGPD() {
-     // On ferme la modal
-     showRGPDModal.value = false;
-     // On récupère le pendingMessage pour ne pas le perdre
+     showRGPDModal.value = false
      if (pendingMessage.value) {
-          message.value = pendingMessage.value;
+          message.value = pendingMessage.value
      }
 }
-
 </script>
