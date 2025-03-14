@@ -60,7 +60,7 @@ class MessagesController {
                          await messagesService.saveBotMessage(user.uuid, natureResponse.content)
                          return {
                               response: natureResponse.content,
-                              choices: natureResponse.choices || [],
+                              choices: natureResponse.choices || null,
                               status: 'success',
                          }
                     }
@@ -89,7 +89,7 @@ class MessagesController {
                return {
                     response: responseText,
                     status: 'success',
-                    choices: [],
+                    choices: null,
                }
           } catch (error) {
                console.error('MessagesController.sendMessage error:', error)
