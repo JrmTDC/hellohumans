@@ -9,7 +9,7 @@
           </button>
           <!-- Icône de notifications désactivées (optionnel) -->
           <div
-               v-if="!isOpen && !notificationsEnabled"
+               v-if="!isOpen && !notificationSound"
                class="absolute top-[37px] right-[23px] font-bold pointer-events-none rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px] bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1"
           >
                <svgoIconNotificationDisabled class="w-[16px] h-[16px]"/>
@@ -33,7 +33,7 @@
                <ChatHeader
                     :isChatActive="isChatActive"
                     :isOpen="isOpen"
-                    :notificationsEnabled="notificationsEnabled"
+                    :notificationSound="notificationSound"
                     :showOptions="showOptions"
                     @goToHome="goToHome"
                     @toggleChat="toggleChat"
@@ -66,7 +66,6 @@
                     v-if="isChatActive"
                     v-model:currentMessage="message"
                     @sendMessage="sendMessage"
-                    :acceptedRGPD="acceptedRGPD"
                />
           </div>
 
@@ -75,12 +74,13 @@
                :show="showRGPDModal"
                @accept="onAcceptRGPD"
                @close="onCloseRGPD"
+               :isLoading="onLoadingRGPD"
           />
 
           <!-- Options -->
           <ChatOptions
                v-if="showOptions"
-               :notificationsEnabled="notificationsEnabled"
+               :notificationSound="notificationSound"
                :isExpanded="isExpanded"
                :optionsBox="optionsBox"
                @toggleNotifications="toggleNotifications"
@@ -106,7 +106,7 @@ import ChatOptions from '@/components/chat/ChatOptions.vue';
 
 // --- État global du chatbot ---
 const config = useRuntimeConfig();
-const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}/`;
+const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`;
 
 const message = ref(''); // Message en cours
 const clientKey = ref(`${config.public.apiClientKey}`); // Clé client
@@ -114,15 +114,15 @@ const messages = ref<any[]>([]); // Historique des messages
 const isLoading = ref(false); // Animation de chargement
 const isOpen = ref(false); // Gère l'ouverture du chatbot
 const isChatActive = ref(false); // Gère l'affichage entre Home & Chat
-const notificationsEnabled = ref(true); // True = Notifications activées
+const notificationSound = ref(true); // True = Notifications activées
 const isExpanded = ref(false); // True = Chatbox agrandie
 const showOptions = ref(false); // Gère l'ouverture des options
 const isSending = ref(false); // Empêche l'envoi multiple
 const isVisible = ref(false); // Gère l'animation d'ouverture
 
 // Modal RGPD
-const acceptedRGPD = ref(false);
 const showRGPDModal = ref(false);
+const onLoadingRGPD = ref(false);
 const pendingMessage = ref<string | null>(null);
 
 // Référence pour la zone d'options
@@ -145,7 +145,7 @@ watch(
      messages,
      (newMessages) => {
           if (isBrowser) {
-               localStorage.setItem('chat_history', JSON.stringify(newMessages));
+               localStorage.setItem('user_messages', JSON.stringify(newMessages));
           }
      },
      { deep: true }
@@ -166,9 +166,13 @@ const toggleExpend = () => {
 
 // Fonction pour activer/désactiver les notifications
 const toggleNotifications = () => {
-     notificationsEnabled.value = !notificationsEnabled.value;
+     notificationSound.value = !notificationSound.value;
      if (isBrowser) {
-          localStorage.setItem('notifications_enabled', notificationsEnabled.value.toString());
+          localStorage.setItem('user_settings',
+               JSON.stringify({
+                    notificationSound: notificationSound.value.toString()
+               })
+          );
      }
      showOptions.value = false;
 };
@@ -186,13 +190,14 @@ onMounted(() => {
 
      if (isBrowser) {
           // Récupération de l'état des notifications
-          const savedNotifications = localStorage.getItem('notifications_enabled');
-          if (savedNotifications !== null) {
-               notificationsEnabled.value = savedNotifications === 'true';
+          const userLocalStorage = localStorage.getItem('user_settings');
+          if (userLocalStorage !== null) {
+               const userLS = JSON.parse(userLocalStorage)
+               notificationSound.value = userLS.notificationSound === 'true';
           }
 
           // Récupération des messages
-          const savedMessages = localStorage.getItem('chat_history');
+          const savedMessages = localStorage.getItem('user_messages');
           if (savedMessages) {
                messages.value = JSON.parse(savedMessages);
           }
@@ -214,8 +219,16 @@ const handleClickOutside = (event: any) => {
 const sendMessage = async () => {
      if (!message.value.trim()) return;
 
-     // RGPD déjà accepté ?
-     if (!acceptedRGPD.value) {
+     const userSettingsLocalStorage = localStorage.getItem('user_settings');
+     let userSetting = {};
+
+     try {
+          userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {};
+     } catch (error) {
+          userSetting = {};
+     }
+
+     if (userSetting.rgpd !== 'accepted') {
           // Pas accepté, on stocke le message et on ouvre la modal
           pendingMessage.value = message.value;
           showRGPDModal.value = true;
@@ -233,45 +246,60 @@ const sendMessage = async () => {
      const userMessage = message.value;
      message.value = '';
 
-     if (!isSending.value) {
-          isSending.value = true; // Désactive l'envoi
+     if (userSetting.uuid || !isSending.value) {
+          isSending.value = true;
           try {
-               const res = await fetch(apiUrl+'/chat', {
+               const res = await fetch(apiUrl + '/messages', {
                     method: 'POST',
                     headers: {
                          'Content-Type': 'application/json',
                          'x-client-key': clientKey.value,
                     },
                     body: JSON.stringify({
+                         user_uuid: userSetting.uuid,
                          message: userMessage,
                     }),
                });
-               const data = await res.json();
-
-               setTimeout(() => {
-                    if (notificationsEnabled.value) {
+               const resUserMessage = await res.json();
+               if (!res.ok) {
+                    messages.value.push({
+                         text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
+                         datetime: new Date().toISOString(),
+                         status: 'unavailable',
+                         sender: 'bot',
+                    });
+               }else{
+                    if (userSetting.notificationAudio) {
                          playNotificationSound();
                     }
-                    if (data.status && (data.status === 'success' || data.status === 'unavailable')) {
+                    if(resUserMessage.success.choices) {
+
+                         // return exemple :
+                         /*
+                                "VTT",
+                                "Randonnée",
+                                "Trail",
+                                "Équitation",
+                                "Grande Randonnée"
+                          */
+
+                         // Doit afficher des bouttons pour les choix
+                         // Désactivé le input de l'utilisateur
+
+                    }else{
                          messages.value.push({
-                              text: data.response,
+                              text: resUserMessage.success.response,
                               datetime: new Date().toISOString(),
-                              status: data.status,
-                              sender: 'bot',
-                         });
-                    } else {
-                         messages.value.push({
-                              text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. Vous pouvez réessayer dans quelques instants. 🚀",
-                              datetime: new Date().toISOString(),
-                              status: 'unavailable',
+                              status: "success",
                               sender: 'bot',
                          });
                     }
+
                     isLoading.value = false;
-                    isSending.value = false; // Réactive l'envoi
-               }, 1000);
+                    isSending.value = false;
+               }
           } catch (error) {
-               if (notificationsEnabled.value) {
+               if (userSetting.notificationAudio) {
                     playNotificationSound();
                }
                messages.value.push({
@@ -281,7 +309,7 @@ const sendMessage = async () => {
                     sender: 'bot',
                });
                isLoading.value = false;
-               isSending.value = false; // Réactive l'envoi
+               isSending.value = false;
           }
      }
 };
@@ -295,7 +323,7 @@ const toggleOptions = () => {
 const clearChatAndClose = () => {
      messages.value = [];
      if (isBrowser) {
-          localStorage.removeItem('chat_history');
+          localStorage.removeItem('user_messages');
      }
      showOptions.value = false;
 };
@@ -329,56 +357,60 @@ const filteredMessages = computed(() => {
 // Modal RGPD : l'utilisateur accepte
 async function onAcceptRGPD(userData: string) {
      try {
+          onLoadingRGPD.value = true;
           // Appel API pour enregistrer le consentement RGPD
-          // (à adapter avec votre URL / fetch)
-          /*
-          const res = await fetch(apiUrl+'/user', {
+          const res = await fetch(apiUrl+'/users', {
                method: 'POST',
                headers: {
                     'Content-Type': 'application/json',
                     'x-client-key': clientKey.value,
                },
                body: JSON.stringify({
-                    user: userData,
+                    email : userData,
+                    rgpd: 'accepted'
                }),
           });
-          const data = await res.json();
-          */
+          const resData = await res.json();
+          if (res.status === 200) {
 
+               const userSettingsLocalStorage = localStorage.getItem('user_settings');
+               let userSetting = {};
 
-          // envoie email à api, recupère uuid
-          // email: localEmail.value,
-          // Stocker les données RGPD dans `localStorage`
-          localStorage.setItem(
-               'user',
-               JSON.stringify({
-                    uuid: '123456',
-                    rgpd: 'accepted'
-               })
-          );
+               try {
+                    userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {};
+               } catch (error) {
+                    userSetting = {};
+               }
 
+               localStorage.setItem(
+                    'user_settings',
+                    JSON.stringify({
+                         ...userSetting,
+                         uuid: resData.success.user.uuid,
+                         notificationSound: userSetting.notificationSound ?? true,
+                         rgpd: 'accepted',
+                    })
+               );
 
+               setTimeout(() => {
+                    // On ferme la modal
+                    showRGPDModal.value = false;
+                    // On envoie immédiatement le pendingMessage s'il y en a un
+                    if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
+                         // On place la valeur dans message
+                         message.value = pendingMessage.value;
+                         pendingMessage.value = null;
+                         // On envoie
+                         sendMessage();
+                    }
+                    onLoadingRGPD.value = false;
+               }, 2000);
+          }
      } catch (err) {
           console.error("Erreur enregistrement de l'utilisateur:", err);
+          onLoadingRGPD.value = false;
           // Gérer un éventuel message d'erreur
      }
-     setTimeout(() => {
-
-          // On marque la RGPD comme acceptée
-          acceptedRGPD.value = true;
-
-          // On ferme la modal
-          showRGPDModal.value = false;
-          // On envoie immédiatement le pendingMessage s'il y en a un
-          if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
-               // On place la valeur dans message
-               message.value = pendingMessage.value;
-               pendingMessage.value = null;
-               // On envoie
-               sendMessage();
-          }
-
-     }, 2000);
 }
 
 // Modal RGPD : l'utilisateur clique sur la croix pour fermer
@@ -390,4 +422,5 @@ function onCloseRGPD() {
           message.value = pendingMessage.value;
      }
 }
+
 </script>
