@@ -249,6 +249,13 @@ async function sendMessage() {
                const resUserMessage = await res.json()
 
                if (!res.ok) {
+                    if (resUserMessage.error?.name === 'user_invalid') {
+                         removeLastUserMessage();
+                         isLoading.value = false
+                         pendingMessage.value = userMessage
+                         showRGPDModal.value = true
+                         return
+                    }
                     messages.value.push({
                          text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
                          datetime: new Date().toISOString(),
@@ -449,6 +456,34 @@ function onCloseRGPD() {
      showRGPDModal.value = false
      if (pendingMessage.value) {
           message.value = pendingMessage.value
+     }
+}
+
+function removeLastMessage() {
+     if (messages.value.length > 0) {
+          messages.value.pop();
+     }
+}
+
+function removeLastBotMessage() {
+     const lastBotIndex = messages.value
+          .map((msg, index) => ({ msg, index }))
+          .reverse()
+          .find(({ msg }) => msg.sender === 'bot')?.index;
+
+     if (lastBotIndex !== undefined) {
+          messages.value.splice(lastBotIndex, 1);
+     }
+}
+
+function removeLastUserMessage() {
+     const lastUserIndex = messages.value
+          .map((msg, index) => ({ msg, index }))
+          .reverse()
+          .find(({ msg }) => msg.sender === 'user')?.index;
+
+     if (lastUserIndex !== undefined) {
+          messages.value.splice(lastUserIndex, 1);
      }
 }
 </script>
