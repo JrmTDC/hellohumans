@@ -310,21 +310,8 @@ async function sendMessage() {
 
 // Quand l'utilisateur **clique un choix** renvoyé par l'API
 function onChoiceSelected(choice: string) {
-
-     // On récupère le dernier message du bot qui possède des choices
-     const lastBotMsg = messages.value
-     .slice()
-     .reverse()
-     .find(msg => msg.sender === 'bot' && msg.choices);
-
-     // On vide les choices pour les supprimer de l'interface
-     if (lastBotMsg) {
-          lastBotMsg.choices = [];
-     }
-
-     // On réactive l'input
+     removeLastChoiceMessage();
      disableInput.value = false
-     // On relance l'appel API
      message.value = choice
      sendMessage()
 }
@@ -459,12 +446,14 @@ function onCloseRGPD() {
      }
 }
 
+// Supprimer le dernier message
 function removeLastMessage() {
      if (messages.value.length > 0) {
           messages.value.pop();
      }
 }
 
+// Supprimer le dernier message du bot
 function removeLastBotMessage() {
      const lastBotIndex = messages.value
           .map((msg, index) => ({ msg, index }))
@@ -476,6 +465,7 @@ function removeLastBotMessage() {
      }
 }
 
+// Supprimer le dernier message de l'utilisateur
 function removeLastUserMessage() {
      const lastUserIndex = messages.value
           .map((msg, index) => ({ msg, index }))
@@ -486,4 +476,17 @@ function removeLastUserMessage() {
           messages.value.splice(lastUserIndex, 1);
      }
 }
+
+// Supprimer le dernier message qui possède des choices
+function removeLastChoiceMessage() {
+     const lastBotMsg = messages.value
+          .slice()
+          .reverse()
+          .find(msg => msg.sender === 'bot' && msg.choices);
+
+     if (lastBotMsg) {
+          lastBotMsg.choices = [];
+     }
+}
+
 </script>
