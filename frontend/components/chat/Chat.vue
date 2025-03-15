@@ -162,7 +162,7 @@ watch(
      { deep: true }
 )
 
-// --- MONTAGE & DEMONTAGE ---
+// Écouter les clics pour fermer le menu d'options
 onMounted(() => {
      document.addEventListener('click', handleClickOutside)
 
@@ -171,7 +171,7 @@ onMounted(() => {
           const userLocalStorage = localStorage.getItem('user_settings')
           if (userLocalStorage !== null) {
                const userLS = JSON.parse(userLocalStorage)
-               notificationSound.value = userLS.notificationSound === 'true'
+               notificationSound.value = userLS.notificationSound === true
           }
 
           // Récupérer l'historique
@@ -182,6 +182,7 @@ onMounted(() => {
      }
 })
 
+// Désactiver l'écouteur de clics
 onUnmounted(() => {
      document.removeEventListener('click', handleClickOutside)
 })
@@ -264,7 +265,7 @@ async function sendMessage() {
                     })
                } else {
                     // Notification audio ?
-                    if (userSetting.notificationAudio) {
+                    if (userSetting.notificationSound) {
                          playNotificationSound()
                     }
                     // SI L'API RETOURNE DES CHOICES
@@ -293,9 +294,6 @@ async function sendMessage() {
                isLoading.value = false
                isSending.value = false
           } catch (error) {
-               if (userSetting.notificationAudio) {
-                    playNotificationSound()
-               }
                messages.value.push({
                     text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
                     datetime: new Date().toISOString(),
@@ -379,7 +377,7 @@ function toggleNotifications() {
                'user_settings',
                JSON.stringify({
                     ...userSetting,
-                    notificationSound: notificationSound.value.toString(),
+                    notificationSound: notificationSound.value,
                })
           );
      }
