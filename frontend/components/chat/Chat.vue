@@ -28,7 +28,7 @@
           class="max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200
            absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto
            shadow-lg overflow-hidden z-1 bg-white scale-85 opacity-0
-           transform transition-transform duration-300 ease-in-out"
+           transform transition-transform duration-300 ease-in-out h-min"
           :class="[
       isExpanded ? 'w-[593px]' : 'w-[372px]',
       isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
