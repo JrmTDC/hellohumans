@@ -5,8 +5,9 @@
                v-if="!isOpen"
                @click="toggleChat"
                class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto
-             transition duration-150 ease-in-out relative text-[#007dfc] bg-[#0566ff]
+             transition duration-150 ease-in-out relative text-[#007dfc]
              shadow-[0px_4px_24px_#02061033] hover:scale-110"
+               :style="{ backgroundColor: primaryColor }"
           >
                <svgoButtonIconChat class="w-[24px] h-[24px]" />
           </button>
@@ -22,6 +23,7 @@
      </div>
 
      <!-- CONTENEUR PRINCIPAL DU CHAT -->
+
      <div
           v-if="isOpen || isVisible"
           id="hellohumans-chat-iframe"
@@ -37,6 +39,7 @@
           <div v-auto-animate class="flex-1 overflow-hidden">
                <!-- HEADER -->
                <ChatHeader
+                    :primaryColor="primaryColor"
                     :isChatActive="isChatActive"
                     :isOpen="isOpen"
                     :notificationSound="notificationSound"
@@ -54,6 +57,7 @@
                <!-- ÉCRAN D'ACCUEIL -->
                <ChatHome
                     v-if="!isChatActive"
+                    :primaryColor="primaryColor"
                     :suggestedQuestions="suggestedQuestions"
                     @sendSuggestedMessage="sendSuggestedMessage"
                     @openChat="() => (isChatActive = true)"
@@ -71,6 +75,7 @@
                <!-- CHAMP DE SAISIE -->
                <ChatInput
                     v-if="isChatActive && !disableInput"
+                    :primaryColor="primaryColor"
                     v-model:currentMessage="message"
                     :disableInput="disableInput"
                     @sendMessage="sendMessage"
@@ -79,6 +84,7 @@
 
           <!-- MODAL RGPD -->
           <ChatModal
+               :primaryColor="primaryColor"
                :show="showRGPDModal"
                @accept="onAcceptRGPD"
                @close="onCloseRGPD"
@@ -88,6 +94,7 @@
           <!-- OPTIONS -->
           <ChatOptions
                v-if="showOptions"
+               :primaryColor="primaryColor"
                :notificationSound="notificationSound"
                :isExpanded="isExpanded"
                :optionsBox="optionsBox"
@@ -139,8 +146,23 @@ const pendingMessage = ref<string | null>(null)
 // Pour cliquer en dehors des options
 const optionsBox = ref<HTMLElement | null>(null)
 
-// Questions suggérées
-const suggestedQuestions = [
+// Vérifie si on est dans le navigateur (pour localStorage)
+const isBrowser = typeof window !== 'undefined'
+
+// On ajoute la prop "overrideConfig"
+const props = defineProps<{
+     overrideConfig?: {
+          color?: string;
+          suggestedQuestions?: string[];
+          // etc. Tout ce que vous voulez paramétrer
+     }
+}>()
+
+const primaryColor = computed(() => {
+     return props.overrideConfig?.color ?? '#0566ff'
+})
+
+let defaultQuestions = [
      'Quels sont les restaurants ?',
      'Quels sont les événements à venir ?',
      'Quels sites touristiques visiter ?',
@@ -148,8 +170,13 @@ const suggestedQuestions = [
      'Quels sont les transport ?',
 ]
 
-// Vérifie si on est dans le navigateur (pour localStorage)
-const isBrowser = typeof window !== 'undefined'
+const suggestedQuestions = computed(() => {
+     // Si overrideConfig.suggestedQuestions existe, on l'utilise
+     // sinon on renvoie defaultQuestions
+     return props.overrideConfig?.suggestedQuestions?.length
+          ? props.overrideConfig.suggestedQuestions
+          : defaultQuestions
+})
 
 // Sauvegarder l'historique des messages dans localStorage
 watch(

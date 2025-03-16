@@ -15,7 +15,7 @@
                               v-if="!notificationSound"
                          />
                          <svgoIconHpOn
-                              class="fill-[#0566ff] h-[20px] w-[20px]"
+                              class="   h-[20px] w-[20px]" :style="{ fill:primaryColor }"
                               v-else
                          />
                          <span class="ml-[10px] text-[#06132b]">Son {{ notificationSound ? "activé" : "désactivé" }}</span>
@@ -28,7 +28,7 @@
                          />
                          <label
                               for="audio-switch"
-                              class="flex items-center cursor-pointer w-10 h-5 bg-[#2f3941] rounded-full transition-colors duration-300 m-auto" :style="{ backgroundColor: notificationSound ? '#0566ff' : '#abb3c3' }">
+                              class="flex items-center cursor-pointer w-10 h-5 bg-[#2f3941] rounded-full transition-colors duration-300 m-auto" :style="{ backgroundColor: notificationSound ? primaryColor : '#abb3c3' }">
                               <svgoBtnPuce class="fill-[#fff] h-[16px] w-[16px] transition-transform duration-300" :style="{ transform: notificationSound ? 'translateX(20px)' : 'translateX(3px)', }"/>
                          </label>
                     </button>
@@ -63,6 +63,7 @@ const props = defineProps<{
      notificationSound: boolean;
      isExpanded: boolean;
      optionsBox: HTMLElement | null;
+     primaryColor: String;
 }>();
 const emits = defineEmits(['toggleNotifications', 'toggleExpend', 'clearChatAndClose', 'closeOptions']);
 

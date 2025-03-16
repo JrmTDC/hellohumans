@@ -25,7 +25,7 @@
               <svgoIconSortcutEnter class="w-[11px] h-[10px]" fill="#647491" />
             </div>
           </span>
-                         <svgoIconSend class="w-[20px] h-[21px] fill-[#0566ff]" />
+                         <svgoIconSend class="w-[20px] h-[21px]" :style="{ fill:primaryColor }" />
                     </button>
                </div>
           </div>
@@ -50,6 +50,7 @@ const emits = defineEmits(['update:currentMessage', 'sendMessage']);
 
 const props = defineProps<{
      currentMessage: string;
+     primaryColor: String;
 }>();
 
 // On crée un modèle local pour pouvoir utiliser v-model

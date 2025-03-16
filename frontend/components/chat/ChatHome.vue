@@ -32,11 +32,9 @@
           >
                <div class="flex flex-col items-start gap-[2px] flex-grow">
                     <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
-                    <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">
-          Je suis là pour vous aider !
-        </span>
+                    <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
                </div>
-               <svgoIconSend class="w-[20px] h-[21px] fill-[#0566ff]"/>
+               <svgoIconSend class="w-[20px] h-[21px]" :style="{ fill:primaryColor }" />
           </button>
 
           <!-- Powered by HelloHumans Agent -->
@@ -58,28 +56,31 @@
                     @click="$emit('openChat')"
                     class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold"
                >
-                    <svgoIconHome class="w-[28px] h-[28px]"/>
+                    <svgoIconHome class="w-[28px] h-[28px]" :style="{ fill:primaryColor }"/>
                     <span class="text-sm text-gray-700">Accueil</span>
                </button>
 
                <!-- Chat -->
                <button
                     @click="$emit('openChat')"
+                    @mouseover="isHovered = true"
+                    @mouseleave="isHovered = false"
                     class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700"
                >
-                    <svgoIconChat class="w-[28px] h-[28px] group-hover:fill-[#0566ff]"/>
+                    <svgoIconChat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? primaryColor : '' }" />
                     <span class="text-sm">Discussion</span>
                </button>
           </div>
      </div>
 </template>
-
 <script setup lang="ts">
 
 const props = defineProps<{
      suggestedQuestions: string[];
+     primaryColor: String;
 }>();
 
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
+const isHovered = ref(false);
 
 </script>

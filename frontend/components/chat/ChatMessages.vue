@@ -28,8 +28,7 @@
                               :key="choice"
                               class="px-3 py-2 border rounded cursor-pointer hover:bg-[#0566ff] hover:text-white"
                               @click="$emit('choiceSelected', choice)"
-                         >
-                              {{ choice }}
+                         >{{ choice }}
                          </button>
                     </div>
                </div>
