@@ -10,8 +10,9 @@ export default defineNuxtConfig({
        '@nuxtjs/color-mode',
      ],
      css: [
-          '@/assets/css/fonts.css', // ✅ Importation des polices
-          '@/assets/css/main.css' // ✅ Importation du CSS global
+          '@/assets/css/fonts/mulish.css',
+          '@/assets/css/fonts/euclidcircularb.css',
+          '@/assets/css/main.css'
      ],
      svgo: {
           defaultImport: 'component',
