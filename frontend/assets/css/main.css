@@ -1,6 +1,10 @@
-﻿*{
-    font-family: Mulish;
-    letter-spacing: -0.24px;
+﻿#hellohumans-panel-iframe{
+     font-family: euclidcircularb;
+     letter-spacing: -0.24px;
+}
+#hellohumans-chat-iframe{
+     font-family: Mulish;
+     letter-spacing: -0.24px;
 }
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
