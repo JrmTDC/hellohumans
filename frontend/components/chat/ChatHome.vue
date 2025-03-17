@@ -77,7 +77,7 @@
 
 const props = defineProps<{
      suggestedQuestions: string[];
-     primaryColor: String;
+     primaryColor: string;
 }>();
 
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);

@@ -38,9 +38,6 @@ button:hover .hhcss_iconChatFillPath{
 #hellohumans-chat-iframe{
     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
-.hhcss_message-operator{
-    background: linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, #00a9ff, #01ccff) border-box border-box;
-}
 .hhcss_message-operator.hhcss_chat-error{
      color: #06132b;
      background: #f0f2f7;

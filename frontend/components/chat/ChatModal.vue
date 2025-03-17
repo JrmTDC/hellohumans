@@ -60,6 +60,7 @@ import { ref, onMounted } from 'vue';
 const props = defineProps<{
      show: boolean;
      isLoading : boolean;
+     primaryColor: string;
 }>();
 
 const emits = defineEmits(['accept', 'close', 'loading']);

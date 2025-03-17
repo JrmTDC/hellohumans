@@ -50,7 +50,7 @@ const emits = defineEmits(['update:currentMessage', 'sendMessage']);
 
 const props = defineProps<{
      currentMessage: string;
-     primaryColor: String;
+     primaryColor: string;
 }>();
 
 // On crée un modèle local pour pouvoir utiliser v-model

@@ -75,7 +75,7 @@ const props = defineProps<{
      isOpen: boolean;
      notificationSound: boolean;
      showOptions: boolean;
-     primaryColor: String;
+     primaryColor: string;
 }>();
 
 const emits = defineEmits([

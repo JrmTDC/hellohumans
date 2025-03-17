@@ -63,7 +63,7 @@ const props = defineProps<{
      notificationSound: boolean;
      isExpanded: boolean;
      optionsBox: HTMLElement | null;
-     primaryColor: String;
+     primaryColor: string;
 }>();
 const emits = defineEmits(['toggleNotifications', 'toggleExpend', 'clearChatAndClose', 'closeOptions']);
 

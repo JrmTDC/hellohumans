@@ -12,10 +12,14 @@
                     :key="index"
                     :class="[
           msg.sender === 'user'
-            ? 'hhcss_message-visitor mt-[9px] bg-[#0566ff] text-white float-right'
+            ? 'hhcss_message-visitor mt-[9px] text-white float-right '
             : 'hhcss_message-operator mt-[9px] text-[rgb(6,19,43)] float-left border border-transparent',
           msg.status === 'unavailable' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
           'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
+        ]" :style="[
+             msg.sender === 'user' ? { backgroundColor: primaryColor } : { background:`linear-gradient(white, white) padding-box padding-box,
+               linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` },
+             msg.status === 'unavailable' ? { } : {},
         ]"
                >
                     <!-- Affichage du texte du message -->
@@ -24,9 +28,12 @@
                     <!-- Si le message contient des choices, on affiche des boutons -->
                     <div v-if="msg.choices" class="mt-2 flex flex-wrap gap-2">
                          <button
-                              v-for="choice in msg.choices"
+                              v-for="(choice, index) in msg.choices"
                               :key="choice"
-                              class="px-3 py-2 border rounded cursor-pointer hover:bg-[#0566ff] hover:text-white"
+                              @mouseover="hoverIndex = index"
+                              @mouseleave="hoverIndex = null"
+                              class="px-3 py-2 border rounded cursor-pointer hover:text-white"
+                              :style="{ backgroundColor: hoverIndex === index ? primaryColor : '' }"
                               @click="$emit('choiceSelected', choice)"
                          >{{ choice }}
                          </button>
@@ -56,6 +63,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { colord } from 'colord';
 
 const emits = defineEmits(['choiceSelected']);
 
@@ -69,12 +77,19 @@ const props = defineProps<{
      }>;
      isLoading: boolean;
      isChatActive: boolean;
+     primaryColor: string;
 }>();
 
 // Références pour la zone de chat et la scrollbar
 const chatContainer = ref<HTMLElement | null>(null);
 const customScrollbar = ref<HTMLElement | null>(null);
 const scrollbarContainer = ref<HTMLElement | null>(null);
+const hoverIndex = ref(null);
+
+const primaryColor = toRef(props, 'primaryColor');
+
+const variation1 = computed(() => colord(primaryColor.value).rotate(-15).lighten(0).toHex());
+const variation2 = computed(() => colord(primaryColor.value).rotate(-20).lighten(0.1).toHex());
 
 let isDragging = false;
 let startY = 0;

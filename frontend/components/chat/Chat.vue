@@ -66,6 +66,7 @@
                <!-- LISTE DES MESSAGES -->
                <ChatMessages
                     v-if="isChatActive"
+                    :primaryColor="primaryColor"
                     :messages="messages"
                     :isLoading="isLoading"
                     :isChatActive="isChatActive"
