@@ -1,5 +1,87 @@
-<!-- ChatAdmin.vue -->
 <template>
+     <div id="hellohumans-panel-iframe" class="border border-[rgb(226,232,239)] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-1 p-[4px_8px] m-[15px]">
+          <div class="flex flex-row justify-start items-start">
+               <div class="flex flex-col justify-start items-stretch w-full p-[20px] ">
+                    <div class="relative p-[13px_20px_13px_44px] mb-0 rounded-[8px] bg-[rgb(255,221,167)] text-[rgb(58,35,0)] mb-[20px]">
+                         <div class="absolute top-[10px] left-[12px] flex items-center justify-center w-[24px] h-[24px]"
+                         >
+                              <svgoIconWarling class="w-[24px] h-[24px] fill-[#d48200]"/>
+                         </div>
+                         Le widget de chat n'est pas installé sur le site du client. Les visiteurs ne peuvent pas voir les modifications pour le moment.
+                    </div>
+
+                    <div class="flex flex-col justify-start items-stretch mb-[20px]" >
+                         <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">Apparence</h2>
+                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] max-w-[750px]">Personnalisez votre widget de chat HelloHuman pour attirer l'attention des visiteurs de votre site Web ou pour adapter l'apparence du widget à votre marque.</p>
+                    </div>
+
+                    <!-- SECTION GÉNÉRAL -->
+                    <ExpandableSection title="Général">
+                         <div class="flex flex-col justify-start items-start gap-3">
+                              <label class="block">Couleur d'arrière-plan :</label>
+                              <div>
+
+                                   <div class="w-full flex items-center text-[rgb(8,15,26)] text-left">
+                                        <svgoIconPickerColor class="w-[24px] h-[24px] fill-[#647491]"/>
+                                        <span class="ml-[12px] whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px] leading-[18px] tracking-[-0.01em]">Choisissez votre couleur</span>
+                                   </div>
+                                   <ul>
+                                        <li class="p-[14px_8px_4px] overflow-hidden text-ellipsis whitespace-nowrap text-[rgb(100,116,145)] pointer-events-none text-[12px] leading-[16px] tracking-[-0.01em]">Themes</li>
+                                        <li class="p-[9px_8px] rounded-[4px] text-[rgb(8,15,26)] cursor-pointer bg-white overflow-hidden text-ellipsis whitespace-nowrap flex gap-[8px] items-center text-[14px] leading-[18px] tracking-[-0.01em] hover:bg-[rgb(220, 233, 255)]">
+                                             <div class="w-full flex items-center text-[rgb(8,15,26)] text-left">
+                                                  <button class="bg-[linear-gradient(115deg,rgb(42,39,218),rgb(0,204,255))] p-0 border-none rounded-full cursor-pointer flex items-center justify-center flex-[0_0_22px] w-[22px] h-[22px] shadow-[inset_0px_0px_2px_0px_rgba(0,0,0,0.2)]"></button>
+                                                  <span class="ml-[12px] whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left"
+                                                  >Dégradé 1</span>
+                                             </div>
+                                        </li>
+                                   </ul>
+                              </div>
+                         </div>
+                         <div class="flex flex-col justify-start items-start gap-3">
+                              <label class="block">Couleur de l'action :</label>
+                              <input v-model="configData.name" type="text" class="border px-3 py-2 rounded w-full" />
+                         </div>
+
+
+                    </ExpandableSection>
+
+                    <!-- SECTION CONTENU -->
+                    <ExpandableSection title="Contenu">
+                         <label class="block mb-2">Questions suggérées :</label>
+
+                         <ColorPicker v-model="configData.color" />
+
+
+                    </ExpandableSection>
+
+                    <!-- SECTION VISIBILITÉ & POSITION -->
+                    <ExpandableSection title="Visibilité et position">
+                         <label class="block mb-2">Afficher le chat ?</label>
+                         <input type="checkbox" v-model="configData.showChat" />
+                         <textarea v-model="configData.suggestedQuestionsString" class="border px-3 py-2 rounded w-full"></textarea>
+                    </ExpandableSection>
+
+                    <!-- SECTION PACK NATURE -->
+                    <ExpandableSection title="Pack Nature">
+                         <label class="block mb-2">Activer le Pack Nature ? </label>
+                         <input type="checkbox" v-model="configData.has_nature_pack" />
+                    </ExpandableSection>
+
+                    <!-- SECTION AVANCÉ -->
+                    <ExpandableSection title="Avancé">
+                         <label class="block mb-2">Clé API Client :</label>
+                         <input v-model="apiClientKey" type="text" class="border px-3 py-2 rounded w-full" />
+                    </ExpandableSection>
+
+               </div>
+               <div class="self-stretch w-[400px] min-w-[400px]">
+                    <div class="sticky top-0 min-h-[628px] bg-[linear-gradient(rgb(255,255,255)_0%,rgba(255,255,255,0)_500px),url(data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7)] bg-repeat w-full">
+                         <Chat v-if="isChatActive" :overrideConfig="appliedConfig" />
+                    </div>
+               </div>
+          </div>
+     </div>
+
      <div class="p-4">
           <h1 class="text-2xl font-bold mb-4">Administration du Chatbot</h1>
 
@@ -14,8 +96,7 @@
                />
                <button
                     class="ml-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    @click="loadClientData"
-               >
+                    @click="loadClientData">
                     Charger config
                </button>
           </div>
@@ -96,7 +177,7 @@
                </div>
           </div>
 
-          <Chat v-if="isChatActive" :overrideConfig="appliedConfig" />
+
      </div>
 </template>
 
@@ -104,6 +185,8 @@
 import { ref, watch, computed } from 'vue'
 import Chat from '@/components/chat/Chat.vue'
 import {useRuntimeConfig} from "#imports"; // votre composant principal du Chat
+import ExpandableSection from '@/components/Panel/ExpandableSection.vue'
+import ColorPicker from '@/components/Panel/ColorPicker.vue'
 
 const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`
