@@ -8,17 +8,18 @@ export async function handleNaturePack(message: string, client: any): Promise<Na
      // Vérifier si le message correspond à un "déclencheur" nature
      const lowerMsg = message.toLowerCase()
      if (lowerMsg.includes('activité') || lowerMsg.includes('quoi faire')) {
-          // On propose un "menu"
           return {
                content: `Dans la région de ${client.name} vous pouvez pratiquer plusieurs activités. Laquelle vous intéresse ?`,
-               choices: ['VTT', 'Randonnée', 'Trail', 'Équitation', 'Grande Randonnée'],
+               choices: ['Randonnée', 'Grandes Randonnées', 'VTT', 'Vélo', 'Équitation', 'Trail','Escalade','Vol libre'],
           }
      }
 
-     // Autre exemple : si l'utilisateur a cliqué "VTT" précédemment, tu pourrais
-     // faire un appel Geotrek via fetch(...) et construire un message.
-     // ...
-     // return { content: 'Voici 3 itinéraires VTT ...', choices: [] }
+     if (lowerMsg.includes('randonnée') || lowerMsg.includes('grandes randonnées') || lowerMsg.includes('vtt') || lowerMsg.includes('vélo') || lowerMsg.includes('équitation') || lowerMsg.includes('trail') || lowerMsg.includes('escalade') || lowerMsg.includes('vol libre')) {
+          return {
+               content: `J'ai des itinéraires de différentes difficultés. Laquelle vous intéresse ?`,
+               choices: ['Très facile', 'Facile', 'Intermédiaire', 'Difficile', 'Très difficile'],
+          }
+     }
 
      // Si on n'a pas trouvé de correspondance, on retourne null
      return null
