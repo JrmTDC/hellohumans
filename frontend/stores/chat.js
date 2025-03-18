@@ -8,12 +8,15 @@ export const useChatStore = defineStore('chat', {
                apiUrl: `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`,
                config: {
                     name: 'HelloHumans',
-                    suggestedQuestionsString: 'Quels sont les restaurants ?;Quels sont les événements à venir ?;Quels sites touristiques visiter ?;Où trouver un hôtel ?;Quels sont les transport ?',
+                    suggestedQuestionsString: '',
                     showChat: true,
                     has_nature_pack: false,
                     apiKey: '4a250974433e6ea35fad46637734b8fe',
+                    backgroundColor: '#0566ff',
+                    textColor: '#ffffff',
                     actionColor: '#0566ff',
-                    backgroundColor: '#0566ff'
+                    isCustomBackground : false,
+
                },
                defaultConfig: {},
                isLoaded: false
