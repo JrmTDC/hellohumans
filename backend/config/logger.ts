@@ -1,35 +1,20 @@
 import env from '#start/env'
-import app from '@adonisjs/core/services/app'
 import { defineConfig, targets } from '@adonisjs/core/logger'
 
 const loggerConfig = defineConfig({
   default: 'app',
 
-  /**
-   * The loggers object can be used to define multiple loggers.
-   * By default, we configure only one logger (named "app").
-   */
   loggers: {
     app: {
       enabled: true,
-      name: env.get('APP_NAME'),
-      level: env.get('LOG_LEVEL'),
+      level: env.get('LOG_LEVEL', 'info'), // Définit un niveau de log par défaut
       transport: {
         targets: targets()
-          .pushIf(!app.inProduction, targets.pretty())
-          .pushIf(app.inProduction, targets.file({ destination: 1 }))
-          .toArray(),
+            .pushIf(!process.env.NODE_ENV || process.env.NODE_ENV === 'development', targets.pretty()) // Logs stylisés en dev
+            .toArray(),
       },
     },
   },
 })
 
 export default loggerConfig
-
-/**
- * Inferring types for the list of loggers you have configured
- * in your application.
- */
-declare module '@adonisjs/core/types' {
-  export interface LoggersList extends InferLoggers<typeof loggerConfig> {}
-}
