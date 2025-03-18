@@ -102,5 +102,4 @@ class MessagesController {
           }
      }
 }
-
 export default new MessagesController()

@@ -20,7 +20,6 @@ class ClientsController {
                     has_nature_pack: client.has_nature_pack,
                }
           } catch (error) {
-               console.error('Erreur ClientsController.show:', error)
                return response.internalServerError({
                     error: {
                          name: 'internal_error',

@@ -70,8 +70,8 @@
 
 <script setup lang="ts">
 import Chat from '@/components/chat/Chat.vue'
-import ExpandableSection from '@/components/Panel/ExpandableSection.vue'
-import ColorPicker from '@/components/Panel/ColorPicker.vue'
+import ExpandableSection from '@/components/panel/ExpandableSection.vue'
+import ColorPicker from '@/components/panel/ColorPicker.vue'
 
 const chatStore = useChatStore()
 const clientConfig = computed(() => chatStore.config)

@@ -11,7 +11,7 @@ class UserService {
      public async findOrCreateUser(params: {
           client_uuid: string
           email: string
-          rgpd: boolean
+          rgpd: string
      }): Promise<UserEntity> {
           // Chercher l'user
           let { data, error } = await supabase

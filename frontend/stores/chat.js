@@ -16,7 +16,6 @@ export const useChatStore = defineStore('chat', {
                     textColor: '#ffffff',
                     actionColor: '#0566ff',
                     isCustomBackground : false,
-
                },
                defaultConfig: {},
                isLoaded: false

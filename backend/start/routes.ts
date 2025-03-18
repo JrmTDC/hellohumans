@@ -1,9 +1,8 @@
 import router from '@adonisjs/core/services/router'
-import SecurityMiddleware from '#middleware/security_middleware'
-
 import ClientsController from '#controllers/ClientsController'
 import UsersController from '#controllers/UsersController'
 import MessagesController from '#controllers/MessagesController'
+import SecurityMiddleware from '#middleware/security_middleware'
 
 router.group(() => {
      router.get('/clients', (ctx) => ClientsController.show(ctx))
