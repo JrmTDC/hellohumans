@@ -21,11 +21,15 @@
                          <ExpandableSection title="Général" :isBilled="false">
                               <div class="flex flex-col justify-start items-start gap-3">
                                    <label class="block">Couleur d'arrière-plan :</label>
-                                   <ColorPicker type="themes" v-model="chatStore.config.backgroundColor" />
+                                   <ColorPicker type="backgroundColors" v-model="chatStore.config.backgroundColor" @update:textColor="chatStore.config.textColor = $event" />
                               </div>
-                              <div class="flex flex-col justify-start items-start gap-3">
+                              <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                   <label class="block">Couleur du texte :</label>
+                                   <ColorPicker type="textColors" v-model="chatStore.config.textColor" />
+                              </div>
+                              <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
                                    <label class="block">Couleur de l'action :</label>
-                                   <ColorPicker type="colors" v-model="chatStore.config.actionColor" />
+                                   <ColorPicker type="actionColors" v-model="chatStore.config.actionColor" />
                               </div>
                          </ExpandableSection>
 
