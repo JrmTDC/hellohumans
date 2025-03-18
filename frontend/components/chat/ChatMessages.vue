@@ -17,7 +17,7 @@
           msg.status === 'unavailable' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
           'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
         ]" :style="[
-             msg.sender === 'user' ? { backgroundColor: primaryColor } : { background:`linear-gradient(white, white) padding-box padding-box,
+             msg.sender === 'user' ? { background: clientConfig.actionColor } : { background:`linear-gradient(white, white) padding-box padding-box,
                linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` },
              msg.status === 'unavailable' ? { } : {},
         ]"
@@ -33,7 +33,7 @@
                               @mouseover="hoverIndex = index"
                               @mouseleave="hoverIndex = null"
                               class="px-3 py-2 border rounded cursor-pointer hover:text-white"
-                              :style="{ backgroundColor: hoverIndex === index ? primaryColor : '' }"
+                              :style="{ background: hoverIndex === index ? clientConfig.actionColor : '' }"
                               @click="$emit('choiceSelected', choice)"
                          >{{ choice }}
                          </button>
@@ -77,7 +77,7 @@ const props = defineProps<{
      }>;
      isLoading: boolean;
      isChatActive: boolean;
-     primaryColor: string;
+     clientConfig: object;
 }>();
 
 // Références pour la zone de chat et la scrollbar
@@ -86,10 +86,10 @@ const customScrollbar = ref<HTMLElement | null>(null);
 const scrollbarContainer = ref<HTMLElement | null>(null);
 const hoverIndex = ref(null);
 
-const primaryColor = toRef(props, 'primaryColor');
+const clientConfig = toRef(props, 'clientConfig');
 
-const variation1 = computed(() => colord(primaryColor.value).rotate(-15).lighten(0).toHex());
-const variation2 = computed(() => colord(primaryColor.value).rotate(-20).lighten(0.1).toHex());
+const variation1 = computed(() => colord(clientConfig.value.actionColor).rotate(-15).lighten(0).toHex());
+const variation2 = computed(() => colord(clientConfig.value.actionColor).rotate(-20).lighten(0.1).toHex());
 
 let isDragging = false;
 let startY = 0;

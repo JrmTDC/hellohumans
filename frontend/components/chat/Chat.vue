@@ -1,110 +1,113 @@
 <template>
-     <!-- BOUTON FLOTANT POUR OUVRIR -->
-     <div class="absolute w-[112px] h-[140px] bottom-[12px] flex items-center justify-center pointer-events-none z-[1] right-0">
-          <button
-               v-if="!isOpen"
-               @click="toggleChat"
-               class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto
+     <div id="hellohumans-chat-iframe" class="block border-none fixed inset-auto bottom-0 right-0 opacity-100 bg-transparent m-0 max-h-[100dvh] max-w-[100vw] translate-y-0 transition-none visible z-[999999999]"
+          :class="[
+               isVisible ? 'w-[424px] h-[747px] max-h-[100%]' : 'w-[112px] h-[140px] max-h-[100dvh]'
+          ]">
+          <!-- BOUTON FLOTANT POUR OUVRIR -->
+          <div class="fixed w-[112px] h-[140px] bottom-[12px] flex items-center justify-center pointer-events-none z-[1] right-0">
+               <button
+                    v-if="!isOpen"
+                    @click="toggleChat"
+                    class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto
              transition duration-150 ease-in-out relative text-[#007dfc]
              shadow-[0px_4px_24px_#02061033] hover:scale-110"
-               :style="{ backgroundColor: primaryColor }"
-          >
-               <svgoButtonIconChat class="w-[24px] h-[24px]" />
-          </button>
-          <!-- Icône de notifications désactivées (optionnel) -->
-          <div
-               v-if="!isOpen && !notificationSound"
-               class="absolute top-[37px] right-[23px] font-bold pointer-events-none
+                    :style="{ background: clientConfig.backgroundColor }"
+               >
+                    <svgoButtonIconChat class="w-[24px] h-[24px]" />
+               </button>
+               <!-- Icône de notifications désactivées (optionnel) -->
+               <div
+                    v-if="!isOpen && !notificationSound"
+                    class="absolute top-[37px] right-[23px] font-bold pointer-events-none
              rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px]
              bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1"
-          >
-               <svgoIconNotificationDisabled class="w-[16px] h-[16px]" />
+               >
+                    <svgoIconNotificationDisabled class="w-[16px] h-[16px]" />
+               </div>
           </div>
-     </div>
 
-     <!-- CONTENEUR PRINCIPAL DU CHAT -->
+          <!-- CONTENEUR PRINCIPAL DU CHAT -->
 
-     <div
-          v-if="isOpen || isVisible"
-          id="hellohumans-chat-iframe"
-          class="max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200
-           absolute bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto
-           shadow-lg overflow-hidden z-1 bg-white scale-85 opacity-0
-           transform transition-transform duration-300 ease-in-out h-min"
-          :class="[
-      isExpanded ? 'w-[593px]' : 'w-[372px]',
-      isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
-    ]"
-     >
-          <div v-auto-animate class="flex-1 overflow-hidden">
-               <!-- HEADER -->
-               <ChatHeader
-                    :primaryColor="primaryColor"
-                    :isChatActive="isChatActive"
-                    :isOpen="isOpen"
-                    :notificationSound="notificationSound"
-                    :showOptions="showOptions"
-                    @goToHome="goToHome"
-                    @toggleChat="toggleChat"
-                    @toggleOptions="toggleOptions"
-               />
+          <div
+               v-if="isOpen || isVisible"
+               class="max-h-[calc(100%-47px)] h-[699px] flex flex-col transition-[height] duration-200 fixed bottom-[26px] right-[26px] left-auto rounded-[16px] pointer-events-auto shadow-lg overflow-hidden z-1 bg-white scale-85 opacity-0 transform transition-transform duration-300 ease-in-out h-min"
+               :class="[
+                    isExpanded ? 'w-[593px]' : 'w-[372px]',
+                    isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
+               ]"
+          >
+               <div v-auto-animate class="flex-1 overflow-hidden">
+                    <!-- HEADER -->
+                    <ChatHeader
+                         :clientConfig="clientConfig"
+                         :isChatActive="isChatActive"
+                         :isOpen="isOpen"
+                         :notificationSound="notificationSound"
+                         :showOptions="showOptions"
+                         @goToHome="goToHome"
+                         @toggleChat="toggleChat"
+                         @toggleOptions="toggleOptions"
+                    />
 
-               <!-- Vague décorative -->
-               <div class="relative z-10">
-                    <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]" />
+                    <!-- Vague décorative -->
+                    <div class="relative z-10">
+                         <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]" />
+                    </div>
+
+                    <!-- ÉCRAN D'ACCUEIL -->
+                    <ChatHome
+                         v-if="!isChatActive"
+                         :clientConfig="clientConfig"
+                         :suggestedQuestions="formattedQuestions"
+                         @sendSuggestedMessage="sendSuggestedMessage"
+                         @openChat="() => (isChatActive = true)"
+                    />
+
+                    <!-- LISTE DES MESSAGES -->
+                    <ChatMessages
+                         v-if="isChatActive"
+                         :clientConfig="clientConfig"
+                         :messages="messages"
+                         :isLoading="isLoading"
+                         :isChatActive="isChatActive"
+                         @choiceSelected="onChoiceSelected"
+                    />
+
+                    <!-- CHAMP DE SAISIE -->
+                    <ChatInput
+                         v-if="isChatActive && !disableInput"
+                         :clientConfig="clientConfig"
+                         v-model:currentMessage="message"
+                         :disableInput="disableInput"
+                         @sendMessage="sendMessage"
+                    />
                </div>
 
-               <!-- ÉCRAN D'ACCUEIL -->
-               <ChatHome
-                    v-if="!isChatActive"
-                    :primaryColor="primaryColor"
-                    :suggestedQuestions="suggestedQuestions"
-                    @sendSuggestedMessage="sendSuggestedMessage"
-                    @openChat="() => (isChatActive = true)"
+               <!-- MODAL RGPD -->
+               <ChatModal
+                    :clientConfig="clientConfig"
+                    :show="showRGPDModal"
+                    @accept="onAcceptRGPD"
+                    @close="onCloseRGPD"
+                    :isLoading="onLoadingRGPD"
                />
 
-               <!-- LISTE DES MESSAGES -->
-               <ChatMessages
-                    v-if="isChatActive"
-                    :primaryColor="primaryColor"
-                    :messages="messages"
-                    :isLoading="isLoading"
-                    :isChatActive="isChatActive"
-                    @choiceSelected="onChoiceSelected"
-               />
-
-               <!-- CHAMP DE SAISIE -->
-               <ChatInput
-                    v-if="isChatActive && !disableInput"
-                    :primaryColor="primaryColor"
-                    v-model:currentMessage="message"
-                    :disableInput="disableInput"
-                    @sendMessage="sendMessage"
+               <!-- OPTIONS -->
+               <ChatOptions
+                    v-if="showOptions"
+                    :clientConfig="clientConfig"
+                    :notificationSound="notificationSound"
+                    :isExpanded="isExpanded"
+                    :optionsBox="optionsBox"
+                    @toggleNotifications="toggleNotifications"
+                    @toggleExpend="toggleExpend"
+                    @clearChatAndClose="clearChatAndClose"
+                    @closeOptions="showOptions = false"
                />
           </div>
 
-          <!-- MODAL RGPD -->
-          <ChatModal
-               :primaryColor="primaryColor"
-               :show="showRGPDModal"
-               @accept="onAcceptRGPD"
-               @close="onCloseRGPD"
-               :isLoading="onLoadingRGPD"
-          />
-
-          <!-- OPTIONS -->
-          <ChatOptions
-               v-if="showOptions"
-               :primaryColor="primaryColor"
-               :notificationSound="notificationSound"
-               :isExpanded="isExpanded"
-               :optionsBox="optionsBox"
-               @toggleNotifications="toggleNotifications"
-               @toggleExpend="toggleExpend"
-               @clearChatAndClose="clearChatAndClose"
-               @closeOptions="showOptions = false"
-          />
      </div>
+
 </template>
 
 <script setup lang="ts">
@@ -150,34 +153,15 @@ const optionsBox = ref<HTMLElement | null>(null)
 // Vérifie si on est dans le navigateur (pour localStorage)
 const isBrowser = typeof window !== 'undefined'
 
-// On ajoute la prop "overrideConfig"
 const props = defineProps<{
-     overrideConfig?: {
-          color?: string;
-          suggestedQuestions?: string[];
-          // etc. Tout ce que vous voulez paramétrer
-     }
-}>()
+     clientConfig: object;
+}>();
 
-const primaryColor = computed(() => {
-     return props.overrideConfig?.color ?? '#0566ff'
-})
-
-let defaultQuestions = [
-     'Quels sont les restaurants ?',
-     'Quels sont les événements à venir ?',
-     'Quels sites touristiques visiter ?',
-     'Où trouver un hôtel ?',
-     'Quels sont les transport ?',
-]
-
-const suggestedQuestions = computed(() => {
-     // Si overrideConfig.suggestedQuestions existe, on l'utilise
-     // sinon on renvoie defaultQuestions
-     return props.overrideConfig?.suggestedQuestions?.length
-          ? props.overrideConfig.suggestedQuestions
-          : defaultQuestions
-})
+const formattedQuestions = computed(() =>
+     props.clientConfig?.suggestedQuestionsString
+          ? props.clientConfig.suggestedQuestionsString.split(';')
+          : []
+)
 
 // Sauvegarder l'historique des messages dans localStorage
 watch(

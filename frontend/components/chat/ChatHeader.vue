@@ -1,5 +1,5 @@
 <template>
-     <div class="p-[24px] text-white rounded-t-lg" :style="{ backgroundColor: primaryColor }">
+     <div class="p-[24px] text-white rounded-t-lg" :style="{ background: clientConfig.backgroundColor }">
           <div class="flex justify-between items-center">
                <div v-if="!isChatActive">
                     <svgoLogoHelloHumansFull class="w-[189px] h-[28px]"/>
@@ -75,7 +75,7 @@ const props = defineProps<{
      isOpen: boolean;
      notificationSound: boolean;
      showOptions: boolean;
-     primaryColor: string;
+     clientConfig: object;
 }>();
 
 const emits = defineEmits([
