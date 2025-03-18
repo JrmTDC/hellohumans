@@ -1,5 +1,5 @@
 ﻿<template>
      <div>
-          <ChatAdmin />
+          <Panel />
      </div>
 </template>
