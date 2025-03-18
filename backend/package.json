@@ -11,8 +11,7 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "mkdir -p data/client && [ -f data/clients.json ] && cp -r data/clients.json data/client/*.json ./data/ || echo 'Fichiers déjà existants'"
+    "typecheck": "tsc --noEmit"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
