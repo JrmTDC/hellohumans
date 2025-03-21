@@ -18,7 +18,5 @@
 import PanelNav from '@/components/panel/PanelNav.vue'
 import PanelHeader from '@/components/panel/PanelHeader.vue'
 
-defineProps({
-     pageTitle: String
-})
+const pageTitle = useState('pageTitle')
 </script>

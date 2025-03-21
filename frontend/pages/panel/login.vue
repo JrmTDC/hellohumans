@@ -12,9 +12,9 @@
                          @click="toggleLangMenu"
                          class="box-border h-[34px] px-[8px] pr-[6px] inline-flex items-center justify-center rounded-[3px] border border-transparent text-[rgb(100,116,145)] text-[14px] leading-[1] uppercase"
                     >
-                         <svgo-icon-earth class="w-[16px] h-[16px] mr-2 fill-[#647491]" />
+                         <svgo-panel-icon-earth class="w-[16px] h-[16px] mr-2 fill-[#647491]" />
                          {{ selectedLang }}
-                         <svgo-icon-triangle-caret-down class="w-[16px] h-[16px] ml-2 transform transition-transform fill-[#647491]" :class="{ 'rotate-180': isLangMenuOpen }" />
+                         <svgo-panel-icon-triangle-caret-down class="w-[16px] h-[16px] ml-2 transform transition-transform fill-[#647491]" :class="{ 'rotate-180': isLangMenuOpen }" />
                     </button>
 
                     <!-- Liste des langues -->
@@ -89,7 +89,7 @@
 
                          <!-- Lien vers l'inscription -->
                          <p class="mt-4 text-gray-600 text-sm">
-                              Vous n’avez pas de compte ? <a href="#" class="text-blue-500 hover:underline">C'est parti</a>
+                              Vous n’avez pas de compte ? <a href="/panel/register" class="text-blue-500 hover:underline">C'est parti</a>
                          </p>
                     </form>
                </div>
