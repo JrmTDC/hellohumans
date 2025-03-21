@@ -7,7 +7,7 @@
                          <div class="relative p-[13px_20px_13px_44px] mb-0 rounded-[8px] bg-[rgb(255,221,167)] text-[rgb(58,35,0)] mb-[20px]">
                               <div class="absolute top-[10px] left-[12px] flex items-center justify-center w-[24px] h-[24px]"
                               >
-                                   <svgoIconWarling class="w-[24px] h-[24px] fill-[#d48200]"/>
+                                   <svgo-chat-icon-warling class="w-[24px] h-[24px] fill-[#d48200]"/>
                               </div>
                               Le widget de chat n'est pas installé sur le site du client. Les visiteurs ne peuvent pas voir les modifications pour le moment.
                          </div>

@@ -1,40 +1,32 @@
 import { defineStore } from 'pinia'
-import {useRuntimeConfig} from "#imports";
+import { useChatApi } from '@/composables/useChatApi'
 
 export const useChatStore = defineStore('chat', {
-     state: () => {
-          const config = useRuntimeConfig()
-          return {
-               apiUrl: `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`,
-               config: {
-                    name: 'HelloHumans',
-                    suggestedQuestionsString: '',
-                    showChat: true,
-                    has_nature_pack: false,
-                    apiKey: '4a250974433e6ea35fad46637734b8fe',
-                    backgroundColor: '#0566ff',
-                    textColor: '#ffffff',
-                    actionColor: '#0566ff',
-                    isCustomBackground : false,
-               },
-               defaultConfig: {},
-               isLoaded: false
-          }
-     },
+     state: () => ({
+          config: {
+               name: 'HelloHumans',
+               suggestedQuestionsString: '',
+               showChat: true,
+               has_nature_pack: false,
+               apiKey: '4a250974433e6ea35fad46637734b8fe',
+               backgroundColor: '#0566ff',
+               textColor: '#ffffff',
+               actionColor: '#0566ff',
+               isCustomBackground: false
+          },
+          defaultConfig: {},
+          isLoaded: false
+     }),
 
      actions: {
           async fetchConfig() {
                try {
-                    const response = await fetch(`${this.apiUrl}/clients`,{
-                         method: 'GET',
-                         headers: { 'Content-Type': 'application/json', 'x-client-key': `${this.config.apiKey}` }
-                    })
-                    if (!response.ok) throw new Error('Erreur de récupération de la configuration')
+                    const { apiFetch } = useChatApi()
+                    const data = await apiFetch('/clients')
 
-                    const data = await response.json()
                     if (data.success) {
-                         this.defaultConfig = data.success // Sauvegarde la config API
-                         this.config = { ...this.config, ...data.success } // Applique la config API, en gardant les valeurs locales si manquantes
+                         this.defaultConfig = data.success
+                         this.config = { ...this.config, ...data.success }
                          this.isLoaded = true
                     }
                } catch (error) {
@@ -44,12 +36,11 @@ export const useChatStore = defineStore('chat', {
 
           async saveConfig() {
                try {
-                    const response = await fetch('/api/chat-config', {
+                    const { apiFetch } = useChatApi()
+                    await apiFetch('/config', {
                          method: 'POST',
-                         headers: { 'Content-Type': 'application/json' },
                          body: JSON.stringify(this.config)
                     })
-                    if (!response.ok) throw new Error('Erreur lors de la sauvegarde')
 
                     alert('Configuration sauvegardée avec succès !')
                } catch (error) {
@@ -59,7 +50,7 @@ export const useChatStore = defineStore('chat', {
           },
 
           resetConfig() {
-               this.config = { ...this.config, ...this.defaultConfig } // Restaure la config API
+               this.config = { ...this.config, ...this.defaultConfig }
           }
      }
 })

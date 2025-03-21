@@ -1,0 +1,96 @@
+<template>
+     <nav class="app-nav z-[99] text-[#8796af] flex flex-row items-stretch justify-start">
+          <ul class="w-[65px] border-r border-[#e2e8ef] m-0 p-[4px] list-none bg-[#f5f7f9] flex flex-col z-[10]">
+
+               <!-- Éléments du haut -->
+               <li v-for="item in topItems" :key="item.route">
+                    <Tooltip :text="item.tooltip">
+                         <NuxtLink
+                              v-if="item.type === 'link'"
+                              :to="item.route"
+                              :class="{ 'text-white bg-[#dce9ff]': $route.path === item.route }"
+                              class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef]"
+                              @mouseover="hoveredItem = item.icon"
+                              @mouseleave="hoveredItem = null"
+                         >
+                              <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
+                                   <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px] hover:fill-[rgb(0,20,51)]" />
+                              </span>
+                         </NuxtLink>
+                         <button
+                              v-else
+                              @click="toggleMenu"
+                              class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative"
+                         >
+                              <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
+                                   <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[32px] h-[32px] hover:fill-[rgb(0,20,51)]" />
+                              </span>
+                         </button>
+                    </Tooltip>
+
+               </li>
+
+               <!-- Séparateur -->
+               <div class="m-auto"></div>
+
+               <!-- Éléments du bas -->
+               <li v-for="item in bottomItems" :key="item.route">
+                    <Tooltip :text="item.tooltip">
+                         <NuxtLink
+                              v-if="item.type === 'link'"
+                              :to="item.route"
+                              :class="{ 'text-white bg-[#dce9ff]': $route.path === item.route }"
+                              class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef]"
+                              @mouseover="hoveredItem = item.icon"
+                              @mouseleave="hoveredItem = null"
+                         >
+                              <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
+                                   <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px] hover:fill-[rgb(0,20,51)]" />
+                              </span>
+                         </NuxtLink>
+                         <button
+                              v-else
+                              @click="toggleSideMenuUser"
+                              class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative"
+                         >
+                              <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
+                                   <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[32px] h-[32px] hover:fill-[rgb(0,20,51)]" />
+                              </span>
+                         </button>
+                    </Tooltip>
+               </li>
+          </ul>
+          <SideMenu
+               v-if="showSideUserMenu"
+               @closeSideUserMenu="showSideUserMenu = false" />
+     </nav>
+</template>
+
+<script setup lang="ts">
+import { ref, markRaw} from 'vue'
+import Tooltip from '@/components/panel/Tooltip.vue'
+import SideMenu from '@/components/panel/SideMenu.vue'
+
+import iconMenuLogo from '@/assets/icons/panel/logoHelloHumansMini.svg'
+import iconMenuRobot from '@/assets/icons/panel/iconRobot.svg'
+import iconMenuSetting from '@/assets/icons/panel/iconSetting.svg'
+import iconUserPicture from '@/assets/icons/panel/iconUserPicture.svg'
+
+const menuItems = ref([
+     { position: 'top', type:'link', icon: markRaw(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
+     { position: 'top', type:'link', icon: markRaw(iconMenuRobot), route: '/panel/', tooltip: 'Analyse du site' },
+     { position: 'bottom', type:'link', icon: markRaw(iconMenuSetting), route: '/panel/', tooltip: 'Paramètres' },
+     { position: 'bottom', type:'button', icon: markRaw(iconUserPicture), route: null, tooltip: 'Votre compte' }
+])
+
+// Séparer les éléments "top" et "bottom"
+const topItems = computed(() => menuItems.value.filter(item => item.position === 'top'))
+const bottomItems = computed(() => menuItems.value.filter(item => item.position === 'bottom'))
+
+const hoveredItem = ref(null)
+const showSideUserMenu = ref(false)
+
+const toggleSideMenuUser = () => {
+     showSideUserMenu.value = !showSideUserMenu.value
+}
+</script>

@@ -1,0 +1,16 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+     <!-- Background Circle -->
+     <circle cx="16" cy="16" r="13" stroke="#9ac1ff" stroke-width="3" fill="none"/>
+     <!-- Progress Circle -->
+     <circle
+          cx="16"
+          cy="16"
+          r="13"
+          stroke="#0566ff"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-dasharray="81.6814"
+          stroke-dashoffset="28.5885"
+          fill="none"
+     />
+</svg>
