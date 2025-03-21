@@ -124,7 +124,7 @@ import ChatModal from '@/components/chat/ChatModal.vue'
 
 // --- ÉTAT PRINCIPAL DU CHAT ---
 const config = useRuntimeConfig()
-const apiUrl = `${config.public.apiBaseUrl}/api/${config.public.apiVersion}`
+const apiUrl = `${config.public.apiBaseUrl}/api/chat/`
 
 // Variables / Refs principales
 const message = ref('')         // Message en cours de saisie
