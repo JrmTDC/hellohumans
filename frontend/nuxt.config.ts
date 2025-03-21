@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
      compatibilityDate: '2024-11-01',
      devtools: { enabled: true },
@@ -19,9 +18,7 @@ export default defineNuxtConfig({
      },
      runtimeConfig: {
           public: {
-               apiBaseUrl: process.env.API_BASE_URL || "",
-               apiVersion: process.env.API_VERSION || "",
-               apiClientKey: process.env.API_CLIENT_KEY || "",
+               apiBaseUrl: process.env.API_BASE_URL || ""
           },
-     },
+     }
 })
