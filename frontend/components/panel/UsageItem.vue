@@ -46,7 +46,7 @@
      </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import ProgressCircle from '@/components/panel/ProgressCircle.vue'
 const props = defineProps({
      item: Object,

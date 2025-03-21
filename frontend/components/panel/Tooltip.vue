@@ -21,7 +21,7 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
 
 const props = defineProps({

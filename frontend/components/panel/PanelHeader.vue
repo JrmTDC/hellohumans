@@ -33,7 +33,7 @@
      </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import UsageItem from '@/components/panel/UsageItem.vue'
 

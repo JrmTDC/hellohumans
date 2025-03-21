@@ -67,7 +67,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, markRaw} from 'vue'
+import { ref } from 'vue'
+import { rawIcon } from '@/utils/rawIcon'
 import Tooltip from '@/components/panel/Tooltip.vue'
 import SideMenu from '@/components/panel/SideMenu.vue'
 
@@ -77,10 +78,10 @@ import iconMenuSetting from '@/assets/icons/panel/iconSetting.svg'
 import iconUserPicture from '@/assets/icons/panel/iconUserPicture.svg'
 
 const menuItems = ref([
-     { position: 'top', type:'link', icon: markRaw(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
-     { position: 'top', type:'link', icon: markRaw(iconMenuRobot), route: '/panel/', tooltip: 'Analyse du site' },
-     { position: 'bottom', type:'link', icon: markRaw(iconMenuSetting), route: '/panel/', tooltip: 'Paramètres' },
-     { position: 'bottom', type:'button', icon: markRaw(iconUserPicture), route: null, tooltip: 'Votre compte' }
+     { position: 'top', type:'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
+     { position: 'top', type:'link', icon: rawIcon(iconMenuRobot), route: '/panel/', tooltip: 'Analyse du site' },
+     { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings', tooltip: 'Paramètres' },
+     { position: 'bottom', type:'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'Votre compte' }
 ])
 
 // Séparer les éléments "top" et "bottom"

@@ -32,10 +32,18 @@ const handleClickOutside = (event: MouseEvent) => {
           emits('closeSideUserMenu')
      }
 }
+let skipNextClick = true
 
-onMounted(async () => {
-     await nextTick()
-     document.addEventListener('click', handleClickOutside)
+onMounted(() => {
+     skipNextClick = true
+     setTimeout(() => {
+          skipNextClick = false
+     }, 100)
+
+     document.addEventListener('click', (e) => {
+          if (skipNextClick) return
+          handleClickOutside(e)
+     })
 })
 
 onUnmounted(() => {
