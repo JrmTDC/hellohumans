@@ -1,11 +1,12 @@
-import { HttpContext } from '@adonisjs/core/http'
+import type { HttpContext } from '@adonisjs/core/http'
 import ipService from '#services/ipService'
 import blockedUserAgentsService from '#services/blockedUserAgentsService'
 import clientService from '#services/clientService'
 import { getUserIp } from '#services/utils'
 
-export default class SecurityMiddleware {
+export default class ChatSecurityMiddleware {
      public async handle(ctx: HttpContext, next: () => Promise<void>) {
+
           const { request, response } = ctx
 
           // 1) Récupérer l'IP

@@ -2,11 +2,28 @@
      "extends": "@adonisjs/tsconfig/tsconfig.app.json",
      "compilerOptions": {
           "rootDir": "./",
-          "outDir": "./build"
+          "outDir": "./build",
+          "module": "NodeNext",
+          "moduleResolution": "NodeNext",
+          "strict": true,
+          "baseUrl": "./",
+          "paths": {
+               "#controllers/*": [
+                    "app/controllers/*"
+               ],
+               "#middleware/*": [
+                    "app/middleware/*"
+               ],
+               "#services/*": [
+                    "app/services/*"
+               ],
+               "#start/*": [
+                    "start/*"
+               ],
+               "#config/*": [
+                    "config/*"
+               ]
+          }
      },
-     "include": [
-          "start",
-          "app",
-          "contracts"
-     ]
+     "include": ["start", "app", "contracts", "config", "middleware"]
 }

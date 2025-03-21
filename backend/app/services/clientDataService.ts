@@ -1,5 +1,5 @@
 import { ClientDataRow } from '#contracts/interfaces'
-import { supabase } from '#services/supabaseClient'
+import { supabase } from '#services/supabaseService'
 
 export async function loadClientData(clientUUID: string): Promise<{ prompt: string }> {
      // On récupère toutes les lignes de la table client_data pour un clientKey

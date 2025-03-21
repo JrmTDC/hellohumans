@@ -4,15 +4,15 @@ import server from '@adonisjs/core/services/server'
 server.errorHandler(() => import('#exceptions/handler'))
 
 server.use([
-     () => import('#middleware/force_json_response_middleware'),
-     () => import('@adonisjs/cors/cors_middleware'),
-     () => import('#middleware/format_response_middleware'),
+  () => import('#middleware/container_bindings_middleware'),  // Liaison des classes au conteneur IoC
+  () => import('#middleware/format_response_middleware'),    // Formatage uniforme des réponses API
+  () => import('#middleware/force_json_response_middleware'),// Forcer les réponses JSON
+  () => import('@adonisjs/cors/cors_middleware'),            // Gestion du CORS
 ])
 
-router.use([
-     () => import('@adonisjs/core/bodyparser_middleware'),
-])
+router.use([() => import('@adonisjs/core/bodyparser_middleware')])
 
 export const middleware = router.named({
-     security: () => import('#middleware/security_middleware'),
+     chat_security: () => import('#middleware/chat_security_middleware'),
+     panel_auth: () => import('#middleware/panel_auth_middleware'),
 })

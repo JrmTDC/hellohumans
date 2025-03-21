@@ -1,7 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
 import userService from '#services/userService'
 
-class UsersController {
+class VisitorsController {
      public async store({ request, response, client }: HttpContext) {
           try {
                const { email, rgpd } = request.all()
@@ -37,7 +37,7 @@ class UsersController {
                     },
                }
           } catch (error) {
-               console.error('Erreur UsersController.store:', error)
+               console.error('Erreur VisitorsController.store:', error)
                return response.internalServerError({
                     error: { name: 'internal_error', description: 'Erreur interne' },
                })
@@ -45,4 +45,4 @@ class UsersController {
      }
 }
 
-export default new UsersController()
+export default new VisitorsController()

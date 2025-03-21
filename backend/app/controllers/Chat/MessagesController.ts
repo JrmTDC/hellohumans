@@ -1,4 +1,3 @@
-// app/controllers/MessagesController.ts
 import { HttpContext } from '@adonisjs/core/http'
 import Env from '#start/env'
 import messagesService from '#services/messagesService'
