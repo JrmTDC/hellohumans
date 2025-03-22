@@ -73,13 +73,18 @@ import Tooltip from '@/components/panel/Tooltip.vue'
 import SideMenu from '@/components/panel/SideMenu.vue'
 
 import iconMenuLogo from '@/assets/icons/panel/logoHelloHumansMini.svg'
-import iconMenuRobot from '@/assets/icons/panel/iconRobot.svg'
-import iconMenuSetting from '@/assets/icons/panel/iconSetting.svg'
-import iconUserPicture from '@/assets/icons/panel/iconUserPicture.svg'
+import iconMenuRobot from '@/assets/icons/panel/iconMenuRobot.svg'
+import iconMenuFlow from '@/assets/icons/panel/iconMenuFlow.svg'
+import iconMenuSetting from '@/assets/icons/panel/iconMenuSetting.svg'
+import iconUserPicture from '@/assets/icons/panel/iconMenuUserPicture.svg'
+import iconMenuModule from '@/assets/icons/panel/iconMenuModule.svg'
+import iconMenuBulb from '@/assets/icons/panel/iconMenuBulb.svg'
 
 const menuItems = ref([
      { position: 'top', type:'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
-     { position: 'top', type:'link', icon: rawIcon(iconMenuRobot), route: '/panel/', tooltip: 'Analyse du site' },
+     { position: 'top', type:'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'Analyse du site' },
+     { position: 'bottom', type:'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'x' },
+     { position: 'bottom', type:'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'Intégrations' },
      { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings', tooltip: 'Paramètres' },
      { position: 'bottom', type:'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'Votre compte' }
 ])
