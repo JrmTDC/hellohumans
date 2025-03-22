@@ -22,16 +22,16 @@
 
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({
      text: { type: String, required: true },
-     placement: { type: String, default: 'right' }, // right, left, top, bottom
-     offset: { type: Number, default: 10 }
+     placement: { type: String, default: 'right' },
+     offset: { type: Number, default: 1 }
 })
 
 const show = ref(false)
-const wrapper = ref(null)
+const wrapper = ref<HTMLElement | null>(null)
 const tooltipStyle = ref({})
 
 const updateTooltipPosition = () => {
@@ -41,30 +41,50 @@ const updateTooltipPosition = () => {
      const rect = el.getBoundingClientRect()
      let top = 0
      let left = 0
+     let topAjust = 4
+     let leftAjust = 0
 
      switch (props.placement) {
           case 'right':
-               top = rect.height / 2
-               left = rect.width + props.offset
+               top = topAjust + rect.top + rect.height / 2
+               left = leftAjust + rect.right + props.offset
+               tooltipStyle.value = {
+                    top: `${top}px`,
+                    left: `${left}px`,
+                    transform: 'translateY(-50%)',
+                    position: 'fixed'
+               }
                break
           case 'left':
-               top = rect.height / 2
-               left = -props.offset
+               top = topAjust + rect.top + rect.height / 2
+               left = leftAjust + rect.left - props.offset
+               tooltipStyle.value = {
+                    top: `${top}px`,
+                    left: `${left}px`,
+                    transform: 'translateY(-50%) translateX(-100%)',
+                    position: 'fixed'
+               }
                break
           case 'top':
-               top = -props.offset
-               left = rect.width / 2
+               top = topAjust + rect.top - props.offset
+               left = leftAjust + rect.left + rect.width / 2
+               tooltipStyle.value = {
+                    top: `${top}px`,
+                    left: `${left}px`,
+                    transform: 'translate(-50%, -100%)',
+                    position: 'fixed'
+               }
                break
           case 'bottom':
-               top = rect.height + props.offset
-               left = rect.width / 2
+               top = topAjust + rect.bottom + props.offset
+               left = leftAjust + rect.left + rect.width / 2
+               tooltipStyle.value = {
+                    top: `${top}px`,
+                    left: `${left}px`,
+                    transform: 'translate(-50%, 0)',
+                    position: 'fixed'
+               }
                break
-     }
-
-     tooltipStyle.value = {
-          top: `${top}px`,
-          left: `${left}px`,
-          transform: 'translateY(-50%)'
      }
 }
 
@@ -72,5 +92,13 @@ onMounted(() => {
      nextTick(() => {
           updateTooltipPosition()
      })
+})
+
+watch(show, (newVal) => {
+     if (newVal) {
+          nextTick(() => {
+               updateTooltipPosition()
+          })
+     }
 })
 </script>
