@@ -63,7 +63,7 @@ const usages = [
           progressColor: '#22c55e',
           bgColor: '#e5e7eb',
           centerContent: 'infinity',
-          numberContent: 0,
+          numberContent: '0',
           sizeCircle: 32,
           sizeFont: 12,
           autoColor: true
@@ -78,7 +78,7 @@ const usages = [
           progressColor: '#f59e0b',
           bgColor: '#e5e7eb',
           centerContent: 'none',
-          numberContent: 0,
+          numberContent: '0',
           sizeCircle: 32,
           sizeFont: 12,
           autoColor: true

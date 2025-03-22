@@ -7,7 +7,26 @@
 
                               <div class="grid grid-cols-[1fr_340px] grid-rows-1 flex-[1_1_0%]">
                                    <div class="flex flex-col justify-start items-start p-[24px_20px_24px_28px] min-w-0">
-d
+                                        <div class="flex flex-row justify-start items-center border border-[rgb(226,232,239)] rounded-[12px] bg-[rgb(245,247,249)] p-[20px] mt-0 mb-0">
+                                             <div class="w-[48px] h-[48px] relative">
+                                                  <ProgressCircle
+                                                       :percentage="16"
+                                                       progressColor="#34b857"
+                                                       bgColor="#ccf1d5"
+                                                       center-content="number"
+                                                       number-content="1/6"
+                                                       :sizeCircle=48
+                                                       :sizeFont=13
+                                                  />
+                                             </div>
+                                             <div class="flex flex-col justify-start items-start mr-auto ml-[12px]">
+                                                  <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em]">Finalisez votre configuration de HelloHumans</h2>
+                                                  <p class="mt-[4px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">Nous allons vous aider à créer un environnement qui ravira vos visiteurs. C'est très facile et cela ne prend que quelques minutes.</p>
+                                             </div>
+                                             <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] px-[14px] shadow-none ml-[12px] min-w-fit bg-[#dce9ff] border-[#dce9ff] text-[#0049bd] hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
+                                                  <span>Terminer l'intégration</span>
+                                             </button>
+                                        </div>
                                    </div>
                                    <div class="flex flex-col justify-start items-start border-l border-[rgb(226,232,239)] p-[24px_28px_24px_20px]">
 
@@ -35,6 +54,7 @@ d
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import UsageItemDashbord from "~/components/panel/UsageItemDashbord.vue";
+import ProgressCircle from '@/components/panel/ProgressCircle.vue'
 
 const usages = [
      {
@@ -47,7 +67,7 @@ const usages = [
           progressColor: '#22c55e',
           bgColor: '#e5e7eb',
           centerContent: 'infinity',
-          numberContent: 0,
+          numberContent: '0',
           autoColor: true
      },
      {
@@ -60,7 +80,7 @@ const usages = [
           progressColor: '#f59e0b',
           bgColor: '#e5e7eb',
           centerContent: 'none',
-          numberContent: 0,
+          numberContent: '0',
           autoColor: true
      }
 ]

@@ -62,7 +62,7 @@ const props = defineProps({
           validator: (val) => ['percentage', 'number', 'infinity', 'none'].includes(val)
      },
      numberContent: {
-          type: Number,
+          type: String,
           default: 0
      },
      sizeCircle: {
