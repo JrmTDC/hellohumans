@@ -34,7 +34,7 @@
                     {{ numberContent }}
                </template>
                <template v-else-if="centerContent === 'infinity'">
-                    <svgo-panel-icon-infinity class="w-[16px] h-[16px]" :style="{ fill: progressColor }" />
+                    <svgo-panel-icon-infinity :style="{ fill: progressColor, width: `${sizeInfinity}px`, height: `${sizeInfinity}px`}" />
                </template>
           </div>
      </div>
@@ -72,11 +72,19 @@ const props = defineProps({
      sizeFont: {
           type: Number,
           default: 12
+     },
+     sizeInfinity:{
+          type: Number,
+          default: 16
+     },
+     strokeWidth:{
+          type: Number,
+          default: 3
      }
 })
 
 const radius = 13
-const strokeWidth = 3
+const strokeWidth = props.strokeWidth
 const circumference = 2 * Math.PI * radius
 
 const animatedPercentage = ref(0)

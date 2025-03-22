@@ -10,26 +10,17 @@
 d
                                    </div>
                                    <div class="flex flex-col justify-start items-start border-l border-[rgb(226,232,239)] p-[24px_28px_24px_20px]">
+
                                         <div class="flex flex-col justify-start items-start mt-0 mb-0 w-full">
                                              <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em]">Utilisation actuelle</h2>
-                                             <div class="border border-[rgb(226,232,239)] rounded-[12px] mt-[16px] w-full">
-                                                  <div class="flex flex-col justify-start items-start p-[20px] w-full">
-                                                       <div class="flex flex-row justify-start items-center">
-                                                            <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Audience</h2>
-                                                       </div>
-                                                       <div class="flex flex-row justify-start items-center mt-[16px]">
-                                                            <div></div>
-                                                            <div class="flex flex-row justify-start items-center ml-[8px]">
-                                                                 <h2 class="mt-0 mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-[#acb8cb]">0</h2>
-                                                                 <h2 class="mt-0 mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-[#acb8cb]">&nbsp;/&nbsp;</h2>
-                                                                 <h2 class="mt-0 mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-[#acb8cb]">52</h2>
-                                                                 <h2 class="mt-0 mb-0 font-normal text-[32px] tracking-[-0.01em] text-[#acb8cb] leading-[18px]">∞</h2>
-                                                            </div>
-                                                       </div>
-
-                                                  </div>
-                                             </div>
+                                             <UsageItemDashbord
+                                                  v-for="(item, index) in usages"
+                                                  :key="index"
+                                                  :item="item"
+                                                  :class="index > 0 ? 'mt-[16px]' : ''"
+                                             />
                                         </div>
+
                                    </div>
                               </div>
 
@@ -43,6 +34,37 @@ d
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+import UsageItemDashbord from "~/components/panel/UsageItemDashbord.vue";
+
+const usages = [
+     {
+          title: 'Audience',
+          description: 'Nombre total de visiteurs ayant interagi avec votre chatbot.',
+          titleUsage: 'Visiteurs atteints',
+          usage: 320,
+          limit: '∞',
+          percentage: 100,
+          progressColor: '#22c55e',
+          bgColor: '#e5e7eb',
+          centerContent: 'infinity',
+          numberContent: 0,
+          autoColor: true
+     },
+     {
+          title: 'Interactions',
+          description: 'Conversations automatisées gérées par le bot.',
+          titleUsage: 'Conversations traitées',
+          usage: 4600,
+          limit: 5000,
+          percentage: 82,
+          progressColor: '#f59e0b',
+          bgColor: '#e5e7eb',
+          centerContent: 'none',
+          numberContent: 0,
+          autoColor: true
+     }
+]
+
 definePageMeta({
      layout: 'panel'
 })
