@@ -79,10 +79,12 @@ import iconMenuSetting from '@/assets/icons/panel/iconMenuSetting.svg'
 import iconUserPicture from '@/assets/icons/panel/iconMenuUserPicture.svg'
 import iconMenuModule from '@/assets/icons/panel/iconMenuModule.svg'
 import iconMenuBulb from '@/assets/icons/panel/iconMenuBulb.svg'
+import iconMenuAnalytic from '@/assets/icons/panel/iconMenuAnalytic.svg'
 
 const menuItems = ref([
      { position: 'top', type:'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
      { position: 'top', type:'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'Analyse du site' },
+     { position: 'top', type:'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'Analytique' },
      { position: 'bottom', type:'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'x' },
      { position: 'bottom', type:'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'Intégrations' },
      { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings', tooltip: 'Paramètres' },

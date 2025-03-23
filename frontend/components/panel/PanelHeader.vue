@@ -1,7 +1,10 @@
 <template>
      <header class="app-content-header flex items-center bg-[#f5f7f9] flex-[0_0_58px] flex-row h-[58px] justify-start pl-[24px] pr-[12px] relative z-[12]">
           <div class="flex flex-row justify-start items-center flex-grow w-full">
-               <h1 class="inline-flex items-center text-[20px] font-medium tracking-[-0.01em] leading-[26px] mb-0 mr-auto mt-0 max-w-[calc(100%-268px)]">{{ title }}</h1>
+               <h1 class="inline-flex items-center text-[20px] font-medium tracking-[-0.01em] leading-[26px] mb-0 mr-auto mt-0 max-w-[calc(100%-268px)]">
+                    {{ title }}
+                    <div v-if="isBilled" :class="isPaid ? 'bg-[rgb(190,255,203)]' : 'bg-[rgb(255,219,186)]'" class="p-[3px_5px] rounded-[4px] block ml-[8px]" > <div class="flex flex-row justify-start items-center"> <svgo-panel-icon-premium class="w-[14px] h-[14px] block fill-[rgb(8,15,26)] transition-none mr-0" /> <p class="mt-0 mb-0 ml-[2px] font-normal text-[12px] leading-[16px] tracking-[-0.01em]"> {{ isPaid ? 'Payé' : 'Payant' }} </p> </div> </div>
+               </h1>
                <div class="flex flex-row justify-start items-center ml-[16px]" ref="usageMenuRef">
                     <div @click="toggleUsageMenu" class="flex flex-row justify-start items-center p-[6px] rounded-[6px] cursor-pointer text-[rgb(58,35,0)] bg-transparent hover:bg-[rgb(220,233,255)] group">
                          <svgo-panel-icon-usage-menu class="w-[20px] h-[20px] fill-[#8796af] transition-transform group-hover:fill-[rgb(5,102,255)]" :class="{ 'rotate-180': isUsageMenuOpen }" />
@@ -37,7 +40,11 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import UsageItemHeader from '@/components/panel/UsageItemHeader.vue'
 
-defineProps({ title: String })
+defineProps({
+     title: String,
+     isBilled: Boolean,
+     isPaid: Boolean
+})
 
 const isUsageMenuOpen = ref(false)
 const usageMenuRef = ref(null)

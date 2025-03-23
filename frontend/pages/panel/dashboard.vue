@@ -27,6 +27,24 @@
                                                   <span>Terminer l'intégration</span>
                                              </button>
                                         </div>
+                                        <div class="flex flex-col justify-start items-start mt-[24px] mb-0 w-full">
+                                             <div class="flex flex-row justify-start items-center w-full">
+                                                  <h2 class="mt-0 mb-0 mr-auto font-medium text-[18px] leading-[24px] tracking-[-0.01em]">Performance</h2>
+                                                  <div class="relative flex items-center ml-0">
+                                                       <div class="flex items-center w-[245px] h-[28px] rounded-[12px] bg-[rgba(100,116,145,0.08)] transition-[border-color] duration-[300ms] border-2 border-transparent px-[8px] cursor-pointer">
+                                                            <div class="flex-[1_1_0%] items-center flex overflow-hidden">
+                                                                 <svgo-panel-icon-calandar class="w-[16px] h-[16px] mr-[5px] fill-[#647491]"/>
+                                                                 <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden whitespace-nowrap">
+                                                                      21 févr. 2025 - 22 mars 2025
+                                                                 </p>
+                                                            </div>
+                                                            <div class="flex items-center justify-center">
+                                                                 <svgo-panel-icon-triangle-caret-down class="rotate-0 transition-transform duration-[300ms] w-[24px] h-[24px] fill-[rgb(100,116,145)]"/>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
                                    </div>
                                    <div class="flex flex-col justify-start items-start border-l border-[rgb(226,232,239)] p-[24px_28px_24px_20px]">
 
@@ -98,6 +116,12 @@ onMounted(() => {
      }
      const pageTitle = useState('pageTitle')
      pageTitle.value = 'Tableau de bord'
+
+     const pageIsBilled = useState('pageIsBilled')
+     pageIsBilled.value = false
+
+     const pageIsPaid = useState('pageIsPaid')
+     pageIsPaid.value = false
 })
 
 </script>
