@@ -17,13 +17,13 @@
                          @click="closeModal"
                          class="absolute top-[20px] right-[20px] group"
                     >
-                         <svgoIconMinimize class="w-[24px] h-[24px] fill-[#6D7E9E] group-hover:fill-[#0566ff]" />
+                         <svgo-chat-icon-minimize class="w-[24px] h-[24px] fill-[#6D7E9E] group-hover:fill-[#0566ff]" />
                     </button>
 
                     <!-- Titre + formulaire RGPD -->
                     <h2 class="text-[15px] mb-2 text-[#494949]">Avant de commencer, veuillez entrer votre adresse email.</h2>
                     <div class="relative left-0 p-[15px]">
-                         <svgoIconInput class="w-[24px] h-[24px] fill-[#0566ff] rotate-45 absolute top-[28px] left-[25px]" />
+                         <svgo-chat-icon-input class="w-[24px] h-[24px] fill-[#0566ff] rotate-45 absolute top-[28px] left-[25px]" />
                          <input
                               v-model="localUser"
                               type="email"

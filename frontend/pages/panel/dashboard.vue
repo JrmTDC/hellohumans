@@ -86,7 +86,7 @@ const usages = [
           bgColor: '#e5e7eb',
           centerContent: 'infinity',
           numberContent: '0',
-          autoColor: true
+          autoColor: false
      },
      {
           title: 'Interactions',

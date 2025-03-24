@@ -13,7 +13,7 @@
              shadow-[0px_4px_24px_#02061033] hover:scale-110"
                     :style="{ background: clientConfig.backgroundColor }"
                >
-                    <svgoButtonIconChat class="w-[24px] h-[24px]" />
+                    <svgo-chat-button-icon-chat class="w-[24px] h-[24px]" />
                </button>
                <!-- Icône de notifications désactivées (optionnel) -->
                <div
@@ -21,8 +21,8 @@
                     class="absolute top-[37px] right-[23px] font-bold pointer-events-none
              rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px]
              bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1"
-               >
-                    <svgoIconNotificationDisabled class="w-[16px] h-[16px]" />
+               >-
+                    <svgo-chat-icon-notification-disabled class="w-[16px] h-[16px]" />
                </div>
           </div>
 
@@ -51,7 +51,7 @@
 
                     <!-- Vague décorative -->
                     <div class="relative z-10">
-                         <svgoLineWave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]" />
+                         <svgo-chat-line-wave class="h-6 w-[calc(100%+10px)] absolute bottom-[-12px] left-[-4px]" />
                     </div>
 
                     <!-- ÉCRAN D'ACCUEIL -->
