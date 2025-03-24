@@ -22,10 +22,10 @@
             Envoyer
             <div class="flex items-center gap-1 text-xs text-[rgb(100,116,145)]">
               Raccourci
-              <svgoIconSortcutEnter class="w-[11px] h-[10px]" fill="#647491" />
+                 <svgo-chat-icon-sortcut-enter class="w-[11px] h-[10px]" fill="#647491" />
             </div>
           </span>
-                         <svgoIconSend class="w-[20px] h-[21px]" :style="{ fill:clientConfig.actionColor }" />
+                         <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:clientConfig.actionColor }" />
                     </button>
                </div>
           </div>

@@ -15,7 +15,7 @@
                                 <span class="text-[15px] font-medium text-left text-[#06132b] overflow-hidden text-ellipsis">
                                   {{ question }}
                                 </span>
-                              <svgoIconNext class="w-[20px] h-[20px]"/>
+                              <svgo-chat-icon-next class="w-[20px] h-[20px]"/>
                          </button>
                          <hr
                               class="ml-[15px] mr-[15px]"
@@ -34,7 +34,7 @@
                     <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
                     <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
                </div>
-               <svgoIconSend class="w-[20px] h-[21px]" :style="{ fill:clientConfig.actionColor }" />
+               <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:clientConfig.actionColor }" />
           </button>
 
           <!-- Powered by HelloHumans Agent -->
@@ -56,7 +56,7 @@
                     @click="$emit('openChat')"
                     class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold"
                >
-                    <svgoIconHome class="w-[28px] h-[28px]" :style="{ fill:clientConfig.actionColor }"/>
+                    <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:clientConfig.actionColor }"/>
                     <span class="text-sm text-gray-700">Accueil</span>
                </button>
 
@@ -67,7 +67,7 @@
                     @mouseleave="isHovered = false"
                     class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700"
                >
-                    <svgoIconChat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? clientConfig.actionColor : '' }" />
+                    <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? clientConfig.actionColor : '' }" />
                     <span class="text-sm">Discussion</span>
                </button>
           </div>

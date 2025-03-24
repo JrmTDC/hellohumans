@@ -30,5 +30,7 @@ export const usePanelStore = defineStore('panel', {
                     console.error('Erreur de récupération des usages :', error)
                }
           }
+
+
      }
 })

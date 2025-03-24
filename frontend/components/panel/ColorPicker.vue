@@ -13,7 +13,7 @@
                </span>
 
                <!-- Icône de sélection (rotation en fonction de l'ouverture) -->
-               <svgoIconInputSelect
+               <svgo-chat-icon-input-select
                     class="w-6 h-6 transform transition-transform fill-[#080f1a]"
                     :class="{ 'rotate-180': isOpen }" />
           </div>
@@ -27,7 +27,7 @@
                <div
                     class="relative flex items-center p-[9px_8px] cursor-pointer hover:bg-[#dce9ff] rounded"
                     @click="triggerColorPicker">
-                    <svgoIconPickerColor class="w-6 h-6 fill-[#647491]" />
+                    <svgo-chat-icon-picker-color class="w-6 h-6 fill-[#647491]" />
                     <span class="ml-3 flex-1 text-left text-sm text-gray-700">Choisissez votre couleur</span>
                     <!-- Picker color caché qui s'ouvre au bon endroit -->
                     <input
