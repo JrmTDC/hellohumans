@@ -57,12 +57,12 @@
 
                               <!-- Champ Mot de passe -->
                               <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                   <input
-                                        type="password"
+                                   <PasswordInput
                                         v-model="password"
                                         placeholder="Mot de passe"
-                                        class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                        :class="{ 'border-[rgb(232,19,50)]': errors.password }"
+                                        :error="!!errors.password"
+                                        extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
+                                        :iconSize=20
                                    />
                                    <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.password }}</span>
                               </fieldset>
@@ -97,9 +97,11 @@
      </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import PasswordInput from '@/components/panel/PasswordInput.vue'
+
 
 const router = useRouter()
 
