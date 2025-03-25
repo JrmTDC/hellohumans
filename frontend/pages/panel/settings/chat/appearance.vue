@@ -18,5 +18,11 @@ onMounted(() => {
      }
      const pageTitle = useState('pageTitle')
      pageTitle.value = 'Paramètres'
+
+     const pageIsBilled = useState('pageIsBilled')
+     pageIsBilled.value = false
+
+     const pageIsPaid = useState('pageIsPaid')
+     pageIsPaid.value = false
 })
 </script>
