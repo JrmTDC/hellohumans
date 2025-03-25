@@ -72,7 +72,7 @@
                                    v-model="password"
                                   placeholder="Mot de passe"
                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                   :error=errors.password
+                                   :error=errorPassword
                                   :iconSize=20
                               />
                               <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.password }}</span>
@@ -127,6 +127,7 @@ const password = ref('')
 const siteweb = ref('')
 const agreed = ref(false)
 const errors = ref({ email: null, password: null, siteweb: null, agreed: null })
+let errorPassword = ref(false)
 const loginError = ref(false)
 const loading = ref(false)
 
@@ -169,6 +170,7 @@ const validateForm = () => {
 
      if (!password.value) {
           errors.value.password = 'Ne peut être vide !'
+          errorPassword = true
           valid = false
      }
 
