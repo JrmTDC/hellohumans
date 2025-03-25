@@ -7,6 +7,8 @@ export default defineNuxtConfig({
        '@formkit/auto-animate',
        'nuxt-svgo',
        '@nuxtjs/color-mode',
+       'nuxt-echarts',
+       'dayjs-nuxt'
      ],
      css: [
           '@/assets/css/fonts/mulish.css',
