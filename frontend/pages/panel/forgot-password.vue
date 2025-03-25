@@ -76,7 +76,7 @@
                               </p>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <div class="relative">
-                                   <svgo-panel-icon-info class="absolute left-[-25px] w-4 h-4 text-[rgb(26,73,143)]"/>
+                                   <svgo-panel-icon-info class="absolute left-[-28px] w-4 h-4"/>
                                    <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(26,73,143)] mt-[-20px] mb-[12px]">
                                         Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.
                                    </p>
