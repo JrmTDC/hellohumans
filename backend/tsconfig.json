@@ -2,7 +2,7 @@
      "extends": "@adonisjs/tsconfig/tsconfig.app.json",
      "compilerOptions": {
           "rootDir": "./",
-          "outDir": "./build",
+          "outDir": "./.output",
           "module": "NodeNext",
           "moduleResolution": "NodeNext",
           "strict": true,
@@ -25,5 +25,5 @@
                ]
           }
      },
-     "include": ["start", "app", "contracts", "config", "middleware"]
+     "include": ["**/*.ts", "bin/**/*.ts"]
 }
