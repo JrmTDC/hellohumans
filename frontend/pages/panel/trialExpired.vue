@@ -1,6 +1,6 @@
 <template>
      <div id="app-content" class="flex-1 overflow-x-hidden overflow-y-auto relative h-full">
-          <div class="fixed inset-0 z-[100] flex flex-col justify-start items-center bg-[#f5f7f9] overflow-scroll">
+          <div class="fixed inset-0 z-[100] flex flex-col justify-start items-center bg-[#f5f7f9]">
                <div class="bg-white w-full mt-0 mb-0">
                     <div class="grid place-items-center">
                          <div class="flex flex-col justify-start items-center w-[560px] text-center pt-10 pb-8">
@@ -21,6 +21,7 @@
                     </div>
                     <div class="mt-5 flex flex-[1_1_0%] flex-wrap w-full gap-1">
                          <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] p-4 bg-white">
+
                               <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
@@ -32,10 +33,11 @@
                               <div class="grid place-items-center bg-[#dce9ff] w-5 h-5 rounded-full self-end ml-4">
                                    <svgo-panel-icon-offer-included class="w-[16px] h-[16px] fill-[#00378e]"/>
                               </div>
-                         </div>
-                         <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] p-4 bg-white">sqd</div>
 
-                         <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] bg-[#f5f7f9] p-4">
+
+                         </div>
+                         <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] p-4 bg-white">
+
                               <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
@@ -44,11 +46,49 @@
                                         </div>
                                    </div>
                               </div>
+                              <div class="grid place-items-center bg-[#dce9ff] w-5 h-5 rounded-full self-end ml-4">
+                                   <svgo-panel-icon-offer-included class="w-[16px] h-[16px] fill-[#00378e]"/>
+                              </div>
+
+
+                         </div>
+
+                         <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] bg-[#f5f7f9] p-4">
+
+                              <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
+                              <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
+                                   <div class="flex flex-row justify-start items-center max-w-full">
+                                        <Tooltip text="Les conversations représentent le nombre total de conversations dans le chat en direct" placement="top" variant="white" :arrow="true">
+                                             <div class="w-full">
+                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">Conversations traitées - <strong>JUSQU’À 50</strong></p>
+                                             </div>
+                                        </Tooltip>
+                                   </div>
+                              </div>
                               <div class="grid place-items-center bg-[#e2e8ef] w-5 h-5 rounded-full self-end ml-4">
                                    <svgo-panel-icon-offer-excluded class="w-[16px] h-[16px] fill-[#acb8cb]"/>
                               </div>
+
+
                          </div>
-                         <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] bg-[#f5f7f9] p-4">sqd</div>
+                         <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] bg-[#f5f7f9] p-4">
+
+                              <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
+                              <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
+                                   <div class="flex flex-row justify-start items-center max-w-full">
+                                        <Tooltip text="Les conversations représentent le nombre total de conversations dans le chat en direct" placement="top" variant="white" :arrow="true">
+                                             <div class="w-full">
+                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">Conversations traitées - <strong>JUSQU’À 50</strong></p>
+                                             </div>
+                                        </Tooltip>
+                                   </div>
+                              </div>
+                              <div class="grid place-items-center bg-[#e2e8ef] w-5 h-5 rounded-full self-end ml-4">
+                                   <svgo-panel-icon-offer-excluded class="w-[16px] h-[16px] fill-[#acb8cb]"/>
+                              </div>
+
+
+                         </div>
 
                     </div>
                     <button class="mt-5 rounded-[8px] text-[16px] leading-[20px] h-[38px] min-w-[80px] px-4 py-0
@@ -60,4 +100,6 @@
      </div>
 </template>
 <script setup lang="ts">
+import Tooltip from "@/components/panel/Tooltip.vue";
+
 </script>

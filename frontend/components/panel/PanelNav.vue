@@ -4,7 +4,7 @@
 
                <!-- Éléments du haut -->
                <li v-for="item in topItems" :key="item.route">
-                    <Tooltip :text="item.tooltip">
+                    <Tooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
                          <NuxtLink
                               v-if="item.type === 'link'"
                               :to="item.route"
@@ -35,7 +35,7 @@
 
                <!-- Éléments du bas -->
                <li v-for="item in bottomItems" :key="item.route">
-                    <Tooltip :text="item.tooltip">
+                    <Tooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
                          <NuxtLink
                               v-if="item.type === 'link'"
                               :to="item.route"
