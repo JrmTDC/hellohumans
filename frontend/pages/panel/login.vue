@@ -12,7 +12,6 @@
                     <LanguageSelector @languageSelected="updateSelectedLang" />
                </div>
           </div>
-
           <!-- Formulaire de connexion -->
           <div class="grid place-items-center relative">
                <div class="py-[40px] px-0 m-0">
@@ -51,7 +50,7 @@
 
                          <!-- Lien Mot de passe oublié -->
                          <div class="w-full text-left mt-[-8px] mb-[24px]">
-                              <a href="#" class="text-[rgb(5,102,255)] font-normal no-underline transition-colors duration-200 ease-in-out text-[14px]">Mot de passe oublié ?</a>
+                              <a href="/panel/forgot-password" class="text-[rgb(5,102,255)] font-normal no-underline transition-colors duration-200 ease-in-out text-[14px]">Mot de passe oublié ?</a>
                          </div>
 
                          <!-- Erreur d'authentification -->
@@ -95,6 +94,7 @@ const password = ref('')
 const errors = ref({ email: null, password: null })
 const loginError = ref(false)
 const loading = ref(false)
+
 
 const updateSelectedLang = (lang: string) => {
      console.log('Langue sélectionnée :', lang) // Vérification dans la console
