@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { rawIcon } from '@/utils/rawIcon'
-import Tooltip from '@/components/panel/Tooltip.vue'
+import Tooltip from '@/components/panel/common/Tooltip.vue'
 import SideMenu from '@/components/panel/SideMenu.vue'
 
 import iconMenuLogo from '@/assets/icons/panel/logoHelloHumansMini.svg'

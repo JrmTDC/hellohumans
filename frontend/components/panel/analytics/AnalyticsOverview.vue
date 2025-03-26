@@ -50,7 +50,7 @@ import { use } from 'echarts/core'
 import { TooltipComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
-import Tooltip from '@/components/ui/Tooltip.vue'
+import Tooltip from '@/components/panel/common/Tooltip.vue'
 import DateRangePicker from '@/components/ui/DateRangePicker.vue'
 
 use([TooltipComponent, CanvasRenderer])

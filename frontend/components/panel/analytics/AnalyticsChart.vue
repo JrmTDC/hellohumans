@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import Tooltip from '@/components/panel/Tooltip.vue'
+import Tooltip from '@/components/panel/common/Tooltip.vue'
 
 const activeTab = ref<'audience' | 'interactions'>('audience')
 const chartType = ref<'bar' | 'line'>('bar')

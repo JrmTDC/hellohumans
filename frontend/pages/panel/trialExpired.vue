@@ -7,8 +7,7 @@
                               <span class="block w-6 min-w-[24px] h-6 min-h-[24px] mt-0 mb-0"></span>
                               <h2 class="mt-0 mb-0 font-medium text-[32px] leading-[41px] tracking-[-0.01em]">Continuez à exploiter pleinement Hellohumans</h2>
                               <span class="block w-3 min-w-[12px] h-3 min-h-[12px]"></span>
-                              <p class="mt-0 mb-0 font-normal text-[18px] leading-[23px] tracking-[-0.01em] text-[#647491]">Votre essai du <strong>avec toutes les fonctionnalités</strong> a expiré le <strong>24/03/2025</strong>. Continuez sur votre lancée. Comparez les plans et choisissez l'option idéale pour votre entreprise.
-                              </p>
+                              <p class="mt-0 mb-0 font-normal text-[18px] leading-[23px] tracking-[-0.01em] text-[#647491]">Votre essai du <strong>avec toutes les fonctionnalités</strong> a expiré le <strong>24/03/2025</strong>. Continuez sur votre lancée. Comparez les plans et choisissez l'option idéale pour votre entreprise.</p>
                               <span class="block w-5 min-w-[20px] h-5 min-h-[20px]"></span>
                               <a href="/panel/upgrade" class="inline-flex justify-center items-center bg-[#0566ff] border border-[#0566ff] text-white w-auto rounded-[8px] text-[16px] h-[38px] leading-[20px] px-4 py-0 hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white ">Comparer les offres</a>
                          </div>
@@ -33,11 +32,8 @@
                               <div class="grid place-items-center bg-[#dce9ff] w-5 h-5 rounded-full self-end ml-4">
                                    <svgo-panel-icon-offer-included class="w-[16px] h-[16px] fill-[#00378e]"/>
                               </div>
-
-
                          </div>
                          <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] p-4 bg-white">
-
                               <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
@@ -49,12 +45,9 @@
                               <div class="grid place-items-center bg-[#dce9ff] w-5 h-5 rounded-full self-end ml-4">
                                    <svgo-panel-icon-offer-included class="w-[16px] h-[16px] fill-[#00378e]"/>
                               </div>
-
-
                          </div>
 
                          <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] bg-[#f5f7f9] p-4">
-
                               <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
@@ -100,6 +93,6 @@
      </div>
 </template>
 <script setup lang="ts">
-import Tooltip from "@/components/panel/Tooltip.vue";
+import Tooltip from "@/components/panel/common/Tooltip.vue";
 
 </script>
