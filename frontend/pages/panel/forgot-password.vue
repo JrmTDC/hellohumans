@@ -71,6 +71,7 @@
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
                                    Vérifiez votre boîte de réception !
                               </h1>
+                              <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
                                    Un e-mail de réinitialisation a été envoyé. Consultez votre boîte de réception et suivez les instructions.
                               </p>

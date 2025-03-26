@@ -10,6 +10,8 @@
                     { 'border-[rgb(232,19,50)]': error }
                ]"
                @input="emit('update:modelValue', password)"
+               @focus="emit('focus')"
+               @blur="emit('blur')"
           />
 
           <!-- Bouton pour afficher/masquer le mot de passe -->
@@ -48,7 +50,7 @@ const props = defineProps({
      },
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'focus', 'blur']);
 const password = ref(props.modelValue || ''); // Rend la valeur réactive
 const showPassword = ref(false);
 
