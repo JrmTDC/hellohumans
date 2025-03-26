@@ -26,12 +26,14 @@
                               <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
                                    <input
                                         type="email"
-                                        v-model="email"
+                                        v-model="inputEmail"
                                         placeholder="Adresse e-mail"
                                         class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :class="{ 'border-[rgb(232,19,50)]': errors.email }"
                                    />
-                                   <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.email }}</span>
+                                   <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
+                                        {{ errorMessageEmail }}
+                                   </span>
                               </fieldset>
 
                               <!-- Champ Mot de passe -->
@@ -43,7 +45,7 @@
                                         extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :iconSize=20
                                    />
-                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.password }}</span>
+                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}</span>
                               </fieldset>
                          </fieldset>
 
@@ -89,11 +91,13 @@ const config = useRuntimeConfig()
 const apiUrl = `${config.public.apiBaseUrl}/api`
 
 // Champs du formulaire
-const email = ref('')
+const inputEmail = ref('')
 const password = ref('')
-const errors = ref({ email: null, password: null })
+const errors = ref({ email: false, password: false })
 const loginError = ref(false)
 const loading = ref(false)
+const errorMessageEmail = ref('');
+const errorPassword = ref('');
 
 
 const updateSelectedLang = (lang: string) => {
@@ -101,20 +105,25 @@ const updateSelectedLang = (lang: string) => {
 }
 
 // Fonction pour valider le formulaire
-const validateForm = () => {
-     errors.value = { email: null, password: null }
-     let valid = true
+     const validateForm = () => {
+          errors.value = { email: false, password: false }
+          let valid = true
 
-     if (!email.value) {
-          errors.value.email = 'Ne peut être vide !'
-          valid = false
-     } else if (!/\S+@\S+\.\S+/.test(email.value)) {
-          errors.value.email = 'L’adresse e-mail est invalide !'
-          valid = false
-     }
+          if (!inputEmail.value) {
+               errors.value.email = true
+               errorMessageEmail.value = 'Ne peut être vide !'
+               valid = false
+
+          } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
+               errors.value.password = true
+               errorMessageEmail.value  =  'L’adresse e-mail est invalide !'
+               valid = false
+          }
+
 
      if (!password.value) {
-          errors.value.password = 'Ne peut être vide !'
+          errors.value.password = true
+          errorPassword.value = 'Ne peut être vide !'
           valid = false
      }
 
@@ -124,7 +133,6 @@ const validateForm = () => {
 // Fonction pour gérer la connexion
 const handleLogin = async () => {
      if (!validateForm()) return
-
      loginError.value = false
      loading.value = true
 
@@ -132,7 +140,7 @@ const handleLogin = async () => {
           const response = await fetch(apiUrl + '/panel/auth/login', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email: email.value, password: password.value })
+               body: JSON.stringify({ email: inputEmail.value, password: password.value })
           })
 
           const data = await response.json()

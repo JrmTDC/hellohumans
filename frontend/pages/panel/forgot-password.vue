@@ -15,7 +15,7 @@
                <div class="py-[40px] px-0 m-0">
                     <!-- Formulaire de récupération -->
                     <div v-if="!emailSent">
-                         <form class="flex flex-col items-center w-full" @submit.prevent="handleReset">
+                         <form class="flex flex-col items-center w-full" @submit.prevent="handleForgot">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
                                         Mot de passe oublié ?
@@ -30,13 +30,13 @@
                                    <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
                                         <input
                                              type="email"
-                                             v-model="email"
+                                             v-model="inputEmail"
                                              placeholder="Adresse e-mail"
                                              class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                              :class="{ 'border-[rgb(232,19,50)]': errors.email }"
                                         />
-                                        <span v-if="errors.email" class="_inputError text-[rgb(232,19,50)] text-[12px] leading-[16px] tracking-[-0.01em] pl-[2px] pt-[4px]">
-                                             {{ errors.email }}
+                                        <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
+                                             {{ errorMessageEmail }}
                                         </span>
                                    </fieldset>
                               </fieldset>
@@ -76,13 +76,11 @@
                               </p>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <div class="relative">
-                                   <svgo-panel-icon-info class="absolute left-[-28px] w-4 h-4"/>
+                                   <svgo-panel-icon-info class="absolute left-[-28px] w-4 h-4 fill-[#0569FF]"/>
                                    <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(26,73,143)] mt-[-20px] mb-[12px]">
                                         Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.
                                    </p>
                               </div>
-
-
                          </fieldset>
 
                          <!-- Retour à la connexion -->
@@ -97,15 +95,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import LanguageSelector from '@/components/panel/LanguageSelector.vue'
 
-const router = useRouter()
-const email = ref('')
-const errors = ref({ email: null })
+
+const inputEmail = ref('')
+const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
 const errorMessage = ref('')
+const errorMessageEmail = ref('');
 
 const updateSelectedLang = (lang: string) => {
      console.log('Langue sélectionnée :', lang)
@@ -113,14 +111,16 @@ const updateSelectedLang = (lang: string) => {
 
 // Fonction de validation
 const validateForm = () => {
-     errors.value = { email: null }
+     errors.value = { email: false }
      let valid = true
 
-     if (!email.value) {
-          errors.value.email = 'Ne peut être vide !'
+     if (!inputEmail.value) {
+          errors.value.email = true
+          errorMessageEmail.value =  'Ne peut être vide !'
           valid = false
-     } else if (!/\S+@\S+\.\S+/.test(email.value)) {
-          errors.value.email = 'L’adresse e-mail est invalide !'
+     } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
+          errors.value.email = true
+          errorMessageEmail.value  =  'L’adresse e-mail est invalide !'
           valid = false
      }
 
@@ -128,7 +128,7 @@ const validateForm = () => {
 }
 
 // Simulation de l'envoi d'un email sans appel API
-const handleReset = async () => {
+const handleForgot = async () => {
      if (!validateForm()) return
 
      loading.value = true

@@ -41,22 +41,24 @@
                               <span class="block text-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] -mt-[20px] mb-[12px]">Aucune carte de crédit requise</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="email" type="email" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full" :class="{ 'border-[rgb(232,19,50)]': errors.email }" placeholder="Votre adresse e-mail">
-                              <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.email }}</span>
+                              <input v-model="inputEmail" type="email" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.email }" placeholder="Votre adresse e-mail">
+                              <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
                               <PasswordInput
                                    v-model="password"
                                   placeholder="Mot de passe"
                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                   :error=errorPassword
+                                   :error=errors.password
                                   :iconSize=20
                               />
-                              <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.password }}</span>
+                              <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="siteweb" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full" :class="{ 'border-[rgb(232,19,50)]': errors.siteweb }" placeholder="Site Web">
-                              <span v-if="errors.siteweb" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.siteweb }}</span>
+                              <input v-model="siteweb" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.siteweb }" placeholder="Site Web">
+
+
+                              <span v-if="errors.siteweb" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorSiteweb }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center mt-[13px]">
                               <label class="flex items-start max-w-[365px] text-[14px] leading-[18px] tracking-[-0.01em] cursor-pointer">
@@ -77,7 +79,7 @@
                                              <a href="#" class="underline text-[#0566ff]">Conditions générales</a> et la
                                              <a href="#" class="underline text-[#0566ff]">Politique de confidentialité</a> de HelloHumans.
                                         </span>
-                                        <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errors.agreed }}</span>
+                                        <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsAgreed }}</span>
                                    </span>
                               </label>
                          </fieldset>
@@ -100,14 +102,19 @@ import PasswordInput from "@/components/panel/PasswordInput.vue";
 import LanguageSelector from "@/components/panel/LanguageSelector.vue";
 
 // Champs du formulaire
-const email = ref('')
+const inputEmail = ref('')
 const password = ref('')
 const siteweb = ref('')
 const agreed = ref(false)
-const errors = ref({ email: null, password: null, siteweb: null, agreed: null })
-let errorPassword = ref(false)
+const errors = ref({ email: false, password: false, siteweb: false, agreed: false })
 const loginError = ref(false)
 const loading = ref(false)
+const errorMessageEmail = ref('');
+const errorPassword = ref('');
+const errorSiteweb = ref('');
+const errorsAgreed = ref('');
+
+
 
 const router = useRouter()
 
@@ -117,35 +124,41 @@ const updateSelectedLang = (lang: string) => {
 
 // Fonction pour valider le formulaire
 const validateForm = () => {
-     errors.value = { email: null, password: null }
+     errors.value = { email: false, password: false, siteweb: false, agreed: false }
      let valid = true
 
-     if (!email.value) {
-          errors.value.email = 'Ne peut être vide !'
+     if (!inputEmail.value) {
+          errors.value.email = true
+          errorMessageEmail.value = 'Ne peut être vide !'
           valid = false
-     } else if (!/\S+@\S+\.\S+/.test(email.value)) {
-          errors.value.email = 'L’adresse e-mail est invalide !'
+
+     } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
+          errors.value.password = true
+          errorMessageEmail.value  =  'L’adresse e-mail est invalide !'
           valid = false
      }
 
      if (!password.value) {
-          errors.value.password = 'Ne peut être vide !'
-          errorPassword = true
+          errors.value.password = true
+          errorPassword.value = 'Ne peut être vide !'
           valid = false
      }
 
      if (!siteweb.value) {
-          errors.value.siteweb = 'Ne peut être vide !'
+          errors.value.siteweb = true
+          errorSiteweb.value = 'Ne peut être vide !'
           valid = false
      }
 
      if (!agreed.value) {
-          errors.value.agreed = 'Un accord est requis'
+          errors.value.agreed = true
+          errorsAgreed.value = 'Un accord est requis'
           valid = false
      }
 
      return valid
 }
+
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
      if (!validateForm()) return
@@ -157,7 +170,7 @@ const handleRegister = async () => {
           const response = await fetch(apiUrl + '/panel/auth/login', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email: email.value, password: password.value })
+               body: JSON.stringify({ email: inputEmail.value, password: password.value })
           })
 
           const data = await response.json()
