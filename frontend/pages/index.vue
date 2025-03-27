@@ -2,4 +2,4 @@
      <div>
           <Panel />
      </div>
-</template>
+</template> 
