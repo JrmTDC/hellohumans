@@ -81,7 +81,7 @@
                          <div
                               class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center"
                          >
-                              <svgo-panel-icon-info class="w-[14px] h-[14px] fill-[#647491]" />
+                              <svgo-panel-icon-helper class="w-[14px] h-[14px] fill-[#647491]" />
                          </div>
                     </div>
                     <span class="block w-[12px] h-[12px]"></span>
@@ -210,7 +210,7 @@
                     <div
                          class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center"
                     >
-                         <svgo-panel-icon-info class="w-[14px] h-[14px] fill-[#647491]" />
+                         <svgo-panel-icon-helper class="w-[14px] h-[14px] fill-[#647491]" />
                     </div>
                </div>
                <span class="block w-[12px] h-[12px]"></span>
