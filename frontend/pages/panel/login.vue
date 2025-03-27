@@ -79,15 +79,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref,  } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-
 import PasswordInput from '@/components/panel/PasswordInput.vue'
 import LanguageSelector from '@/components/panel/LanguageSelector.vue'
 import {usePublicStore} from "~/stores/publicStore";
 
 const router = useRouter()
 
+// Configuration de l'API
+const config = useRuntimeConfig()
+const apiUrl = `${config.public.apiBaseUrl}/api`
 
 // Champs du formulaire
 const inputEmail = ref('')
@@ -98,10 +100,10 @@ const loading = ref(false)
 const errorMessageEmail = ref('');
 const errorPassword = ref('');
 
+
 const updateSelectedLang = (lang: string) => {
      console.log('Langue sélectionnée :', lang) // Vérification dans la console
 }
-
 
 // Fonction pour valider le formulaire
      const validateForm = () => {
@@ -128,7 +130,7 @@ const updateSelectedLang = (lang: string) => {
 
      return valid
 }
-const publicStore = usePublicStore()
+
 // Fonction pour gérer la connexion
 const handleLogin = async () => {
      if (!validateForm()) return
@@ -137,8 +139,8 @@ const handleLogin = async () => {
 
      try {
 
+          const publicStore = usePublicStore()
           const response = await publicStore.login(inputEmail.value, password.value)
-
           if (response) {
                let resp = await response.json()
                localStorage.setItem('token', resp.success.token)
@@ -146,6 +148,7 @@ const handleLogin = async () => {
           } else {
                loginError.value = true
           }
+
 
      } catch (error) {
           loginError.value = false

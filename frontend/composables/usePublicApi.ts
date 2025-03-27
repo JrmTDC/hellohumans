@@ -1,7 +1,7 @@
 import {useRuntimeConfig} from "#imports";
 export function usePublicApi() {
      const config = useRuntimeConfig()
-     const apiUrl = `${config.public.apiBaseUrl}/api/`
+     const apiUrl = `${config.public.apiBaseUrl}`
 
      async function apiFetch(path: string, options: RequestInit = {}) {
           const headers = {
