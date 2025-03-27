@@ -79,16 +79,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,  } from 'vue'
 import { useRouter } from 'vue-router'
+
 import PasswordInput from '@/components/panel/PasswordInput.vue'
 import LanguageSelector from '@/components/panel/LanguageSelector.vue'
+import {usePublicStore} from "~/stores/publicStore";
 
 const router = useRouter()
 
-// Configuration de l'API
-const config = useRuntimeConfig()
-const apiUrl = `${config.public.apiBaseUrl}/api`
 
 // Champs du formulaire
 const inputEmail = ref('')
@@ -99,10 +98,10 @@ const loading = ref(false)
 const errorMessageEmail = ref('');
 const errorPassword = ref('');
 
-
 const updateSelectedLang = (lang: string) => {
      console.log('Langue sélectionnée :', lang) // Vérification dans la console
 }
+
 
 // Fonction pour valider le formulaire
      const validateForm = () => {
@@ -129,7 +128,7 @@ const updateSelectedLang = (lang: string) => {
 
      return valid
 }
-
+const publicStore = usePublicStore()
 // Fonction pour gérer la connexion
 const handleLogin = async () => {
      if (!validateForm()) return
@@ -137,20 +136,17 @@ const handleLogin = async () => {
      loading.value = true
 
      try {
-          const response = await fetch(apiUrl + '/panel/auth/login', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email: inputEmail.value, password: password.value })
-          })
 
-          const data = await response.json()
+          const response = await publicStore.login(inputEmail.value, password.value)
 
-          if (!response.ok) {
-               loginError.value = true
-          } else {
-               localStorage.setItem('token', data.success.token)
+          if (response) {
+               let resp = await response.json()
+               localStorage.setItem('token', resp.success.token)
                router.push('/panel/')
+          } else {
+               loginError.value = true
           }
+
      } catch (error) {
           loginError.value = false
      }

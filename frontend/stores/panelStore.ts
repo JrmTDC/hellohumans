@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import { usePanelApi } from '@/composables/usePanelApi'
+import {useRuntimeConfig} from "#imports";
+const config = useRuntimeConfig()
+const apiUrl = `${config.public.apiBaseUrl}/api`
 
 export const usePanelStore = defineStore('panel', {
      state: () => ({

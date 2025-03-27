@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import { usePublicApi } from '@/composables/usePublicApi'
+import {useRuntimeConfig} from "#imports";
+const config = useRuntimeConfig()
+const apiUrl = `${config.public.apiBaseUrl}`
 
 export const usePublicStore = defineStore('public', {
      state: () => ({
@@ -13,7 +16,7 @@ export const usePublicStore = defineStore('public', {
                this.loading = true
                this.error = null
                try {
-                    const data = await apiFetch('/auth/login', {
+                    const data = await apiFetch(apiUrl + '/auth/login', {
                          method: 'POST',
                          body: JSON.stringify({ email, password })
                     })
