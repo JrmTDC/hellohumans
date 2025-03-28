@@ -87,10 +87,6 @@ import {usePublicStore} from "~/stores/publicStore";
 
 const router = useRouter()
 
-// Configuration de l'API
-const config = useRuntimeConfig()
-const apiUrl = `${config.public.apiBaseUrl}/api`
-
 // Champs du formulaire
 const inputEmail = ref('')
 const password = ref('')
@@ -142,7 +138,7 @@ const handleLogin = async () => {
           const publicStore = usePublicStore()
           const response = await publicStore.login(inputEmail.value, password.value)
           if (response) {
-               let resp = await response.json()
+               //let resp = await response.json()
                localStorage.setItem('token', resp.success.token)
                router.push('/panel/')
           } else {
