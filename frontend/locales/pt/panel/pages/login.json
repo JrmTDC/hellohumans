@@ -1,0 +1,14 @@
+{
+     "title": "Bem-vindo de volta",
+     "subtitle": "Entre na sua conta HelloHumans",
+     "emailPlaceholder": "Endereço de e-mail",
+     "passwordPlaceholder": "Senha",
+     "forgotPassword": "Esqueceu a senha?",
+     "invalidCredentials": "E-mail ou senha incorretos!",
+     "submit": "Entrar",
+     "submitLoading": "Carregando...",
+     "noAccount": "Ainda não tem uma conta?",
+     "registerLink": "Vamos lá",
+     "error.empty": "Não pode estar vazio!",
+     "error.invalidEmail": "Endereço de e-mail inválido!"
+}

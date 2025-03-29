@@ -1,0 +1,14 @@
+{
+     "title": "Bentornato",
+     "subtitle": "Accedi al tuo account HelloHumans",
+     "emailPlaceholder": "Indirizzo email",
+     "passwordPlaceholder": "Password",
+     "forgotPassword": "Hai dimenticato la password?",
+     "invalidCredentials": "Email o password errati!",
+     "submit": "Accedi",
+     "submitLoading": "Caricamento...",
+     "noAccount": "Non hai un account?",
+     "registerLink": "Iniziamo",
+     "error.empty": "Non può essere vuoto!",
+     "error.invalidEmail": "Indirizzo email non valido!"
+}
