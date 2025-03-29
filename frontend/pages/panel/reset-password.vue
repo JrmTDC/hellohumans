@@ -197,3 +197,25 @@ const updateSelectedLang = (lang: string) => {
      console.log('Langue sélectionnée :', lang)
 }
 </script>
+
+
+
+
+<!--
+{{ t('panel.reset-passwordPage') }}
+{{ t('panel.reset-passwordTitle') }}
+{{ t('panel.password') }}
+{{ t('panel.passwordErrorEmpty') }}
+{{ t('panel.passwordErrorShort') }}
+{{ t('panel.passwordStrength') }}
+{{ t('panel.passwordStrengthWeak') }}
+{{ t('panel.passwordStrengthMedium') }}
+{{ t('panel.passwordStrengthStrong') }}
+{{ t('panel.passwordStrengthVeryStrong') }}
+{{ t('panel.confirmPassword') }}
+{{ t('panel.confirmPasswordError') }}
+{{ t('panel.submit') }}
+{{ t('panel.loading') }}
+{{ t('panel.successMessage') }}
+{{ t('panel.loginLink') }}
+-->

@@ -1,0 +1,10 @@
+﻿{
+     "title": "Continua a sfruttare al massimo Hellohumans",
+     "trialExpired": "La tua prova con <strong>tutte le funzionalità</strong> è scaduta il <strong>{date}</strong>. Continua il tuo percorso. Confronta i piani e scegli l'opzione migliore per la tua azienda.",
+     "comparePlans": "Confronta i piani",
+     "downgradeTitle": "Passa al piano gratuito",
+     "downgradeDescription": "Puoi passare a un piano inferiore in qualsiasi momento e utilizzare il nostro piano gratuito a vita. Puoi modificarlo quando vuoi.",
+     "processedConversations": "Conversazioni elaborate - <strong>FINO A {count}</strong>",
+     "tooltipProcessedConversations": "Le conversazioni rappresentano il numero totale di chat in tempo reale",
+     "downgradeButton": "Passa a una versione precedente"
+}

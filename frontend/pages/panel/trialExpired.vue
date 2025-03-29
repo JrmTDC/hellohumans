@@ -85,7 +85,7 @@
 
                     </div>
                     <button class="mt-5 rounded-[8px] text-[16px] leading-[20px] h-[38px] min-w-[80px] px-4 py-0
-  bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333]">
+                         bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333]">
                          <span>Passer à une version antérieure</span>
                     </button>
                </div>
@@ -96,3 +96,14 @@
 import Tooltip from "@/components/panel/common/Tooltip.vue";
 
 </script>
+
+<!--
+{{ t('panel.trialExpiredPage.title') }}
+{{ t('panel.trialExpiredPage.trialExpired', { date: '24/03/2025' })
+{{ t('panel.trialExpiredPage.comparePlans') }}
+{{ t('panel.trialExpiredPage.downgradeTitle') }}
+{{ t('panel.trialExpiredPage.downgradeDescription') }}
+{{ t('panel.trialExpiredPage.processedConversations', { count: 50 })
+{{ t('panel.trialExpiredPage.tooltipProcessedConversations') }}
+{{ t('panel.trialExpiredPage.downgradeButton') }}
+-->

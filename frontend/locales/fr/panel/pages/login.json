@@ -1,0 +1,14 @@
+{
+     "title": "Bon retour parmi nous",
+     "description": "Connectez-vous à votre compte HelloHumans",
+     "emailLabel": "Adresse e-mail",
+     "passwordLabel": "Mot de passe",
+     "forgotPasswordLink": "Mot de passe oublié ?",
+     "invalidCredentialsError": "E-mail ou mot de passe incorrect !",
+     "loginButton": "Se connecter",
+     "loadingButton": "Chargement...",
+     "noAccountLink": "Vous n’avez pas de compte ? C'est parti",
+     "emailEmptyError": "Ne peut être vide !",
+     "emailInvalidError": "L’adresse e-mail est invalide !",
+     "passwordEmptyError": "Ne peut être vide !"
+}

@@ -177,3 +177,11 @@ function closePanel() {
      router.push('/panel')
 }
 </script>
+
+<!--
+{{ t('panel.upgrade.ModulesPage.trialRemaining', { count: 0 }) }}
+{{ t('panel.upgrade.ModulesPage.title') }}
+{{ t('panel.upgrade.ModulesPage.description') }}
+{{ t('panel.upgrade.ModulesPage.chooseModules') }}
+{{ t('panel.upgrade.ModulesPage.nextButtonLabel') }}
+-->

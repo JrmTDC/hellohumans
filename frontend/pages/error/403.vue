@@ -5,3 +5,9 @@
           <nuxt-link to="/">Revenir à l’accueil</nuxt-link>
      </div>
 </template>
+
+<!--
+{{ t('error.403Page.title') }}
+{{ t('error.403Page.message') }}
+{{ t('error.403Page.backHome') }}
+-->

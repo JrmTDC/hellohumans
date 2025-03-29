@@ -126,3 +126,21 @@ onMounted(() => {
 })
 
 </script>
+
+<!--
+{{ t('panel.dashboardPage.pageTitle') }}
+{{ t('panel.dashboardPage.finalizeConfigurationTitle') }}
+{{ t('panel.dashboardPage.finalizeConfigurationDescription') }}
+{{ t('panel.dashboardPage.finishIntegrationButton') }}
+{{ t('panel.dashboardPage.performanceSectionTitle') }}
+{{ t('panel.dashboardPage.currentUsageTitle') }}
+{{ t('panel.dashboardPage.usageItemTitleAudience') }}
+{{ t('panel.dashboardPage.usageItemDescriptionAudience') }}
+{{ t('panel.dashboardPage.usageItemTitleInteractions') }}
+{{ t('panel.dashboardPage.usageItemDescriptionInteractions') }}
+{{ t('panel.dashboardPage.dateRange') }}
+{{ t('panel.dashboardPage.infinityLabel') }}
+{{ t('panel.dashboardPage.usageLimit') }}
+{{ t('panel.dashboardPage.usagePercentage') }}
+{{ t('panel.dashboardPage.usageNone') }}
+-->

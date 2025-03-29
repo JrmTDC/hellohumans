@@ -102,3 +102,11 @@ function closePanel() {
      router.push('/panel')
 }
 </script>
+
+<!--
+{{ t('panel.upgrade.indexPage.trial_remaining', { count: 0 }) }}
+{{ t('panel.upgrade.indexPage.select_offer') }}
+{{ t('panel.upgrade.indexPage.choose_offer_description') }}
+{{ t('panel.upgrade.indexPage.view_all_features') }}
+{{ t('panel.upgrade.indexPage.next_step') }}
+-->

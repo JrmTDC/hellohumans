@@ -59,3 +59,7 @@ onMounted(async () => {
      }
 })
 </script>
+
+<!--
+{{ t('panel.indexPage.checking')  }}
+-->

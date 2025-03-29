@@ -76,3 +76,10 @@ onMounted(() => {
      pageIsPaid.value = true
 })
 </script>
+
+<!--
+{{ t('panel.analyticsPage.overviewButton') }}
+{{ t('panel.analyticsPage.pageTitle') }}
+{{ t('panel.analyticsPage.dateRangeLabel') }}
+{{ t('panel.analyticsPage.chartLabel') }}
+-->

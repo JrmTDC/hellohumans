@@ -1,0 +1,12 @@
+﻿{
+     "title": "Kostenloses Konto erstellen",
+     "subtitle": "Keine Kreditkarte erforderlich",
+     "emailPlaceholder": "Ihre E-Mail-Adresse",
+     "passwordPlaceholder": "Passwort",
+     "sitewebPlaceholder": "Website",
+     "errorEmail": "E-Mail ist erforderlich",
+     "errorPassword": "Passwort ist erforderlich",
+     "errorSiteweb": "Website ist erforderlich",
+     "agreement": "Durch die Anmeldung stimmen Sie unseren Geschäftsbedingungen zu.",
+     "submitButton": "Registrieren"
+}

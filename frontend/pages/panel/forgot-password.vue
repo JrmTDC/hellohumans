@@ -141,3 +141,19 @@ const handleForgot = async () => {
      }, 2000) // Simulation d'un délai de traitement de 2 secondes
 }
 </script>
+
+<!--
+{{ t('panel.forgot-passwordPage.title') }}
+{{ t('panel.forgot-passwordPage.description') }}
+{{ t('panel.forgot-passwordPage.emailPlaceholder') }}
+{{ t('panel.forgot-passwordPage.emailErrorRequired') }}
+{{ t('panel.forgot-passwordPage.emailErrorInvalid') }}
+{{ t('panel.forgot-passwordPage.submitButton') }}
+{{ t('panel.forgot-passwordPage.loadingSubmitButton') }}
+{{ t('panel.forgot-passwordPage.createAccountLink') }}
+{{ t('panel.forgot-passwordPage.loginLink') }}
+{{ t('panel.forgot-passwordPage.errorMessage') }}
+{{ t('panel.forgot-passwordPage.successTitle') }}
+{{ t('panel.forgot-passwordPage.successMessage')
+{{ t('panel.forgot-passwordPage.successInfoMessage') }}
+-->

@@ -1,0 +1,12 @@
+﻿{
+     "title": "Create a Free Account",
+     "subtitle": "No credit card required",
+     "emailPlaceholder": "Your email address",
+     "passwordPlaceholder": "Password",
+     "sitewebPlaceholder": "Website",
+     "errorEmail": "Email is required",
+     "errorPassword": "Password is required",
+     "errorSiteweb": "Website is required",
+     "agreement": "By signing up, you agree to our terms and conditions.",
+     "submitButton": "Sign Up"
+}

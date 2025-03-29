@@ -1,0 +1,7 @@
+﻿{
+     "trial_remaining": "Su prueba completa termina en {count} día | Su prueba completa termina en {count} días",
+     "select_offer": "Seleccione su oferta",
+     "choose_offer_description": "Elija una oferta y seleccione módulos adicionales en el siguiente paso.",
+     "view_all_features": "Ver todas las funcionalidades",
+     "next_step": "Próximo paso: Seleccione módulos adicionales"
+}

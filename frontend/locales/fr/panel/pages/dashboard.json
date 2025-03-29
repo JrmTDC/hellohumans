@@ -1,0 +1,17 @@
+﻿{
+     "pageTitle": "Tableau de bord",
+     "finalizeConfigurationTitle": "Finalisez votre configuration de HelloHumans",
+     "finalizeConfigurationDescription": "Nous allons vous aider à créer un environnement qui ravira vos visiteurs. C'est très facile et cela ne prend que quelques minutes.",
+     "finishIntegrationButton": "Terminer l'intégration",
+     "performanceSectionTitle": "Performance",
+     "currentUsageTitle": "Utilisation actuelle",
+     "usageItemTitleAudience": "Visiteurs atteints",
+     "usageItemDescriptionAudience": "Nombre total de visiteurs ayant interagi avec votre chatbot.",
+     "usageItemTitleInteractions": "Conversations traitées",
+     "usageItemDescriptionInteractions": "Conversations automatisées gérées par le bot.",
+     "dateRange": "21 févr. 2025 - 22 mars 2025",
+     "infinityLabel": "∞",
+     "usageLimit": "Limite : {limit}",
+     "usagePercentage": "Progression : {percentage}%",
+     "usageNone": "Aucun"
+}

@@ -188,3 +188,19 @@ const handleRegister = async () => {
      loading.value = false
 }
 </script>
+
+<!--
+{{ t('panel.registerPage.title') }}
+{{ t('panel.registerPage.subtitle') }}
+{{ t('panel.registerPage.emailPlaceholder') }}">
+{{ t('panel.registerPage.passwordPlaceholder') }}">
+{{ t('panel.registerPage.sitewebPlaceholder') }}">
+{{ t('panel.registerPage.errorEmail') }}
+{{ t('panel.registerPage.errorPassword') }}
+{{ t('panel.registerPage.errorSiteweb') }}
+{{ t('panel.registerPage.agreement') }}
+{{ t('panel.registerPage.submitButton') }}
+-->
+
+
+

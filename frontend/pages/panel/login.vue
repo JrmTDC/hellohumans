@@ -32,7 +32,6 @@
                                         :class="{ 'border-[rgb(232,19,50)]': errors.email }"
                                    />
                                    <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
-                                        {{ errorMessageEmail }}
                                    </span>
                               </fieldset>
 
@@ -153,3 +152,18 @@ const handleLogin = async () => {
      loading.value = false
 }
 </script>
+
+<!--
+{{ t('panel.loginPage.title') }}
+{{ t('panel.loginPage.description') }}
+{{ t('panel.loginPage.emailLabel') }}
+{{ t('panel.loginPage.passwordLabel') }}
+{{ t('panel.loginPage.forgotPasswordLink') }}
+{{ t('panel.loginPage.invalidCredentialsError') }}
+{{ t('panel.loginPage.loginButton') }}
+{{ t('panel.loginPage.loadingButton') }}
+{{ t('panel.loginPage.noAccountLink') }}
+{{ t('panel.loginPage.emailEmptyError') }}
+{{ t('panel.loginPage.emailInvalidError') }}
+{{ t('panel.loginPage.passwordEmptyError') }}
+-->
