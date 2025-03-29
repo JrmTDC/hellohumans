@@ -12,7 +12,7 @@ router.group(() => {
      router.post('/visitors', (ctx) => VisitorsController.store(ctx))
      router.post('/messages', (ctx) => MessagesController.sendMessage(ctx))
 })
-     .prefix('/api/chat')
+     .prefix('/chat')
      .use(middleware.chat_security())
 
 // Routes d'authentification et de gestion du mot de passe

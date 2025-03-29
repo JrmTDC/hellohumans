@@ -1,7 +1,7 @@
 import {useRuntimeConfig} from "#imports";
 export function usePanelApi() {
      const config = useRuntimeConfig()
-     const apiUrl = `${config.public.apiBaseUrl}/api/panel/`
+     const apiUrl = `${config.public.apiBaseUrl}/panel`
 
      const token = () => {
           if (process.client) {
