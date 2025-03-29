@@ -24,7 +24,7 @@ router.group(() => {
      router.post('/reset-password', (ctx) => AuthController.resetPassword(ctx))
      router.post('/change-password', (ctx) => AuthController.changePassword(ctx))
 })
-     .prefix('/api/panel/auth')
+     .prefix('/panel/auth')
 
 // Routes protégées par l'authentification
 router.group(() => {
@@ -41,5 +41,5 @@ router.group(() => {
           }
      })
 })
-     .prefix('/api/panel')
+     .prefix('/panel')
      .use(middleware.panel_auth())
