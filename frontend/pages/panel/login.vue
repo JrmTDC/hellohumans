@@ -1,5 +1,5 @@
 <template>
-     <div v-auto-animate id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
+     <div id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
           <!-- Header -->
           <div class="flex flex-row justify-start items-center relative p-[32px_40px] z-[1]">
                <div class="mr-auto">
@@ -83,7 +83,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PasswordInput from '@/components/panel/PasswordInput.vue'
 import LanguageSelector from '@/components/panel/LanguageSelector.vue'
-import {usePublicStore} from "~/stores/publicStore";
+import {usePublicStore} from "@/stores/publicStore";
+const { t } = useI18n()
 
 const router = useRouter()
 
@@ -134,18 +135,15 @@ const handleLogin = async () => {
      loading.value = true
 
      try {
-
           const publicStore = usePublicStore()
           const response = await publicStore.login(inputEmail.value, password.value)
           if (response) {
                //let resp = await response.json()
-               localStorage.setItem('token', resp.success.token)
-               router.push('/panel/')
+               localStorage.setItem('token', response.success.token)
+               await router.push('/panel/')
           } else {
                loginError.value = true
           }
-
-
      } catch (error) {
           loginError.value = false
      }

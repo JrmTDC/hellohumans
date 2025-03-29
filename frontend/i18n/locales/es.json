@@ -1,0 +1,20 @@
+{
+     "panel": {
+          "pages": {
+               "login": {
+                    "title": "Bienvenido de nuevo",
+                    "subtitle": "Inicia sesión en tu cuenta de HelloHumans",
+                    "emailPlaceholder": "Correo electrónico",
+                    "passwordPlaceholder": "Contraseña",
+                    "forgotPassword": "¿Olvidaste tu contraseña?",
+                    "invalidCredentials": "¡Correo electrónico o contraseña incorrectos!",
+                    "submit": "Iniciar sesión",
+                    "submitLoading": "Cargando...",
+                    "noAccount": "¿No tienes una cuenta?",
+                    "registerLink": "Vamos allá",
+                    "error.empty": "¡No puede estar vacío!",
+                    "error.invalidEmail": "¡Dirección de correo inválida!"
+               }
+          }
+     }
+}

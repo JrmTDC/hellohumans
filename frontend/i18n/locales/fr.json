@@ -1,0 +1,35 @@
+{
+     "panel": {
+          "pages": {
+               "login": {
+                    "title": "Bon retour parmi nous",
+                    "subtitle": "Connectez-vous à votre compte HelloHumans",
+                    "emailPlaceholder": "Adresse e-mail",
+                    "passwordPlaceholder": "Mot de passe",
+                    "forgotPassword": "Mot de passe oublié ?",
+                    "invalidCredentials": "E-mail ou mot de passe incorrect !",
+                    "submit": "Se connecter",
+                    "submitLoading": "Chargement...",
+                    "noAccount": "Vous n’avez pas de compte ?",
+                    "registerLink": "C'est parti",
+                    "error.empty": "Ne peut être vide !",
+                    "error.invalidEmail": "L’adresse e-mail est invalide !"
+               },
+               "register": {
+                    "title": "Créer un compte"
+               }
+          },
+            "components": {
+                 "SideMenu": {
+                    "title": "Menu"
+                 }
+            }
+     },
+     "errror" : {
+          "pages": {
+               "notFound": {
+                    "title": "Page introuvable"
+               }
+          }
+     }
+}
