@@ -1,0 +1,12 @@
+﻿{
+     "title": "Créer un compte gratuit",
+     "subtitle": "Aucune carte de crédit requise",
+     "emailPlaceholder": "Votre adresse e-mail",
+     "passwordPlaceholder": "Mot de passe",
+     "sitewebPlaceholder": "Site Web",
+     "errorEmail": "L'email est requis",
+     "errorPassword": "Le mot de passe est requis",
+     "errorSiteweb": "Le site web est requis",
+     "agreement": "En vous inscrivant, vous acceptez nos termes et conditions.",
+     "submitButton": "S'inscrire"
+}
