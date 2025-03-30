@@ -27,3 +27,12 @@ const refreshPage = () => {
      location.reload()
 }
 </script>
+
+<!--
+{{ t('error.serverErrorPage.title') }}
+{{ t('error.serverErrorPage.description') }}
+{{ t('error.serverErrorPage.reloadButton') }}
+{{ t('error.serverErrorPage.engineeringTeam') }}
+{{ t('error.serverErrorPage.email') }}
+{{ t('error.serverErrorPage.statusPage') }}
+-->

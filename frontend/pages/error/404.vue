@@ -32,3 +32,10 @@ const goHome = () => {
      router.push(isPanel.value ? '/panel' : '/')
 }
 </script>
+
+<!--
+{{ t('error.unauthorizedPage.title') }}
+{{ t('error.unauthorizedPage.description') }}
+{{ t('error.unauthorizedPage.linkDescription') }}
+{{ t('error.unauthorizedPage.homeButton') }}
+-->

@@ -1,7 +1,12 @@
 <template>
      <div>
-          <h1>Erreur Inattendue</h1>
-          <p>Une erreur s’est produite, mais elle n’est pas répertoriée ici.</p>
-          <nuxt-link to="/">Revenir à l’accueil</nuxt-link>
+          <h1>{{ t('error.defaultPage.title') }}</h1>
+          <p>{{ t('error.defaultPage.message') }}</p>
+          <nuxt-link to="/">{{ t('error.defaultPage.backToHome') }}</nuxt-link>
      </div>
 </template>
+
+
+
+
+

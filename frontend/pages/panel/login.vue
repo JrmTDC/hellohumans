@@ -17,7 +17,7 @@
                <div class="py-[40px] px-0 m-0">
                     <form class="flex flex-col items-center w-full" @submit.prevent="handleLogin">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
-                              <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center relative text-[32px] leading-[41px] tracking-[-0.01em]">Bon retour parmi nous</h1>
+                              <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center relative text-[32px] leading-[41px] tracking-[-0.01em]">{{ t('panel.pages.login.title') }}</h1>
                               <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">Connectez-vous à votre compte HelloHumans</p>
                          </fieldset>
 

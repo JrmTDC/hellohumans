@@ -132,15 +132,25 @@
                     "notFound": {
                          "title": "Erro 403",
                          "message": "Você não tem permissão para acessar este recurso.",
-                         "backHome": "Voltar para a página inicial"
+                         "backToHome": "Voltar para a página inicial"
                     },
                     "serverError": {
-                         "title": "Erreur 500"
+                         "title": "Ops, ocorreu um problema.",
+                         "description": "Clique no botão para recarregar a página&nbsp;:",
+                         "reloadButton": "Recarregar a página",
+                         "engineeringTeam": "... enquanto isso, a equipe de engenharia foi informada sobre o problema."
                     },
                     "unauthorized": {
-                         "title": "Erreur 404"
+                         "title": "Ops, página não encontrada.",
+                         "description": "Desculpe, a página que você está procurando não pode ser encontrada.",
+                         "linkDescription": "O link que você seguiu pode estar quebrado ou não existir mais.",
+                         "homeButton": "Ir para a página inicial"
                     },
-                    "default": {}
+                    "default": {
+                         "title": "Erro Inesperado",
+                         "message": "Ocorreu um erro, mas não está listado aqui.",
+                         "backToHome": "Voltar para a página inicial"
+                    }
                }
           }
      }

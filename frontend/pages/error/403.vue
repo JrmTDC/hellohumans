@@ -7,7 +7,10 @@
 </template>
 
 <!--
-{{ t('error.403Page.title') }}
-{{ t('error.403Page.message') }}
-{{ t('error.403Page.backHome') }}
+{{ t('error.notFoundPage.title') }}
+{{ t('error.notFoundPage.message') }}
+{{ t('error.notFoundPage.backToHome') }}
 -->
+
+
+

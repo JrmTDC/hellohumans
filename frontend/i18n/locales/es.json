@@ -131,16 +131,26 @@
                "pages": {
                     "notFound": {
                          "title": "Error 403",
-                         "message": "No tienes permiso para acceder a este recurso.",
-                         "backHome": "Volver al inicio"
+                         "message": "No tiene permiso para acceder a este recurso.",
+                         "backToHome": "Volver a la página de inicio"
                     },
                     "serverError": {
-                         "title": "Erreur 500"
+                         "title": "Vaya, ocurrió un problema.",
+                         "description": "Presiona el botón para recargar la página&nbsp;:",
+                         "reloadButton": "Recargar la página",
+                         "engineeringTeam": "... mientras tanto, el equipo de ingeniería ha sido informado del problema."
                     },
                     "unauthorized": {
-                         "title": "Erreur 404"
+                         "title": "Vaya, página no encontrada.",
+                         "description": "Lo sentimos, la página que buscas no se puede encontrar.",
+                         "linkDescription": "El enlace que seguiste puede estar roto o ya no existe.",
+                         "homeButton": "Ir a la página de inicio"
                     },
-                    "default": {}
+                    "default": {
+                         "title": "Error Inesperado",
+                         "message": "Ocurrió un error, pero no está listado aquí.",
+                         "backToHome": "Volver a la página de inicio"
+                    }
                }
           }
      }

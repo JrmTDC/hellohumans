@@ -132,15 +132,25 @@
                     "notFound": {
                          "title": "Fehler 403",
                          "message": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen.",
-                         "backHome": "Zurück zur Startseite"
+                         "backToHome": "Zurück zur Startseite"
                     },
                     "serverError": {
-                         "title": "Erreur 500"
+                         "title": "Ups, ein Problem ist aufgetreten.",
+                         "description": "Drücken Sie die Schaltfläche, um die Seite neu zu laden&nbsp;:",
+                         "reloadButton": "Seite neu laden",
+                         "engineeringTeam": "... außerdem wurde das Ingenieurteam über dieses Problem informiert."
                     },
                     "unauthorized": {
-                         "title": "Erreur 404"
+                         "title": "Hoppla, Seite nicht gefunden.",
+                         "description": "Es tut uns leid, die von Ihnen gesuchte Seite kann nicht gefunden werden.",
+                         "linkDescription": "Der von Ihnen verfolgte Link ist möglicherweise defekt oder existiert nicht mehr.",
+                         "homeButton": "Zur Startseite"
                     },
-                    "default": {}
+                    "default": {
+                         "title": "Unerwarteter Fehler",
+                         "message": "Ein Fehler ist aufgetreten, der hier nicht aufgeführt ist.",
+                         "backToHome": "Zurück zur Startseite"
+                    }
                }
           }
      }
