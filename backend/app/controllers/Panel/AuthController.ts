@@ -135,12 +135,12 @@ class AuthController {
       */
      public async register({ request, response }: HttpContext) {
           try {
-               const { email, password, accept_cg } = request.all()
+               const { email, password, siteweb, accept_cg } = request.all()
 
                // Vérification des entrées
-               if (!email || !password) {
+               if (!email || !password || !siteweb) {
                     return response.badRequest({
-                         error: { name: 'missingFields', description: 'Email et mot de passe sont requis' }
+                         error: { name: 'missingFields', description: '' }
                     })
                }
 

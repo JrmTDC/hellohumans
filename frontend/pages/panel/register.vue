@@ -100,6 +100,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PasswordInput from "@/components/panel/PasswordInput.vue";
 import LanguageSelector from "@/components/panel/LanguageSelector.vue";
+import { usePublicStore } from "@/stores/publicStore";
 
 // Champs du formulaire
 const inputEmail = ref('')
@@ -167,6 +168,18 @@ const handleRegister = async () => {
      loading.value = true
 
      try {
+
+          /*
+          const response = await publicStore.login(inputEmail.value, password.value)
+          if (response) {
+               //let resp = await response.json()
+               localStorage.setItem('token', resp.success.token)
+               router.push('/panel/')
+          } else {
+               loginError.value = true
+          }
+          */
+
           const response = await fetch(apiUrl + '/panel/auth/login', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },

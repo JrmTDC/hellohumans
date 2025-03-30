@@ -12,7 +12,7 @@ router.group(() => {
      router.post('/visitors', (ctx) => VisitorsController.store(ctx))
      router.post('/messages', (ctx) => MessagesController.sendMessage(ctx))
 })
-     .prefix('/api/chat')
+     .prefix('/chat')
      .use(middleware.chat_security())
 
 // Routes d'authentification et de gestion du mot de passe
@@ -24,7 +24,7 @@ router.group(() => {
      router.post('/reset-password', (ctx) => AuthController.resetPassword(ctx))
      router.post('/change-password', (ctx) => AuthController.changePassword(ctx))
 })
-     .prefix('/api/panel/auth')
+     .prefix('/panel/auth')
 
 // Routes protégées par l'authentification
 router.group(() => {
@@ -41,5 +41,5 @@ router.group(() => {
           }
      })
 })
-     .prefix('/api/panel')
+     .prefix('/panel')
      .use(middleware.panel_auth())

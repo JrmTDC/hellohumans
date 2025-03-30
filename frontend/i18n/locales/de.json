@@ -1,0 +1,20 @@
+{
+     "panel": {
+          "pages": {
+               "login": {
+                    "title": "Willkommen zurück",
+                    "subtitle": "Melden Sie sich bei Ihrem HelloHumans-Konto an",
+                    "emailPlaceholder": "E-Mail-Adresse",
+                    "passwordPlaceholder": "Passwort",
+                    "forgotPassword": "Passwort vergessen?",
+                    "invalidCredentials": "E-Mail oder Passwort ist falsch!",
+                    "submit": "Anmelden",
+                    "submitLoading": "Lädt...",
+                    "noAccount": "Sie haben noch kein Konto?",
+                    "registerLink": "Los geht’s",
+                    "error.empty": "Darf nicht leer sein!",
+                    "error.invalidEmail": "Ungültige E-Mail-Adresse!"
+               }
+          }
+     }
+}
