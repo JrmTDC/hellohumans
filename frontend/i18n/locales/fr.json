@@ -1,6 +1,9 @@
 {
      "panel": {
           "pages": {
+               "index": {
+                    "checking": "Connexion ..."
+               },
                "login": {
                     "title": "Bon retour parmi nous",
                     "description": "Connectez-vous à votre compte HelloHumans",
@@ -84,16 +87,22 @@
                },
                "trialExpired": {
                     "title": "Continuez à exploiter pleinement Hellohumans",
-                    "trialExpired": "Votre essai du &lt;strong&gt;avec toutes les fonctionnalités&lt;/strong&gt; a expiré le &lt;strong&gt;{date}&lt;/strong&gt;. Continuez sur votre lancée. Comparez les plans et choisissez l'option idéale pour votre entreprise.",
+                    "info": {
+                         "part1": "Votre essai du",
+                         "highlight1": "avec toutes les fonctionnalités",
+                         "part2": "a expiré le",
+                         "highlight2": "{date}",
+                         "part3": "Continuez sur votre lancée. Comparez les plans et choisissez l'option idéale pour votre entreprise."
+                    },
                     "comparePlans": "Comparer les offres",
                     "downgradeTitle": "Passer à offre Free",
                     "downgradeDescription": "Vous pouvez à tout moment revenir à une offre inférieure et utiliser notre offre gratuite à vie. Vous pouvez la modifier quand vous le souhaitez.",
-                    "processedConversations": "Conversations traitées - &lt;strong&gt;JUSQU’À {count}&lt;/strong&gt;",
+                    "processedConversations": {
+                         "part1": "Conversations traitées - ",
+                         "highlight1": "JUSQU’À {count}"
+                    },
                     "tooltipProcessedConversations": "Les conversations représentent le nombre total de conversations dans le chat en direct",
                     "downgradeButton": "Passer à une version antérieure"
-               },
-               "index": {
-                    "checking": "Connexion ..."
                },
                "upgrade": {
                     "Index": {
@@ -121,14 +130,7 @@
                          }
                     }
                },
-               "components": {
-                    "SideMenu": {
-                         "title": "Menu"
-                    }
-               }
-          },
-          "error": {
-               "pages": {
+               "error": {
                     "notFound": {
                          "title": "Erreur 403",
                          "message": "Vous n’avez pas l’autorisation d’accéder à cette ressource.",
@@ -151,6 +153,11 @@
                          "message": "Une erreur s’est produite, mais elle n’est pas répertoriée ici.",
                          "backToHome": "Revenir à l’accueil"
                     }
+               }
+          },
+          "components": {
+               "SideMenu": {
+                    "title": "Menu"
                }
           }
      }

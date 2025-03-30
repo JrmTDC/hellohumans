@@ -7,10 +7,10 @@ import { computed } from 'vue'
 import { useError } from '#imports'
 
 // Import des composants d’erreur
-import Error404 from '~/pages/error/404.vue'
-import Error403 from '~/pages/error/403.vue'
-import Error500 from '~/pages/error/500.vue'
-import ErrorDefault from '~/pages/error/default.vue' // si vous voulez gérer un fallback
+import Error404 from '~/pages/panel/error/404.vue'
+import Error403 from '~/pages/panel/error/403.vue'
+import Error500 from '~/pages/panel/error/500.vue'
+import ErrorDefault from '~/pages/panel/error/default.vue' // si vous voulez gérer un fallback
 
 // Récupérer l'erreur levée
 const error = useError()

@@ -93,7 +93,7 @@
      </div>
 </template>
 <script setup lang="ts">
-import Tooltip from "@/components/panel/common/Tooltip.vue";
+import Tooltip from "~/components/panel/common/Tooltip.vue";
 
 </script>
 

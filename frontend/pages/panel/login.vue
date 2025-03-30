@@ -9,7 +9,7 @@
                     <!-- Autres éléments du login -->
 
                     <!-- Sélecteur de langue -->
-                    <LanguageSelector @languageSelected="updateSelectedLang" />
+                    <LanguageSelector />
                </div>
           </div>
           <!-- Formulaire de connexion -->
@@ -95,11 +95,6 @@ const loginError = ref(false)
 const loading = ref(false)
 const errorMessageEmail = ref('');
 const errorPassword = ref('');
-
-
-const updateSelectedLang = (lang: string) => {
-     console.log('Langue sélectionnée :', lang) // Vérification dans la console
-}
 
 // Fonction pour valider le formulaire
      const validateForm = () => {
