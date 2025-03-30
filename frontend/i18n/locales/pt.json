@@ -1,6 +1,9 @@
 {
      "panel": {
           "pages": {
+               "index": {
+                    "checking": "Conectando ..."
+               },
                "login": {
                     "title": "Bem-vindo de volta",
                     "subtitle": "Entre na sua conta HelloHumans",
@@ -11,7 +14,8 @@
                     "submit": "Entrar",
                     "submitLoading": "Carregando...",
                     "noAccount": "Ainda não tem uma conta?",
-                    "registerLink": "Vamos lá",
+                    "link": "Vamos lá",
+                    "registerLink": "Não pode estar vazio!",
                     "error.empty": "Não pode estar vazio!",
                     "error.invalidEmail": "Endereço de e-mail inválido!"
                },
@@ -84,16 +88,22 @@
                },
                "trialExpired": {
                     "title": "Continue a aproveitar ao máximo o Hellohumans",
-                    "trialExpired": "Seu teste com <strong>todas as funcionalidades</strong> expirou em <strong>{date}</strong>. Continue. Compare os planos e escolha a melhor opção para o seu negócio.",
+                    "info": {
+                         "part1": "Seu teste com",
+                         "highlight1": "todas as funcionalidades",
+                         "part2": "expirou em",
+                         "highlight2": "{date}",
+                         "part3": "Continue. Compare os planos e escolha a melhor opção para o seu negócio."
+                    },
                     "comparePlans": "Comparar planos",
                     "downgradeTitle": "Mudar para o plano gratuito",
                     "downgradeDescription": "Você pode mudar para um plano inferior a qualquer momento e usar nosso plano gratuito para sempre. Você pode alterá-lo sempre que quiser.",
-                    "processedConversations": "Conversas processadas - <strong>ATÉ {count}</strong>",
+                    "processedConversations": {
+                         "part1": "Conversas processadas - ",
+                         "highlight1": "ATÉ {count}"
+                    },
                     "tooltipProcessedConversations": "As conversas representam o número total de bate-papos no chat ao vivo",
                     "downgradeButton": "Mudar para uma versão anterior"
-               },
-               "index": {
-                    "checking": "Conectando ..."
                },
                "upgrade": {
                     "Index": {
@@ -121,14 +131,7 @@
                          }
                     }
                },
-               "components": {
-                    "SideMenu": {
-                         "title": "Menu"
-                    }
-               }
-          },
-          "error": {
-               "pages": {
+               "error": {
                     "notFound": {
                          "title": "Erro 403",
                          "message": "Você não tem permissão para acessar este recurso.",
@@ -138,7 +141,9 @@
                          "title": "Ops, ocorreu um problema.",
                          "description": "Clique no botão para recarregar a página&nbsp;:",
                          "reloadButton": "Recarregar a página",
-                         "engineeringTeam": "... enquanto isso, a equipe de engenharia foi informada sobre o problema."
+                         "engineeringTeam": "... enquanto isso, a equipe de engenharia foi informada sobre o problema.",
+                         "contactSupport": "Se isso não ajudar, entre em contato pelo chat ou em.",
+                         "statusPage": "Você pode acompanhar o incidente em nossa página de status:"
                     },
                     "unauthorized": {
                          "title": "Ops, página não encontrada.",
@@ -151,6 +156,11 @@
                          "message": "Ocorreu um erro, mas não está listado aqui.",
                          "backToHome": "Voltar para a página inicial"
                     }
+               }
+          },
+          "components": {
+               "SideMenu": {
+                    "title": "Menu"
                }
           }
      }

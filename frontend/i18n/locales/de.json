@@ -1,6 +1,9 @@
 {
      "panel": {
           "pages": {
+               "index": {
+                    "checking": "Verbinden ..."
+               },
                "login": {
                     "title": "Willkommen zurück",
                     "subtitle": "Melden Sie sich bei Ihrem HelloHumans-Konto an",
@@ -11,8 +14,9 @@
                     "submit": "Anmelden",
                     "submitLoading": "Lädt...",
                     "noAccount": "Sie haben noch kein Konto?",
-                    "registerLink": "Los geht’s",
-                    "error.empty": "Darf nicht leer sein!",
+                    "link": "Los geht’s",
+                    "registerLink": " Darf nicht leer sein!",
+                    "error.empty": " Darf nicht leer sein!",
                     "error.invalidEmail": "Ungültige E-Mail-Adresse!"
                },
                "register": {
@@ -84,16 +88,22 @@
                },
                "trialExpired": {
                     "title": "Nutzen Sie Hellohumans weiterhin in vollem Umfang",
-                    "trialExpired": "Ihre Testversion mit <strong>allen Funktionen</strong> ist am <strong>{date}</strong> abgelaufen. Machen Sie weiter. Vergleichen Sie die Pläne und wählen Sie die beste Option für Ihr Unternehmen.",
+                    "info": {
+                         "part1": "Ihre Testversion mit",
+                         "highlight1": "allen Funktionen",
+                         "part2": "ist am",
+                         "highlight2": "{date}",
+                         "part3": "abgelaufen. Machen Sie weiter. Vergleichen Sie die Pläne und wählen Sie die beste Option für Ihr Unternehmen."
+                    },
                     "comparePlans": "Pläne vergleichen",
                     "downgradeTitle": "Zum kostenlosen Tarif wechseln",
                     "downgradeDescription": "Sie können jederzeit auf eine niedrigere Version umsteigen und unseren kostenlosen Plan nutzen. Sie können ihn jederzeit ändern.",
-                    "processedConversations": "Verarbeitete Gespräche - <strong>BIS ZU {count}</strong>",
+                    "processedConversations": {
+                         "part1": "Verarbeitete Gespräche - ",
+                         "highlight1": "BIS ZU {count}"
+                    },
                     "tooltipProcessedConversations": "Gespräche stehen für die Gesamtanzahl der Chats im Live-Chat",
                     "downgradeButton": "Zur vorherigen Version wechseln"
-               },
-               "index": {
-                    "checking": "Verbinden ..."
                },
                "upgrade": {
                     "Index": {
@@ -121,14 +131,7 @@
                          }
                     }
                },
-               "components": {
-                    "SideMenu": {
-                         "title": "Menu"
-                    }
-               }
-          },
-          "error": {
-               "pages": {
+               "error": {
                     "notFound": {
                          "title": "Fehler 403",
                          "message": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen.",
@@ -138,7 +141,9 @@
                          "title": "Ups, ein Problem ist aufgetreten.",
                          "description": "Drücken Sie die Schaltfläche, um die Seite neu zu laden&nbsp;:",
                          "reloadButton": "Seite neu laden",
-                         "engineeringTeam": "... außerdem wurde das Ingenieurteam über dieses Problem informiert."
+                         "engineeringTeam": "... außerdem wurde das Ingenieurteam über dieses Problem informiert.",
+                         "contactSupport": "Falls das nicht hilft, kontaktieren Sie uns per Chat oder unter.",
+                         "statusPage": "Sie können den Vorfall auf unserer Statusseite verfolgen:"
                     },
                     "unauthorized": {
                          "title": "Hoppla, Seite nicht gefunden.",
@@ -150,8 +155,14 @@
                          "title": "Unerwarteter Fehler",
                          "message": "Ein Fehler ist aufgetreten, der hier nicht aufgeführt ist.",
                          "backToHome": "Zurück zur Startseite"
+                         }
                     }
+               },
+          "components": {
+               "SideMenu": {
+                    "title": "Menu"
                }
           }
+
      }
 }

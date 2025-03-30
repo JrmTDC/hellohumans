@@ -1,16 +1,15 @@
 <template>
      <div>
-          <h1>Erreur 403</h1>
-          <p>Vous n’avez pas l’autorisation d’accéder à cette ressource.</p>
-          <nuxt-link to="/">Revenir à l’accueil</nuxt-link>
+          <h1>{{ t('panel.pages.error.notFound.title') }}</h1>
+          <p>{{ t('panel.pages.error.notFound.message') }}</p>
+          <nuxt-link to="/">{{ t('panel.pages.error.notFound.backToHome') }}</nuxt-link>
      </div>
 </template>
 
-<!--
-{{ t('error.notFoundPage.title') }}
-{{ t('error.notFoundPage.message') }}
-{{ t('error.notFoundPage.backToHome') }}
--->
+<script setup lang="ts">
+const { t } = useI18n()
+</script>
+
 
 
 

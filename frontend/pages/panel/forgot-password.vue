@@ -18,10 +18,10 @@
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleForgot">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
-                                        Mot de passe oublié ?
+                                        {{ t('panel.pages.forgotPassword.title') }}
                                    </h1>
                                    <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
-                                        Nous vous enverrons les instructions de réinitialisation par courrier électronique.
+                                        {{ t('panel.pages.forgotPassword.description') }}
                                    </p>
                               </fieldset>
 
@@ -31,7 +31,7 @@
                                         <input
                                              type="email"
                                              v-model="inputEmail"
-                                             placeholder="Adresse e-mail"
+                                             :placeholder="t('panel.pages.forgotPassword.emailPlaceholder')"
                                              class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                              :class="{ 'border-[rgb(232,19,50)]': errors.email }"
                                         />
@@ -48,19 +48,19 @@
                                    class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
                                    :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
                               >
-                                   {{ loading ? 'Envoi en cours...' : 'Envoyer' }}
+                                   {{ loading ? t('panel.pages.forgotPassword.loadingSubmitButton') : t('panel.pages.forgotPassword.submitButton') }}
                               </button>
 
                               <!-- Retour à la connexion ou Créer un compte -->
                               <p class="mt-4 text-gray-600 text-sm text-center">
-                                   <a href="/panel/register" class="text-blue-500 hover:underline">Créer un compte</a>
+                                   <a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.createAccountLink') }}</a>
                                    <span class="mx-3"></span>
-                                   <a href="/panel/login" class="text-blue-500 hover:underline">Se connecter</a>
+                                   <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.loginLink') }}</a>
                               </p>
 
                               <!-- Message d'erreur -->
                               <p v-if="errorMessage" class="text-red-600 mt-3 text-sm">
-                                   {{ errorMessage }}
+                                   {{ t('panel.pages.forgotPassword.errorMessage') }}
                               </p>
                          </form>
                     </div>
@@ -69,24 +69,24 @@
                     <div v-else class="flex flex-col items-center w-full">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
-                                   Vérifiez votre boîte de réception !
+                                   {{ t('panel.pages.forgotPassword.successTitle') }}
                               </h1>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
-                                   Un e-mail de réinitialisation a été envoyé. Consultez votre boîte de réception et suivez les instructions.
+                                   {{ t('panel.pages.forgotPassword.successMessage')}}
                               </p>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <div class="relative">
                                    <svgo-panel-icon-info class="absolute left-[-28px] w-4 h-4 fill-[#0569FF]"/>
                                    <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(26,73,143)] mt-[-20px] mb-[12px]">
-                                        Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.
+                                        {{ t('panel.pages.forgotPassword.successInfoMessage') }}
                                    </p>
                               </div>
                          </fieldset>
 
                          <!-- Retour à la connexion -->
                          <p class="mt-4 text-gray-600 text-sm text-center">
-                              <a href="/panel/login" class="text-blue-500 hover:underline">Se connecter</a>
+                              <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.loginLink') }}</a>
                          </p>
                     </div>
                </div>
@@ -96,8 +96,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import LanguageSelector from '@/components/panel/LanguageSelector.vue'
+import LanguageSelector from '~/components/panel/LanguageSelector.vue'
 
+const { t } = useI18n()
 
 const inputEmail = ref('')
 const errors = ref({ email: false })
@@ -117,11 +118,11 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmail.value =  'Ne peut être vide !'
+          errorMessageEmail.value = t('panel.pages.forgotPassword.emailErrorRequired')
           valid = false
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
           errors.value.email = true
-          errorMessageEmail.value  =  'L’adresse e-mail est invalide !'
+          errorMessageEmail.value  = t('panel.pages.forgotPassword.emailErrorInvalid')
           valid = false
      }
 
@@ -141,19 +142,3 @@ const handleForgot = async () => {
      }, 2000) // Simulation d'un délai de traitement de 2 secondes
 }
 </script>
-
-<!--
-{{ t('panel.forgot-passwordPage.title') }}
-{{ t('panel.forgot-passwordPage.description') }}
-{{ t('panel.forgot-passwordPage.emailPlaceholder') }}
-{{ t('panel.forgot-passwordPage.emailErrorRequired') }}
-{{ t('panel.forgot-passwordPage.emailErrorInvalid') }}
-{{ t('panel.forgot-passwordPage.submitButton') }}
-{{ t('panel.forgot-passwordPage.loadingSubmitButton') }}
-{{ t('panel.forgot-passwordPage.createAccountLink') }}
-{{ t('panel.forgot-passwordPage.loginLink') }}
-{{ t('panel.forgot-passwordPage.errorMessage') }}
-{{ t('panel.forgot-passwordPage.successTitle') }}
-{{ t('panel.forgot-passwordPage.successMessage')
-{{ t('panel.forgot-passwordPage.successInfoMessage') }}
--->

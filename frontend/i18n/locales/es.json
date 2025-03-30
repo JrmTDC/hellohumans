@@ -1,6 +1,9 @@
 {
      "panel": {
           "pages": {
+               "index": {
+                    "checking": "Conectando ..."
+               },
                "login": {
                     "title": "Bienvenido de nuevo",
                     "subtitle": "Inicia sesión en tu cuenta de HelloHumans",
@@ -11,7 +14,8 @@
                     "submit": "Iniciar sesión",
                     "submitLoading": "Cargando...",
                     "noAccount": "¿No tienes una cuenta?",
-                    "registerLink": "Vamos allá",
+                    "link": "Empezar",
+                    "registerLink": "¡No puede estar vacío!",
                     "error.empty": "¡No puede estar vacío!",
                     "error.invalidEmail": "¡Dirección de correo inválida!"
                },
@@ -84,17 +88,23 @@
                },
                "trialExpired": {
                     "title": "Continúa aprovechando al máximo Hellohumans",
-                    "trialExpired": "Tu prueba con <strong>todas las funciones</strong> expiró el <strong>{date}</strong>. Sigue adelante. Compara los planes y elige la mejor opción para tu negocio.",
+                    "info": {
+                         "part1": "Tu prueba con ,",
+                         "highlight1": "todas las funciones",
+                         "part2":  "expiró el",
+                         "highlight2": "{date}",
+                         "part3": "Sigue adelante. Compara los planes y elige la mejor opción para tu negocio."
+                    },
                     "comparePlans": "Comparar planes",
                     "downgradeTitle": "Cambiar al plan gratuito",
-                    "downgradeDescription": "Puedes cambiar a una versión inferior en cualquier momento y usar nuestro plan gratuito de por vida. Puedes modificarlo cuando quieras.",
-                    "processedConversations": "Conversaciones procesadas - <strong>HASTA {count}</strong>",
+                    "downgradeDescription":"Puedes cambiar a una versión inferior en cualquier momento y usar nuestro plan gratuito de por vida. Puedes modificarlo cuando quieras.",
+                    "processedConversations": {
+                         "part1": "Conversaciones procesadas - ",
+                         "highlight1": "HASTA {count}"
+                    },
                     "tooltipProcessedConversations": "Las conversaciones representan el número total de chats en vivo",
                     "downgradeButton": "Cambiar a una versión anterior"
-               },
-               "index": {
-                    "checking": "Conectando ..."
-               },
+                    },
                "upgrade": {
                     "Index": {
                          "trial_remaining": "Su prueba completa termina en {count} día | Su prueba completa termina en {count} días",
@@ -121,14 +131,8 @@
                          }
                     }
                },
-               "components": {
-                    "SideMenu": {
-                         "title": "Menu"
-                    }
-               }
-          },
-          "error": {
-               "pages": {
+               "error": {
+
                     "notFound": {
                          "title": "Error 403",
                          "message": "No tiene permiso para acceder a este recurso.",
@@ -138,20 +142,30 @@
                          "title": "Vaya, ocurrió un problema.",
                          "description": "Presiona el botón para recargar la página&nbsp;:",
                          "reloadButton": "Recargar la página",
-                         "engineeringTeam": "... mientras tanto, el equipo de ingeniería ha sido informado del problema."
+                         "engineeringTeam": "... mientras tanto, el equipo de ingeniería ha sido informado del problema.",
+                         "contactSupport": "Si esto no ayuda, contáctanos a través del chat o en.",
+                         "statusPage": "Puedes seguir el incidente en nuestra página de estado:"
                     },
                     "unauthorized": {
                          "title": "Vaya, página no encontrada.",
                          "description": "Lo sentimos, la página que buscas no se puede encontrar.",
                          "linkDescription": "El enlace que seguiste puede estar roto o ya no existe.",
-                         "homeButton": "Ir a la página de inicio"
+                             "homeButton": "Ir a la página de inicio"
                     },
                     "default": {
                          "title": "Error Inesperado",
                          "message": "Ocurrió un error, pero no está listado aquí.",
                          "backToHome": "Volver a la página de inicio"
+
                     }
                }
+          },
+          "components": {
+               "SideMenu": {
+                    "title": "Menu"
+               }
+
           }
+
      }
 }

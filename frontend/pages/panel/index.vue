@@ -6,7 +6,7 @@
                     <div class="progress w-full h-[12px] rounded-[4px] bg-[#002661] my-5 overflow-hidden">
                          <div class="progress-bar bg-[#0566ff] h-full transition-[width] duration-[600ms] ease-[ease]" role="progressbar" style="width:20%;"></div>
                     </div>
-                    <p class="message text-white font-medium mx-[-20px] my-0">&nbsp;Connexion ...</p>
+                    <p class="message text-white font-medium mx-[-20px] my-0">{{ t('panel.pages.index.checking')  }}</p>
                </div>
           </div>
      </div>
@@ -15,6 +15,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+const { t } = useI18n()
 
 // Configuration de l'API
 const config = useRuntimeConfig()
@@ -60,6 +61,3 @@ onMounted(async () => {
 })
 </script>
 
-<!--
-{{ t('panel.indexPage.checking')  }}
--->

@@ -6,17 +6,18 @@
                },
                "login": {
                     "title": "Bon retour parmi nous",
-                    "description": "Connectez-vous à votre compte HelloHumans",
-                    "emailLabel": "Adresse e-mail",
-                    "passwordLabel": "Mot de passe",
-                    "forgotPasswordLink": "Mot de passe oublié ?",
-                    "invalidCredentialsError": "E-mail ou mot de passe incorrect !",
-                    "loginButton": "Se connecter",
-                    "loadingButton": "Chargement...",
-                    "noAccountLink": "Vous n’avez pas de compte ? C'est parti",
-                    "emailEmptyError": "Ne peut être vide !",
-                    "emailInvalidError": "L’adresse e-mail est invalide !",
-                    "passwordEmptyError": "Ne peut être vide !"
+                    "subtitle": "Connectez-vous à votre compte HelloHumans",
+                    "emailPlaceholder": "Adresse e-mail",
+                    "passwordPlaceholder": "Mot de passe",
+                    "forgotPassword": "Mot de passe oublié ?",
+                    "invalidCredentials": "E-mail ou mot de passe incorrect !",
+                    "submit": "Se connecter",
+                    "submitLoading": "Chargement...",
+                    "noAccount": "Vous n’avez pas de compte ?",
+                    "link": "C'est parti",
+                    "registerLink": "Ne peut être vide !",
+                    "error.empty": "Ne peut être vide !",
+                    "error.invalidEmail": "L’adresse e-mail est invalide !"
                },
                "register": {
                     "title": "Créer un compte gratuit",
@@ -140,7 +141,9 @@
                          "title": "Oups, un problème est survenu.",
                          "description": "Appuyez sur le bouton pour recharger la page&nbsp;:",
                          "reloadButton": "Recharger la page",
-                         "engineeringTeam": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème."
+                         "engineeringTeam": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème.",
+                         "contactSupport": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
+                         "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :"
                     },
                     "unauthorized": {
                          "title": "Oups, page introuvable.",

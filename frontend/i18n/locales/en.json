@@ -1,6 +1,9 @@
 {
      "panel": {
           "pages": {
+               "index": {
+                    "checking": "Connecting ..."
+               },
                "login": {
                     "title": "Welcome back",
                     "subtitle": "Sign in to your HelloHumans account",
@@ -11,7 +14,8 @@
                     "submit": "Sign in",
                     "submitLoading": "Loading...",
                     "noAccount": "Don’t have an account?",
-                    "registerLink": "Let’s go",
+                    "link": "Let’s go",
+                    "registerLink": "Cannot be empty!",
                     "error.empty": "Cannot be empty!",
                     "error.invalidEmail": "Invalid email address!"
                },
@@ -84,17 +88,23 @@
                },
                "trialExpired": {
                     "title": "Continue to fully leverage Hellohumans",
-                    "trialExpired": "Your trial with <strong>all features</strong> expired on <strong>{date}</strong>. Keep going. Compare plans and choose the best option for your business.",
-                    "comparePlans": "Compare plans",
-                    "downgradeTitle": "Switch to Free plan",
-                    "downgradeDescription": "You can downgrade anytime and use our lifetime free plan. You can change it whenever you want.",
-                    "processedConversations": "Processed conversations - <strong>UP TO {count}</strong>",
-                    "tooltipProcessedConversations": "Conversations represent the total number of chats in live chat",
-                    "downgradeButton": "Switch to a previous version"
-               },
-               "index": {
-                    "checking": "Connecting ..."
-               },
+                         "info": {
+                              "part1": "Your trial with",
+                              "highlight1": "all features",
+                              "part2": "expired on",
+                              "highlight2": "{date}",
+                              "part3": ". Keep going. Compare plans and choose the best option for your business."
+                         },
+                         "comparePlans": "Compare plans",
+                         "downgradeTitle": "Switch to Free plan",
+                         "downgradeDescription": "You can downgrade anytime and use our lifetime free plan. You can change it whenever you want.",
+                         "processedConversations": {
+                              "part1": "Processed conversations - ",
+                              "highlight1": "UP TO {count}"
+                         },
+                         "tooltipProcessedConversations": "Conversations represent the total number of chats in live chat",
+                         "downgradeButton": "Switch to a previous version"
+},
                "upgrade": {
                     "Index": {
                          "trial_remaining": "Your full trial ends in {count} day | Your full trial ends in {count} days",
@@ -121,14 +131,7 @@
                          }
                     }
                },
-               "components": {
-                    "SideMenu": {
-                         "title": "Menu"
-                    }
-               }
-          },
-          "error": {
-               "pages": {
+               "error": {
                     "notFound": {
                          "title": "Error 403",
                          "message": "You do not have permission to access this resource.",
@@ -138,7 +141,9 @@
                          "title": "Oops, something went wrong.",
                          "description": "Click the button to reload the page&nbsp;:",
                          "reloadButton": "Reload the page",
-                         "engineeringTeam": "... in the meantime, the engineering team has been informed of the issue."
+                         "engineeringTeam": "... in the meantime, the engineering team has been informed of the issue.",
+                         "contactSupport": "If this doesn’t help, contact us via chat or at.",
+                         "statusPage": "You can follow the incident on our status page:"
                     },
                     "unauthorized": {
                          "title": "Oops, page not found.",
@@ -151,6 +156,11 @@
                          "message": "An error occurred, but it is not listed here.",
                          "backToHome": "Back to Home"
                     }
+               }
+          },
+          "components": {
+               "SideMenu": {
+                    "title": "Menu"
                }
           }
      }

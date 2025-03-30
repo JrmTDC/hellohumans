@@ -18,7 +18,7 @@
                     <form class="flex flex-col items-center w-full" @submit.prevent="handleLogin">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center relative text-[32px] leading-[41px] tracking-[-0.01em]">{{ t('panel.pages.login.title') }}</h1>
-                              <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">Connectez-vous à votre compte HelloHumans</p>
+                              <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">{{ t('panel.pages.login.subtitle') }}</p>
                          </fieldset>
 
                          <!-- Champ Email -->
@@ -27,35 +27,37 @@
                                    <input
                                         type="email"
                                         v-model="inputEmail"
-                                        placeholder="Adresse e-mail"
+                                        :placeholder="t('panel.pages.login.emailPlaceholder')"
                                         class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :class="{ 'border-[rgb(232,19,50)]': errors.email }"
                                    />
-                                   <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
+                                   <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}
                                    </span>
+
                               </fieldset>
 
                               <!-- Champ Mot de passe -->
                               <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
                                    <PasswordInput
                                         v-model="password"
-                                        placeholder="Mot de passe"
+                                        :placeholder="t('panel.pages.login.passwordPlaceholder')"
                                         :error="!!errors.password"
                                         extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :iconSize=20
                                    />
-                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}</span>
+                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}
+                                   </span>
                               </fieldset>
                          </fieldset>
 
 
                          <!-- Lien Mot de passe oublié -->
                          <div class="w-full text-left mt-[-8px] mb-[24px]">
-                              <a href="/panel/forgot-password" class="text-[rgb(5,102,255)] font-normal no-underline transition-colors duration-200 ease-in-out text-[14px]">Mot de passe oublié ?</a>
+                              <a href="/panel/forgot-password" class="text-[rgb(5,102,255)] font-normal no-underline transition-colors duration-200 ease-in-out text-[14px]">{{ t('panel.pages.login.forgotPassword') }}</a>
                          </div>
 
                          <!-- Erreur d'authentification -->
-                         <span v-if="loginError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">E-mail ou mot de passe incorrect !</span>
+                         <span v-if="loginError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.login.invalidCredentials') }}</span>
 
                          <!-- Bouton de connexion -->
                          <button
@@ -64,12 +66,14 @@
                               class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
                               :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
                          >
-                              {{ loading ? 'Chargement...' : 'Se connecter' }}
+                              {{ loading ? t('panel.pages.login.submit') : t('panel.pages.login.submitLoading') }}
                          </button>
 
                          <!-- Lien vers l'inscription -->
                          <p class="mt-4 text-gray-600 text-sm">
-                              Vous n’avez pas de compte ? <a href="/panel/register" class="text-blue-500 hover:underline">C'est parti</a>
+                              {{ t('panel.pages.login.noAccount') }}<a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.login.link') }}</a>
+
+
                          </p>
                     </form>
                </div>
@@ -103,19 +107,19 @@ const errorPassword = ref('');
 
           if (!inputEmail.value) {
                errors.value.email = true
-               errorMessageEmail.value = 'Ne peut être vide !'
+               errorMessageEmail.value = t('panel.pages.login.registerLink')
                valid = false
 
           } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
                errors.value.password = true
-               errorMessageEmail.value  =  'L’adresse e-mail est invalide !'
+               errorMessageEmail.value  = t('panel.pages.login.error.invalidEmail')
                valid = false
           }
 
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = 'Ne peut être vide !'
+          errorPassword.value = t('panel.pages.login.registerLink')
           valid = false
      }
 
@@ -146,17 +150,8 @@ const handleLogin = async () => {
 }
 </script>
 
-<!--
-{{ t('panel.loginPage.title') }}
-{{ t('panel.loginPage.description') }}
-{{ t('panel.loginPage.emailLabel') }}
-{{ t('panel.loginPage.passwordLabel') }}
-{{ t('panel.loginPage.forgotPasswordLink') }}
-{{ t('panel.loginPage.invalidCredentialsError') }}
-{{ t('panel.loginPage.loginButton') }}
-{{ t('panel.loginPage.loadingButton') }}
-{{ t('panel.loginPage.noAccountLink') }}
-{{ t('panel.loginPage.emailEmptyError') }}
-{{ t('panel.loginPage.emailInvalidError') }}
-{{ t('panel.loginPage.passwordEmptyError') }}
--->
+
+
+
+
+
