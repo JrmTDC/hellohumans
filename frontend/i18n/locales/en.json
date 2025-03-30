@@ -14,6 +14,133 @@
                     "registerLink": "Let’s go",
                     "error.empty": "Cannot be empty!",
                     "error.invalidEmail": "Invalid email address!"
+               },
+               "register": {
+                    "title": "Create a Free Account",
+                    "subtitle": "No credit card required",
+                    "emailPlaceholder": "Your email address",
+                    "passwordPlaceholder": "Password",
+                    "sitewebPlaceholder": "Website",
+                    "errorEmail": "Email is required",
+                    "errorPassword": "Password is required",
+                    "errorSiteweb": "Website is required",
+                    "agreement": "By signing up, you agree to our terms and conditions.",
+                    "submitButton": "Sign Up"
+               },
+               "forgotPassword": {
+                    "title": "Forgot your password?",
+                    "description": "We will send you reset instructions via email.",
+                    "emailPlaceholder": "Email address",
+                    "emailErrorRequired": "Cannot be empty!",
+                    "emailErrorInvalid": "Invalid email address!",
+                    "submitButton": "Send",
+                    "loadingSubmitButton": "Sending...",
+                    "createAccountLink": "Create an account",
+                    "loginLink": "Log in",
+                    "errorMessage": "An error occurred. Please try again.",
+                    "successTitle": "Check your inbox!",
+                    "successMessage": "A reset email has been sent. Check your inbox and follow the instructions.",
+                    "successInfoMessage": "If we have this email address, we will send you an email with instructions to reset your password."
+               },
+               "resetPassword": {
+                    "title": "Reset Password",
+                    "passwordPlaceholder": "New password",
+                    "confirmPasswordPlaceholder": "Confirm password",
+                    "passwordErrorEmpty": "Cannot be empty!",
+                    "passwordErrorShort": "Password must be at least 6 characters long.",
+                    "passwordErrorMismatch": "Passwords do not match.",
+                    "passwordStrengthLabel": "Password security level",
+                    "passwordStrengthWeak": "Weak",
+                    "passwordStrengthMedium": "Medium",
+                    "passwordStrengthStrong": "Strong",
+                    "passwordStrengthVeryStrong": "Very strong",
+                    "submit": "Reset Password",
+                    "loading": "Loading...",
+                    "successMessage": "Success! Your password has been reset.",
+                    "loginLink": "Log in"
+               },
+               "dashboard": {
+                    "pageTitle": "Dashboard",
+                    "finalizeConfigurationTitle": "Vervollständigen Sie Ihre HelloHumans-Konfiguration",
+                    "finalizeConfigurationDescription": "Wir helfen Ihnen, eine Umgebung zu schaffen, die Ihre Besucher begeistern wird. Es ist ganz einfach und dauert nur wenige Minuten.",
+                    "finishIntegrationButton": "Integration abschließen",
+                    "performanceSectionTitle": "Leistung",
+                    "currentUsageTitle": "Aktuelle Nutzung",
+                    "usageItemTitleAudience": "Erreichte Besucher",
+                    "usageItemDescriptionAudience": "Gesamtzahl der Besucher, die mit Ihrem Chatbot interagiert haben.",
+                    "usageItemTitleInteractions": "Verarbeitete Gespräche",
+                    "usageItemDescriptionInteractions": "Automatisierte Gespräche, die vom Bot verwaltet werden.",
+                    "dateRange": "21. Feb 2025 - 22. Mär 2025",
+                    "infinityLabel": "∞",
+                    "usageLimit": "Limit: {limit}",
+                    "usagePercentage": "Fortschritt: {percentage}%",
+                    "usageNone": "Keine"
+               },
+               "analytics": {
+                    "overviewButton": "Overview",
+                    "pageTitle": "Overview",
+                    "dateRangeLabel": "Date Range",
+                    "chartLabel": "Analytics Chart"
+               },
+               "trialExpired": {
+                    "title": "Continue to fully leverage Hellohumans",
+                    "trialExpired": "Your trial with <strong>all features</strong> expired on <strong>{date}</strong>. Keep going. Compare plans and choose the best option for your business.",
+                    "comparePlans": "Compare plans",
+                    "downgradeTitle": "Switch to Free plan",
+                    "downgradeDescription": "You can downgrade anytime and use our lifetime free plan. You can change it whenever you want.",
+                    "processedConversations": "Processed conversations - <strong>UP TO {count}</strong>",
+                    "tooltipProcessedConversations": "Conversations represent the total number of chats in live chat",
+                    "downgradeButton": "Switch to a previous version"
+               },
+               "index": {
+                    "checking": "Connecting ..."
+               },
+               "upgrade": {
+                    "Index": {
+                         "trial_remaining": "Your full trial ends in {count} day | Your full trial ends in {count} days",
+                         "select_offer": "Select your offer",
+                         "choose_offer_description": "Choose an offer and select additional modules in the next step.",
+                         "view_all_features": "View all features",
+                         "next_step": "Next step: Choose additional modules"
+                    },
+                    "Modules": {
+                         "trialRemaining": "Your full trial ends in {count} day | Your full trial ends in {count} days",
+                         "title": "Select your plan",
+                         "description": "Choose a plan and select modules in the next step.",
+                         "chooseModules": "Choose additional modules",
+                         "nextButtonLabel": "Payment"
+                    }
+               },
+               "settings": {
+                    "index": {
+
+                    },
+                    "chat": {
+                         "appearance": {
+
+                         }
+                    }
+               },
+               "components": {
+                    "SideMenu": {
+                         "title": "Menu"
+                    }
+               }
+          },
+          "error": {
+               "pages": {
+                    "notFound": {
+                         "title": "Error 403",
+                         "message": "You do not have permission to access this resource.",
+                         "backHome": "Return to home"
+                    },
+                    "serverError": {
+                         "title": "Erreur 500"
+                    },
+                    "unauthorized": {
+                         "title": "Erreur 404"
+                    },
+                    "default": {}
                }
           }
      }

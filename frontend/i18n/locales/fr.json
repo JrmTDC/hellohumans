@@ -3,32 +3,144 @@
           "pages": {
                "login": {
                     "title": "Bon retour parmi nous",
-                    "subtitle": "Connectez-vous à votre compte HelloHumans",
-                    "emailPlaceholder": "Adresse e-mail",
-                    "passwordPlaceholder": "Mot de passe",
-                    "forgotPassword": "Mot de passe oublié ?",
-                    "invalidCredentials": "E-mail ou mot de passe incorrect !",
-                    "submit": "Se connecter",
-                    "submitLoading": "Chargement...",
-                    "noAccount": "Vous n’avez pas de compte ?",
-                    "registerLink": "C'est parti",
-                    "error.empty": "Ne peut être vide !",
-                    "error.invalidEmail": "L’adresse e-mail est invalide !"
+                    "description": "Connectez-vous à votre compte HelloHumans",
+                    "emailLabel": "Adresse e-mail",
+                    "passwordLabel": "Mot de passe",
+                    "forgotPasswordLink": "Mot de passe oublié ?",
+                    "invalidCredentialsError": "E-mail ou mot de passe incorrect !",
+                    "loginButton": "Se connecter",
+                    "loadingButton": "Chargement...",
+                    "noAccountLink": "Vous n’avez pas de compte ? C'est parti",
+                    "emailEmptyError": "Ne peut être vide !",
+                    "emailInvalidError": "L’adresse e-mail est invalide !",
+                    "passwordEmptyError": "Ne peut être vide !"
                },
                "register": {
-                    "title": "Créer un compte"
+                    "title": "Créer un compte gratuit",
+                    "subtitle": "Aucune carte de crédit requise",
+                    "emailPlaceholder": "Votre adresse e-mail",
+                    "passwordPlaceholder": "Mot de passe",
+                    "sitewebPlaceholder": "Site Web",
+                    "errorEmail": "L'email est requis",
+                    "errorPassword": "Le mot de passe est requis",
+                    "errorSiteweb": "Le site web est requis",
+                    "agreement": "En vous inscrivant, vous acceptez nos termes et conditions.",
+                    "submitButton": "S'inscrire"
+               },
+               "forgotPassword": {
+                    "title": "Mot de passe oublié ?",
+                    "description": "Nous vous enverrons les instructions de réinitialisation par courrier électronique.",
+                    "emailPlaceholder": "Adresse e-mail",
+                    "emailErrorRequired": "Ne peut être vide !",
+                    "emailErrorInvalid": "L’adresse e-mail est invalide !",
+                    "submitButton": "Envoyer",
+                    "loadingSubmitButton": "Envoi en cours...",
+                    "createAccountLink": "Créer un compte",
+                    "loginLink": "Se connecter",
+                    "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
+                    "successTitle": "Vérifiez votre boîte de réception !",
+                    "successMessage": "Un e-mail de réinitialisation a été envoyé. Consultez votre boîte de réception et suivez les instructions.",
+                    "successInfoMessage": "Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe."
+               },
+               "resetPassword": {
+                    "title": "Réinitialiser le mot de passe",
+                    "passwordPlaceholder": "Nouveau mot de passe",
+                    "confirmPasswordPlaceholder": "Confirmer le mot de passe",
+                    "passwordErrorEmpty": "Ne peut être vide !",
+                    "passwordErrorShort": "Le mot de passe doit contenir au moins 6 caractères.",
+                    "passwordErrorMismatch": "Les mots de passe ne correspondent pas.",
+                    "passwordStrengthLabel": "Niveau de sécurité du mot de passe",
+                    "passwordStrengthWeak": "Faible",
+                    "passwordStrengthMedium": "Moyen",
+                    "passwordStrengthStrong": "Fort",
+                    "passwordStrengthVeryStrong": "Très fort",
+                    "submit": "Réinitialiser le mot de passe",
+                    "loading": "Chargement...",
+                    "successMessage": "Opération réussie ! Votre mot de passe a été réinitialisé.",
+                    "loginLink": "Se connecter"
+               },
+               "dashboard": {
+                    "pageTitle": "Tableau de bord",
+                    "finalizeConfigurationTitle": "Finalisez votre configuration de HelloHumans",
+                    "finalizeConfigurationDescription": "Nous allons vous aider à créer un environnement qui ravira vos visiteurs. C'est très facile et cela ne prend que quelques minutes.",
+                    "finishIntegrationButton": "Terminer l'intégration",
+                    "performanceSectionTitle": "Performance",
+                    "currentUsageTitle": "Utilisation actuelle",
+                    "usageItemTitleAudience": "Visiteurs atteints",
+                    "usageItemDescriptionAudience": "Nombre total de visiteurs ayant interagi avec votre chatbot.",
+                    "usageItemTitleInteractions": "Conversations traitées",
+                    "usageItemDescriptionInteractions": "Conversations automatisées gérées par le bot.",
+                    "dateRange": "21 févr. 2025 - 22 mars 2025",
+                    "infinityLabel": "∞",
+                    "usageLimit": "Limite : {limit}",
+                    "usagePercentage": "Progression : {percentage}%",
+                    "usageNone": "Aucun"
+               },
+               "analytics": {
+                    "overviewButton": "Vue d’ensemble",
+                    "pageTitle": "Vue d’ensemble",
+                    "dateRangeLabel": "Plage de dates",
+                    "chartLabel": "Graphique analytique"
+               },
+               "trialExpired": {
+                    "title": "Continuez à exploiter pleinement Hellohumans",
+                    "trialExpired": "Votre essai du &lt;strong&gt;avec toutes les fonctionnalités&lt;/strong&gt; a expiré le &lt;strong&gt;{date}&lt;/strong&gt;. Continuez sur votre lancée. Comparez les plans et choisissez l'option idéale pour votre entreprise.",
+                    "comparePlans": "Comparer les offres",
+                    "downgradeTitle": "Passer à offre Free",
+                    "downgradeDescription": "Vous pouvez à tout moment revenir à une offre inférieure et utiliser notre offre gratuite à vie. Vous pouvez la modifier quand vous le souhaitez.",
+                    "processedConversations": "Conversations traitées - &lt;strong&gt;JUSQU’À {count}&lt;/strong&gt;",
+                    "tooltipProcessedConversations": "Les conversations représentent le nombre total de conversations dans le chat en direct",
+                    "downgradeButton": "Passer à une version antérieure"
+               },
+               "index": {
+                    "checking": "Connexion ..."
+               },
+               "upgrade": {
+                    "Index": {
+                         "trial_remaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
+                         "select_offer": "Sélectionner votre offre",
+                         "choose_offer_description": "Choisissez une offre et choisissez des modules à l'étape suivante.",
+                         "view_all_features": "Voir toutes les fonctionnalités",
+                         "next_step": "Prochaine étape : choisissez des modules complémentaires"
+                    },
+                    "Modules": {
+                         "trialRemaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
+                         "title": "Sélectionner votre offre",
+                         "description": "Choisissez une offre et choisissez des modules à l'étape suivante.",
+                         "chooseModules": "Choisissez les modules complémentaires",
+                         "nextButtonLabel": "Paiement"
+                    }
+               },
+               "settings": {
+                    "index": {
+
+                    },
+                    "chat": {
+                         "appearance": {
+
+                         }
+                    }
+               },
+               "components": {
+                    "SideMenu": {
+                         "title": "Menu"
+                    }
                }
           },
-            "components": {
-                 "SideMenu": {
-                    "title": "Menu"
-                 }
-            }
-     },
-     "errror" : {
-          "pages": {
-               "notFound": {
-                    "title": "Page introuvable"
+          "error": {
+               "pages": {
+                    "notFound": {
+                         "title": "Erreur 403",
+                         "message": "Vous n’avez pas l’autorisation d’accéder à cette ressource.",
+                         "backHome": "Revenir à l’accueil"
+                    },
+                    "serverError": {
+                         "title": "Erreur 500"
+                    },
+                    "unauthorized": {
+                         "title": "Erreur 404"
+                    },
+                    "default": {}
                }
           }
      }

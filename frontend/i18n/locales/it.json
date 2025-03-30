@@ -14,6 +14,133 @@
                     "registerLink": "Iniziamo",
                     "error.empty": "Non può essere vuoto!",
                     "error.invalidEmail": "Indirizzo email non valido!"
+               },
+               "register": {
+                    "title": "Crea un account gratuito",
+                    "subtitle": "Nessuna carta di credito richiesta",
+                    "emailPlaceholder": "Il tuo indirizzo email",
+                    "passwordPlaceholder": "Password",
+                    "sitewebPlaceholder": "Sito web",
+                    "errorEmail": "L'email è obbligatoria",
+                    "errorPassword": "La password è obbligatoria",
+                    "errorSiteweb": "Il sito web è obbligatorio",
+                    "agreement": "Iscrivendoti, accetti i nostri termini e condizioni.",
+                    "submitButton": "Registrati"
+               },
+               "forgotPassword": {
+                    "title": "Password dimenticato?",
+                    "description": "Ti invieremo le istruzioni per il reset via email.",
+                    "emailPlaceholder": "Indirizzo email",
+                    "emailErrorRequired": "Non può essere vuoto!",
+                    "emailErrorInvalid": "Indirizzo email non valido!",
+                    "submitButton": "Invia",
+                    "loadingSubmitButton": "Invio in corso...",
+                    "createAccountLink": "Crea un account",
+                    "loginLink": "Accedi",
+                    "errorMessage": "Si è verificato un errore. Per favore riprova.",
+                    "successTitle": "Controlla la tua casella di posta!",
+                    "successMessage": "È stata inviata una email di reset. Controlla la tua casella di posta e segui le istruzioni.",
+                    "successInfoMessage": "Se possediamo questo indirizzo email, ti invieremo una email con le istruzioni per reimpostare la tua password."
+               },
+               "resetPassword": {
+                    "title": "Reimposta la password",
+                    "passwordPlaceholder": "Nuova password",
+                    "confirmPasswordPlaceholder": "Conferma password",
+                    "passwordErrorEmpty": "Non può essere vuoto!",
+                    "passwordErrorShort": "La password deve contenere almeno 6 caratteri.",
+                    "passwordErrorMismatch": "Le password non corrispondono.",
+                    "passwordStrengthLabel": "Livello di sicurezza della password",
+                    "passwordStrengthWeak": "Debole",
+                    "passwordStrengthMedium": "Media",
+                    "passwordStrengthStrong": "Forte",
+                    "passwordStrengthVeryStrong": "Molto forte",
+                    "submit": "Reimposta la password",
+                    "loading": "Caricamento...",
+                    "successMessage": "Operazione riuscita! La tua password è stata reimpostata.",
+                    "loginLink": "Accedi"
+               },
+               "dashboard": {
+                    "pageTitle": "Cruscotto",
+                    "finalizeConfigurationTitle": "Completa la configurazione di HelloHumans",
+                    "finalizeConfigurationDescription": "Ti aiuteremo a creare un ambiente che delizierà i tuoi visitatori. È molto facile e richiede solo pochi minuti.",
+                    "finishIntegrationButton": "Completa l'integrazione",
+                    "performanceSectionTitle": "Prestazioni",
+                    "currentUsageTitle": "Utilizzo attuale",
+                    "usageItemTitleAudience": "Visitatori raggiunti",
+                    "usageItemDescriptionAudience": "Numero totale di visitatori che hanno interagito con il tuo chatbot.",
+                    "usageItemTitleInteractions": "Conversazioni elaborate",
+                    "usageItemDescriptionInteractions": "Conversazioni automatizzate gestite dal bot.",
+                    "dateRange": "21 feb. 2025 - 22 mar. 2025",
+                    "infinityLabel": "∞",
+                    "usageLimit": "Limite: {limit}",
+                    "usagePercentage": "Progresso: {percentage}%",
+                    "usageNone": "Nessuno"
+               },
+               "analytics": {
+                    "overviewButton": "Panoramica",
+                    "pageTitle": "Panoramica",
+                    "dateRangeLabel": "Intervallo di date",
+                    "chartLabel": "Grafico analitico"
+               },
+               "trialExpired": {
+                    "title": "Continua a sfruttare al massimo Hellohumans",
+                    "trialExpired": "La tua prova con <strong>tutte le funzionalità</strong> è scaduta il <strong>{date}</strong>. Continua il tuo percorso. Confronta i piani e scegli l'opzione migliore per la tua azienda.",
+                    "comparePlans": "Confronta i piani",
+                    "downgradeTitle": "Passa al piano gratuito",
+                    "downgradeDescription": "Puoi passare a un piano inferiore in qualsiasi momento e utilizzare il nostro piano gratuito a vita. Puoi modificarlo quando vuoi.",
+                    "processedConversations": "Conversazioni elaborate - <strong>FINO A {count}</strong>",
+                    "tooltipProcessedConversations": "Le conversazioni rappresentano il numero totale di chat in tempo reale",
+                    "downgradeButton": "Passa a una versione precedente"
+               },
+               "index": {
+                    "checking": "Connessione ..."
+               },
+               "upgrade": {
+                    "Index": {
+                         "trial_remaining": "La tua prova completa termina tra {count} giorno | La tua prova completa termina tra {count} giorni",
+                         "select_offer": "Seleziona la tua offerta",
+                         "choose_offer_description": "Scegli un'offerta e seleziona moduli aggiuntivi nel passaggio successivo.",
+                         "view_all_features": "Visualizza tutte le funzionalità",
+                         "next_step": "Passaggio successivo: Scegli moduli aggiuntivi"
+                    },
+                    "Modules": {
+                         "trialRemaining": "Su prueba completa termina en {count} día | Su prueba completa termina en {count} días",
+                         "title": "Seleccione su plan",
+                         "description": "Elija un plan y seleccione módulos en el siguiente paso.",
+                         "chooseModules": "Elija módulos adicionales",
+                         "nextButtonLabel": "Pago"
+                    }
+               },
+               "settings": {
+                    "index": {
+
+                    },
+                    "chat": {
+                         "appearance": {
+
+                         }
+                    }
+               },
+               "components": {
+                    "SideMenu": {
+                         "title": "Menu"
+                    }
+               }
+          },
+          "error": {
+               "pages": {
+                    "notFound": {
+                         "title": "Errore 403",
+                         "message": "Non hai il permesso di accedere a questa risorsa.",
+                         "backHome": "Torna alla home"
+                    },
+                    "serverError": {
+                         "title": "Erreur 500"
+                    },
+                    "unauthorized": {
+                         "title": "Erreur 404"
+                    },
+                    "default": {}
                }
           }
      }

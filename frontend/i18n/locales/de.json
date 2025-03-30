@@ -14,6 +14,133 @@
                     "registerLink": "Los geht’s",
                     "error.empty": "Darf nicht leer sein!",
                     "error.invalidEmail": "Ungültige E-Mail-Adresse!"
+               },
+               "register": {
+                    "title": "Kostenloses Konto erstellen",
+                    "subtitle": "Keine Kreditkarte erforderlich",
+                    "emailPlaceholder": "Ihre E-Mail-Adresse",
+                    "passwordPlaceholder": "Passwort",
+                    "sitewebPlaceholder": "Website",
+                    "errorEmail": "E-Mail ist erforderlich",
+                    "errorPassword": "Passwort ist erforderlich",
+                    "errorSiteweb": "Website ist erforderlich",
+                    "agreement": "Durch die Anmeldung stimmen Sie unseren Geschäftsbedingungen zu.",
+                    "submitButton": "Registrieren"
+               },
+               "forgotPassword": {
+                    "title": "Passwort vergessen?",
+                    "description": "Wir senden Ihnen die Anweisungen zur Zurücksetzung per E-Mail.",
+                    "emailPlaceholder": "E-Mail-Adresse",
+                    "emailErrorRequired": "Darf nicht leer sein!",
+                    "emailErrorInvalid": "Die E-Mail-Adresse ist ungültig!",
+                    "submitButton": "Senden",
+                    "loadingSubmitButton": "Wird gesendet...",
+                    "createAccountLink": "Konto erstellen",
+                    "loginLink": "Einloggen",
+                    "errorMessage": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+                    "successTitle": "Überprüfen Sie Ihr Postfach!",
+                    "successMessage": "Eine Zurücksetzungs-E-Mail wurde gesendet. Überprüfen Sie Ihr Postfach und folgen Sie den Anweisungen.",
+                    "successInfoMessage": "Wenn wir diese E-Mail-Adresse haben, senden wir Ihnen eine E-Mail mit Anweisungen zur Zurücksetzung Ihres Passworts."
+               },
+               "resetPassword": {
+                    "title": "Passwort zurücksetzen",
+                    "passwordPlaceholder": "Neues Passwort",
+                    "confirmPasswordPlaceholder": "Passwort bestätigen",
+                    "passwordErrorEmpty": "Darf nicht leer sein!",
+                    "passwordErrorShort": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+                    "passwordErrorMismatch": "Passwörter stimmen nicht überein.",
+                    "passwordStrengthLabel": "Sicherheitsstufe des Passworts",
+                    "passwordStrengthWeak": "Schwach",
+                    "passwordStrengthMedium": "Mittel",
+                    "passwordStrengthStrong": "Stark",
+                    "passwordStrengthVeryStrong": "Sehr stark",
+                    "submit": "Passwort zurücksetzen",
+                    "loading": "Laden...",
+                    "successMessage": "Erfolgreich! Ihr Passwort wurde zurückgesetzt.",
+                    "loginLink": "Anmelden"
+               },
+               "dashboard": {
+                    "pageTitle": "Dashboard",
+                    "finalizeConfigurationTitle": "Vervollständigen Sie Ihre HelloHumans-Konfiguration",
+                    "finalizeConfigurationDescription": "Wir helfen Ihnen, eine Umgebung zu schaffen, die Ihre Besucher begeistern wird. Es ist ganz einfach und dauert nur wenige Minuten.",
+                    "finishIntegrationButton": "Integration abschließen",
+                    "performanceSectionTitle": "Leistung",
+                    "currentUsageTitle": "Aktuelle Nutzung",
+                    "usageItemTitleAudience": "Erreichte Besucher",
+                    "usageItemDescriptionAudience": "Gesamtzahl der Besucher, die mit Ihrem Chatbot interagiert haben.",
+                    "usageItemTitleInteractions": "Verarbeitete Gespräche",
+                    "usageItemDescriptionInteractions": "Automatisierte Gespräche, die vom Bot verwaltet werden.",
+                    "dateRange": "21. Feb 2025 - 22. Mär 2025",
+                    "infinityLabel": "∞",
+                    "usageLimit": "Limit: {limit}",
+                    "usagePercentage": "Fortschritt: {percentage}%",
+                    "usageNone": "Keine"
+               },
+               "analytics": {
+                    "overviewButton": "Übersicht",
+                    "pageTitle": "Übersicht",
+                    "dateRangeLabel": "Datumsbereich",
+                    "chartLabel": "Analytisches Diagramm"
+               },
+               "trialExpired": {
+                    "title": "Nutzen Sie Hellohumans weiterhin in vollem Umfang",
+                    "trialExpired": "Ihre Testversion mit <strong>allen Funktionen</strong> ist am <strong>{date}</strong> abgelaufen. Machen Sie weiter. Vergleichen Sie die Pläne und wählen Sie die beste Option für Ihr Unternehmen.",
+                    "comparePlans": "Pläne vergleichen",
+                    "downgradeTitle": "Zum kostenlosen Tarif wechseln",
+                    "downgradeDescription": "Sie können jederzeit auf eine niedrigere Version umsteigen und unseren kostenlosen Plan nutzen. Sie können ihn jederzeit ändern.",
+                    "processedConversations": "Verarbeitete Gespräche - <strong>BIS ZU {count}</strong>",
+                    "tooltipProcessedConversations": "Gespräche stehen für die Gesamtanzahl der Chats im Live-Chat",
+                    "downgradeButton": "Zur vorherigen Version wechseln"
+               },
+               "index": {
+                    "checking": "Verbinden ..."
+               },
+               "upgrade": {
+                    "Index": {
+                         "trial_remaining": "Ihre vollständige Testversion endet in {count} Tag | Ihre vollständige Testversion endet in {count} Tagen",
+                         "select_offer": "Wählen Sie Ihr Angebot",
+                         "choose_offer_description": "Wählen Sie ein Angebot aus und fügen Sie in der nächsten Stufe Module hinzu.",
+                         "view_all_features": "Alle Funktionen anzeigen",
+                         "next_step": "Nächster Schritt: Wählen Sie zusätzliche Module"
+                    },
+                    "Modules": {
+                         "trialRemaining": "Ihre vollständige Testversion endet in {count} Tag | Ihre vollständige Testversion endet in {count} Tagen",
+                         "title": "Wählen Sie Ihr Angebot",
+                         "description": "Wählen Sie ein Angebot und fügen Sie Module in der nächsten Stufe hinzu.",
+                         "chooseModules": "Wählen Sie zusätzliche Module",
+                         "nextButtonLabel": "Bezahlung"
+                    }
+               },
+               "settings": {
+                    "index": {
+
+                    },
+                    "chat": {
+                         "appearance": {
+
+                         }
+                    }
+               },
+               "components": {
+                    "SideMenu": {
+                         "title": "Menu"
+                    }
+               }
+          },
+          "error": {
+               "pages": {
+                    "notFound": {
+                         "title": "Fehler 403",
+                         "message": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen.",
+                         "backHome": "Zurück zur Startseite"
+                    },
+                    "serverError": {
+                         "title": "Erreur 500"
+                    },
+                    "unauthorized": {
+                         "title": "Erreur 404"
+                    },
+                    "default": {}
                }
           }
      }
