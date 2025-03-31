@@ -205,3 +205,17 @@ button:hover .hhcss_iconChatFillPath{
      top: calc(50% - 20px);
      left: calc(50% - 20px);
 }
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+     transition: all 0.3s ease;
+     max-height: 100px;
+     opacity: 1;
+     margin-bottom: 8px;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+     max-height: 0;
+     opacity: 0;
+     margin-bottom: 0;
+}

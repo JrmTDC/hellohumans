@@ -70,11 +70,9 @@
                          </button>
 
                          <!-- Lien vers l'inscription -->
-                         <p class="mt-4 text-gray-600 text-sm">
-                              {{ t('panel.pages.login.noAccount') }}<a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.login.registerCta') }}</a>
-
-
-                         </p>
+                         <div class="mt-[40px] border-t border-[#e2e8ef] pt-[20px] w-full text-left">
+                              <p class="mt-4 text-gray-600 text-sm">{{ t('panel.pages.login.noAccount') }} <a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.login.registerCta') }}</a></p>
+                         </div>
                     </form>
                </div>
           </div>
