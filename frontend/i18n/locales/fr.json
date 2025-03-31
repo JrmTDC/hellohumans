@@ -44,7 +44,7 @@
                },
                "forgotPassword": {
                     "title": "Mot de passe oublié ?",
-                    "subtitle": "Nous vous enverrons les instructions de réinitialisation par courrier électronique.",
+                    "subtitle": "Nous vous enverrons les instructions de réinitialisation par e-mai.",
                     "emailPlaceholder": "Adresse e-mail",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
@@ -54,9 +54,8 @@
                     "login": "Se connecter",
                     "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
                     "emailSentTitle": "Vérifiez votre boîte de réception !",
-                    "emailSentText": "Un e-mail de réinitialisation a été envoyé. Consultez votre boîte de réception et suivez les instructions.",
                     "emailSentNote": "Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.",
-                    "loginLink": "Retour à la connexion"
+                    "loginLink": "Se connecter"
                },
                "resetPassword": {
                     "title": "Réinitialiser le mot de passe",

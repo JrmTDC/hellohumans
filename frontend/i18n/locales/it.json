@@ -54,9 +54,8 @@
                     "login": "Accedi",
                     "errorMessage": "Si è verificato un errore. Riprova.",
                     "emailSentTitle": "Controlla la tua casella di posta!",
-                    "emailSentText": "È stata inviata un'e-mail di reset. Segui le istruzioni.",
                     "emailSentNote": "Se abbiamo questo indirizzo e-mail, ti invieremo istruzioni per reimpostare la password.",
-                    "loginLink": "Torna al login"
+                    "loginLink": "Accedi"
                },
                "resetPassword": {
                     "title": "Reimposta la password",

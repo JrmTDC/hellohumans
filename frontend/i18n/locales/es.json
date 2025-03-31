@@ -54,9 +54,8 @@
                     "login": "Iniciar sesión",
                     "errorMessage": "Ocurrió un error. Inténtalo de nuevo.",
                     "emailSentTitle": "¡Revisa tu bandeja de entrada!",
-                    "emailSentText": "Se ha enviado un correo electrónico de restablecimiento. Sigue las instrucciones en tu bandeja de entrada.",
                     "emailSentNote": "Si esta dirección de correo está en nuestra base de datos, te enviaremos instrucciones para restablecer tu contraseña.",
-                    "loginLink": "Volver al inicio de sesión"
+                    "loginLink": "Iniciar sesión"
                },
                "resetPassword": {
                     "title": "Restablecer contraseña",

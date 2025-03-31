@@ -54,9 +54,8 @@
                     "login": "Entrar",
                     "errorMessage": "Ocorreu um erro. Tente novamente.",
                     "emailSentTitle": "Verifique sua caixa de entrada!",
-                    "emailSentText": "Um e-mail de redefinição foi enviado. Siga as instruções.",
                     "emailSentNote": "Se tivermos esse e-mail, enviaremos instruções para redefinir sua senha.",
-                    "loginLink": "Voltar ao login"
+                    "loginLink": "Entrar"
                },
                "resetPassword": {
                     "title": "Redefinir senha",

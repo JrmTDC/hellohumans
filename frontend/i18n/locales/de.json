@@ -54,9 +54,8 @@
                     "login": "Einloggen",
                     "errorMessage": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
                     "emailSentTitle": "Überprüfen Sie Ihren Posteingang!",
-                    "emailSentText": "Eine Zurücksetzungs-E-Mail wurde gesendet. Folgen Sie den Anweisungen in Ihrem Posteingang.",
                     "emailSentNote": "Falls wir diese E-Mail-Adresse gespeichert haben, senden wir Ihnen eine Zurücksetzungsanleitung.",
-                    "loginLink": "Zurück zur Anmeldung"
+                    "loginLink": "Einloggen"
                },
                "resetPassword": {
                     "title": "Passwort zurücksetzen",
@@ -73,7 +72,7 @@
                     "submit": "Passwort zurücksetzen",
                     "loading": "Laden...",
                     "successMessage": "Erfolgreich! Ihr Passwort wurde zurückgesetzt.",
-                    "loginLink": "Anmelden"
+                    "loginLink": "Einloggen"
                },
                "dashboard": {
                     "setupTitle": "Schließen Sie Ihre HelloHumans-Einrichtung ab",

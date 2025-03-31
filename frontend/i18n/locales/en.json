@@ -54,9 +54,8 @@
                     "login": "Sign in",
                     "errorMessage": "An error occurred. Please try again.",
                     "emailSentTitle": "Check your inbox!",
-                    "emailSentText": "A reset email has been sent. Check your inbox and follow the instructions.",
                     "emailSentNote": "If we have this email on file, we’ll send you instructions to reset your password.",
-                    "loginLink": "Back to login"
+                    "loginLink": "Sign in"
                },
                "resetPassword": {
                     "title": "Reset Password",
