@@ -20,7 +20,7 @@
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
                                         {{ t('panel.pages.forgotPassword.title') }}
                                    </h1>
-                                   <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
+                                   <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px] text-center">
                                         {{ t('panel.pages.forgotPassword.subtitle') }}
                                    </p>
                               </fieldset>
@@ -52,7 +52,7 @@
                               </button>
 
                               <!-- Retour à la connexion ou Créer un compte -->
-                              <p class="mt-4 text-gray-600 text-sm text-center">
+                              <p class="mt-4 text-gray-600 text-[16px] text-center">
                                    <a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.createAccount') }}</a>
                                    <span class="mx-3"></span>
                                    <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.login') }}</a>
@@ -72,20 +72,18 @@
                                    {{ t('panel.pages.forgotPassword.emailSentTitle') }}
                               </h1>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
-                              <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
-                                   {{ t('panel.pages.forgotPassword.emailSentText')}}
-                              </p>
-                              <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
-                              <div class="relative">
-                                   <svgo-panel-icon-info class="absolute left-[-28px] w-4 h-4 fill-[#0569FF]"/>
-                                   <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(26,73,143)] mt-[-20px] mb-[12px]">
-                                        {{ t('panel.pages.forgotPassword.emailSentNote') }}
-                                   </p>
+                              <div class="self-center border-0 flex flex-col items-center p-0">
+                                   <span class="flex flex-row items-center justify-center mb-[15px]  text-[16px] max-w-[370px]">
+                                        <svgo-panel-icon-info class="h-[18px] w-[18px] mx-[9px] my-0 fill-[#0569FF] min-w-[18px] min-h-[18px]"/>
+                                        <p class="text-[16px] leading-[18px] text-[#303f9f]">
+                                             {{ t('panel.pages.forgotPassword.emailSentNote') }}
+                                        </p>
+                                   </span>
                               </div>
                          </fieldset>
 
                          <!-- Retour à la connexion -->
-                         <p class="mt-4 text-gray-600 text-sm text-center">
+                         <p class="mt-4 text-gray-600 text-center text-[16px] ">
                               <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.loginLink') }}</a>
                          </p>
                     </div>

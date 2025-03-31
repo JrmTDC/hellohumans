@@ -1,4 +1,5 @@
-﻿<template>
+﻿<!-- resetAttempt -->
+<template>
      <div v-auto-animate id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
           <!-- Header -->
           <div class="flex flex-row justify-start items-center relative p-[32px_40px] z-[1]">
@@ -23,34 +24,36 @@
 
                               <!-- Champ Mot de passe -->
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
-                                   <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                        <PasswordInput
-                                             v-model="password"
-                                             placeholder="Nouveau mot de passe"
-                                             :error="!!errors.password"
-                                             @input="evaluatePasswordStrength"
-                                             @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
-                                             @blur="() => { passwordFocused = false; evaluatePasswordStrength() }"
-                                             extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                             :iconSize="20"
-                                        />
-                                        <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
+                                   <fieldset>
+                                        <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
+                                             <PasswordInput
+                                                  v-model="password"
+                                                  placeholder="Nouveau mot de passe"
+                                                  :error="!!errors.password"
+                                                  @input="evaluatePasswordStrength"
+                                                  @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
+                                                  @blur="() => { passwordFocused = false; evaluatePasswordStrength() }"
+                                                  extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
+                                                  :iconSize="20"
+                                             />
+                                             <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
                                              {{ errorPassword }}
-                                        </span>
+                                             </span>
+                                        </fieldset>
 
                                         <!-- Barre de progression et texte -->
-                                        <div v-if="passwordFocused" class="flex items-center w-[min(370px,-32px+100vw)] max-w-full mt-2">
-                                             <div class="ml-[20px] w-[100px] bg-gray-300 h-1 rounded-full mr-4">
-                                                  <div class="h-full rounded-full transition-all duration-300 ease-in-out"
-                                                       :style="{ width: progressWidth, backgroundColor: progressColor }">
+                                        <Transition name="slide-fade" appear>
+                                             <div v-if="passwordFocused" class="relative translate-y-[-8px] pl-[4px] self-start h-[0.1px] overflow-hidden h-[15.9px] mb-[8px]">
+                                                  <div class="flex items-center">
+                                                       <div class="w-[100px] h-[4px] rounded-[3.5px] bg-[#eff2f6] inline-block mr-[12px]">
+                                                            <div class="block h-[4px] rounded-[3.5px]" :style="{ width: progressWidth, backgroundColor: progressColor }"></div>
+                                                       </div>
+                                                       <span class="text-[12px] font-medium leading-normal tracking-[-0.09px] text-[rgb(135,150,175)]">{{ passwordStrength }}</span>
                                                   </div>
                                              </div>
-                                             <div :class="strengthClass" class="text-sm">
-                                                  {{ passwordStrength }}
-                                             </div>
-                                        </div>
-                                   </fieldset>
+                                        </Transition>
 
+                                   </fieldset>
                                    <!-- Champ Confirmation du mot de passe -->
                                    <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
                                         <PasswordInput
@@ -85,14 +88,16 @@
                                    Réinitialiser le mot de passe
                               </h1>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
-                              <div class="relative">
-                                   <svgo-panel-icon-info class="absolute left-[-28px] top-[-19px] w-4 h-4 fill-[#0569FF]"/>
-                                   <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(26,73,143)] mt-[-20px] mb-[12px]">
-                                        Opération réussie ! Votre mot de passe a été réinitialisé.
-                                   </p>
+                              <div class="self-center border-0 flex flex-col items-center p-0">
+                                   <span class="flex flex-row items-center justify-center mb-[15px]  text-[16px] max-w-[370px]">
+                                        <svgo-panel-icon-info class="h-[18px] w-[18px] mx-[9px] my-0 fill-[#0569FF] min-w-[18px] min-h-[18px]"/>
+                                        <p class="text-[16px] leading-[18px] text-[#303f9f]">
+                                             Opération réussie ! Votre mot de passe a été réinitialisé.
+                                        </p>
+                                   </span>
                               </div>
                          </fieldset>
-                         <p class="mt-4 text-gray-600 text-sm text-center">
+                         <p class="mt-4 text-gray-600 text-[16px] text-center">
                               <a href="/panel/login" class="text-blue-500 hover:underline">Se connecter</a>
                          </p>
                     </div>
@@ -118,7 +123,6 @@ const password = ref('')
 const confirmPassword = ref('')
 const errorConfirmPassword = ref('')
 const passwordStrength = ref('')
-const strengthClass = ref('')
 const progressWidth = ref('0%')
 const progressColor = ref('rgb(226,232,239)')
 const passwordFocused = ref(false)
@@ -160,27 +164,26 @@ const evaluatePasswordStrength = () => {
           passwordStrength.value = 'Niveau de sécurité du mot de passe'
           progressWidth.value = '0%'
           progressColor.value = 'rgb(226,232,239)'
-          strengthClass.value = 'text-gray-400'
-     } else if (pass.length <= 4) {
+     } else if (pass.length <= 4 ) {
+          passwordStrength.value = 'Très Faible'
+          progressWidth.value = '20%'
+          progressColor.value = 'rgb(246, 48, 62)'
+     } else if (pass.length <= 7) {
           passwordStrength.value = 'Faible'
-          progressWidth.value = '25%'
-          progressColor.value = 'rgb(255, 0, 0)'
-          strengthClass.value = 'text-red-500'
-     } else if (pass.length <= 8) {
+          progressWidth.value = '40%'
+          progressColor.value = 'rgb(246, 135, 48)'
+     } else if (pass.length <= 9) {
           passwordStrength.value = 'Moyen'
-          progressWidth.value = '50%'
-          progressColor.value = 'rgb(255, 204, 0)'
-          strengthClass.value = 'text-yellow-500'
-     } else if (pass.length <= 12) {
+          progressWidth.value = '60%'
+          progressColor.value = 'rgb(255, 200, 89)'
+     } else if (pass.length <= 13) {
           passwordStrength.value = 'Fort'
-          progressWidth.value = '75%'
-          progressColor.value = 'rgb(0, 204, 0)'
-          strengthClass.value = 'text-green-500'
+          progressWidth.value = '80%'
+          progressColor.value = 'rgb(52, 184, 87)'
      } else {
-          passwordStrength.value = 'Très fort'
+          passwordStrength.value = 'Très Fort'
           progressWidth.value = '100%'
-          progressColor.value = 'rgb(0, 204, 0)'
-          strengthClass.value = 'text-green-500'
+          progressColor.value = 'rgb(52, 184, 87)'
      }
 }
 
