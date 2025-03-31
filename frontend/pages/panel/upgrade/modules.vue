@@ -93,14 +93,15 @@ const trialActive = ref(false)
 const showPaymentModal = ref(false)
 
 onMounted(() => {
+     if (!store.availableModules.length) {
+          store.initModules()
+     }
+     store.restore()
+     isChecking.value = false
      if (!store.currentOffer) {
           router.replace('/panel/upgrade')
           return
      }
-     if (!store.availableModules.length) {
-          store.initModules()
-     }
-     isChecking.value = false
 })
 
 function toggleModule(moduleId: string, checked: boolean) {

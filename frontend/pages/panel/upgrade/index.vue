@@ -43,7 +43,8 @@
                          :selectedOffer="store.currentOffer"
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
-                         nextButtonLabel="Prochaine étape : choisissez des modules complémentaires"
+                         :selectedModules="store.selectedAddOns"
+                         nextButtonLabel="Prochaine étape"
                          @updateBillingCycle="store.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
@@ -101,6 +102,9 @@ function goStep(step: number) {
 function closePanel() {
      router.push('/panel')
 }
+onMounted(() => {
+     store.restore()
+})
 </script>
 
 <!--

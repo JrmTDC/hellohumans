@@ -1,4 +1,7 @@
-﻿#hellohumans-panel {
+﻿#hellohumans-siteweb {
+     font-family: euclidcircularb;
+}
+#hellohumans-panel {
      font-family: euclidcircularb;
      letter-spacing: -0.24px;
      ._inputError::before {
@@ -43,6 +46,25 @@ button:hover .hhcss_iconChatFillPath{
     display: inline-block;
     margin-left: 8px;
 }
+.hhcss_waveLandingPage svg .path {
+     stroke-dasharray: 1;
+     stroke-dashoffset: 0;
+}
+@media (min-width: 1200px) {
+     .hhcss_waveLandingPage {
+          display: block;
+          opacity: 0;
+          -webkit-animation: animation-1goej7b 0.9s forwards;
+          animation: animation-1goej7b 0.9s forwards;
+     }
+     svg .path {
+          opacity: 1;
+          stroke-dasharray: 1;
+          stroke-dashoffset: 1;
+          -webkit-animation: animation-qivclq 0.8s ease-in-out 1 forwards 0.9s;
+          animation: animation-qivclq 0.8s ease-in-out 1 forwards 0.9s;
+     }
+}
 @keyframes blink{
     0%, 60%, 100% {
         transform: initial;
@@ -50,6 +72,30 @@ button:hover .hhcss_iconChatFillPath{
     30% {
         transform: translateY(-5px);
     }
+}
+@keyframes animation-1goej7b{
+     0% {
+          opacity: 0;
+     }
+
+     99.99% {
+          opacity: 0;
+     }
+     100% {
+          opacity: 1;
+     }
+}
+@keyframes animation-qivclq{
+     0% {
+          stroke-dashoffset: 1;
+     }
+
+     1% {
+          opacity: 0;
+     }
+     100% {
+          stroke-dashoffset: 0;
+     }
 }
 .hhcss_puceAnimation span{
     display: inline-block;
