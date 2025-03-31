@@ -55,10 +55,10 @@
                               <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="siteweb" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.siteweb }" :placeholder=" t('panel.pages.register.websitePlaceholder')">
+                              <input v-model="website" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.website }" :placeholder=" t('panel.pages.register.websitePlaceholder')">
 
 
-                              <span v-if="errors.siteweb" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorSiteweb }}</span>
+                              <span v-if="errors.website" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorWebsite }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center mt-[13px]">
                               <label class="flex items-start max-w-[365px] text-[14px] leading-[18px] tracking-[-0.01em] cursor-pointer">
@@ -85,8 +85,8 @@
                          </fieldset>
 
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 [width:min(370px,_calc(-32px+100vw))]">
-                              <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}</button>
-                              <span class="block text-center mt-[40px] mb-[12px] text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.register.alreadyHaveAccount') }}<a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.register.loginCta') }}</a>
+                              <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}</button>
+                              <span class="block text-center mt-[40px] pt-[20px] text-[16px]  text-[#647491] border-t border-[#e2e8ef]">{{ t('panel.pages.register.alreadyHaveAccount') }} <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.register.loginCta') }}</a>
                               </span>
                          </fieldset>
                     </form>
@@ -107,14 +107,14 @@ const { t } = useI18n()
 // Champs du formulaire
 const inputEmail = ref('')
 const password = ref('')
-const siteweb = ref('')
+const website = ref('')
 const agreed = ref(false)
-const errors = ref({ email: false, password: false, siteweb: false, agreed: false })
+const errors = ref({ email: false, password: false, website: false, agreed: false })
 const loginError = ref(false)
 const loading = ref(false)
 const errorMessageEmail = ref('');
 const errorPassword = ref('');
-const errorSiteweb = ref('');
+const errorWebsite = ref('');
 const errorsAgreed = ref('');
 
 
@@ -127,7 +127,7 @@ const updateSelectedLang = (lang: string) => {
 
 // Fonction pour valider le formulaire
 const validateForm = () => {
-     errors.value = { email: false, password: false, siteweb: false, agreed: false }
+     errors.value = { email: false, password: false, website: false, agreed: false }
      let valid = true
 
      if (!inputEmail.value) {
@@ -147,9 +147,9 @@ const validateForm = () => {
           valid = false
      }
 
-     if (!siteweb.value) {
-          errors.value.siteweb = true
-          errorSiteweb.value = t('panel.pages.register.errorWebsiteEmpty')
+     if (!website.value) {
+          errors.value.website = true
+          errorWebsite.value = t('panel.pages.register.errorWebsiteEmpty')
           valid = false
      }
 
@@ -194,7 +194,7 @@ const handleRegister = async () => {
                loginError.value = true
           } else {
                localStorage.setItem('token', data.success.token)
-               router.push('/panel/')
+               await router.push('/panel/')
           }
      } catch (error) {
           loginError.value = false
