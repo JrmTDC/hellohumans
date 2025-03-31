@@ -2,49 +2,61 @@
      "panel": {
           "pages": {
                "index": {
-                    "checking": "Connessione ..."
+                    "loading": "Connessione in corso ..."
                },
                "login": {
                     "title": "Bentornato",
                     "subtitle": "Accedi al tuo account HelloHumans",
                     "emailPlaceholder": "Indirizzo email",
                     "passwordPlaceholder": "Password",
-                    "forgotPassword": "Hai dimenticato la password?",
-                    "invalidCredentials": "Email o password errati!",
+                    "forgotPassword": "Password dimenticata?",
+                    "errorEmailEmpty": "Non può essere vuoto!",
+                    "errorEmailInvalid": "L'indirizzo email non è valido!",
+                    "errorPasswordEmpty": "Non può essere vuoto!",
+                    "loginError": "Email o password errati!",
                     "submit": "Accedi",
-                    "submitLoading": "Caricamento...",
+                    "loading": "Caricamento...",
                     "noAccount": "Non hai un account?",
-                    "link": "Iniziamo",
-                    "registerLink": "Non può essere vuoto!",
-                    "error.empty": "Non può essere vuoto!",
-                    "error.invalidEmail": "Indirizzo email non valido!"
+                    "registerCta": "Iniziamo"
                },
                "register": {
                     "title": "Crea un account gratuito",
                     "subtitle": "Nessuna carta di credito richiesta",
                     "emailPlaceholder": "Il tuo indirizzo email",
                     "passwordPlaceholder": "Password",
-                    "sitewebPlaceholder": "Sito web",
-                    "errorEmail": "L'email è obbligatoria",
-                    "errorPassword": "La password è obbligatoria",
-                    "errorSiteweb": "Il sito web è obbligatorio",
-                    "agreement": "Iscrivendoti, accetti i nostri termini e condizioni.",
-                    "submitButton": "Registrati"
+                    "websitePlaceholder": "Sito web",
+                    "acceptLabel": "Accetto i",
+                    "terms": "Termini e condizioni",
+                    "privacy": "Informativa sulla privacy",
+                    "errorEmailEmpty": "Non può essere vuoto!",
+                    "errorEmailInvalid": "L'indirizzo email non è valido!",
+                    "errorPasswordEmpty": "Non può essere vuoto!",
+                    "errorWebsiteEmpty": "Non può essere vuoto!",
+                    "errorAgreementRequired": "È necessario accettare",
+                    "cta": "Inizia gratis",
+                    "alreadyHaveAccount": "Hai già un account?",
+                    "loginCta": "Accedi",
+                    "asideTitle": "Fai crescere la tua attività con assistenza intelligente",
+                    "asideText": "Automatizza le FAQ e migliora l’esperienza dei visitatori con un chatbot AI per potenziare il supporto clienti.",
+                    "benefit1": "Rispondi istantaneamente 24/7 ai visitatori",
+                    "benefit2": "Automatizza fino al 70% delle domande frequenti grazie all’IA",
+                    "benefit3": "Risparmia tempo e migliora la soddisfazione del cliente"
                },
                "forgotPassword": {
-                    "title": "Password dimenticato?",
-                    "description": "Ti invieremo le istruzioni per il reset via email.",
+                    "title": "Password dimenticata?",
+                    "subtitle": "Ti invieremo le istruzioni per il reset via email.",
                     "emailPlaceholder": "Indirizzo email",
-                    "emailErrorRequired": "Non può essere vuoto!",
-                    "emailErrorInvalid": "Indirizzo email non valido!",
-                    "submitButton": "Invia",
-                    "loadingSubmitButton": "Invio in corso...",
-                    "createAccountLink": "Crea un account",
-                    "loginLink": "Accedi",
-                    "errorMessage": "Si è verificato un errore. Per favore riprova.",
-                    "successTitle": "Controlla la tua casella di posta!",
-                    "successMessage": "È stata inviata una email di reset. Controlla la tua casella di posta e segui le istruzioni.",
-                    "successInfoMessage": "Se possediamo questo indirizzo email, ti invieremo una email con le istruzioni per reimpostare la tua password."
+                    "errorEmailEmpty": "Non può essere vuoto!",
+                    "errorEmailInvalid": "L'indirizzo email non è valido!",
+                    "submit": "Invia",
+                    "loading": "Invio in corso...",
+                    "createAccount": "Crea un account",
+                    "login": "Accedi",
+                    "errorMessage": "Si è verificato un errore. Riprova.",
+                    "emailSentTitle": "Controlla la tua casella di posta!",
+                    "emailSentText": "È stata inviata un'e-mail di reset. Segui le istruzioni.",
+                    "emailSentNote": "Se abbiamo questo indirizzo e-mail, ti invieremo istruzioni per reimpostare la password.",
+                    "loginLink": "Torna al login"
                },
                "resetPassword": {
                     "title": "Reimposta la password",
@@ -64,27 +76,28 @@
                     "loginLink": "Accedi"
                },
                "dashboard": {
-                    "pageTitle": "Cruscotto",
-                    "finalizeConfigurationTitle": "Completa la configurazione di HelloHumans",
-                    "finalizeConfigurationDescription": "Ti aiuteremo a creare un ambiente che delizierà i tuoi visitatori. È molto facile e richiede solo pochi minuti.",
-                    "finishIntegrationButton": "Completa l'integrazione",
-                    "performanceSectionTitle": "Prestazioni",
-                    "currentUsageTitle": "Utilizzo attuale",
-                    "usageItemTitleAudience": "Visitatori raggiunti",
-                    "usageItemDescriptionAudience": "Numero totale di visitatori che hanno interagito con il tuo chatbot.",
-                    "usageItemTitleInteractions": "Conversazioni elaborate",
-                    "usageItemDescriptionInteractions": "Conversazioni automatizzate gestite dal bot.",
-                    "dateRange": "21 feb. 2025 - 22 mar. 2025",
-                    "infinityLabel": "∞",
-                    "usageLimit": "Limite: {limit}",
-                    "usagePercentage": "Progresso: {percentage}%",
-                    "usageNone": "Nessuno"
+                    "setupTitle": "Completa la configurazione di HelloHumans",
+                    "setupText": "Ti aiuteremo a creare un ambiente che i tuoi visitatori ameranno. È facile e richiede solo pochi minuti.",
+                    "setupCta": "Completa l’integrazione",
+                    "performanceTitle": "Prestazioni",
+                    "calendarRange": "21 feb 2025 - 22 mar 2025",
+                    "usageTitle": "Utilizzo attuale",
+                    "usageItems": {
+                         "audience": {
+                              "title": "Pubblico",
+                              "description": "Numero totale di visitatori che hanno interagito con il tuo chatbot.",
+                              "titleUsage": "Visitatori raggiunti"
+                         },
+                         "interactions": {
+                              "title": "Interazioni",
+                              "description": "Conversazioni automatizzate gestite dal bot.",
+                              "titleUsage": "Conversazioni elaborate"
+                         }
+                    }
                },
                "analytics": {
-                    "overviewButton": "Panoramica",
-                    "pageTitle": "Panoramica",
-                    "dateRangeLabel": "Intervallo di date",
-                    "chartLabel": "Grafico analitico"
+                    "menuOverview": "Panoramica",
+                    "title": "Panoramica"
                },
                "trialExpired": {
                     "title":  "Continua a sfruttare al massimo Hellohumans",
@@ -134,26 +147,26 @@
                "error": {
                     "notFound": {
                          "title": "Errore 403",
-                         "message": "Non hai il permesso di accedere a questa risorsa.",
+                         "description": "Non sei autorizzato ad accedere a questa risorsa.",
                          "backToHome": "Torna alla home"
                     },
                     "serverError": {
                          "title": "Ops, si è verificato un problema.",
-                         "description": "Premi il pulsante per ricaricare la pagina&nbsp;:",
-                         "reloadButton": "Ricaricare la pagina",
-                         "engineeringTeam": "... nel frattempo, il team di ingegneria è stato informato del problema.",
-                         "contactSupport": "Se questo non aiuta, contattaci tramite la chat o a.",
-                         "statusPage": "Puoi seguire l’incidente sulla nostra pagina di stato:"
+                         "instruction": "Premi il pulsante per ricaricare la pagina:",
+                         "reload": "Ricarica la pagina",
+                         "help": "Se non funziona, contattaci via chat o a:",
+                         "statusPage": "Puoi seguire l'incidente sulla nostra pagina di stato:",
+                         "note": "... tra l'altro, il team tecnico è stato informato del problema."
                     },
                     "unauthorized": {
                          "title": "Ops, pagina non trovata.",
-                         "description": "Ci dispiace, la pagina che stai cercando non può essere trovata.",
-                         "linkDescription": "Il link che hai seguito potrebbe essere interrotto o non esistere più.",
-                         "homeButton": "Vai alla homepage"
+                         "description": "Siamo spiacenti, la pagina che stai cercando non è stata trovata.",
+                         "hint": "Il link che hai seguito potrebbe essere rotto o non esistere più.",
+                         "goHome": "Vai alla home page"
                     },
                     "default": {
-                         "title": "Errore Imprevisto",
-                         "message": "Si è verificato un errore, ma non è elencato qui.",
+                         "title": "Errore imprevisto",
+                         "description": "Si è verificato un errore, ma non è elencato qui.",
                          "backToHome": "Torna alla home"
 
                     }

@@ -2,7 +2,7 @@
      "panel": {
           "pages": {
                "index": {
-                    "checking": "Connecting ..."
+                    "loading": "Connecting ..."
                },
                "login": {
                     "title": "Welcome back",
@@ -10,41 +10,53 @@
                     "emailPlaceholder": "Email address",
                     "passwordPlaceholder": "Password",
                     "forgotPassword": "Forgot password?",
-                    "invalidCredentials": "Incorrect email or password!",
+                    "errorEmailEmpty": "Cannot be empty!",
+                    "errorEmailInvalid": "The email address is invalid!",
+                    "errorPasswordEmpty": "Cannot be empty!",
+                    "loginError": "Incorrect email or password!",
                     "submit": "Sign in",
-                    "submitLoading": "Loading...",
+                    "loading": "Loading...",
                     "noAccount": "Don’t have an account?",
-                    "link": "Let’s go",
-                    "registerLink": "Cannot be empty!",
-                    "error.empty": "Cannot be empty!",
-                    "error.invalidEmail": "Invalid email address!"
+                    "registerCta": "Let’s go"
                },
                "register": {
-                    "title": "Create a Free Account",
+                    "title": "Create a free account",
                     "subtitle": "No credit card required",
                     "emailPlaceholder": "Your email address",
                     "passwordPlaceholder": "Password",
-                    "sitewebPlaceholder": "Website",
-                    "errorEmail": "Email is required",
-                    "errorPassword": "Password is required",
-                    "errorSiteweb": "Website is required",
-                    "agreement": "By signing up, you agree to our terms and conditions.",
-                    "submitButton": "Sign Up"
+                    "websitePlaceholder": "Website",
+                    "acceptLabel": "I accept the",
+                    "terms": "Terms and Conditions",
+                    "privacy": "Privacy Policy",
+                    "errorEmailEmpty": "Cannot be empty!",
+                    "errorEmailInvalid": "The email address is invalid!",
+                    "errorPasswordEmpty": "Cannot be empty!",
+                    "errorWebsiteEmpty": "Cannot be empty!",
+                    "errorAgreementRequired": "Agreement is required",
+                    "cta": "Get started for free",
+                    "alreadyHaveAccount": "Already have an account?",
+                    "loginCta": "Sign in",
+                    "asideTitle": "Grow your business with smart support",
+                    "asideText": "Automate frequent questions and improve visitor experience with an AI-powered chatbot that boosts your customer support.",
+                    "benefit1": "Instantly respond to visitors 24/7",
+                    "benefit2": "Automate up to 70% of recurring questions using AI",
+                    "benefit3": "Save time while improving customer satisfaction"
                },
                "forgotPassword": {
-                    "title": "Forgot your password?",
-                    "description": "We will send you reset instructions via email.",
+                    "title": "Forgot password?",
+                    "subtitle": "We'll send you reset instructions by email.",
                     "emailPlaceholder": "Email address",
-                    "emailErrorRequired": "Cannot be empty!",
-                    "emailErrorInvalid": "Invalid email address!",
-                    "submitButton": "Send",
-                    "loadingSubmitButton": "Sending...",
-                    "createAccountLink": "Create an account",
-                    "loginLink": "Log in",
+                    "errorEmailEmpty": "Cannot be empty!",
+                    "errorEmailInvalid": "The email address is invalid!",
+                    "submit": "Send",
+                    "loading": "Sending...",
+                    "createAccount": "Create an account",
+                    "login": "Sign in",
                     "errorMessage": "An error occurred. Please try again.",
-                    "successTitle": "Check your inbox!",
-                    "successMessage": "A reset email has been sent. Check your inbox and follow the instructions.",
-                    "successInfoMessage": "If we have this email address, we will send you an email with instructions to reset your password."
+                    "emailSentTitle": "Check your inbox!",
+                    "emailSentText": "A reset email has been sent. Check your inbox and follow the instructions.",
+                    "emailSentNote": "If we have this email on file, we’ll send you instructions to reset your password.",
+                    "loginLink": "Back to login"
                },
                "resetPassword": {
                     "title": "Reset Password",
@@ -64,27 +76,28 @@
                     "loginLink": "Log in"
                },
                "dashboard": {
-                    "pageTitle": "Dashboard",
-                    "finalizeConfigurationTitle": "Vervollständigen Sie Ihre HelloHumans-Konfiguration",
-                    "finalizeConfigurationDescription": "Wir helfen Ihnen, eine Umgebung zu schaffen, die Ihre Besucher begeistern wird. Es ist ganz einfach und dauert nur wenige Minuten.",
-                    "finishIntegrationButton": "Integration abschließen",
-                    "performanceSectionTitle": "Leistung",
-                    "currentUsageTitle": "Aktuelle Nutzung",
-                    "usageItemTitleAudience": "Erreichte Besucher",
-                    "usageItemDescriptionAudience": "Gesamtzahl der Besucher, die mit Ihrem Chatbot interagiert haben.",
-                    "usageItemTitleInteractions": "Verarbeitete Gespräche",
-                    "usageItemDescriptionInteractions": "Automatisierte Gespräche, die vom Bot verwaltet werden.",
-                    "dateRange": "21. Feb 2025 - 22. Mär 2025",
-                    "infinityLabel": "∞",
-                    "usageLimit": "Limit: {limit}",
-                    "usagePercentage": "Fortschritt: {percentage}%",
-                    "usageNone": "Keine"
+                    "setupTitle": "Complete your HelloHumans setup",
+                    "setupText": "We’ll help you build an environment your visitors will love. It’s easy and takes just a few minutes.",
+                    "setupCta": "Finish setup",
+                    "performanceTitle": "Performance",
+                    "calendarRange": "Feb 21, 2025 - Mar 22, 2025",
+                    "usageTitle": "Current usage",
+                    "usageItems": {
+                         "audience": {
+                              "title": "Audience",
+                              "description": "Total number of visitors who interacted with your chatbot.",
+                              "titleUsage": "Visitors reached"
+                         },
+                         "interactions": {
+                              "title": "Interactions",
+                              "description": "Automated conversations handled by the bot.",
+                              "titleUsage": "Conversations processed"
+                         }
+                    }
                },
                "analytics": {
-                    "overviewButton": "Overview",
-                    "pageTitle": "Overview",
-                    "dateRangeLabel": "Date Range",
-                    "chartLabel": "Analytics Chart"
+                    "menuOverview": "Overview",
+                    "title": "Overview"
                },
                "trialExpired": {
                     "title": "Continue to fully leverage Hellohumans",
@@ -134,27 +147,27 @@
                "error": {
                     "notFound": {
                          "title": "Error 403",
-                         "message": "You do not have permission to access this resource.",
-                         "backToHome": "Back to home"
+                         "description": "You are not authorized to access this resource.",
+                         "backToHome": "Return to homepage"
                     },
                     "serverError": {
                          "title": "Oops, something went wrong.",
-                         "description": "Click the button to reload the page&nbsp;:",
-                         "reloadButton": "Reload the page",
-                         "engineeringTeam": "... in the meantime, the engineering team has been informed of the issue.",
-                         "contactSupport": "If this doesn’t help, contact us via chat or at.",
-                         "statusPage": "You can follow the incident on our status page:"
+                         "instruction": "Press the button to reload the page:",
+                         "reload": "Reload the page",
+                         "help": "If that doesn’t help, contact us via chat or at:",
+                         "statusPage": "You can follow the incident on our status page:",
+                         "note": "... by the way, the engineering team has been notified of the issue."
                     },
                     "unauthorized": {
                          "title": "Oops, page not found.",
-                         "description": "Sorry, the page you're looking for cannot be found.",
-                         "linkDescription": "The link you followed may be broken or no longer exists.",
-                         "homeButton": "Go to homepage"
+                         "description": "Sorry, the page you’re looking for could not be found.",
+                         "hint": "The link you followed may be broken or no longer exists.",
+                         "goHome": "Go to homepage"
                     },
                     "default": {
                          "title": "Unexpected Error",
-                         "message": "An error occurred, but it is not listed here.",
-                         "backToHome": "Back to Home"
+                         "description": "An error occurred, but it is not listed here.",
+                         "backToHome": "Return to homepage"
                     }
                }
           },

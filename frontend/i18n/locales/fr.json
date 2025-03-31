@@ -2,7 +2,7 @@
      "panel": {
           "pages": {
                "index": {
-                    "checking": "Connexion ..."
+                    "loading": "Connexion ..."
                },
                "login": {
                     "title": "Bon retour parmi nous",
@@ -10,41 +10,53 @@
                     "emailPlaceholder": "Adresse e-mail",
                     "passwordPlaceholder": "Mot de passe",
                     "forgotPassword": "Mot de passe oublié ?",
-                    "invalidCredentials": "E-mail ou mot de passe incorrect !",
+                    "errorEmailEmpty": "Ne peut être vide !",
+                    "errorEmailInvalid": "L’adresse e-mail est invalide !",
+                    "errorPasswordEmpty": "Ne peut être vide !",
+                    "loginError": "E-mail ou mot de passe incorrect !",
                     "submit": "Se connecter",
-                    "submitLoading": "Chargement...",
+                    "loading": "Chargement...",
                     "noAccount": "Vous n’avez pas de compte ?",
-                    "link": "C'est parti",
-                    "registerLink": "Ne peut être vide !",
-                    "error.empty": "Ne peut être vide !",
-                    "error.invalidEmail": "L’adresse e-mail est invalide !"
+                    "registerCta": "C'est parti"
                },
                "register": {
                     "title": "Créer un compte gratuit",
                     "subtitle": "Aucune carte de crédit requise",
                     "emailPlaceholder": "Votre adresse e-mail",
                     "passwordPlaceholder": "Mot de passe",
-                    "sitewebPlaceholder": "Site Web",
-                    "errorEmail": "L'email est requis",
-                    "errorPassword": "Le mot de passe est requis",
-                    "errorSiteweb": "Le site web est requis",
-                    "agreement": "En vous inscrivant, vous acceptez nos termes et conditions.",
-                    "submitButton": "S'inscrire"
+                    "websitePlaceholder": "Site Web",
+                    "acceptLabel": "J’accepte les",
+                    "terms": "Conditions générales",
+                    "privacy": "Politique de confidentialité",
+                    "errorEmailEmpty": "Ne peut être vide !",
+                    "errorEmailInvalid": "L’adresse e-mail est invalide !",
+                    "errorPasswordEmpty": "Ne peut être vide !",
+                    "errorWebsiteEmpty": "Ne peut être vide !",
+                    "errorAgreementRequired": "Un accord est requis",
+                    "cta": "Débuter gratuitement",
+                    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+                    "loginCta": "Se connecter",
+                    "asideTitle": "Développez votre activité grâce à une assistance intelligente",
+                    "asideText": "Automatisez les réponses aux questions fréquentes et améliorez l’expérience de vos visiteurs grâce à un chatbot IA conçu pour booster votre support client.",
+                    "benefit1": "Répondez instantanément 24h/24 aux demandes de vos visiteurs",
+                    "benefit2": "Automatisez jusqu’à 70 % des questions récurrentes grâce à l’IA",
+                    "benefit3": "Gagnez du temps tout en améliorant la satisfaction client"
                },
                "forgotPassword": {
                     "title": "Mot de passe oublié ?",
-                    "description": "Nous vous enverrons les instructions de réinitialisation par courrier électronique.",
+                    "subtitle": "Nous vous enverrons les instructions de réinitialisation par courrier électronique.",
                     "emailPlaceholder": "Adresse e-mail",
-                    "emailErrorRequired": "Ne peut être vide !",
-                    "emailErrorInvalid": "L’adresse e-mail est invalide !",
-                    "submitButton": "Envoyer",
-                    "loadingSubmitButton": "Envoi en cours...",
-                    "createAccountLink": "Créer un compte",
-                    "loginLink": "Se connecter",
+                    "errorEmailEmpty": "Ne peut être vide !",
+                    "errorEmailInvalid": "L’adresse e-mail est invalide !",
+                    "submit": "Envoyer",
+                    "loading": "Envoi en cours...",
+                    "createAccount": "Créer un compte",
+                    "login": "Se connecter",
                     "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
-                    "successTitle": "Vérifiez votre boîte de réception !",
-                    "successMessage": "Un e-mail de réinitialisation a été envoyé. Consultez votre boîte de réception et suivez les instructions.",
-                    "successInfoMessage": "Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe."
+                    "emailSentTitle": "Vérifiez votre boîte de réception !",
+                    "emailSentText": "Un e-mail de réinitialisation a été envoyé. Consultez votre boîte de réception et suivez les instructions.",
+                    "emailSentNote": "Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.",
+                    "loginLink": "Retour à la connexion"
                },
                "resetPassword": {
                     "title": "Réinitialiser le mot de passe",
@@ -65,26 +77,28 @@
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",
-                    "finalizeConfigurationTitle": "Finalisez votre configuration de HelloHumans",
-                    "finalizeConfigurationDescription": "Nous allons vous aider à créer un environnement qui ravira vos visiteurs. C'est très facile et cela ne prend que quelques minutes.",
-                    "finishIntegrationButton": "Terminer l'intégration",
-                    "performanceSectionTitle": "Performance",
-                    "currentUsageTitle": "Utilisation actuelle",
-                    "usageItemTitleAudience": "Visiteurs atteints",
-                    "usageItemDescriptionAudience": "Nombre total de visiteurs ayant interagi avec votre chatbot.",
-                    "usageItemTitleInteractions": "Conversations traitées",
-                    "usageItemDescriptionInteractions": "Conversations automatisées gérées par le bot.",
-                    "dateRange": "21 févr. 2025 - 22 mars 2025",
-                    "infinityLabel": "∞",
-                    "usageLimit": "Limite : {limit}",
-                    "usagePercentage": "Progression : {percentage}%",
-                    "usageNone": "Aucun"
+                    "setupTitle": "Finalisez votre configuration de HelloHumans",
+                    "setupText": "Nous allons vous aider à créer un environnement qui ravira vos visiteurs. C'est très facile et cela ne prend que quelques minutes.",
+                    "setupCta": "Terminer l'intégration",
+                    "performanceTitle": "Performance",
+                    "calendarRange": "21 févr. 2025 - 22 mars 2025",
+                    "usageTitle": "Utilisation actuelle",
+                    "usageItems": {
+                         "audience": {
+                              "title": "Audience",
+                              "description": "Nombre total de visiteurs ayant interagi avec votre chatbot.",
+                              "titleUsage": "Visiteurs atteints"
+                         },
+                         "interactions": {
+                              "title": "Interactions",
+                              "description": "Conversations automatisées gérées par le bot.",
+                              "titleUsage": "Conversations traitées"
+                         }
+                    }
                },
                "analytics": {
-                    "overviewButton": "Vue d’ensemble",
-                    "pageTitle": "Vue d’ensemble",
-                    "dateRangeLabel": "Plage de dates",
-                    "chartLabel": "Graphique analytique"
+                    "menuOverview": "Vue d’ensemble",
+                    "title": "Vue d’ensemble"
                },
                "trialExpired": {
                     "title": "Continuez à exploiter pleinement Hellohumans",
@@ -134,26 +148,26 @@
                "error": {
                     "notFound": {
                          "title": "Erreur 403",
-                         "message": "Vous n’avez pas l’autorisation d’accéder à cette ressource.",
+                         "description": "Vous n’avez pas l’autorisation d’accéder à cette ressource.",
                          "backToHome": "Revenir à l’accueil"
                     },
                     "serverError": {
                          "title": "Oups, un problème est survenu.",
-                         "description": "Appuyez sur le bouton pour recharger la page&nbsp;:",
-                         "reloadButton": "Recharger la page",
-                         "engineeringTeam": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème.",
-                         "contactSupport": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
-                         "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :"
+                         "instruction": "Appuyez sur le bouton pour recharger la page :",
+                         "reload": "Recharger la page",
+                         "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
+                         "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :",
+                         "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème."
                     },
                     "unauthorized": {
                          "title": "Oups, page introuvable.",
                          "description": "Nous sommes désolés, la page que vous recherchez est introuvable.",
-                         "linkDescription": "Le lien que vous avez suivi est peut-être cassé ou n'existe plus.",
-                         "homeButton": "Aller à la page d'accueil"
+                         "hint": "Le lien que vous avez suivi est peut-être cassé ou n'existe plus.",
+                         "goHome": "Aller à la page d'accueil"
                     },
                     "default": {
                          "title": "Erreur Inattendue",
-                         "message": "Une erreur s’est produite, mais elle n’est pas répertoriée ici.",
+                         "description": "Une erreur s’est produite, mais elle n’est pas répertoriée ici.",
                          "backToHome": "Revenir à l’accueil"
                     }
                }
@@ -165,3 +179,4 @@
           }
      }
 }
+
