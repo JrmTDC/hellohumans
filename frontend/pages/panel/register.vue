@@ -13,22 +13,22 @@
           <div class="[grid-area:1_/_2_/_3_/_4] relative z-0 overflow-hidden relative before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-z-10 before:bg-white before:[width:max(3000px,300vh)] before:[height:max(3000px,300vh)] before:[transform:translateX(-50%)]"></div>
           <div class="grid place-items-center [grid-area:aside]">
                <section class="p-[40px] mx-auto text-white">
-                    <h2 class="mt-0 mb-0 font-semibold text-[24px] leading-[31px] tracking-[-0.01em]">Développez votre activité grâce à une assistance intelligente</h2>
+                    <h2 class="mt-0 mb-0 font-semibold text-[24px] leading-[31px] tracking-[-0.01em]">{{ t('panel.pages.register.asideTitle') }}</h2>
                     <span class="block w-2 min-w-[8px] h-2 min-h-[8px]"></span>
-                    <p class="mt-0 mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] text-[#8796af]">Automatisez les réponses aux questions fréquentes et améliorez l’expérience de vos visiteurs grâce à un chatbot IA conçu pour booster votre support client.</p>
+                    <p class="mt-0 mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] text-[#8796af]">{{ t('panel.pages.register.asideText') }}</p>
                     <span class="block w-10 min-w-[40px] h-10 min-h-[40px]"></span>
                     <div class="flex flex-col justify-start items-start mb-[max(7vw,40px)]">
                          <div class="flex flex-row justify-start items-start">
                               <svgo-panel-icon-up-register class="h-[20px] w-[20px] shrink-0" />
-                              <p class="mt-0 mb-0 ml-3 font-normal text-[16px] leading-[20px] tracking-[-0.01em]">Répondez instantanément 24h/24 aux demandes de vos visiteurs</p>
+                              <p class="mt-0 mb-0 ml-3 font-normal text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.register.benefit1') }}</p>
                          </div>
                          <div class="flex flex-row justify-start items-start mt-8">
                               <svgo-panel-icon-up-register class="h-[20px] w-[20px] shrink-0" />
-                              <p class="mt-0 mb-0 ml-3 font-normal text-[16px] leading-[20px] tracking-[-0.01em]">Automatisez jusqu’à 70 % des questions récurrentes grâce à l’IA</p>
+                              <p class="mt-0 mb-0 ml-3 font-normal text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.register.benefit2') }}</p>
                          </div>
                          <div class="flex flex-row justify-start items-start mt-8">
                               <svgo-panel-icon-up-register class="h-[20px] w-[20px] shrink-0" />
-                              <p class="mt-0 mb-0 ml-3 font-normal text-[16px] leading-[20px] tracking-[-0.01em]">Gagnez du temps tout en améliorant la satisfaction client</p>
+                              <p class="mt-0 mb-0 ml-3 font-normal text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.register.benefit3') }}</p>
                          </div>
                     </div>
                </section>
@@ -37,17 +37,17 @@
                <div class="px-[40px] py-[32px]">
                     <form class="flex flex-col items-center w-full" @submit.prevent="handleRegister">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 [width:min(370px,_calc(-32px+100vw))]">
-                              <h1 class="text-[rgb(8,15,26)] font-semibold mb-[28px] text-center relative text-[32px] leading-[41px] tracking-[-0.01em]">Créer un compte gratuit</h1>
-                              <span class="block text-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] -mt-[20px] mb-[12px]">Aucune carte de crédit requise</span>
+                              <h1 class="text-[rgb(8,15,26)] font-semibold mb-[28px] text-center relative text-[32px] leading-[41px] tracking-[-0.01em]">{{ t('panel.pages.register.title') }}</h1>
+                              <span class="block text-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] -mt-[20px] mb-[12px]">{{ t('panel.pages.register.subtitle') }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="inputEmail" type="email" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.email }" placeholder="Votre adresse e-mail">
+                              <input v-model="inputEmail" type="email" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.email }" :placeholder="t('panel.pages.register.emailPlaceholder')">
                               <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
                               <PasswordInput
                                    v-model="password"
-                                  placeholder="Mot de passe"
+                                  :placeholder="t('panel.pages.register.passwordPlaceholder')"
                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                    :error=errors.password
                                   :iconSize=20
@@ -55,7 +55,7 @@
                               <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="siteweb" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.siteweb }" placeholder="Site Web">
+                              <input v-model="siteweb" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.siteweb }" :placeholder=" t('panel.pages.register.websitePlaceholder')">
 
 
                               <span v-if="errors.siteweb" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorSiteweb }}</span>
@@ -75,9 +75,9 @@
                                              class="float-left block w-[20px] h-[20px] rounded-[3px] border-[2px] border-[rgb(226,232,239)] cursor-pointer mr-[14px] mb-[16px] translate-y-[1px] transition-all duration-100 ease-in-out peer-checked:bg-[rgb(5,102,255)] peer-checked:border-[rgb(5,102,255)] peer-checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMTg2LjMwMSAzMzkuODkzTDk2IDI0OS40NjFsLTMyIDMwLjUwN0wxODYuMzAxIDQwMiA0NDggMTQwLjUwNiA0MTYgMTEweiIvPjwvc3ZnPg==')] peer-checked:bg-center peer-checked:bg-no-repeat peer-checked:bg-[length:16px_16px]" :class="{ 'border-[rgb(232,19,50)]': errors.agreed }"
                                         ></span>
                                         <span class="mt-0 mb-0">
-                                             J’accepte les
-                                             <a href="#" class="underline text-[#0566ff]">Conditions générales</a> et la
-                                             <a href="#" class="underline text-[#0566ff]">Politique de confidentialité</a> de HelloHumans.
+                                            {{ t('panel.pages.register.acceptLabel') }}
+                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> et la
+                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> HelloHumans.
                                         </span>
                                         <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsAgreed }}</span>
                                    </span>
@@ -85,8 +85,8 @@
                          </fieldset>
 
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 [width:min(370px,_calc(-32px+100vw))]">
-                              <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] hover:bg-[#31e756] hover:border-[#31e756]">Débuter gratuitement</button>
-                              <span class="block text-center mt-[40px] mb-[12px] text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">Vous avez déjà un compte ? <a href="/panel/login" class="text-blue-500 hover:underline"> Se connecter</a>
+                              <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}</button>
+                              <span class="block text-center mt-[40px] mb-[12px] text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.register.alreadyHaveAccount') }}<a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.register.loginCta') }}</a>
                               </span>
                          </fieldset>
                     </form>
@@ -101,6 +101,8 @@ import { useRouter } from 'vue-router'
 import PasswordInput from "@/components/panel/PasswordInput.vue";
 import LanguageSelector from "@/components/panel/LanguageSelector.vue";
 import { usePublicStore } from "@/stores/publicStore";
+
+const { t } = useI18n()
 
 // Champs du formulaire
 const inputEmail = ref('')
@@ -130,30 +132,30 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmail.value = 'Ne peut être vide !'
+          errorMessageEmail.value = t('panel.pages.register.errorEmailEmpty')
           valid = false
 
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
           errors.value.password = true
-          errorMessageEmail.value  =  'L’adresse e-mail est invalide !'
+          errorMessageEmail.value  =  t('panel.pages.register.errorEmailInvalid')
           valid = false
      }
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = 'Ne peut être vide !'
+          errorPassword.value = t('panel.pages.register.errorPasswordEmpty')
           valid = false
      }
 
      if (!siteweb.value) {
           errors.value.siteweb = true
-          errorSiteweb.value = 'Ne peut être vide !'
+          errorSiteweb.value = t('panel.pages.register.errorWebsiteEmpty')
           valid = false
      }
 
      if (!agreed.value) {
           errors.value.agreed = true
-          errorsAgreed.value = 'Un accord est requis'
+          errorsAgreed.value = t('panel.pages.register.errorAgreementRequired')
           valid = false
      }
 
@@ -201,19 +203,6 @@ const handleRegister = async () => {
      loading.value = false
 }
 </script>
-
-<!--
-{{ t('panel.registerPage.title') }}
-{{ t('panel.registerPage.subtitle') }}
-{{ t('panel.registerPage.emailPlaceholder') }}">
-{{ t('panel.registerPage.passwordPlaceholder') }}">
-{{ t('panel.registerPage.sitewebPlaceholder') }}">
-{{ t('panel.registerPage.errorEmail') }}
-{{ t('panel.registerPage.errorPassword') }}
-{{ t('panel.registerPage.errorSiteweb') }}
-{{ t('panel.registerPage.agreement') }}
-{{ t('panel.registerPage.submitButton') }}
--->
 
 
 

@@ -6,7 +6,7 @@
                     <div class="progress w-full h-[12px] rounded-[4px] bg-[#002661] my-5 overflow-hidden">
                          <div class="progress-bar bg-[#0566ff] h-full transition-[width] duration-[600ms] ease-[ease]" role="progressbar" style="width:20%;"></div>
                     </div>
-                    <p class="message text-white font-medium mx-[-20px] my-0">{{ t('panel.pages.index.checking')  }}</p>
+                    <p class="message text-white font-medium mx-[-20px] my-0">{{ t('panel.pages.index.loading') }}</p>
                </div>
           </div>
      </div>

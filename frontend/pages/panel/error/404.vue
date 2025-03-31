@@ -9,8 +9,8 @@
                </div>
 
                <header class="text-[rgb(48,63,159)] text-center font-semibold mt-[24px] mb-[16px] text-[40px] leading-[">{{ t('panel.pages.error.unauthorized.title') }}</header>
-               <p class="text-[rgb(8,15,26)] text-[18px] leading-[23px] tracking-[-0.01em]">{{ t('panel.pages.error.unauthorized.description') }}</p><p class="text-[rgb(8,15,26)] mb-[32px]  text-[18px] leading-[23px] tracking-[-0.01em]">{{ t('panel.pages.error.unauthorized.linkDescription') }}</p>
-               <button @click="goHome" class="antialiased inline-block mb-0 font-normal text-center align-middle touch-manipulation cursor-pointer bg-none border border-[rgb(5,102,255)] whitespace-nowrap px-[32px] text-[18.1px] leading-[22px] rounded-[4px] min-w-[160px] h-[46px] text-white bg-[rgb(5,102,255)] hover:text-white hover:bg-[rgb(0,73,189)] hover:border-[rgb(0,73,189)]">{{ t('panel.pages.error.unauthorized.homeButton') }}</button>
+               <p class="text-[rgb(8,15,26)] text-[18px] leading-[23px] tracking-[-0.01em]">{{ t('panel.pages.error.unauthorized.description') }}</p><p class="text-[rgb(8,15,26)] mb-[32px]  text-[18px] leading-[23px] tracking-[-0.01em]">{{ t('panel.pages.error.unauthorized.hint') }}</p>
+               <button @click="goHome" class="antialiased inline-block mb-0 font-normal text-center align-middle touch-manipulation cursor-pointer bg-none border border-[rgb(5,102,255)] whitespace-nowrap px-[32px] text-[18.1px] leading-[22px] rounded-[4px] min-w-[160px] h-[46px] text-white bg-[rgb(5,102,255)] hover:text-white hover:bg-[rgb(0,73,189)] hover:border-[rgb(0,73,189)]">{{ t('panel.pages.error.unauthorized.goHome') }}</button>
           </div>
      </div>
 </template>

@@ -57,7 +57,7 @@
                          </div>
 
                          <!-- Erreur d'authentification -->
-                         <span v-if="loginError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.login.invalidCredentials') }}</span>
+                         <span v-if="loginError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.login.loginError') }}</span>
 
                          <!-- Bouton de connexion -->
                          <button
@@ -66,12 +66,12 @@
                               class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
                               :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
                          >
-                              {{ loading ? t('panel.pages.login.submit') : t('panel.pages.login.submitLoading') }}
+                              {{ loading ? t('panel.pages.login.submit') : t('panel.pages.login.loading') }}
                          </button>
 
                          <!-- Lien vers l'inscription -->
                          <p class="mt-4 text-gray-600 text-sm">
-                              {{ t('panel.pages.login.noAccount') }}<a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.login.link') }}</a>
+                              {{ t('panel.pages.login.noAccount') }}<a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.login.registerCta') }}</a>
 
 
                          </p>
@@ -107,19 +107,19 @@ const errorPassword = ref('');
 
           if (!inputEmail.value) {
                errors.value.email = true
-               errorMessageEmail.value = t('panel.pages.login.registerLink')
+               errorMessageEmail.value = t('panel.pages.login.errorEmailEmpty')
                valid = false
 
           } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
                errors.value.password = true
-               errorMessageEmail.value  = t('panel.pages.login.error.invalidEmail')
+               errorMessageEmail.value  = t('panel.pages.login.errorEmailInvalid')
                valid = false
           }
 
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = t('panel.pages.login.registerLink')
+          errorPassword.value = t('panel.pages.login.errorPasswordEmpty')
           valid = false
      }
 

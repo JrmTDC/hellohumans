@@ -21,7 +21,7 @@
                                         {{ t('panel.pages.forgotPassword.title') }}
                                    </h1>
                                    <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
-                                        {{ t('panel.pages.forgotPassword.description') }}
+                                        {{ t('panel.pages.forgotPassword.subtitle') }}
                                    </p>
                               </fieldset>
 
@@ -48,14 +48,14 @@
                                    class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
                                    :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
                               >
-                                   {{ loading ? t('panel.pages.forgotPassword.loadingSubmitButton') : t('panel.pages.forgotPassword.submitButton') }}
+                                   {{ loading ? t('panel.pages.forgotPassword.loading') : t('panel.pages.forgotPassword.submit') }}
                               </button>
 
                               <!-- Retour à la connexion ou Créer un compte -->
                               <p class="mt-4 text-gray-600 text-sm text-center">
-                                   <a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.createAccountLink') }}</a>
+                                   <a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.createAccount') }}</a>
                                    <span class="mx-3"></span>
-                                   <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.loginLink') }}</a>
+                                   <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.login') }}</a>
                               </p>
 
                               <!-- Message d'erreur -->
@@ -69,17 +69,17 @@
                     <div v-else class="flex flex-col items-center w-full">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
-                                   {{ t('panel.pages.forgotPassword.successTitle') }}
+                                   {{ t('panel.pages.forgotPassword.emailSentTitle') }}
                               </h1>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[-20px] mb-[12px]">
-                                   {{ t('panel.pages.forgotPassword.successMessage')}}
+                                   {{ t('panel.pages.forgotPassword.emailSentText')}}
                               </p>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <div class="relative">
                                    <svgo-panel-icon-info class="absolute left-[-28px] w-4 h-4 fill-[#0569FF]"/>
                                    <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(26,73,143)] mt-[-20px] mb-[12px]">
-                                        {{ t('panel.pages.forgotPassword.successInfoMessage') }}
+                                        {{ t('panel.pages.forgotPassword.emailSentNote') }}
                                    </p>
                               </div>
                          </fieldset>
@@ -118,11 +118,11 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmail.value = t('panel.pages.forgotPassword.emailErrorRequired')
+          errorMessageEmail.value = t('panel.pages.forgotPassword.errorEmailEmpty')
           valid = false
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
           errors.value.email = true
-          errorMessageEmail.value  = t('panel.pages.forgotPassword.emailErrorInvalid')
+          errorMessageEmail.value  = t('panel.pages.forgotPassword.errorEmailInvalid')
           valid = false
      }
 

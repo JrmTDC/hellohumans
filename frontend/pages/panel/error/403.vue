@@ -1,7 +1,7 @@
 <template>
      <div>
           <h1>{{ t('panel.pages.error.notFound.title') }}</h1>
-          <p>{{ t('panel.pages.error.notFound.message') }}</p>
+          <p>{{ t('panel.pages.error.notFound.description') }}</p>
           <nuxt-link to="/">{{ t('panel.pages.error.notFound.backToHome') }}</nuxt-link>
      </div>
 </template>
