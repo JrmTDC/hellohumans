@@ -305,7 +305,23 @@ export const useUpgradeStore = defineStore('upgrade', {
                }
                localStorage.setItem('upgradeStore', JSON.stringify(data))
           },
-
+          autoPersist() {
+               watch(
+                    () => [
+                         this.selectedOfferId,
+                         this.billingCycle,
+                         this.availableModules.map((m) => ({
+                              id: m.id,
+                              selected: m.selected,
+                              selectedChoiceIndex: m.selectedChoiceIndex
+                         }))
+                    ],
+                    () => {
+                         this.persist()
+                    },
+                    { deep: true }
+               )
+          },
           restore() {
                const raw = localStorage.getItem('upgradeStore')
                if (!raw) return

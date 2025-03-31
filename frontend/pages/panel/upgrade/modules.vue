@@ -80,18 +80,18 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUpgradeStore } from '@/stores/upgradeStore'
 
-import StepperHeader from '@/components/panel/upgrade/StepperHeader.vue'
-import ModuleCard from '@/components/panel/upgrade/ModuleCard.vue'
-import SubscriptionSummary from '@/components/panel/upgrade/SubscriptionSummary.vue'
-import LoadingOverlay from '@/components/panel/common/LoadingOverlay.vue'
-import PaymentModal from '@/components/panel/upgrade/PaymentModal.vue'
+import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
+import ModuleCard from '~/components/panel/upgrade/ModuleCard.vue'
+import SubscriptionSummary from '~/components/panel/upgrade/SubscriptionSummary.vue'
+import LoadingOverlay from '~/components/panel/common/LoadingOverlay.vue'
+import PaymentModal from '~/components/panel/upgrade/PaymentModal.vue'
 
 const store = useUpgradeStore()
 const router = useRouter()
 const isChecking = ref(true)
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
-
+store.autoPersist()
 onMounted(() => {
      if (!store.availableModules.length) {
           store.initModules()
