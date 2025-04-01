@@ -27,6 +27,7 @@
                     "websitePlaceholder": "Sito web",
                     "acceptLabel": "Accetto i",
                     "terms": "Termini e condizioni",
+                    "andLabel": "e la",
                     "privacy": "Informativa sulla privacy",
                     "errorEmailEmpty": "Non può essere vuoto!",
                     "errorEmailInvalid": "L'indirizzo email non è valido!",
@@ -61,18 +62,19 @@
                     "title": "Reimposta la password",
                     "passwordPlaceholder": "Nuova password",
                     "confirmPasswordPlaceholder": "Conferma password",
-                    "passwordErrorEmpty": "Non può essere vuoto!",
-                    "passwordErrorShort": "La password deve contenere almeno 6 caratteri.",
-                    "passwordErrorMismatch": "Le password non corrispondono.",
-                    "passwordStrengthLabel": "Livello di sicurezza della password",
-                    "passwordStrengthWeak": "Debole",
-                    "passwordStrengthMedium": "Media",
-                    "passwordStrengthStrong": "Forte",
-                    "passwordStrengthVeryStrong": "Molto forte",
+                    "errorPasswordEmpty": "Non può essere vuoto!",
+                    "errorPasswordTooShort": "La password deve contenere almeno 6 caratteri.",
+                    "errorPasswordMismatch": "Le password non corrispondono",
                     "submit": "Reimposta la password",
                     "loading": "Caricamento...",
-                    "successMessage": "Operazione riuscita! La tua password è stata reimpostata.",
-                    "loginLink": "Accedi"
+                    "success": "Successo! La tua password è stata reimpostata.",
+                    "loginLink": "Accedi",
+                    "strengthLabel": "Livello di sicurezza della password",
+                    "veryWeak": "Molto debole",
+                    "weak": "Debole",
+                    "medium": "Media",
+                    "strong": "Forte",
+                    "veryStrong": "Molto forte"
                },
                "dashboard": {
                     "setupTitle": "Completa la configurazione di HelloHumans",
@@ -99,7 +101,7 @@
                     "title": "Panoramica"
                },
                "trialExpired": {
-                    "title":  "Continua a sfruttare al massimo Hellohumans",
+                    "title":  "Continua a sfruttare al meglio",
                     "info": {
                          "part1": "La tua prova con",
                          "highlight1": "tutte le funzionalità",

@@ -76,8 +76,7 @@
                                         ></span>
                                         <span class="mt-0 mb-0">
                                             {{ t('panel.pages.register.acceptLabel') }}
-                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> et la
-                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> {{ appName }}.
+                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> {{ t('panel.pages.register.andLabel') }} <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> {{ appName }}.
                                         </span>
                                         <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsAgreed }}</span>
                                    </span>

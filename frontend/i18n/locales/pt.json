@@ -27,6 +27,7 @@
                     "websitePlaceholder": "Site",
                     "acceptLabel": "Aceito os",
                     "terms": "Termos e condições",
+                    "andLabel": "e a",
                     "privacy": "Política de privacidade",
                     "errorEmailEmpty": "Não pode estar vazio!",
                     "errorEmailInvalid": "O endereço de e-mail é inválido!",
@@ -61,18 +62,19 @@
                     "title": "Redefinir senha",
                     "passwordPlaceholder": "Nova senha",
                     "confirmPasswordPlaceholder": "Confirmar senha",
-                    "passwordErrorEmpty": "Não pode estar vazio!",
-                    "passwordErrorShort": "A senha deve ter pelo menos 6 caracteres.",
-                    "passwordErrorMismatch": "As senhas não coincidem.",
-                    "passwordStrengthLabel": "Nível de segurança da senha",
-                    "passwordStrengthWeak": "Fraca",
-                    "passwordStrengthMedium": "Média",
-                    "passwordStrengthStrong": "Forte",
-                    "passwordStrengthVeryStrong": "Muito forte",
+                    "errorPasswordEmpty": "Não pode estar vazio!",
+                    "errorPasswordTooShort": "A senha deve ter no mínimo 6 caracteres.",
+                    "errorPasswordMismatch": "As senhas não coincidem",
                     "submit": "Redefinir senha",
                     "loading": "Carregando...",
-                    "successMessage": "Sucesso! Sua senha foi redefinida.",
-                    "loginLink": "Entrar"
+                    "success": "Sucesso! Sua senha foi redefinida.",
+                    "loginLink": "Entrar",
+                    "strengthLabel": "Nível de segurança da senha",
+                    "veryWeak": "Muito fraca",
+                    "weak": "Fraca",
+                    "medium": "Média",
+                    "strong": "Forte",
+                    "veryStrong": "Muito forte"
                },
                "dashboard": {
                     "setupTitle": "Conclua sua configuração do HelloHumans",
@@ -99,7 +101,7 @@
                     "title": "Visão geral"
                },
                "trialExpired": {
-                    "title": "Continue a aproveitar ao máximo o Hellohumans",
+                    "title": "Continue aproveitando ao máximo",
                     "info": {
                          "part1": "Seu teste com",
                          "highlight1": "todas as funcionalidades",

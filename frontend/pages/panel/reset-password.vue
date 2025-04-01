@@ -1,5 +1,4 @@
-﻿<!-- resetAttempt -->
-<template>
+﻿<template>
      <div v-auto-animate id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
           <!-- Header -->
           <div class="flex flex-row justify-start items-center relative p-[32px_40px] z-[1]">
@@ -18,7 +17,7 @@
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleReset">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
-                                        Réinitialiser le mot de passe
+                                        {{ t('panel.pages.resetPassword.title') }}
                                    </h1>
                               </fieldset>
 
@@ -28,7 +27,7 @@
                                         <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
                                              <PasswordInput
                                                   v-model="password"
-                                                  placeholder="Nouveau mot de passe"
+                                                  :placeholder="t('panel.pages.resetPassword.passwordPlaceholder')"
                                                   :error="!!errors.password"
                                                   @input="evaluatePasswordStrength"
                                                   @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
@@ -58,7 +57,7 @@
                                    <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
                                         <PasswordInput
                                              v-model="confirmPassword"
-                                             placeholder="Confirmer le mot de passe"
+                                             :placeholder="t('panel.pages.resetPassword.confirmPasswordPlaceholder')"
                                              :error="!!errors.confirmPassword"
                                              extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                              :iconSize="20"
@@ -76,7 +75,7 @@
                                    class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
                                    :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
                               >
-                                   {{ loading ? 'Chargement...' : 'Réinitialiser le mot de passe' }}
+                                   {{ loading ? t('panel.pages.resetPassword.loading') : t('panel.pages.resetPassword.submit')  }}
                               </button>
                          </form>
                     </div>
@@ -85,33 +84,40 @@
                     <div v-else class="flex flex-col items-center w-full">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
-                                   Réinitialiser le mot de passe
+                                   {{ t('panel.pages.resetPassword.submit') }}
                               </h1>
                               <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
                               <div class="self-center border-0 flex flex-col items-center p-0">
                                    <span class="flex flex-row items-center justify-center mb-[15px]  text-[16px] max-w-[370px]">
                                         <svgo-panel-icon-info class="h-[18px] w-[18px] mx-[9px] my-0 fill-[#0569FF] min-w-[18px] min-h-[18px]"/>
                                         <p class="text-[16px] leading-[18px] text-[#303f9f]">
-                                             Opération réussie ! Votre mot de passe a été réinitialisé.
+                                            {{ t('panel.pages.resetPassword.success') }}
                                         </p>
                                    </span>
                               </div>
                          </fieldset>
                          <p class="mt-4 text-gray-600 text-[16px] text-center">
-                              <a href="/panel/login" class="text-blue-500 hover:underline">Se connecter</a>
+                              <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.resetPassword.loginLink') }}</a>
                          </p>
                     </div>
                </div>
           </div>
      </div>
 </template>
-
+<!--
+{{  }}
+{
+{{  }}
+{{  }}
+{{  }}
+-->
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PasswordInput from '@/components/panel/PasswordInput.vue'
 import LanguageSelector from '@/components/panel/LanguageSelector.vue'
 
+const { t } = useI18n()
 const router = useRouter()
 
 // Champs du formulaire
@@ -133,17 +139,17 @@ const validateForm = () => {
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = 'Ne peut être vide !'
+          errorPassword.value = t('panel.pages.resetPassword.errorPasswordEmpty')
           valid = false
      } else if (password.value.length < 6) {
           errors.value.password = true
-          errorPassword.value = 'Le mot de passe doit contenir au moins 6 caractères.'
+          errorPassword.value = t('panel.pages.resetPassword.errorPasswordTooShort')
           valid = false
      }
 
      if (password.value !== confirmPassword.value) {
           errors.value.confirmPassword = true
-          errorConfirmPassword.value = 'Les mots de passe ne correspondent pas'
+          errorConfirmPassword.value = t('panel.pages.resetPassword.errorPasswordMismatch')
           valid = false
      }
 
@@ -161,27 +167,27 @@ const evaluatePasswordStrength = () => {
      }
 
      if (pass.length === 0) {
-          passwordStrength.value = 'Niveau de sécurité du mot de passe'
+          passwordStrength.value = t('panel.pages.resetPassword.strengthLabel')
           progressWidth.value = '0%'
           progressColor.value = 'rgb(226,232,239)'
      } else if (pass.length <= 4 ) {
-          passwordStrength.value = 'Très Faible'
+          passwordStrength.value = t('panel.pages.resetPassword.veryWeak')
           progressWidth.value = '20%'
           progressColor.value = 'rgb(246, 48, 62)'
      } else if (pass.length <= 7) {
-          passwordStrength.value = 'Faible'
+          passwordStrength.value = t('panel.pages.resetPassword.weak')
           progressWidth.value = '40%'
           progressColor.value = 'rgb(246, 135, 48)'
      } else if (pass.length <= 9) {
-          passwordStrength.value = 'Moyen'
+          passwordStrength.value = t('panel.pages.resetPassword.medium')
           progressWidth.value = '60%'
           progressColor.value = 'rgb(255, 200, 89)'
      } else if (pass.length <= 13) {
-          passwordStrength.value = 'Fort'
+          passwordStrength.value = t('panel.pages.resetPassword.strong')
           progressWidth.value = '80%'
           progressColor.value = 'rgb(52, 184, 87)'
      } else {
-          passwordStrength.value = 'Très Fort'
+          passwordStrength.value = t('panel.pages.resetPassword.veryStrong')
           progressWidth.value = '100%'
           progressColor.value = 'rgb(52, 184, 87)'
      }
@@ -201,24 +207,3 @@ const updateSelectedLang = (lang: string) => {
 }
 </script>
 
-
-
-
-<!--
-{{ t('panel.reset-passwordPage') }}
-{{ t('panel.reset-passwordTitle') }}
-{{ t('panel.password') }}
-{{ t('panel.passwordErrorEmpty') }}
-{{ t('panel.passwordErrorShort') }}
-{{ t('panel.passwordStrength') }}
-{{ t('panel.passwordStrengthWeak') }}
-{{ t('panel.passwordStrengthMedium') }}
-{{ t('panel.passwordStrengthStrong') }}
-{{ t('panel.passwordStrengthVeryStrong') }}
-{{ t('panel.confirmPassword') }}
-{{ t('panel.confirmPasswordError') }}
-{{ t('panel.submit') }}
-{{ t('panel.loading') }}
-{{ t('panel.successMessage') }}
-{{ t('panel.loginLink') }}
--->
