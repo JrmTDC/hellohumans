@@ -31,7 +31,7 @@
                                         class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :class="{ 'border-[rgb(232,19,50)]': errors.email }"
                                    />
-                                   <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}
+                                   <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}
                                    </span>
 
                               </fieldset>
@@ -45,7 +45,7 @@
                                         extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :iconSize=20
                                    />
-                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}
+                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessagePassword }}
                                    </span>
                               </fieldset>
                          </fieldset>
@@ -82,12 +82,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import PasswordInput from '@/components/panel/PasswordInput.vue'
-import LanguageSelector from '@/components/panel/LanguageSelector.vue'
-import {usePublicStore} from "@/stores/publicStore";
+import PasswordInput from '~/components/panel/PasswordInput.vue'
+import LanguageSelector from '~/components/panel/LanguageSelector.vue'
+import {usePublicStore} from "~/stores/publicStore";
 const { t } = useI18n()
 
 const router = useRouter()
+const publicStore = usePublicStore()
 
 // Champs du formulaire
 const inputEmail = ref('')
@@ -96,7 +97,7 @@ const errors = ref({ email: false, password: false })
 const loginError = ref(false)
 const loading = ref(false)
 const errorMessageEmail = ref('');
-const errorPassword = ref('');
+const errorMessagePassword = ref('');
 
 // Fonction pour valider le formulaire
      const validateForm = () => {
@@ -117,7 +118,7 @@ const errorPassword = ref('');
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = t('panel.pages.login.errorPasswordEmpty')
+          errorMessagePassword.value = t('panel.pages.login.errorPasswordEmpty')
           valid = false
      }
 
@@ -130,26 +131,16 @@ const handleLogin = async () => {
      loginError.value = false
      loading.value = true
 
-     try {
-          const publicStore = usePublicStore()
-          const response = await publicStore.login(inputEmail.value, password.value)
-          if (response) {
-               //let resp = await response.json()
-               localStorage.setItem('token', response.success.token)
-               await router.push('/panel/')
-          } else {
-               loginError.value = true
-          }
-     } catch (error) {
+     const success = await publicStore.login(inputEmail.value, password.value)
+     if (success) {
           loginError.value = false
+          errorMessageEmail.value = ''
+          errorMessagePassword.value = ''
+          await router.push('/panel')
+     } else {
+          loginError.value = true
      }
 
      loading.value = false
 }
 </script>
-
-
-
-
-
-

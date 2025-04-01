@@ -3,6 +3,7 @@ import ClientsController from '#controllers/Chat/ClientsController'
 import VisitorsController from '#controllers/Chat/VisitorsController'
 import MessagesController from '#controllers/Chat/MessagesController'
 import AuthController from '#controllers/Panel/AuthController'
+import UpgradeController from '#controllers/Panel/UpgradeController'
 
 import { middleware } from '#start/kernel'
 
@@ -40,6 +41,8 @@ router.group(() => {
                user: ctx.auth.user, // Maintenant TypeScript ne renverra plus d'erreur
           }
      })
+     router.get('/upgrade/offers', (ctx) => UpgradeController.getOffers(ctx))
+     router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_auth())

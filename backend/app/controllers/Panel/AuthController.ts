@@ -203,8 +203,7 @@ class AuthController {
 
                return response.ok({
                     token: data.session?.access_token,
-                    refresh_token: data.session?.refresh_token,
-                    user: data.user,
+                    refresh_token: data.session?.refresh_token
                })
           } catch (error) {
                console.error('Erreur AuthController.login:', error)

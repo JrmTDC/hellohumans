@@ -170,7 +170,7 @@ const handleRegister = async () => {
      loginError.value = false
      loading.value = true
 
-     try {
+
 
           /*
           const response = await publicStore.login(inputEmail.value, password.value)
@@ -181,27 +181,10 @@ const handleRegister = async () => {
           } else {
                loginError.value = true
           }
+          body: JSON.stringify({ email: inputEmail.value, password: password.value })
           */
 
-          const response = await fetch(apiUrl + '/panel/auth/login', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email: inputEmail.value, password: password.value })
-          })
 
-          const data = await response.json()
-
-          if (!response.ok) {
-               loginError.value = true
-          } else {
-               localStorage.setItem('token', data.success.token)
-               await router.push('/panel/')
-          }
-     } catch (error) {
-          loginError.value = false
-     }
-
-     loading.value = false
 }
 </script>
 

@@ -1,4 +1,5 @@
-import {useRuntimeConfig} from "#imports";
+import { useRuntimeConfig } from '#imports'
+
 export function usePublicApi() {
      const config = useRuntimeConfig()
      const apiUrl = `${config.public.apiBaseUrl}/panel`
@@ -14,12 +15,18 @@ export function usePublicApi() {
                headers
           })
 
+          const isJson = response.headers.get('Content-Type')?.includes('application/json')
+          const data = isJson ? await response.json() : await response.text()
+
           if (!response.ok) {
-               const errorText = await response.text()
-               throw new Error(`Erreur API publique: ${response.status} - ${errorText}`)
+               const message = isJson
+                    ? data?.error?.description || JSON.stringify(data)
+                    : data
+
+               throw new Error(`Erreur API publique: ${response.status} - ${message}`)
           }
 
-          return await response.json()
+          return data
      }
 
      return { apiFetch }

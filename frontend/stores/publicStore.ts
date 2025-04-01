@@ -4,7 +4,8 @@ import { usePublicApi } from '@/composables/usePublicApi'
 export const usePublicStore = defineStore('public', {
      state: () => ({
           loading: false,
-          error: null
+          error: null as string | null,
+          token: process.client ? localStorage.getItem('panel_token') : null
      }),
 
      actions: {
@@ -17,7 +18,10 @@ export const usePublicStore = defineStore('public', {
                          method: 'POST',
                          body: JSON.stringify({ email, password })
                     })
-                    localStorage.setItem('panel_token', data.token)
+                    if (process.client) {
+                         localStorage.setItem('panel_token', data.success.token)
+                    }
+                    this.token = data.success.token
                     return true
                } catch (err: any) {
                     this.error = err.message
@@ -26,6 +30,7 @@ export const usePublicStore = defineStore('public', {
                     this.loading = false
                }
           },
+
           async register(email: string, password: string, siteweb: string) {
                const { apiFetch } = usePublicApi()
                this.loading = true
@@ -35,7 +40,10 @@ export const usePublicStore = defineStore('public', {
                          method: 'POST',
                          body: JSON.stringify({ email, password, siteweb })
                     })
-                    localStorage.setItem('panel_token', data.token)
+                    if (process.client) {
+                         localStorage.setItem('panel_token', data.success.token)
+                    }
+                    this.token = data.success.token
                     return true
                } catch (err: any) {
                     this.error = err.message
@@ -43,6 +51,13 @@ export const usePublicStore = defineStore('public', {
                } finally {
                     this.loading = false
                }
+          },
+
+          logout() {
+               if (process.client) {
+                    localStorage.removeItem('panel_token')
+               }
+               this.token = null
           }
      }
 })

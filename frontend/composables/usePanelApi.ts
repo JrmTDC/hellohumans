@@ -1,7 +1,9 @@
-import { useRuntimeConfig } from "#imports";
+import { useRuntimeConfig, useRouter } from '#imports'
+
 export function usePanelApi() {
      const config = useRuntimeConfig()
      const apiUrl = `${config.public.apiBaseUrl}/panel`
+     const router = useRouter()
 
      const token = () => {
           if (process.client) {
@@ -22,12 +24,25 @@ export function usePanelApi() {
                headers
           })
 
+          const isJson = response.headers.get('Content-Type')?.includes('application/json')
+          const data = isJson ? await response.json() : await response.text()
+
           if (!response.ok) {
-               const errorText = await response.text()
-               throw new Error(`Erreur API Panel: ${response.status} - ${errorText}`)
+               if (isJson && data?.error?.name === 'invalidToken') {
+                    if (process.client) {
+                         localStorage.removeItem('panel_token')
+                         router.push('/panel/login')
+                    }
+               }
+
+               const message = isJson
+                    ? `${data.error?.description || 'Erreur'}`
+                    : `${response.status} - ${data}`
+
+               throw new Error(`Erreur API Panel: ${message}`)
           }
 
-          return await response.json()
+          return data
      }
 
      return { apiFetch }
