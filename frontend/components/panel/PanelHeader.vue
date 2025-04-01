@@ -40,7 +40,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import UsageItemHeader from '@/components/panel/UsageItemHeader.vue'
 
-defineProps({
+const props = defineProps({
      title: String,
      isBilled: Boolean,
      isPaid: Boolean

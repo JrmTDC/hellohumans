@@ -187,7 +187,7 @@
      </div>
 </template>
 <script setup lang="ts">
-import { computed, defineProps } from 'vue'
+import { } from 'vue'
 import Tooltip from '@/components/panel/common/Tooltip.vue'
 import type { ModuleAddOn } from '@/stores/upgradeStore'
 

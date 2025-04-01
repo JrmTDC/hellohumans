@@ -77,7 +77,7 @@
                                         <span class="mt-0 mb-0">
                                             {{ t('panel.pages.register.acceptLabel') }}
                                              <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> et la
-                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> HelloHumans.
+                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> {{ appName }}.
                                         </span>
                                         <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsAgreed }}</span>
                                    </span>
@@ -98,10 +98,11 @@
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import PasswordInput from "@/components/panel/PasswordInput.vue";
-import LanguageSelector from "@/components/panel/LanguageSelector.vue";
-import { usePublicStore } from "@/stores/publicStore";
+import PasswordInput from "~/components/panel/PasswordInput.vue";
+import LanguageSelector from "~/components/panel/LanguageSelector.vue";
+import { usePublicStore } from "~/stores/publicStore";
 
+const { appName } = useAppInfo()
 const { t } = useI18n()
 
 // Champs du formulaire

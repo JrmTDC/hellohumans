@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, computed, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useUpgradeStore } from '~/stores/upgradeStore'
 import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
@@ -69,14 +69,16 @@ const router = useRouter()
 const trialActive = ref(false)
 const isChecking = ref(true)
 
-store.autoPersist()
+onMounted(async () => {
+     if (!store.offers.length) await store.fetchOffers()
 
-onMounted(() => {
      store.restore()
+
      // Si aucune offre sélectionnée, on prend la première
      if (!store.selectedOfferId && store.offers.length) {
           store.setOffer(store.offers[0].id)
      }
+
      isChecking.value = false
 })
 

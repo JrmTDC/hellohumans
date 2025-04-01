@@ -98,7 +98,7 @@
      </div>
 </template>
 <script setup lang="ts">
-import { computed, defineProps, defineEmits, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 interface Offer {
      id: string
