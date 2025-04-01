@@ -91,17 +91,20 @@ const router = useRouter()
 const isChecking = ref(true)
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
-store.autoPersist()
-onMounted(() => {
-     if (!store.availableModules.length) {
-          store.initModules()
-     }
+
+onMounted(async () => {
+
+     if (!store.offers.length) await store.fetchOffers()
+     if (!store.availableModules.length) await store.fetchModules()
+
      store.restore()
-     isChecking.value = false
+
      if (!store.currentOffer) {
-          router.replace('/panel/upgrade')
+          await router.replace('/panel/upgrade')
           return
      }
+
+     isChecking.value = false
 })
 
 function toggleModule(moduleId: string, checked: boolean) {
