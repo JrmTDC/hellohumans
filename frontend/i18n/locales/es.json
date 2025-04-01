@@ -97,8 +97,8 @@
                     }
                },
                "analytics": {
-                    "menuOverview": "Resumen",
-                    "title": "Resumen"
+                    "index" : {
+                    }
                },
                "trialExpired": {
                     "title": "Sigue aprovechando al máximo",

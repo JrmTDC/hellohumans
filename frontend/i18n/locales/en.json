@@ -97,8 +97,8 @@
                     }
                },
                "analytics": {
-                    "menuOverview": "Overview",
-                    "title": "Overview"
+                    "index" : {
+                    }
                },
                "trialExpired": {
                     "title": "Keep getting the most out of",

@@ -8,7 +8,7 @@
                                    <div class="rounded-[8px] relative">
                                         <button class="relative outline-none border-none rounded-[8px] flex items-center w-full text-left cursor-pointer bg-[#dce9ff] font-medium text-[#001433] p-[8px_12px] min-h-[36px]">
                                              <svgo-panel-icon-usage-menu  class="w-[16px] h-[16px] fill-[#001433] mr-[8px]"/>
-                                             {{ t('panel.pages.analytics.menuOverview') }}
+                                             Vue d’ensemble
                                         </button>
                                    </div>
                               </li>
@@ -23,7 +23,7 @@
                               <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%] h-[650px]">
                                    <div class="flex flex-col justify-start items-start h-full max-w-[1280px]">
                                         <div class="flex flex-col justify-start items-start max-w-[1280px] mt-0 mb-0">
-                                             <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[31px] tracking-[-0.01em]">{{ t('panel.pages.analytics.title') }}</h2>
+                                             <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[31px] tracking-[-0.01em]">Vue d’ensemble</h2>
                                         </div>
                                         <div class="relative flex items-center mt-[20px] mb-0">
                                              <DatePicker @update="onDateChange" />

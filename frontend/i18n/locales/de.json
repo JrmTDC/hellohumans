@@ -96,8 +96,8 @@
                }
           },
           "analytics": {
-               "menuOverview": "Übersicht",
-               "title": "Übersicht"
+               "index" : {
+               }
           },
           "trialExpired": {
                "title": "Nutzen Sie weiterhin vollumfänglich",
