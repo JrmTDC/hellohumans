@@ -27,6 +27,7 @@
                     "websitePlaceholder": "Site Web",
                     "acceptLabel": "J’accepte les",
                     "terms": "Conditions générales",
+                    "andLabel": "et la",
                     "privacy": "Politique de confidentialité",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
@@ -61,18 +62,19 @@
                     "title": "Réinitialiser le mot de passe",
                     "passwordPlaceholder": "Nouveau mot de passe",
                     "confirmPasswordPlaceholder": "Confirmer le mot de passe",
-                    "passwordErrorEmpty": "Ne peut être vide !",
-                    "passwordErrorShort": "Le mot de passe doit contenir au moins 6 caractères.",
-                    "passwordErrorMismatch": "Les mots de passe ne correspondent pas.",
-                    "passwordStrengthLabel": "Niveau de sécurité du mot de passe",
-                    "passwordStrengthWeak": "Faible",
-                    "passwordStrengthMedium": "Moyen",
-                    "passwordStrengthStrong": "Fort",
-                    "passwordStrengthVeryStrong": "Très fort",
+                    "errorPasswordEmpty": "Ne peut être vide !",
+                    "errorPasswordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
+                    "errorPasswordMismatch": "Les mots de passe ne correspondent pas",
                     "submit": "Réinitialiser le mot de passe",
                     "loading": "Chargement...",
-                    "successMessage": "Opération réussie ! Votre mot de passe a été réinitialisé.",
-                    "loginLink": "Se connecter"
+                    "success": "Opération réussie ! Votre mot de passe a été réinitialisé.",
+                    "loginLink": "Se connecter",
+                    "strengthLabel": "Niveau de sécurité du mot de passe",
+                    "veryWeak": "Très Faible",
+                    "weak": "Faible",
+                    "medium": "Moyen",
+                    "strong": "Fort",
+                    "veryStrong": "Très Fort"
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",
@@ -100,7 +102,7 @@
                     "title": "Vue d’ensemble"
                },
                "trialExpired": {
-                    "title": "Continuez à exploiter pleinement Hellohumans",
+                    "title": "Continuez à exploiter pleinement",
                     "info": {
                          "part1": "Votre essai du",
                          "highlight1": "avec toutes les fonctionnalités",

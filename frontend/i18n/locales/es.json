@@ -27,6 +27,7 @@
                     "websitePlaceholder": "Sitio web",
                     "acceptLabel": "Acepto los",
                     "terms": "Términos y condiciones",
+                    "andLabel": "y la",
                     "privacy": "Política de privacidad",
                     "errorEmailEmpty": "¡No puede estar vacío!",
                     "errorEmailInvalid": "¡La dirección de correo es inválida!",
@@ -58,21 +59,22 @@
                     "loginLink": "Iniciar sesión"
                },
                "resetPassword": {
-                    "title": "Restablecer contraseña",
+                    "title": "Restablecer la contraseña",
                     "passwordPlaceholder": "Nueva contraseña",
                     "confirmPasswordPlaceholder": "Confirmar contraseña",
-                    "passwordErrorEmpty": "¡No puede estar vacío!",
-                    "passwordErrorShort": "La contraseña debe tener al menos 6 caracteres.",
-                    "passwordErrorMismatch": "Las contraseñas no coinciden.",
-                    "passwordStrengthLabel": "Nivel de seguridad de la contraseña",
-                    "passwordStrengthWeak": "Débil",
-                    "passwordStrengthMedium": "Media",
-                    "passwordStrengthStrong": "Fuerte",
-                    "passwordStrengthVeryStrong": "Muy fuerte",
-                    "submit": "Restablecer contraseña",
+                    "errorPasswordEmpty": "¡No puede estar vacío!",
+                    "errorPasswordTooShort": "La contraseña debe tener al menos 6 caracteres.",
+                    "errorPasswordMismatch": "Las contraseñas no coinciden",
+                    "submit": "Restablecer la contraseña",
                     "loading": "Cargando...",
-                    "successMessage": "¡Éxito! Tu contraseña ha sido restablecida.",
-                    "loginLink": "Iniciar sesión"
+                    "success": "¡Éxito! Tu contraseña ha sido restablecida.",
+                    "loginLink": "Iniciar sesión",
+                    "strengthLabel": "Nivel de seguridad de la contraseña",
+                    "veryWeak": "Muy débil",
+                    "weak": "Débil",
+                    "medium": "Media",
+                    "strong": "Fuerte",
+                    "veryStrong": "Muy fuerte"
                },
                "dashboard": {
                     "setupTitle": "Finaliza tu configuración de HelloHumans",
@@ -99,7 +101,7 @@
                     "title": "Resumen"
                },
                "trialExpired": {
-                    "title": "Continúa aprovechando al máximo Hellohumans",
+                    "title": "Sigue aprovechando al máximo",
                     "info": {
                          "part1": "Tu prueba con ,",
                          "highlight1": "todas las funciones",

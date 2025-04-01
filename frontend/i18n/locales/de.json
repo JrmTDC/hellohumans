@@ -1,178 +1,179 @@
-{
-     "panel": {
-          "pages": {
+{"panel": {
+     "pages": {
+          "index": {
+               "loading": "Verbindung wird hergestellt ..."
+          },
+          "login": {
+               "title": "Willkommen zurück",
+               "subtitle": "Melden Sie sich bei Ihrem HelloHumans-Konto an",
+               "emailPlaceholder": "E-Mail-Adresse",
+               "passwordPlaceholder": "Passwort",
+               "forgotPassword": "Passwort vergessen?",
+               "errorEmailEmpty": "Darf nicht leer sein!",
+               "errorEmailInvalid": "Die E-Mail-Adresse ist ungültig!",
+               "errorPasswordEmpty": "Darf nicht leer sein!",
+               "loginError": "E-Mail oder Passwort ist falsch!",
+               "submit": "Einloggen",
+               "loading": "Laden...",
+               "noAccount": "Sie haben kein Konto?",
+               "registerCta": "Los geht’s"
+          },
+          "register": {
+               "title": "Kostenloses Konto erstellen",
+               "subtitle": "Keine Kreditkarte erforderlich",
+               "emailPlaceholder": "Ihre E-Mail-Adresse",
+               "passwordPlaceholder": "Passwort",
+               "websitePlaceholder": "Webseite",
+               "acceptLabel": "Ich akzeptiere die",
+               "terms": "Allgemeinen Geschäftsbedingungen",
+               "andLabel": "und die",
+               "privacy": "Datenschutzrichtlinie",
+               "errorEmailEmpty": "Darf nicht leer sein!",
+               "errorEmailInvalid": "Die E-Mail-Adresse ist ungültig!",
+               "errorPasswordEmpty": "Darf nicht leer sein!",
+               "errorWebsiteEmpty": "Darf nicht leer sein!",
+               "errorAgreementRequired": "Eine Zustimmung ist erforderlich",
+               "cta": "Jetzt kostenlos starten",
+               "alreadyHaveAccount": "Sie haben bereits ein Konto?",
+               "loginCta": "Einloggen",
+               "asideTitle": "Wachsen Sie mit intelligenter Unterstützung",
+               "asideText": "Automatisieren Sie häufige Anfragen und verbessern Sie das Erlebnis Ihrer Besucher mit einem KI-Chatbot für besseren Support.",
+               "benefit1": "Beantworten Sie Anfragen rund um die Uhr sofort",
+               "benefit2": "Automatisieren Sie bis zu 70 % der häufigen Fragen mit KI",
+               "benefit3": "Sparen Sie Zeit und steigern Sie gleichzeitig die Kundenzufriedenheit"
+          },
+          "forgotPassword": {
+               "title": "Passwort vergessen?",
+               "subtitle": "Wir senden Ihnen Anweisungen zur Zurücksetzung per E-Mail.",
+               "emailPlaceholder": "E-Mail-Adresse",
+               "errorEmailEmpty": "Darf nicht leer sein!",
+               "errorEmailInvalid": "Die E-Mail-Adresse ist ungültig!",
+               "submit": "Senden",
+               "loading": "Senden...",
+               "createAccount": "Konto erstellen",
+               "login": "Einloggen",
+               "errorMessage": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+               "emailSentTitle": "Überprüfen Sie Ihren Posteingang!",
+               "emailSentNote": "Falls wir diese E-Mail-Adresse gespeichert haben, senden wir Ihnen eine Zurücksetzungsanleitung.",
+               "loginLink": "Einloggen"
+          },
+          "resetPassword": {
+               "title": "Passwort zurücksetzen",
+               "passwordPlaceholder": "Neues Passwort",
+               "confirmPasswordPlaceholder": "Passwort bestätigen",
+               "errorPasswordEmpty": "Darf nicht leer sein!",
+               "errorPasswordTooShort": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+               "errorPasswordMismatch": "Passwörter stimmen nicht überein",
+               "submit": "Passwort zurücksetzen",
+               "loading": "Lädt...",
+               "success": "Erfolg! Ihr Passwort wurde zurückgesetzt.",
+               "loginLink": "Einloggen",
+               "strengthLabel": "Passwort-Sicherheitsniveau",
+               "veryWeak": "Sehr schwach",
+               "weak": "Schwach",
+               "medium": "Mittel",
+               "strong": "Stark",
+               "veryStrong": "Sehr stark"
+          },
+          "dashboard": {
+               "setupTitle": "Schließen Sie Ihre HelloHumans-Einrichtung ab",
+               "setupText": "Wir helfen Ihnen dabei, eine Umgebung zu schaffen, die Ihre Besucher begeistert. Es ist ganz einfach und dauert nur wenige Minuten.",
+               "setupCta": "Integration abschließen",
+               "performanceTitle": "Leistung",
+               "calendarRange": "21. Feb. 2025 - 22. März 2025",
+               "usageTitle": "Aktuelle Nutzung",
+               "usageItems": {
+                    "audience": {
+                         "title": "Zielgruppe",
+                         "description": "Gesamtzahl der Besucher, die mit Ihrem Chatbot interagiert haben.",
+                         "titleUsage": "Erreichte Besucher"
+                    },
+                    "interactions": {
+                         "title": "Interaktionen",
+                         "description": "Automatisierte Gespräche, die vom Bot verwaltet wurden.",
+                         "titleUsage": "Behandelte Konversationen"
+                    }
+               }
+          },
+          "analytics": {
+               "menuOverview": "Übersicht",
+               "title": "Übersicht"
+          },
+          "trialExpired": {
+               "title": "Nutzen Sie weiterhin vollumfänglich",
+               "info": {
+                    "part1": "Ihre Testversion mit",
+                    "highlight1": "allen Funktionen",
+                    "part2": "ist am",
+                    "highlight2": "{date}",
+                    "part3": "abgelaufen. Machen Sie weiter. Vergleichen Sie die Pläne und wählen Sie die beste Option für Ihr Unternehmen."
+               },
+               "comparePlans": "Pläne vergleichen",
+               "downgradeTitle": "Zum kostenlosen Tarif wechseln",
+               "downgradeDescription": "Sie können jederzeit auf eine niedrigere Version umsteigen und unseren kostenlosen Plan nutzen. Sie können ihn jederzeit ändern.",
+               "processedConversations": {
+                    "part1": "Verarbeitete Gespräche - ",
+                    "highlight1": "BIS ZU {count}"
+               },
+               "tooltipProcessedConversations": "Gespräche stehen für die Gesamtanzahl der Chats im Live-Chat",
+               "downgradeButton": "Zur vorherigen Version wechseln"
+          },
+          "upgrade": {
+               "Index": {
+                    "trial_remaining": "Ihre vollständige Testversion endet in {count} Tag | Ihre vollständige Testversion endet in {count} Tagen",
+                    "select_offer": "Wählen Sie Ihr Angebot",
+                    "choose_offer_description": "Wählen Sie ein Angebot aus und fügen Sie in der nächsten Stufe Module hinzu.",
+                    "view_all_features": "Alle Funktionen anzeigen",
+                    "next_step": "Nächster Schritt: Wählen Sie zusätzliche Module"
+               },
+               "Modules": {
+                    "trialRemaining": "Ihre vollständige Testversion endet in {count} Tag | Ihre vollständige Testversion endet in {count} Tagen",
+                    "title": "Wählen Sie Ihr Angebot",
+                    "description": "Wählen Sie ein Angebot und fügen Sie Module in der nächsten Stufe hinzu.",
+                    "chooseModules": "Wählen Sie zusätzliche Module",
+                    "nextButtonLabel": "Bezahlung"
+               }
+          },
+          "settings": {
                "index": {
-                    "loading": "Verbindung wird hergestellt ..."
-               },
-               "login": {
-                    "title": "Willkommen zurück",
-                    "subtitle": "Melden Sie sich bei Ihrem HelloHumans-Konto an",
-                    "emailPlaceholder": "E-Mail-Adresse",
-                    "passwordPlaceholder": "Passwort",
-                    "forgotPassword": "Passwort vergessen?",
-                    "errorEmailEmpty": "Darf nicht leer sein!",
-                    "errorEmailInvalid": "Die E-Mail-Adresse ist ungültig!",
-                    "errorPasswordEmpty": "Darf nicht leer sein!",
-                    "loginError": "E-Mail oder Passwort ist falsch!",
-                    "submit": "Einloggen",
-                    "loading": "Laden...",
-                    "noAccount": "Sie haben kein Konto?",
-                    "registerCta": "Los geht’s"
-               },
-               "register": {
-                    "title": "Kostenloses Konto erstellen",
-                    "subtitle": "Keine Kreditkarte erforderlich",
-                    "emailPlaceholder": "Ihre E-Mail-Adresse",
-                    "passwordPlaceholder": "Passwort",
-                    "websitePlaceholder": "Webseite",
-                    "acceptLabel": "Ich akzeptiere die",
-                    "terms": "Allgemeinen Geschäftsbedingungen",
-                    "privacy": "Datenschutzrichtlinie",
-                    "errorEmailEmpty": "Darf nicht leer sein!",
-                    "errorEmailInvalid": "Die E-Mail-Adresse ist ungültig!",
-                    "errorPasswordEmpty": "Darf nicht leer sein!",
-                    "errorWebsiteEmpty": "Darf nicht leer sein!",
-                    "errorAgreementRequired": "Eine Zustimmung ist erforderlich",
-                    "cta": "Jetzt kostenlos starten",
-                    "alreadyHaveAccount": "Sie haben bereits ein Konto?",
-                    "loginCta": "Einloggen",
-                    "asideTitle": "Wachsen Sie mit intelligenter Unterstützung",
-                    "asideText": "Automatisieren Sie häufige Anfragen und verbessern Sie das Erlebnis Ihrer Besucher mit einem KI-Chatbot für besseren Support.",
-                    "benefit1": "Beantworten Sie Anfragen rund um die Uhr sofort",
-                    "benefit2": "Automatisieren Sie bis zu 70 % der häufigen Fragen mit KI",
-                    "benefit3": "Sparen Sie Zeit und steigern Sie gleichzeitig die Kundenzufriedenheit"
-               },
-               "forgotPassword": {
-                    "title": "Passwort vergessen?",
-                    "subtitle": "Wir senden Ihnen Anweisungen zur Zurücksetzung per E-Mail.",
-                    "emailPlaceholder": "E-Mail-Adresse",
-                    "errorEmailEmpty": "Darf nicht leer sein!",
-                    "errorEmailInvalid": "Die E-Mail-Adresse ist ungültig!",
-                    "submit": "Senden",
-                    "loading": "Senden...",
-                    "createAccount": "Konto erstellen",
-                    "login": "Einloggen",
-                    "errorMessage": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-                    "emailSentTitle": "Überprüfen Sie Ihren Posteingang!",
-                    "emailSentNote": "Falls wir diese E-Mail-Adresse gespeichert haben, senden wir Ihnen eine Zurücksetzungsanleitung.",
-                    "loginLink": "Einloggen"
-               },
-               "resetPassword": {
-                    "title": "Passwort zurücksetzen",
-                    "passwordPlaceholder": "Neues Passwort",
-                    "confirmPasswordPlaceholder": "Passwort bestätigen",
-                    "passwordErrorEmpty": "Darf nicht leer sein!",
-                    "passwordErrorShort": "Das Passwort muss mindestens 6 Zeichen lang sein.",
-                    "passwordErrorMismatch": "Passwörter stimmen nicht überein.",
-                    "passwordStrengthLabel": "Sicherheitsstufe des Passworts",
-                    "passwordStrengthWeak": "Schwach",
-                    "passwordStrengthMedium": "Mittel",
-                    "passwordStrengthStrong": "Stark",
-                    "passwordStrengthVeryStrong": "Sehr stark",
-                    "submit": "Passwort zurücksetzen",
-                    "loading": "Laden...",
-                    "successMessage": "Erfolgreich! Ihr Passwort wurde zurückgesetzt.",
-                    "loginLink": "Einloggen"
-               },
-               "dashboard": {
-                    "setupTitle": "Schließen Sie Ihre HelloHumans-Einrichtung ab",
-                    "setupText": "Wir helfen Ihnen dabei, eine Umgebung zu schaffen, die Ihre Besucher begeistert. Es ist ganz einfach und dauert nur wenige Minuten.",
-                    "setupCta": "Integration abschließen",
-                    "performanceTitle": "Leistung",
-                    "calendarRange": "21. Feb. 2025 - 22. März 2025",
-                    "usageTitle": "Aktuelle Nutzung",
-                    "usageItems": {
-                         "audience": {
-                              "title": "Zielgruppe",
-                              "description": "Gesamtzahl der Besucher, die mit Ihrem Chatbot interagiert haben.",
-                              "titleUsage": "Erreichte Besucher"
-                         },
-                         "interactions": {
-                              "title": "Interaktionen",
-                              "description": "Automatisierte Gespräche, die vom Bot verwaltet wurden.",
-                              "titleUsage": "Behandelte Konversationen"
-                         }
-                    }
-               },
-               "analytics": {
-                    "menuOverview": "Übersicht",
-                    "title": "Übersicht"
-               },
-               "trialExpired": {
-                    "title": "Nutzen Sie Hellohumans weiterhin in vollem Umfang",
-                    "info": {
-                         "part1": "Ihre Testversion mit",
-                         "highlight1": "allen Funktionen",
-                         "part2": "ist am",
-                         "highlight2": "{date}",
-                         "part3": "abgelaufen. Machen Sie weiter. Vergleichen Sie die Pläne und wählen Sie die beste Option für Ihr Unternehmen."
-                    },
-                    "comparePlans": "Pläne vergleichen",
-                    "downgradeTitle": "Zum kostenlosen Tarif wechseln",
-                    "downgradeDescription": "Sie können jederzeit auf eine niedrigere Version umsteigen und unseren kostenlosen Plan nutzen. Sie können ihn jederzeit ändern.",
-                    "processedConversations": {
-                         "part1": "Verarbeitete Gespräche - ",
-                         "highlight1": "BIS ZU {count}"
-                    },
-                    "tooltipProcessedConversations": "Gespräche stehen für die Gesamtanzahl der Chats im Live-Chat",
-                    "downgradeButton": "Zur vorherigen Version wechseln"
-               },
-               "upgrade": {
-                    "Index": {
-                         "trial_remaining": "Ihre vollständige Testversion endet in {count} Tag | Ihre vollständige Testversion endet in {count} Tagen",
-                         "select_offer": "Wählen Sie Ihr Angebot",
-                         "choose_offer_description": "Wählen Sie ein Angebot aus und fügen Sie in der nächsten Stufe Module hinzu.",
-                         "view_all_features": "Alle Funktionen anzeigen",
-                         "next_step": "Nächster Schritt: Wählen Sie zusätzliche Module"
-                    },
-                    "Modules": {
-                         "trialRemaining": "Ihre vollständige Testversion endet in {count} Tag | Ihre vollständige Testversion endet in {count} Tagen",
-                         "title": "Wählen Sie Ihr Angebot",
-                         "description": "Wählen Sie ein Angebot und fügen Sie Module in der nächsten Stufe hinzu.",
-                         "chooseModules": "Wählen Sie zusätzliche Module",
-                         "nextButtonLabel": "Bezahlung"
-                    }
-               },
-               "settings": {
-                    "index": {
 
-                    },
-                    "chat": {
-                         "appearance": {
+               },
+               "chat": {
+                    "appearance": {
 
-                         }
                     }
+               }
+          },
+          "error": {
+               "notFound": {
+                    "title": "Fehler 403",
+                    "description": "Sie sind nicht berechtigt, auf diese Ressource zuzugreifen.",
+                    "backToHome": "Zurück zur Startseite"
                },
-               "error": {
-                    "notFound": {
-                         "title": "Fehler 403",
-                         "description": "Sie sind nicht berechtigt, auf diese Ressource zuzugreifen.",
-                         "backToHome": "Zurück zur Startseite"
-                    },
-                    "serverError": {
-                         "title": "Ups, ein Problem ist aufgetreten.",
-                         "instruction": "Drücken Sie den Button, um die Seite neu zu laden:",
-                         "reload": "Seite neu laden",
-                         "help": "Wenn das nicht hilft, kontaktieren Sie uns über den Chat oder unter:",
-                         "statusPage": "Sie können den Vorfall auf unserer Statusseite verfolgen:",
-                         "note": "... übrigens wurde unser Engineering-Team über das Problem informiert."
-                    },
-                    "unauthorized": {
-                         "title": "Ups, Seite nicht gefunden.",
-                         "description": "Es tut uns leid, die von Ihnen gesuchte Seite wurde nicht gefunden.",
-                         "hint": "Der Link, dem Sie gefolgt sind, ist möglicherweise defekt oder existiert nicht mehr.",
-                         "goHome": "Zur Startseite"
-                    },
-                    "default": {
-                         "title": "Unerwarteter Fehler",
-                         "description": "Ein Fehler ist aufgetreten, aber er ist hier nicht aufgeführt.",
-                         "backToHome": "Zurück zur Startseite"
-                         }
+               "serverError": {
+                    "title": "Ups, ein Problem ist aufgetreten.",
+                    "instruction": "Drücken Sie den Button, um die Seite neu zu laden:",
+                    "reload": "Seite neu laden",
+                    "help": "Wenn das nicht hilft, kontaktieren Sie uns über den Chat oder unter:",
+                    "statusPage": "Sie können den Vorfall auf unserer Statusseite verfolgen:",
+                    "note": "... übrigens wurde unser Engineering-Team über das Problem informiert."
+               },
+               "unauthorized": {
+                    "title": "Ups, Seite nicht gefunden.",
+                    "description": "Es tut uns leid, die von Ihnen gesuchte Seite wurde nicht gefunden.",
+                    "hint": "Der Link, dem Sie gefolgt sind, ist möglicherweise defekt oder existiert nicht mehr.",
+                    "goHome": "Zur Startseite"
+               },
+               "default": {
+                    "title": "Unerwarteter Fehler",
+                    "description": "Ein Fehler ist aufgetreten, aber er ist hier nicht aufgeführt.",
+                    "backToHome": "Zurück zur Startseite"
                     }
-               },
-          "components": {
-               "SideMenu": {
-                    "title": "Menu"
+               }
+          },
+     "components": {
+          "SideMenu": {
+               "title": "Menu"
                }
           }
 

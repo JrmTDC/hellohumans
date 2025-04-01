@@ -26,6 +26,7 @@
                     "passwordPlaceholder": "Password",
                     "websitePlaceholder": "Website",
                     "acceptLabel": "I accept the",
+                    "andLabel": "and the",
                     "terms": "Terms and Conditions",
                     "privacy": "Privacy Policy",
                     "errorEmailEmpty": "Cannot be empty!",
@@ -58,21 +59,22 @@
                     "loginLink": "Sign in"
                },
                "resetPassword": {
-                    "title": "Reset Password",
+                    "title": "Reset password",
                     "passwordPlaceholder": "New password",
                     "confirmPasswordPlaceholder": "Confirm password",
-                    "passwordErrorEmpty": "Cannot be empty!",
-                    "passwordErrorShort": "Password must be at least 6 characters long.",
-                    "passwordErrorMismatch": "Passwords do not match.",
-                    "passwordStrengthLabel": "Password security level",
-                    "passwordStrengthWeak": "Weak",
-                    "passwordStrengthMedium": "Medium",
-                    "passwordStrengthStrong": "Strong",
-                    "passwordStrengthVeryStrong": "Very strong",
-                    "submit": "Reset Password",
+                    "errorPasswordEmpty": "Cannot be empty!",
+                    "errorPasswordTooShort": "Password must be at least 6 characters long.",
+                    "errorPasswordMismatch": "Passwords do not match",
+                    "submit": "Reset password",
                     "loading": "Loading...",
-                    "successMessage": "Success! Your password has been reset.",
-                    "loginLink": "Log in"
+                    "success": "Success! Your password has been reset.",
+                    "loginLink": "Sign in",
+                    "strengthLabel": "Password strength level",
+                    "veryWeak": "Very Weak",
+                    "weak": "Weak",
+                    "medium": "Medium",
+                    "strong": "Strong",
+                    "veryStrong": "Very Strong"
                },
                "dashboard": {
                     "setupTitle": "Complete your HelloHumans setup",
@@ -99,7 +101,7 @@
                     "title": "Overview"
                },
                "trialExpired": {
-                    "title": "Continue to fully leverage Hellohumans",
+                    "title": "Keep getting the most out of",
                          "info": {
                               "part1": "Your trial with",
                               "highlight1": "all features",
