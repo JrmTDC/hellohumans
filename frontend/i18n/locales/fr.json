@@ -98,8 +98,8 @@
                     }
                },
                "analytics": {
-                    "menuOverview": "Vue d’ensemble",
-                    "title": "Vue d’ensemble"
+                    "index" : {
+                    }
                },
                "trialExpired": {
                     "title": "Continuez à exploiter pleinement",

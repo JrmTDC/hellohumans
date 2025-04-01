@@ -97,8 +97,8 @@
                     }
                },
                "analytics": {
-                    "menuOverview": "Panoramica",
-                    "title": "Panoramica"
+                    "index" : {
+                    }
                },
                "trialExpired": {
                     "title":  "Continua a sfruttare al meglio",

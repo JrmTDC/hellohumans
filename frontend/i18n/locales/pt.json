@@ -97,8 +97,8 @@
                     }
                },
                "analytics": {
-                    "menuOverview": "Visão geral",
-                    "title": "Visão geral"
+                    "index" : {
+                    }
                },
                "trialExpired": {
                     "title": "Continue aproveitando ao máximo",
