@@ -104,10 +104,7 @@ const loading = ref(false)
 const emailSent = ref(false)
 const errorMessage = ref('')
 const errorMessageEmail = ref('');
-
-const updateSelectedLang = (lang: string) => {
-     console.log('Langue sélectionnée :', lang)
-}
+const publicStore = usePublicStore()
 
 // Fonction de validation
 const validateForm = () => {
@@ -127,16 +124,18 @@ const validateForm = () => {
      return valid
 }
 
-// Simulation de l'envoi d'un email sans appel API
 const handleForgot = async () => {
      if (!validateForm()) return
-
+     errorMessageEmail.value = ''
      loading.value = true
-     errorMessage.value = ''
 
-     setTimeout(() => {
-          loading.value = false
+     const success = await publicStore.forgotPassword(inputEmail.value)
+     if (success) {
           emailSent.value = true
-     }, 2000) // Simulation d'un délai de traitement de 2 secondes
+     } else {
+          errorMessageEmail.value = t('panel.pages.forgotPassword.errorMessage')
+     }
+
+     loading.value = false
 }
 </script>

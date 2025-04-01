@@ -53,6 +53,42 @@ export const usePublicStore = defineStore('public', {
                }
           },
 
+          async forgotPassword(email: string) {
+               const { apiFetch } = usePublicApi()
+               this.loading = true
+               this.error = null
+               try {
+                    await apiFetch('/auth/forgot-password', {
+                         method: 'POST',
+                         body: JSON.stringify({ email })
+                    })
+                    return true
+               } catch (err: any) {
+                    this.error = err.message
+                    return false
+               } finally {
+                    this.loading = false
+               }
+          },
+
+          async resetPassword(password: string) {
+               const { apiFetch } = usePublicApi()
+               this.loading = true
+               this.error = null
+               try {
+                    await apiFetch('/auth/reset-password', {
+                         method: 'POST',
+                         body: JSON.stringify({ password })
+                    })
+                    return true
+               } catch (err: any) {
+                    this.error = err.message
+                    return false
+               } finally {
+                    this.loading = false
+               }
+          },
+
           logout() {
                if (process.client) {
                     localStorage.removeItem('panel_token')

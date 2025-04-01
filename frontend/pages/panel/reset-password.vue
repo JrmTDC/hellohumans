@@ -104,13 +104,7 @@
           </div>
      </div>
 </template>
-<!--
-{{  }}
-{
-{{  }}
-{{  }}
-{{  }}
--->
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -193,17 +187,20 @@ const evaluatePasswordStrength = () => {
      }
 }
 
+const publicStore = usePublicStore()
+
 const handleReset = async () => {
      if (!validateForm()) return
      loading.value = true
-     setTimeout(() => {
-          loading.value = false
-          resetPassword.value = true
-     }, 2000)
-}
 
-const updateSelectedLang = (lang: string) => {
-     console.log('Langue sélectionnée :', lang)
+     const success = await publicStore.resetPassword(password.value)
+     if (success) {
+          resetPassword.value = true
+     } else {
+          console.error('Erreur reset:', publicStore.error)
+     }
+
+     loading.value = false
 }
 </script>
 
