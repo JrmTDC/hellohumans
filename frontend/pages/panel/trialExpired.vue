@@ -7,7 +7,7 @@
                               <span class="block w-6 min-w-[24px] h-6 min-h-[24px] mt-0 mb-0"></span>
                               <h2 class="mt-0 mb-0 font-medium text-[32px] leading-[41px] tracking-[-0.01em]">{{ t('panel.pages.trialExpired.title') }} {{ appName }}</h2>
                               <span class="block w-3 min-w-[12px] h-3 min-h-[12px]"></span>
-                              <p class="mt-0 mb-0 font-normal text-[18px] leading-[23px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.trialExpired.info.part1') }} <strong>{{ t('panel.pages.trialExpired.info.highlight1') }} </strong> {{ t('panel.pages.trialExpired.info.part2') }} <strong>{{ t('panel.pages.trialExpired.info.highlight2') }}</strong>{{ t('panel.pages.trialExpired.info.part3') }}</p>
+                              <p class="mt-0 mb-0 font-normal text-[18px] leading-[23px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.trialExpired.info.part1') }} <strong>{{ t('panel.pages.trialExpired.info.highlight1') }} </strong> {{ t('panel.pages.trialExpired.info.part2') }} <strong>{{ t('panel.pages.trialExpired.info.highlight2', { date: '01/04/2025' }) }}</strong> {{ t('panel.pages.trialExpired.info.part3') }}</p>
                               <span class="block w-5 min-w-[20px] h-5 min-h-[20px]"></span>
                               <a href="/panel/upgrade" class="inline-flex justify-center items-center bg-[#0566ff] border border-[#0566ff] text-white w-auto rounded-[8px] text-[16px] h-[38px] leading-[20px] px-4 py-0 hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white ">{{ t('panel.pages.trialExpired.comparePlans') }}</a>
                          </div>
@@ -25,7 +25,7 @@
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
                                         <div class="w-full">
-                                             <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1') }}</strong></p>
+                                             <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1', { count: 50 }) }}</strong></p>
                                         </div>
                                    </div>
                               </div>
@@ -38,7 +38,7 @@
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
                                         <div class="w-full">
-                                             <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1') }}</strong></p>
+                                             <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1', { count: 50 }) }}</strong></p>
                                         </div>
                                    </div>
                               </div>
@@ -53,7 +53,7 @@
                                    <div class="flex flex-row justify-start items-center max-w-full">
                                         <Tooltip text="Les conversations représentent le nombre total de conversations dans le chat en direct" placement="top" variant="white" :arrow="true">
                                              <div class="w-full">
-                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1') }}</strong></p>
+                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1', { count: 50 }) }}</strong></p>
                                              </div>
                                         </Tooltip>
                                    </div>
@@ -71,7 +71,7 @@
                                    <div class="flex flex-row justify-start items-center max-w-full">
                                         <Tooltip text="{{ t('panel.pages.trialExpired.tooltipProcessedConversations') }}" placement="top" variant="white" :arrow="true">
                                              <div class="w-full">
-                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1') }}</strong></p>
+                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1', { count: 50 }) }}</strong></p>
                                              </div>
                                         </Tooltip>
                                    </div>
