@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import supabaseService from '#services/supabaseService'
+import supabaseService, {exchangeRecoveryTokenForSession } from '#services/supabaseService'
 
 class AuthController {
 
@@ -295,32 +295,45 @@ class AuthController {
           }
      }
 
+<<<<<<< Updated upstream
       // Vérifie que le token Supabase est valide pour une tentative de reset
+=======
+>>>>>>> Stashed changes
      public async verifyResetToken({ request, response }: HttpContext) {
           try {
-               const { token } = request.only(['token'])
+               const {token} = request.only(['token'])
 
                if (!token) {
                     return response.badRequest({
-                         error: { name: 'missingToken', description: 'Token manquant' },
+                         error: {name: 'missingToken', description: 'Token manquant'},
                     })
                }
+<<<<<<< Updated upstream
                // Rechercher un utilisateur via le "recovery_token"
                const { data, error } = await supabaseService.auth.getUser(token)
+=======
 
-               if (error || !data?.user) {
+               // Échange du recovery token contre une session
+               const {data, error} = await exchangeRecoveryTokenForSession(token)
+>>>>>>> Stashed changes
+
+               if (error || !data?.session) {
                     return response.unauthorized({
-                         error: { name: 'invalidToken', description: 'Token invalide ou expiré' },
+                         //error: {name: 'invalidToken', description: 'Token invalide ou expiré'},
+                         error: {name: 'invalidToken', description: error}
                     })
                }
 
                return response.ok({
                     message: 'Token valide',
+                    access_token: data.session.access_token,
+                    refresh_token: data.session.refresh_token,
+                    user: data.user,
                })
           } catch (error) {
                console.error('Erreur AuthController.verifyResetToken:', error)
                return response.internalServerError({
-                    error: { name: 'internalError', description: 'Erreur serveur' },
+                    error: {name: 'internalError', description: 'Erreur serveur'},
                })
           }
      }
