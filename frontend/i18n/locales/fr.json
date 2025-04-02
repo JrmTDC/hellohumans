@@ -75,8 +75,10 @@
                     "medium": "Moyen",
                     "strong": "Fort",
                     "veryStrong": "Très Fort",
-                    "messageTokenLoading": "Chargement...",
-                    "messageTokenExpired": "Désolé, ce lien n’est plus valide"
+                    "messageTokenLoading": "Vérification du lien de réinitialisation.",
+                    "messageTokenExpired": "Le lien est invalide ou a expiré.",
+                    "messageTokenMissing": "Le lien est invalide ou a expiré.",
+                    "resendCta": "Renvoyer un lien"
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",

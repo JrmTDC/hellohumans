@@ -13,6 +13,7 @@
           <!-- Contenu principal -->
           <div class="grid place-items-center relative">
                <div class="py-[40px] px-0 m-0">
+
                     <!-- Formulaire de récupération -->
                     <div v-if="!emailSent">
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleForgot">

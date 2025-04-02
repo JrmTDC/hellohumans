@@ -230,6 +230,38 @@ class AuthController {
                })
           }
      }
+
+      // Vérifie que le token Supabase est valide pour une tentative de reset
+
+     public async verifyResetToken({ request, response }: HttpContext) {
+          try {
+               const { token } = request.only(['token'])
+
+               if (!token) {
+                    return response.badRequest({
+                         error: { name: 'missingToken', description: 'Token manquant' },
+                    })
+               }
+
+               const { data, error } = await supabase.auth.getUser(token)
+
+               if (error || !data?.user) {
+                    return response.unauthorized({
+                         error: { name: 'invalidToken', description: 'Token invalide ou expiré' },
+                    })
+               }
+
+               return response.ok({
+                    message: 'Token valide',
+               })
+          } catch (error) {
+               console.error('Erreur AuthController.verifyResetToken:', error)
+               return response.internalServerError({
+                    error: { name: 'internalError', description: 'Erreur serveur' },
+               })
+          }
+     }
+
 }
 
 export default new AuthController()

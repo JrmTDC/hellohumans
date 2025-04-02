@@ -25,6 +25,7 @@ router.group(() => {
      router.post('/forgot-password', (ctx) => AuthController.forgotPassword(ctx))
      router.post('/reset-password', (ctx) => AuthController.resetPassword(ctx))
      router.post('/change-password', (ctx) => AuthController.changePassword(ctx))
+     router.post('/verify-reset-token', (ctx) => AuthController.verifyResetToken(ctx))
 })
      .prefix('/panel/auth')
 
