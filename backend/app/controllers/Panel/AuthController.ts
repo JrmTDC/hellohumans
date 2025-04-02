@@ -121,45 +121,110 @@ class AuthController {
           }
      }
 
-     // Inscription utilisateur (email, password, acceptation CG)
+     // Inscription utilisateur (email, password, site web, acceptation CG)
      public async register({ request, response }: HttpContext) {
           try {
-               const { email, password, siteweb, accept_cg } = request.all()
+               const {email, password, website, accept_cg, lang } = request.all()
 
-               // Vérification des entrées
-               if (!email || !password || !siteweb) {
+               if (!email || !password || !website) {
                     return response.badRequest({
-                         error: { name: 'missingFields', description: '' }
+                         error: {name: 'missingFields', description: 'Email, mot de passe et site web sont requis.'}
                     })
                }
 
                if (!accept_cg) {
                     return response.badRequest({
-                         error: { name: 'cgNotAccepted', description: 'Vous devez accepter les CG pour vous inscrire' }
+                         error: {name: 'cgNotAccepted', description: 'Vous devez accepter les CG pour vous inscrire.'}
                     })
                }
 
-               // Création de l'utilisateur via Supabase
-               const { data, error } = await supabaseService.auth.signUp({
+               // Étape 1 : Créer l'utilisateur via Supabase
+               const {data: authData, error: authError} = await supabaseService.auth.signUp({
                     email,
                     password,
-                    options: { data: { accept_cg: true } },
+                    options: {
+                         data: {accept_cg: true}
+                    }
                })
 
-               if (error) {
+               if (authError || !authData.user) {
                     return response.badRequest({
-                         error: { name: 'registrationFailed', description: error.message }
+                         error: {name: 'registrationFailed', description: authError?.message || 'Erreur Supabase.'}
+                    })
+               }
+
+               const auth_uuid = authData.user.id
+
+               // Étape 2 : Créer le client dans la table `clients`
+               const {data: clientData, error: clientError} = await supabaseService
+                    .from('clients')
+                    .insert({
+                         auth_uuid,
+                         email,
+                         selected_project_uuid: null,
+                         lang: lang || null
+                    })
+                    .select()
+                    .single()
+
+               if (clientError || !clientData) {
+                    return response.badRequest({
+                         error: {name: 'clientCreationFailed', description: 'Impossible de créer le client.' }
+                    })
+               }
+
+               // Étape 3 : Créer un projet associé au client
+               const {data: projectData, error: projectError} = await supabaseService
+                    .from('client_projets')
+                    .insert({
+                         client_uuid: clientData.uuid,
+                         website: website
+                    })
+                    .select()
+                    .single()
+
+               if (projectError || !projectData) {
+                    return response.badRequest({
+                         error: {name: 'projectCreationFailed', description: website }
+                         // description: 'Impossible de créer le projet.'}
+                    })
+               }
+
+               // Étape 4 : Mettre à jour le client avec le projet sélectionné
+               await supabaseService
+                    .from('clients')
+                    .update({selected_project_uuid: projectData.uuid})
+                    .eq('uuid', clientData.uuid)
+
+               // Étape 5 : Récupérer un token de session (connexion auto)
+               const {data: sessionData, error: sessionError} = await supabaseService.auth.signInWithPassword({
+                    email,
+                    password
+               })
+
+               if (sessionError || !sessionData.session) {
+                    return response.internalServerError({
+                         error: {
+                              name: 'sessionCreationFailed',
+                              description: sessionError?.message || 'Impossible de récupérer le token.'
+                         }
                     })
                }
 
                return response.created({
-                    message: 'Utilisateur créé avec succès',
-                    user: data.user,
+                    token: sessionData.session.access_token,
+                    user: {
+                         uuid: clientData.uuid,
+                         email,
+                         selected_project_uuid: projectData.uuid,
+                         lang: clientData.lang
+                    },
+                    project: projectData
                })
           } catch (error) {
                console.error('Erreur AuthController.register:', error)
                return response.internalServerError({
-                    error: { name: 'internalError', description: 'Erreur interne' }
+                    error: {name: 'internalError', description: 'Une erreur interne est survenue.'}
                })
           }
      }

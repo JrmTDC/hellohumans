@@ -3,6 +3,7 @@ import supabase from '#services/supabaseService'
 
 class UpgradeController {
 
+     // Récupération des plans d’abonnement
      public async getPlans({ request, response }: HttpContext) {
           const lang = request.input('lang', 'fr')
 
@@ -32,9 +33,7 @@ class UpgradeController {
           return { plans }
      }
 
-     /**
-      * GET /panel/upgrade/modules
-      */
+     // Récupération des modules
      public async getModules({ request, response }: HttpContext) {
           const lang = request.input('lang', 'fr')
 
