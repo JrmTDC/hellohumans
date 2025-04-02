@@ -6,7 +6,7 @@
                     <svgo-logo-hello-humans-full class="w-[220px]" />
                </div>
                <div class="login-container">
-                    <LanguageSelector @languageSelected="updateSelectedLang" />
+                    <LanguageSelector />
                </div>
           </div>
 

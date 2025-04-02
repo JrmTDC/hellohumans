@@ -6,14 +6,15 @@
                     <svgo-logo-hello-humans-full class="w-[220px]" />
                </div>
                <div class="login-container">
-                    <LanguageSelector @languageSelected="updateSelectedLang" />
+                    <LanguageSelector />
                </div>
           </div>
 
           <!-- Formulaire de réinitialisation -->
           <div class="grid place-items-center relative">
                <div class="py-[40px] px-0 m-0">
-                    <div v-if="!resetPassword">
+                    <div v-if="!resetAttempt">{{ messageTokenStatus }}</div>
+                    <div v-else-if="!resetPassword">
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleReset">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
@@ -106,17 +107,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import {onMounted, ref} from 'vue'
 import PasswordInput from '@/components/panel/PasswordInput.vue'
 import LanguageSelector from '@/components/panel/LanguageSelector.vue'
 
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
+
+const getResetAttempt = ref('');
+
+if (typeof route.query.resetAttempt === 'string') {
+     getResetAttempt.value = route.query.resetAttempt;
+}
 
 // Champs du formulaire
 const errors = ref({ password: false, confirmPassword: false })
 const resetPassword = ref(false)
+const resetAttempt = ref(false)
+const messageTokenStatus = ref(t('panel.pages.resetPassword.messageTokenLoading'))
 const loading = ref(false)
 const errorPassword = ref('')
 const password = ref('')
@@ -193,7 +202,7 @@ const handleReset = async () => {
      if (!validateForm()) return
      loading.value = true
 
-     const success = await publicStore.resetPassword(password.value)
+     const success = await publicStore.resetPasswordAttempt(password.value)
      if (success) {
           resetPassword.value = true
      } else {
@@ -202,5 +211,19 @@ const handleReset = async () => {
 
      loading.value = false
 }
+
+
+onMounted(async () => {
+     try {
+          messageTokenStatus.value = t('panel.pages.resetPassword.messageTokenExpired')
+          const success = await publicStore.resetPasswordToken(getResetAttempt.value)
+          if (success) {
+               resetAttempt.value = true
+          }
+     } catch (error) {
+          console.error('Erreur de chargement des usages :', error)
+     }
+})
+
 </script>
 

@@ -7,7 +7,7 @@
                     <svgo-logo-hello-humans-full class="w-[220px] fill-[#f7f0e5]"/>
                </div>
                <div class="login-container">
-                    <LanguageSelector @languageSelected="updateSelectedLang" />
+                    <LanguageSelector />
                </div>
           </div>
           <div class="[grid-area:1_/_2_/_3_/_4] relative z-0 overflow-hidden relative before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-z-10 before:bg-white before:[width:max(3000px,300vh)] before:[height:max(3000px,300vh)] before:[transform:translateX(-50%)]"></div>
@@ -120,10 +120,6 @@ const errorsAgreed = ref('');
 
 
 const router = useRouter()
-
-const updateSelectedLang = (lang: string) => {
-     console.log('Langue sélectionnée :', lang)
-}
 
 // Fonction pour valider le formulaire
 const validateForm = () => {

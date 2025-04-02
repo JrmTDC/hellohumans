@@ -74,7 +74,9 @@
                     "weak": "Faible",
                     "medium": "Moyen",
                     "strong": "Fort",
-                    "veryStrong": "Très Fort"
+                    "veryStrong": "Très Fort",
+                    "messageTokenLoading": "Chargement...",
+                    "messageTokenExpired": "Désolé, ce lien n’est plus valide"
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",
@@ -83,19 +85,7 @@
                     "setupCta": "Terminer l'intégration",
                     "performanceTitle": "Performance",
                     "calendarRange": "21 févr. 2025 - 22 mars 2025",
-                    "usageTitle": "Utilisation actuelle",
-                    "usageItems": {
-                         "audience": {
-                              "title": "Audience",
-                              "description": "Nombre total de visiteurs ayant interagi avec votre chatbot.",
-                              "titleUsage": "Visiteurs atteints"
-                         },
-                         "interactions": {
-                              "title": "Interactions",
-                              "description": "Conversations automatisées gérées par le bot.",
-                              "titleUsage": "Conversations traitées"
-                         }
-                    }
+                    "usageTitle": "Utilisation actuelle"
                },
                "analytics": {
                     "index" : {
@@ -174,6 +164,23 @@
                }
           },
           "components": {
+               "useUsageDefinitions": {
+                    "audience": {
+                         "title": "Audience",
+                         "description": "Nombre total de visiteurs ayant interagi avec votre chatbot.",
+                         "titleUsage": "Visiteurs atteints"
+                    },
+                    "interactions": {
+                         "title": "Interactions",
+                         "description": "Conversations automatisées gérées par le bot.",
+                         "titleUsage": "Conversations traitées"
+                    },
+                    "rando": {
+                         "title": "Rando+",
+                         "description": "Conversations Rando+ gérées par le bot.",
+                         "titleUsage": "Conversations traitées"
+                    }
+               },
                "SideMenu": {
                     "title": "Menu"
                }
