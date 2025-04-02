@@ -83,7 +83,7 @@ import { useUpgradeStore } from '@/stores/upgradeStore'
 import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
 import ModuleCard from '~/components/panel/upgrade/ModuleCard.vue'
 import SubscriptionSummary from '~/components/panel/upgrade/SubscriptionSummary.vue'
-import LoadingOverlay from '~/components/panel/common/LoadingOverlay.vue'
+import LoadingOverlay from '~/components/panel/common/loadingOverlay.vue'
 import PaymentModal from '~/components/panel/upgrade/PaymentModal.vue'
 
 const store = useUpgradeStore()

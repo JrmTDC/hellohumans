@@ -296,7 +296,6 @@ class AuthController {
      }
 
       // Vérifie que le token Supabase est valide pour une tentative de reset
-
      public async verifyResetToken({ request, response }: HttpContext) {
           try {
                const { token } = request.only(['token'])
@@ -306,7 +305,7 @@ class AuthController {
                          error: { name: 'missingToken', description: 'Token manquant' },
                     })
                }
-
+               // Rechercher un utilisateur via le "recovery_token"
                const { data, error } = await supabaseService.auth.getUser(token)
 
                if (error || !data?.user) {
