@@ -44,14 +44,14 @@
                                         :billingCycle="store.billingCycle"
                                         :onToggle="toggleModule"
                                         :onChangeChoice="changeModuleChoice"
-                                        :includedModules="store.currentOffer?.includedModules || []"
+                                        :includedModules="store.currentPlan?.includedModules || []"
                                    />
                               </div>
                          </div>
                     </div>
 
                     <SubscriptionSummary
-                         :selectedOffer="store.currentOffer"
+                         :selectedPlan="store.currentPlan"
                          :billingCycle="store.billingCycle"
                          :selectedModules="store.selectedAddOns"
                          showModules
@@ -94,12 +94,12 @@ const showPaymentModal = ref(false)
 
 onMounted(async () => {
 
-     if (!store.offers.length) await store.fetchOffers()
+     if (!store.plans.length) await store.fetchPlans()
      if (!store.availableModules.length) await store.fetchModules()
 
      store.restore()
 
-     if (!store.currentOffer) {
+     if (!store.currentPlan) {
           await router.replace('/panel/upgrade')
           return
      }
@@ -118,7 +118,7 @@ function changeModuleChoice(moduleId: string, choiceIndex: number) {
 const computedTotalPrice = computed(() => {
      let total = 0
      // Offre
-     const off = store.currentOffer
+     const off = store.currentPlan
      if (off) {
           if (store.billingCycle === 'monthly') {
                total += off.monthlyPrice

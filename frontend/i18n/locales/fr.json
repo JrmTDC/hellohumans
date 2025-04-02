@@ -113,8 +113,8 @@
                "upgrade": {
                     "Index": {
                          "trial_remaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
-                         "select_offer": "Sélectionner votre offre",
-                         "choose_offer_description": "Choisissez une offre et choisissez des modules à l'étape suivante.",
+                         "select_plan": "Sélectionner votre abonnement",
+                         "choose_plan_description": "Choisissez un abonnement et choisissez des modules à l'étape suivante.",
                          "view_all_features": "Voir toutes les fonctionnalités",
                          "next_step": "Prochaine étape : choisissez des modules complémentaires"
                     },

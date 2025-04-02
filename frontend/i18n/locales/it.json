@@ -122,8 +122,8 @@
                "upgrade": {
                     "Index": {
                          "trial_remaining": "La tua prova completa termina tra {count} giorno | La tua prova completa termina tra {count} giorni",
-                         "select_offer": "Seleziona la tua offerta",
-                         "choose_offer_description": "Scegli un'offerta e seleziona moduli aggiuntivi nel passaggio successivo.",
+                         "select_plan": "Seleziona la tua offerta",
+                         "choose_plan_description": "Scegli un'offerta e seleziona moduli aggiuntivi nel passaggio successivo.",
                          "view_all_features": "Visualizza tutte le funzionalità",
                          "next_step": "Passaggio successivo: Scegli moduli aggiuntivi"
                     },

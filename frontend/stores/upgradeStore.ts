@@ -1,142 +1,161 @@
-     import { defineStore } from 'pinia'
-     import { usePanelApi } from '@/composables/usePanelApi'
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { usePanelApi } from '~/composables/usePanelApi'
 
-     export interface UpgradeOffer {
-          id: string
-          name: string
-          description: string
+export interface UpgradePlan {
+     id: string
+     name: string
+     description: string
+     monthlyPrice: number
+     discountMonths: number
+     includedFeatures: string[]
+     baseSubtitle: string
+     popular?: boolean
+     includedModules?: string[]
+}
+
+export interface ModuleAddOn {
+     id: string
+     name: string
+     description: string
+     basePrice: number
+     discountMonths?: number
+     multipleChoice?: boolean
+     choices?: Array<{
+          label: string
           monthlyPrice: number
-          discountMonths: number
-          includedFeatures: string[]
-          baseSubtitle: string
-          popular?: boolean
-          includedModules?: string[]
-     }
-
-     export interface ModuleAddOn {
-          id: string
-          name: string
-          description: string
-          basePrice: number
           discountMonths?: number
-          multipleChoice?: boolean
-          choices?: Array<{
-               label: string
-               monthlyPrice: number
-               discountMonths?: number
-          }>
-          selectedChoiceIndex?: number
-          selected: boolean
-          disabled?: boolean
-          comingSoon?: boolean
+     }>
+     selectedChoiceIndex?: number
+     selected: boolean
+     disabled?: boolean
+     comingSoon?: boolean
+}
+
+export const useUpgradeStore = defineStore('upgrade', () => {
+     const plans = ref<UpgradePlan[]>([])
+     const availableModules = ref<ModuleAddOn[]>([])
+     const selectedPlanId = ref<string | null>(null)
+     const billingCycle = ref<'monthly' | 'annual'>('monthly')
+
+     const currentPlan = computed(() => {
+          return plans.value.find(o => o.id === selectedPlanId.value) || null
+     })
+
+     const selectedAddOns = computed(() => {
+          const included = currentPlan.value?.includedModules || []
+          return availableModules.value.filter(m => m.selected || included.includes(m.id))
+     })
+
+     const billableAddOns = computed(() => {
+          const included = currentPlan.value?.includedModules || []
+          return availableModules.value.filter(m => m.selected && !included.includes(m.id))
+     })
+
+     async function fetchPlans() {
+          const { apiFetch } = usePanelApi()
+          const res = await apiFetch('/upgrade/plans')
+          plans.value = res.plans
      }
 
-     export const useUpgradeStore = defineStore('upgrade', {
-          state: () => ({
-               offers: [] as UpgradeOffer[],
-               availableModules: [] as ModuleAddOn[],
-               selectedOfferId: null as string | null,
-               billingCycle: 'monthly' as 'monthly' | 'annual'
-          }),
+     async function fetchModules() {
+          const { apiFetch } = usePanelApi()
+          const res = await apiFetch('/upgrade/modules')
+          availableModules.value = res.modules
+     }
 
-          getters: {
-               currentOffer(state): UpgradeOffer | null {
-                    return state.offers.find(o => o.id === state.selectedOfferId) || null
-               },
+     function setPlan(planId: string) {
+          selectedPlanId.value = planId
+          save()
+     }
 
-               selectedAddOns(state): ModuleAddOn[] {
-                    const included = state.currentOffer?.includedModules || []
-                    return state.availableModules.filter(m => m.selected || included.includes(m.id))
-               },
+     function setBillingCycle(cycle: 'monthly' | 'annual') {
+          billingCycle.value = cycle
+          save()
+     }
 
-               billableAddOns(state): ModuleAddOn[] {
-                    const included = state.currentOffer?.includedModules || []
-                    return state.availableModules.filter(m => m.selected && !included.includes(m.id))
+     function toggleModule(moduleId: string, checked: boolean) {
+          const mod = availableModules.value.find(m => m.id === moduleId)
+          if (mod) {
+               mod.selected = checked
+               save()
+          }
+     }
+
+     function setModuleChoice(moduleId: string, index: number) {
+          const mod = availableModules.value.find(m => m.id === moduleId)
+          if (mod?.multipleChoice && mod.choices) {
+               mod.selectedChoiceIndex = index
+               save()
+          }
+     }
+
+     function resetAll() {
+          selectedPlanId.value = null
+          billingCycle.value = 'monthly'
+          availableModules.value = []
+          plans.value = []
+          localStorage.removeItem('upgradeStore')
+     }
+
+     function save() {
+          if (import.meta.client) {
+               const data = {
+                    selectedPlanId: selectedPlanId.value,
+                    billingCycle: billingCycle.value,
+                    modules: availableModules.value.map(m => ({
+                         id: m.id,
+                         selected: m.selected,
+                         selectedChoiceIndex: m.selectedChoiceIndex ?? 0
+                    }))
                }
-          },
+               localStorage.setItem('upgradeStore', JSON.stringify(data))
+          }
+     }
 
-          actions: {
-               async fetchOffers() {
-                    const { apiFetch } = usePanelApi()
-                    const res = await apiFetch('/upgrade/offers')
-                    this.offers = res.offers
-               },
+     function restore() {
+          if (import.meta.client) {
+               const raw = localStorage.getItem('upgradeStore')
+               if (!raw) return
+               try {
+                    const saved = JSON.parse(raw)
+                    selectedPlanId.value = saved.selectedPlanId
+                    billingCycle.value = saved.billingCycle
 
-               async fetchModules() {
-                    const { apiFetch } = usePanelApi()
-                    const res = await apiFetch('/upgrade/modules')
-                    this.availableModules = res.modules
-               },
-
-               setOffer(offerId: string) {
-                    this.selectedOfferId = offerId
-                    this.save()
-               },
-
-               setBillingCycle(cycle: 'monthly' | 'annual') {
-                    this.billingCycle = cycle
-                    this.save()
-               },
-
-               toggleModule(moduleId: string, checked: boolean) {
-                    const mod = this.availableModules.find(m => m.id === moduleId)
-                    if (mod) {
-                         mod.selected = checked
-                         this.save()
-                    }
-               },
-
-               setModuleChoice(moduleId: string, index: number) {
-                    const mod = this.availableModules.find(m => m.id === moduleId)
-                    if (mod?.multipleChoice && mod.choices) {
-                         mod.selectedChoiceIndex = index
-                         this.save()
-                    }
-               },
-
-               resetAll() {
-                    this.selectedOfferId = null
-                    this.billingCycle = 'monthly'
-                    this.availableModules = []
-                    this.offers = []
-                    localStorage.removeItem('upgradeStore')
-               },
-
-               save() {
-                    if (process.client) {
-                         const data = {
-                              selectedOfferId: this.selectedOfferId,
-                              billingCycle: this.billingCycle,
-                              modules: this.availableModules.map(m => ({
-                                   id: m.id,
-                                   selected: m.selected,
-                                   selectedChoiceIndex: m.selectedChoiceIndex ?? 0
-                              }))
-                         }
-                         localStorage.setItem('upgradeStore', JSON.stringify(data))
-                    }
-               },
-
-               restore() {
-                    if (process.client) {
-                         const raw = localStorage.getItem('upgradeStore')
-                         if (!raw) return
-                         try {
-                              const saved = JSON.parse(raw)
-                              this.selectedOfferId = saved.selectedOfferId
-                              this.billingCycle = saved.billingCycle
-
-                              for (const m of saved.modules || []) {
-                                   const mod = this.availableModules.find(am => am.id === m.id)
-                                   if (mod) {
-                                        mod.selected = m.selected
-                                        mod.selectedChoiceIndex = m.selectedChoiceIndex
-                                   }
-                              }
-                         } catch (e) {
-                              console.error('Erreur restauration store upgrade:', e)
+                    for (const m of saved.modules || []) {
+                         const mod = availableModules.value.find(am => am.id === m.id)
+                         if (mod) {
+                              mod.selected = m.selected
+                              mod.selectedChoiceIndex = m.selectedChoiceIndex
                          }
                     }
+               } catch (e) {
+                    console.error('Erreur restauration store upgrade:', e)
                }
           }
-     })
+     }
+
+     return {
+          // state
+          plans,
+          availableModules,
+          selectedPlanId,
+          billingCycle,
+
+          // getters
+          currentPlan,
+          selectedAddOns,
+          billableAddOns,
+
+          // actions
+          fetchPlans,
+          fetchModules,
+          setPlan,
+          setBillingCycle,
+          toggleModule,
+          setModuleChoice,
+          resetAll,
+          save,
+          restore
+     }
+})

@@ -1,7 +1,5 @@
 <template>
-     <div
-          class="p-[32px] px-[40px] w-[448px] flex flex-col justify-start items-[normal] flex-grow-0 border border-[#e2e8ef] bg-[#f5f7f9] self-stretch flex-shrink-0"
-     >
+     <div class="p-[32px] px-[40px] w-[448px] flex flex-col justify-start items-[normal] flex-grow-0 border border-[#e2e8ef] bg-[#f5f7f9] self-stretch flex-shrink-0">
           <div class="flex flex-col justify-start items-[normal] sticky top-[96px]">
                <p class="text-[18px] font-medium mb-0">Résumé de l'abonnement</p>
 
@@ -29,11 +27,11 @@
                <!-- Offre sélectionnée -->
                <div class="mt-[20px]">
                     <p class="text-[12px] text-[#647491] font-medium mb-[16px]">OFFRE</p>
-                    <div v-if="selectedOffer">
+                    <div v-if="selectedPlan">
                          <div class="flex justify-between items-center">
-                              <h2 class="text-[16px] font-medium">{{ selectedOffer.name }}</h2>
+                              <h2 class="text-[16px] font-medium">{{ selectedPlan.name }}</h2>
                               <div>
-                                   <span class="text-[14px] font-medium">{{ offerPrice }} €</span>
+                                   <span class="text-[14px] font-medium">{{ planPrice }} €</span>
                                    <span class="text-[14px] text-[#080f1a] font-medium">{{ billingCycleLocal === 'monthly' ? '/mois' : '/an' }}</span>
                               </div>
                          </div>
@@ -57,7 +55,7 @@
                          <div class="flex justify-between items-center">
                               <h2 class="text-[16px] font-medium">{{ mod.name }}</h2>
                               <div>
-                                   <span v-if="selectedOffer?.includedModules?.includes(mod.id)" class="text-[14px] font-medium text-green-600">Inclus</span>
+                                   <span v-if="selectedPlan?.includedModules?.includes(mod.id)" class="text-[14px] font-medium text-green-600">Inclus</span>
                                    <span v-else>
                 <span class="text-[14px] font-medium">{{ modulePrice(mod) }} €</span>
                 <span class="text-[14px] font-medium">{{ billingCycleLocal === 'monthly' ? '/mois' : '/an' }}</span>
@@ -81,11 +79,11 @@
                <!-- Bouton final -->
                <div class="mt-[20px]">
                     <button
-                         :disabled="!selectedOffer || (disableIfZero && totalPriceLocal <= 0)"
+                         :disabled="!selectedPlan || (disableIfZero && totalPriceLocal <= 0)"
                          @click="goNext"
                          :class="[
             'rounded-[8px] text-[18px] h-[46px] px-[20px] w-full text-white font-medium',
-            (!selectedOffer || (disableIfZero && totalPriceLocal <= 0))
+            (!selectedPlan || (disableIfZero && totalPriceLocal <= 0))
               ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed'
               : 'bg-[#0566ff] hover:bg-[#0049bd]'
           ]"
@@ -100,7 +98,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-interface Offer {
+interface Plan {
      id: string
      name: string
      monthlyPrice: number
@@ -127,7 +125,7 @@ interface ModuleAddOn {
 
 // Props
 const props = defineProps<{
-     selectedOffer: Offer | null
+     selectedPlan: Plan | null
      billingCycle: 'monthly' | 'annual'
      selectedModules: ModuleAddOn[]
      showModules?: boolean
@@ -147,21 +145,21 @@ const showModules = computed(() => props.showModules)
 const totalPriceLocal = computed(() => props.totalPrice)
 const nextButtonLabel = computed(() => props.nextButtonLabel || 'Prochaine étape')
 
-const offerPrice = computed(() => {
-     if (!props.selectedOffer) return 0
-     const { monthlyPrice, discountMonths } = props.selectedOffer
+const planPrice = computed(() => {
+     if (!props.selectedPlan) return 0
+     const { monthlyPrice, discountMonths } = props.selectedPlan
      return billingCycleLocal.value === 'monthly'
           ? monthlyPrice
           : monthlyPrice * (12 - discountMonths)
 })
 
 const firstFeature = computed(() => {
-     if (!props.selectedOffer?.includedFeatures.length) return ''
-     return props.selectedOffer.includedFeatures[0]
+     if (!props.selectedPlan?.includedFeatures.length) return ''
+     return props.selectedPlan.includedFeatures[0]
 })
 
 function modulePrice(mod: ModuleAddOn): number {
-     const isIncluded = props.selectedOffer?.includedModules?.includes(mod.id)
+     const isIncluded = props.selectedPlan?.includedModules?.includes(mod.id)
      if (isIncluded) return 0
 
      if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {

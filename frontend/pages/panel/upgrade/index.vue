@@ -19,14 +19,14 @@
                                    <div
                                         class="w-max max-w-none grid gap-y-0 gap-x-[20px] [grid-auto-flow:row] [grid-template-columns:326px_326px] p-0"
                                    >
-                                        <!-- Boucle sur store.offers -->
-                                        <OfferCard
-                                             v-for="offer in store.offers"
-                                             :key="offer.id"
-                                             :offer="offer"
-                                             :selected="store.selectedOfferId === offer.id"
+                                        <!-- Boucle sur store.plans -->
+                                        <PlanCard
+                                             v-for="plan in store.plans"
+                                             :key="plan.id"
+                                             :plan="plan"
+                                             :selected="store.selectedPlanId === plan.id"
                                              :billingCycle="store.billingCycle"
-                                             @selectOffer="store.setOffer"
+                                             @selectPlan="store.setPlan"
                                         />
                                    </div>
 
@@ -41,7 +41,7 @@
 
                     <!-- Résumé -->
                     <SubscriptionSummary
-                         :selectedOffer="store.currentOffer"
+                         :selectedPlan="store.currentPlan"
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
                          :selectedModules="store.selectedAddOns"
@@ -60,9 +60,9 @@ import {onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useUpgradeStore } from '~/stores/upgradeStore'
 import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
-import OfferCard from '~/components/panel/upgrade/OfferCard.vue'
+import PlanCard from '~/components/panel/upgrade/PlanCard.vue'
 import SubscriptionSummary from '~/components/panel/upgrade/SubscriptionSummary.vue'
-import LoadingOverlay from "~/components/panel/common/LoadingOverlay.vue";
+import LoadingOverlay from "~/components/panel/common/loadingOverlay.vue";
 
 const store = useUpgradeStore()
 const router = useRouter()
@@ -70,13 +70,13 @@ const trialActive = ref(false)
 const isChecking = ref(true)
 
 onMounted(async () => {
-     if (!store.offers.length) await store.fetchOffers()
+     if (!store.plans.length) await store.fetchPlans()
 
      store.restore()
 
      // Si aucune offre sélectionnée, on prend la première
-     if (!store.selectedOfferId && store.offers.length) {
-          store.setOffer(store.offers[0].id)
+     if (!store.selectedPlanId && store.plans.length) {
+          store.setPlan(store.plans[0].id)
      }
 
      isChecking.value = false
@@ -84,12 +84,12 @@ onMounted(async () => {
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)
 const computedTotalPrice = computed(() => {
-     const offer = store.currentOffer
-     if (!offer) return 0
+     const plan = store.currentPlan
+     if (!plan) return 0
      if (store.billingCycle === 'monthly') {
-          return offer.monthlyPrice
+          return plan.monthlyPrice
      }
-     return offer.monthlyPrice * (12 - offer.discountMonths)
+     return plan.monthlyPrice * (12 - plan.discountMonths)
 })
 
 function goNext() {
@@ -100,7 +100,7 @@ function goStep(step: number) {
      if (step === 1) {
           // déjà dessus
      } else if (step === 2) {
-          if (store.selectedOfferId) {
+          if (store.selectedPlanId) {
                router.push('/panel/upgrade/modules')
           }
      } else if (step === 3) {
@@ -112,11 +112,3 @@ function closePanel() {
      router.push('/panel')
 }
 </script>
-
-<!--
-{{ t('panel.upgrade.indexPage.trial_remaining', { count: 0 }) }}
-{{ t('panel.upgrade.indexPage.select_offer') }}
-{{ t('panel.upgrade.indexPage.choose_offer_description') }}
-{{ t('panel.upgrade.indexPage.view_all_features') }}
-{{ t('panel.upgrade.indexPage.next_step') }}
--->

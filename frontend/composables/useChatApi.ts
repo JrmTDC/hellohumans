@@ -1,14 +1,12 @@
-// Configuration de l'API
-import {useRuntimeConfig} from "#imports";
+import { useRuntimeConfig } from '#imports'
+import { useChatStore } from '~/stores/chatStore'
 
 export function useChatApi() {
      const config = useRuntimeConfig()
      const apiUrl = `${config.public.apiBaseUrl}/api/chat/`
 
-     const apiKey = () => {
-          const chatStore = useChatStore()
-          return chatStore.config.apiKey
-     }
+     const chatStore = useChatStore()
+     const apiKey = () => chatStore.config.apiKey || ''
 
      async function apiFetch(path: string, options: RequestInit = {}) {
           const headers = {
@@ -22,12 +20,19 @@ export function useChatApi() {
                headers
           })
 
-          if (!response.ok) {
-               const errorText = await response.text()
-               throw new Error(`Erreur API Chat: ${response.status} - ${errorText}`)
+          const contentType = response.headers.get('Content-Type') || ''
+          const isJson = contentType.includes('application/json')
+          const data = isJson ? await response.json() : await response.text()
+
+          if (response.ok) {
+               return data
           }
 
-          return await response.json()
+          const message = isJson
+               ? data?.error?.description || JSON.stringify(data)
+               : data
+
+          throw new Error(`Erreur API Chat: ${response.status} - ${message}`)
      }
 
      return { apiFetch }

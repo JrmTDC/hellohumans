@@ -30,7 +30,7 @@
                                    </div>
                               </div>
                               <div class="grid place-items-center bg-[#dce9ff] w-5 h-5 rounded-full self-end ml-4">
-                                   <svgo-panel-icon-offer-included class="w-[16px] h-[16px] fill-[#00378e]"/>
+                                   <svgo-panel-icon-plan-included class="w-[16px] h-[16px] fill-[#00378e]"/>
                               </div>
                          </div>
                          <div class="flex flex-row justify-start items-center w-[calc(50%-2px)] shrink border border-[#e2e8ef] rounded-[4px] p-4 bg-white">
@@ -43,7 +43,7 @@
                                    </div>
                               </div>
                               <div class="grid place-items-center bg-[#dce9ff] w-5 h-5 rounded-full self-end ml-4">
-                                   <svgo-panel-icon-offer-included class="w-[16px] h-[16px] fill-[#00378e]"/>
+                                   <svgo-panel-icon-plan-included class="w-[16px] h-[16px] fill-[#00378e]"/>
                               </div>
                          </div>
 
@@ -59,7 +59,7 @@
                                    </div>
                               </div>
                               <div class="grid place-items-center bg-[#e2e8ef] w-5 h-5 rounded-full self-end ml-4">
-                                   <svgo-panel-icon-offer-excluded class="w-[16px] h-[16px] fill-[#acb8cb]"/>
+                                   <svgo-panel-icon-plan-excluded class="w-[16px] h-[16px] fill-[#acb8cb]"/>
                               </div>
 
 
@@ -77,7 +77,7 @@
                                    </div>
                               </div>
                               <div class="grid place-items-center bg-[#e2e8ef] w-5 h-5 rounded-full self-end ml-4">
-                                   <svgo-panel-icon-offer-excluded class="w-[16px] h-[16px] fill-[#acb8cb]"/>
+                                   <svgo-panel-icon-plan-excluded class="w-[16px] h-[16px] fill-[#acb8cb]"/>
                               </div>
 
 

@@ -2,14 +2,12 @@ import { HttpContext } from '@adonisjs/core/http'
 import supabase from '#services/supabaseService'
 
 class UpgradeController {
-     /**
-      * GET /panel/upgrade/offers
-      */
-     public async getOffers({ request, response }: HttpContext) {
+
+     public async getPlans({ request, response }: HttpContext) {
           const lang = request.input('lang', 'fr')
 
           const { data, error } = await supabase
-               .from('subscription_offers')
+               .from('subscription_plans')
                .select('*')
                .eq('disabled', false)
 
@@ -20,18 +18,18 @@ class UpgradeController {
                })
           }
 
-          const offers = data.map((offer) => ({
-               id: offer.id,
-               name: offer.name?.[lang] || offer.name?.['fr'] || 'Sans nom',
-               description: offer.description?.[lang] || offer.description?.['fr'] || '',
-               monthlyPrice: Number(offer.monthlyPrice),
-               discountMonths: offer.discountMonths || 0,
-               includedFeatures: offer.includedFeatures?.[lang] || offer.includedFeatures?.['fr'] || '',
-               baseSubtitle: offer.baseSubtitle?.[lang] || '',
-               includedModules: offer.includedModules || [],
+          const plans = data.map((plan) => ({
+               id: plan.id,
+               name: plan.name?.[lang] || plan.name?.['fr'] || 'Sans nom',
+               description: plan.description?.[lang] || plan.description?.['fr'] || '',
+               monthlyPrice: Number(plan.monthlyPrice),
+               discountMonths: plan.discountMonths || 0,
+               includedFeatures: plan.includedFeatures?.[lang] || plan.includedFeatures?.['fr'] || '',
+               baseSubtitle: plan.baseSubtitle?.[lang] || '',
+               includedModules: plan.includedModules || [],
           }))
 
-          return { offers }
+          return { plans }
      }
 
      /**

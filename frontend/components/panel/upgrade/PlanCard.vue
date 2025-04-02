@@ -1,5 +1,5 @@
 <template>
-     <div class="cursor-pointer" @click="handleSelectOffer">
+     <div class="cursor-pointer" @click="handleSelectPlan">
           <!-- Haut : Titre, badges -->
           <div
                class="bg-white px-[20px] pt-[30px] pb-[2px] text-center flex flex-col justify-center items-start relative [border-radius:12px_12px_0px_0px]"
@@ -24,7 +24,7 @@
                <!-- Badge 'Le plus populaire' -->
                <div
                     class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
-                    v-else-if="offer.popular"
+                    v-else-if="plan.popular"
                >
                     <div
                          class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#ccf1d5]"
@@ -45,7 +45,7 @@
                <!-- Titre -->
                <div class="flex flex-row justify-start items-center">
                     <h2 class="mt-0 mb-0 font-medium text-[20px] leading-[26px] tracking-[-0.01em]">
-                         {{ offer.name }}
+                         {{ plan.name }}
                     </h2>
                </div>
           </div>
@@ -53,7 +53,7 @@
           <!-- Description -->
           <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses ]">
                <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">
-                    {{ offer.description }}
+                    {{ plan.description }}
                </p>
           </div>
 
@@ -97,11 +97,11 @@
           <!-- Features -->
           <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses ]">
                <p class="mt-0 mb-0 font-medium text-[12px] leading-[16px] tracking-[-0.01em] text-left">
-                    {{ offer.baseSubtitle }}
+                    {{ plan.baseSubtitle }}
                </p>
           </div>
           <div
-               v-for="(feature, idx) in offer.includedFeatures"
+               v-for="(feature, idx) in plan.includedFeatures"
                :key="idx"
                :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses ]"
           >
@@ -126,7 +126,7 @@
 <script setup lang="ts">
 import { } from 'vue'
 
-interface Offer {
+interface Plan {
      id: string
      name: string
      description: string
@@ -137,24 +137,24 @@ interface Offer {
 }
 
 const props = defineProps<{
-     offer: Offer
+     plan: Plan
      selected: boolean
      billingCycle: 'monthly' | 'annual'
 }>()
 
-const emit = defineEmits(['selectOffer'])
+const emit = defineEmits(['selectPlan'])
 
-function handleSelectOffer() {
-     emit('selectOffer', props.offer.id)
+function handleSelectPlan() {
+     emit('selectPlan', props.plan.id)
 }
 
 // Calcul du prix
 const displayedPrice = computed(() => {
      if (props.billingCycle === 'monthly') {
-          return props.offer.monthlyPrice
+          return props.plan.monthlyPrice
      } else {
           // ex. (12 - discountMonths) * monthlyPrice
-          return props.offer.monthlyPrice * (12 - props.offer.discountMonths)
+          return props.plan.monthlyPrice * (12 - props.plan.discountMonths)
      }
 })
 
