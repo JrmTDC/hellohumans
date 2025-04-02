@@ -4,6 +4,7 @@ import VisitorsController from '#controllers/Chat/VisitorsController'
 import MessagesController from '#controllers/Chat/MessagesController'
 import AuthController from '#controllers/Panel/AuthController'
 import UpgradeController from '#controllers/Panel/UpgradeController'
+import UsageController from '#controllers/Panel/UsageController'
 
 import { middleware } from '#start/kernel'
 
@@ -43,6 +44,7 @@ router.group(() => {
      })
      router.get('/upgrade/offers', (ctx) => UpgradeController.getOffers(ctx))
      router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
+     router.get('/usage', (ctx) => UsageController.index(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_auth())

@@ -51,14 +51,13 @@
 
                                         <div class="flex flex-col justify-start items-start mt-0 mb-0 w-full">
                                              <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em]">{{ t('panel.pages.dashboard.usageTitle') }}</h2>
-                                             <UsageItemDashbord
+                                             <usageItem
                                                   v-for="(item, index) in usages"
-                                                  :key="index"
+                                                  :key="item.id"
                                                   :item="item"
                                                   :class="index > 0 ? 'mt-[16px]' : ''"
                                              />
                                         </div>
-
                                    </div>
                               </div>
 
@@ -70,57 +69,36 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
-import UsageItemDashbord from "~/components/panel/UsageItemDashbord.vue";
-import ProgressCircle from '@/components/panel/ProgressCircle.vue'
+import { usePanelStore } from '~/stores/panelStore'
+import { useUsageDefinitions } from '~/composables/useUsageDefinitions'
+import usageItem from '~/components/panel/dashboard/usageItem.vue'
+import ProgressCircle from '~/components/panel/ProgressCircle.vue'
 
 const { t } = useI18n()
-const usages = [
-     {
-          title: t('panel.pages.dashboard.usageItems.audience.title'),
-          description: t('panel.pages.dashboard.usageItems.description'),
-          titleUsage: t('panel.pages.dashboard.usageItems.audience.titleUsage'),
-          usage: 320,
-          limit: "∞",
-          percentage: 100,
-          progressColor: '#22c55e',
-          bgColor: '#e5e7eb',
-          centerContent: 'infinity',
-          numberContent: '0',
-          autoColor: false
-     },
-     {
-          title: t('panel.pages.dashboard.usageItems.interactions.titleUsage'),
-          description: t('panel.pages.dashboard.usageItems.interactions.description'),
-          titleUsage: t('panel.pages.dashboard.usageItems.interactions.titleUsage'),
-          usage: 4600,
-          limit: 5000,
-          percentage: 82,
-          progressColor: '#f59e0b',
-          bgColor: '#e5e7eb',
-          centerContent: 'none',
-          numberContent: '0',
-          autoColor: true
+const panelStore = usePanelStore()
+
+const pageTitle = useState('pageTitle', () => '')
+const pageIsBilled = useState('pageIsBilled', () => false)
+const pageIsPaid = useState('pageIsPaid', () => false)
+
+const allUsages = useUsageDefinitions()
+const usages = computed(() => allUsages.value.filter((u) => u.showInDashboard))
+
+onMounted(async () => {
+     pageTitle.value = t('panel.pages.dashboard.pageTitle')
+     pageIsBilled.value = false
+     pageIsPaid.value = false
+
+     try {
+         await panelStore.fetchUsage()
+
+     } catch (error) {
+          console.error('Erreur de chargement des usages :', error)
      }
-]
+})
 
 definePageMeta({
      layout: 'panel'
 })
-
-const router = useRouter()
-
-onMounted(() => {
-     const pageTitle = useState('pageTitle')
-     pageTitle.value = t('panel.pages.dashboard.pageTitle')
-
-     const pageIsBilled = useState('pageIsBilled')
-     pageIsBilled.value = false
-
-     const pageIsPaid = useState('pageIsPaid')
-     pageIsPaid.value = false
-})
-
 </script>
-

@@ -18,7 +18,7 @@ class AuthController {
 
                // Envoi du lien de réinitialisation
                const { error } = await supabaseService.auth.resetPasswordForEmail(email, {
-                    redirectTo: process.env.FRONTEND_RESET_URL || 'https://mon-site.com/reset-password',
+                    redirectTo: process.env.FRONTEND_RESET_URL || 'https://hellohumans.fr/panel/reset-password',
                })
 
                if (error) {

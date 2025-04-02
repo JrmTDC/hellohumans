@@ -5,7 +5,7 @@ export const usePublicStore = defineStore('public', {
      state: () => ({
           loading: false,
           error: null as string | null,
-          token: process.client ? localStorage.getItem('panel_token') : null
+          token: import.meta.client ? localStorage.getItem('panel_token') : null
      }),
 
      actions: {
@@ -31,16 +31,16 @@ export const usePublicStore = defineStore('public', {
                }
           },
 
-          async register(email: string, password: string, siteweb: string) {
+          async register(email: string, password: string, website: string) {
                const { apiFetch } = usePublicApi()
                this.loading = true
                this.error = null
                try {
                     const data = await apiFetch('/auth/register', {
                          method: 'POST',
-                         body: JSON.stringify({ email, password, siteweb })
+                         body: JSON.stringify({ email, password, website })
                     })
-                    if (process.client) {
+                    if (import.meta.client) {
                          localStorage.setItem('panel_token', data.success.token)
                     }
                     this.token = data.success.token
@@ -71,7 +71,7 @@ export const usePublicStore = defineStore('public', {
                }
           },
 
-          async resetPassword(password: string) {
+          async resetPasswordToken(password: string) {
                const { apiFetch } = usePublicApi()
                this.loading = true
                this.error = null
@@ -89,11 +89,22 @@ export const usePublicStore = defineStore('public', {
                }
           },
 
-          logout() {
-               if (process.client) {
-                    localStorage.removeItem('panel_token')
+          async resetPasswordAttempt(password: string) {
+               const { apiFetch } = usePublicApi()
+               this.loading = true
+               this.error = null
+               try {
+                    await apiFetch('/auth/reset-password', {
+                         method: 'POST',
+                         body: JSON.stringify({ password })
+                    })
+                    return true
+               } catch (err: any) {
+                    this.error = err.message
+                    return false
+               } finally {
+                    this.loading = false
                }
-               this.token = null
-          }
+          },
      }
 })

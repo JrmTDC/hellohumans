@@ -18,7 +18,7 @@
                     <div v-if="isUsageMenuOpen" class="usage-dropdown">
                          <div class="absolute right-[32px] top-[53px] z-[2]"><svgo-panel-icon-triangle-up class="w-[17px] h-[7px] fill-[#ffff]" /></div>
                          <div class="absolute top-[60px] right-[25px] box-content w-[412px] bg-white p-[24px] shadow-[0_8px_20px_rgba(0,20,51,0.24)] rounded-[8px] overflow-auto max-h-[calc(-150px+100vh)] z-[1]">
-                              <UsageItemHeader
+                              <headerUsageItem
                                    v-for="(item, index) in usages"
                                    :key="index"
                                    :item="item"
@@ -38,7 +38,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import UsageItemHeader from '@/components/panel/UsageItemHeader.vue'
+import headerUsageItem from '~/components/panel/common/headerUsageItem.vue'
+import {useUsageDefinitions} from "~/composables/useUsageDefinitions";
 
 const props = defineProps({
      title: String,
@@ -59,38 +60,8 @@ const handleClickOutside = (event) => {
      }
 }
 
-const usages = [
-     {
-          title: 'Audience',
-          description: 'Nombre total de visiteurs ayant interagi avec votre chatbot.',
-          titleUsage: 'Visiteurs atteints',
-          usage: 320,
-          limit: '∞',
-          percentage: 100,
-          progressColor: '#22c55e',
-          bgColor: '#e5e7eb',
-          centerContent: 'infinity',
-          numberContent: '0',
-          sizeCircle: 32,
-          sizeFont: 12,
-          autoColor: true
-     },
-     {
-          title: 'Interactions',
-          description: 'Conversations automatisées gérées par le bot.',
-          titleUsage: 'Conversations traitées',
-          usage: 4600,
-          limit: 5000,
-          percentage: 82,
-          progressColor: '#f59e0b',
-          bgColor: '#e5e7eb',
-          centerContent: 'none',
-          numberContent: '0',
-          sizeCircle: 32,
-          sizeFont: 12,
-          autoColor: true
-     }
-]
+const allUsages = useUsageDefinitions()
+const usages = computed(() => allUsages.value.filter((u) => u.showInHeader))
 
 onMounted(() => {
      document.addEventListener('click', handleClickOutside)
