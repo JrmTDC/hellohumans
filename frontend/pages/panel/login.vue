@@ -66,7 +66,7 @@
                               class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
                               :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
                          >
-                              {{ loading ? t('panel.pages.login.submit') : t('panel.pages.login.loading') }}
+                              {{ loading ? t('panel.pages.login.loading') : t('panel.pages.login.submit')  }}
                          </button>
 
                          <!-- Lien vers l'inscription -->
