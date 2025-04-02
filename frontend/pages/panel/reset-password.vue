@@ -13,7 +13,33 @@
           <!-- Formulaire de réinitialisation -->
           <div class="grid place-items-center relative">
                <div class="py-[40px] px-0 m-0">
-                    <div v-if="!resetAttempt">{{ messageTokenStatus }}</div>
+
+                    <!-- Vérification du token -->
+                    <div v-if="tokenLoading" class="flex flex-col items-center justify-center">
+                         <div class="flex items-center justify-center space-x-2 mb-4 h-8">
+                              <div class="w-2.5 h-2.5 bg-[#0569FF] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                              <div class="w-2.5 h-2.5 bg-[#0569FF] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                              <div class="w-2.5 h-2.5 bg-[#0569FF] rounded-full animate-bounce"></div>
+                         </div>
+                         <p class="text-gray-500 text-sm text-center">{{ t('panel.pages.resetPassword.messageTokenLoading') }}</p>
+                    </div>
+
+                    <!-- Token invalide -->
+                    <div v-else-if="!resetAttempt" class="text-center text-sm">
+                         <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
+                              {{ messageTokenStatus }}
+                         </h1>
+
+                         <!-- Bouton Renvoyer un lien -->
+                         <button
+                              @click="router.push('/panel/forgot-password')"
+                              class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
+                         >
+                              {{ t('panel.pages.resetPassword.resendCta') }}
+                         </button>
+
+                    </div>
+
                     <div v-else-if="!resetPassword">
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleReset">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
@@ -135,6 +161,8 @@ const passwordStrength = ref('')
 const progressWidth = ref('0%')
 const progressColor = ref('rgb(226,232,239)')
 const passwordFocused = ref(false)
+const tokenLoading = ref(true)
+
 
 const validateForm = () => {
      errors.value = { password: false, confirmPassword: false }
@@ -214,14 +242,19 @@ const handleReset = async () => {
 
 
 onMounted(async () => {
-     try {
+     if (!getResetAttempt.value) {
+          tokenLoading.value = false
+          messageTokenStatus.value = t('panel.pages.resetPassword.messageTokenMissing')
+          return
+     }
+
+     const valid = await publicStore.resetPasswordToken(getResetAttempt.value)
+     tokenLoading.value = false
+
+     if (valid) {
+          resetAttempt.value = true
+     } else {
           messageTokenStatus.value = t('panel.pages.resetPassword.messageTokenExpired')
-          const success = await publicStore.resetPasswordToken(getResetAttempt.value)
-          if (success) {
-               resetAttempt.value = true
-          }
-     } catch (error) {
-          console.error('Erreur de chargement des usages :', error)
      }
 })
 
