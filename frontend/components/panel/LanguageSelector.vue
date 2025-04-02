@@ -36,8 +36,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-
 const { locales, locale, setLocale } = useI18n()
 
 const isLangMenuOpen = ref(false)

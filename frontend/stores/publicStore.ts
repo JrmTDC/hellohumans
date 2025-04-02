@@ -33,14 +33,14 @@ export const usePublicStore = defineStore('public', () => {
           }
      }
 
-     async function register(email: string, password: string, website: string) {
+     async function register(email: string, password: string, website: string, accept_cg: boolean, lang: string) {
           const { apiFetch } = usePublicApi()
           loading.value = true
           error.value = null
           try {
                const data = await apiFetch('/auth/register', {
                     method: 'POST',
-                    body: JSON.stringify({ email, password, website })
+                    body: JSON.stringify({ email, password, website, accept_cg, lang })
                })
                if (isClient()) {
                     localStorage.setItem('panel_token', data.success.token)

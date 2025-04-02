@@ -52,13 +52,13 @@
                                    :error=errors.password
                                   :iconSize=20
                               />
-                              <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorPassword }}</span>
+                              <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessagePassword }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
                               <input v-model="website" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.website }" :placeholder=" t('panel.pages.register.websitePlaceholder')">
 
 
-                              <span v-if="errors.website" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorWebsite }}</span>
+                              <span v-if="errors.website" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageWebsite }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center mt-[13px]">
                               <label class="flex items-start max-w-[365px] text-[14px] leading-[18px] tracking-[-0.01em] cursor-pointer">
@@ -78,7 +78,7 @@
                                             {{ t('panel.pages.register.acceptLabel') }}
                                              <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> {{ t('panel.pages.register.andLabel') }} <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> {{ appName }}.
                                         </span>
-                                        <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsAgreed }}</span>
+                                        <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsMessageAgreed }}</span>
                                    </span>
                               </label>
                          </fieldset>
@@ -103,6 +103,9 @@ import { usePublicStore } from "~/stores/publicStore";
 
 const { appName } = useAppInfo()
 const { t } = useI18n()
+const { locale } = useI18n()
+
+const publicStore = usePublicStore()
 
 // Champs du formulaire
 const inputEmail = ref('')
@@ -113,11 +116,10 @@ const errors = ref({ email: false, password: false, website: false, agreed: fals
 const loginError = ref(false)
 const loading = ref(false)
 const errorMessageEmail = ref('');
-const errorPassword = ref('');
-const errorWebsite = ref('');
-const errorsAgreed = ref('');
-
-
+const errorMessagePassword = ref('');
+const errorMessageWebsite = ref('');
+const errorsMessageAgreed = ref('');
+const lang = locale.value
 
 const router = useRouter()
 
@@ -139,19 +141,19 @@ const validateForm = () => {
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = t('panel.pages.register.errorPasswordEmpty')
+          errorMessagePassword.value = t('panel.pages.register.errorPasswordEmpty')
           valid = false
      }
 
      if (!website.value) {
           errors.value.website = true
-          errorWebsite.value = t('panel.pages.register.errorWebsiteEmpty')
+          errorMessageWebsite.value = t('panel.pages.register.errorWebsiteEmpty')
           valid = false
      }
 
      if (!agreed.value) {
           errors.value.agreed = true
-          errorsAgreed.value = t('panel.pages.register.errorAgreementRequired')
+          errorsMessageAgreed.value = t('panel.pages.register.errorAgreementRequired')
           valid = false
      }
 
@@ -161,25 +163,23 @@ const validateForm = () => {
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
      if (!validateForm()) return
-
      loginError.value = false
      loading.value = true
 
+     const success = await publicStore.register(inputEmail.value, password.value, website.value, agreed.value, lang)
+     if (success) {
+          loginError.value = false
+          errorMessageEmail.value = ''
+          errorMessagePassword.value = ''
+          errorMessageWebsite.value = ''
+          errorsMessageAgreed.value = ''
 
+          await router.push('/panel')
+     } else {
+          loginError.value = true
+     }
 
-          /*
-          const response = await publicStore.login(inputEmail.value, password.value)
-          if (response) {
-               //let resp = await response.json()
-               localStorage.setItem('token', resp.success.token)
-               router.push('/panel/')
-          } else {
-               loginError.value = true
-          }
-          body: JSON.stringify({ email: inputEmail.value, password: password.value })
-          */
-
-
+     loading.value = false
 }
 </script>
 
