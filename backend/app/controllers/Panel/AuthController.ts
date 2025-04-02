@@ -219,7 +219,6 @@ class AuthController {
                          error: { name: 'invalidToken', description: 'Token invalide' }
                     })
                }
-
                return response.ok({
                     valid: true
                })

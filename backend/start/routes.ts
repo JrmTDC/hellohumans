@@ -43,7 +43,7 @@ router.group(() => {
                user: ctx.auth.user, // Maintenant TypeScript ne renverra plus d'erreur
           }
      })
-     router.get('/upgrade/offers', (ctx) => UpgradeController.getOffers(ctx))
+     router.get('/upgrade/plans', (ctx) => UpgradeController.getPlans(ctx))
      router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
      router.get('/usage', (ctx) => UsageController.index(ctx))
 })

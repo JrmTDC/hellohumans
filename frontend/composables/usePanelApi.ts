@@ -5,8 +5,10 @@ export function usePanelApi() {
      const apiUrl = `${config.public.apiBaseUrl}/panel`
      const router = useRouter()
 
+     const isClient = () => typeof window !== 'undefined'
+
      const token = () => {
-          if (process.client) {
+          if (isClient()) {
                return localStorage.getItem('panel_token') || ''
           }
           return ''
@@ -29,9 +31,9 @@ export function usePanelApi() {
 
           if (!response.ok) {
                if (isJson && data?.error?.name === 'invalidToken') {
-                    if (process.client) {
+                    if (isClient()) {
                          localStorage.removeItem('panel_token')
-                         router.push('/panel/login')
+                         await router.push('/panel/login')
                     }
                }
 

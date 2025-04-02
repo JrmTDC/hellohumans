@@ -91,7 +91,7 @@ onMounted(async () => {
      pageIsPaid.value = false
 
      try {
-         await panelStore.fetchUsage()
+         //await panelStore.fetchUsage()
 
      } catch (error) {
           console.error('Erreur de chargement des usages :', error)
