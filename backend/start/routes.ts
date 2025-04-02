@@ -5,6 +5,7 @@ import MessagesController from '#controllers/Chat/MessagesController'
 import AuthController from '#controllers/Panel/AuthController'
 import UpgradeController from '#controllers/Panel/UpgradeController'
 import UsageController from '#controllers/Panel/UsageController'
+import ClientController from '#controllers/Panel/ClientController'
 
 import { middleware } from '#start/kernel'
 
@@ -31,20 +32,10 @@ router.group(() => {
 
 // Routes protégées par l'authentification
 router.group(() => {
-     router.get('/projects', async (ctx) => {
-          if (!ctx.auth || !ctx.auth.user) {
-               return ctx.response.unauthorized({
-                    error: { name: 'unauthorized', description: 'Utilisateur non authentifié' }
-               })
-          }
-
-          return {
-               message: 'Liste des projets',
-               user: ctx.auth.user, // Maintenant TypeScript ne renverra plus d'erreur
-          }
-     })
      router.get('/upgrade/plans', (ctx) => UpgradeController.getPlans(ctx))
      router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
+     router.get('/client', (ctx) => ClientController.client(ctx))
+     router.get('/projects', (ctx) => ClientController.projects(ctx))
      router.get('/usage', (ctx) => UsageController.index(ctx))
 })
      .prefix('/panel')

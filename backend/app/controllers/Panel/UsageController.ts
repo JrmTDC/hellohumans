@@ -1,31 +1,48 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { getClientUsagesWithLimits } from '#services/usageService'
+import supabase from '#services/supabaseService'
 
 class UsageController {
      public async index({ auth, response }: HttpContext) {
           try {
-               if (!auth || !auth.user?.client_id) {
+               const authUuid = auth?.user?.id
+               if (!authUuid) {
                     return response.unauthorized({
-                         error: { name: 'clientMissing', description: 'Client introuvable dans le contexte' },
-                    })
-               }
-               const clientId = auth.user?.client_id
-               if (!clientId) {
-                    return response.unauthorized({
-                         error: { name: 'clientMissing', description: 'Client introuvable dans le contexte' },
+                         error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
                }
 
-               const { modules, usage } = await getClientUsagesWithLimits(clientId)
+               // Récupérer l'utilisateur -> client
+               const { data: client, error: clientError } = await supabase
+                    .from('clients')
+                    .select('uuid, selected_project_uuid')
+                    .eq('auth_uuid', authUuid)
+                    .single()
 
-               return {
-                    modules,
-                    usage,
+               if (clientError || !client) {
+                    return response.notFound({
+                         error: { name: 'clientNotFound', description: 'Client introuvable.' }
+                    })
                }
-          } catch (err) {
-               console.error('Erreur UsageController.index:', err)
+
+               const projectId = client.selected_project_uuid
+               if (!projectId) {
+                    return response.badRequest({
+                         error: { name: 'missingProject', description: 'Aucun projet sélectionné.' }
+                    })
+               }
+
+               // TODO: Récupérer dynamiquement les données d’usage réelles plus tard
+               const usage = [
+                    { id: 'audience', usage: 320 },
+                    { id: 'interactions', usage: 4600, limit: 5000 },
+                    { id: 'guideplus', usage: 87, limit: 100 },
+               ]
+
+               return { usage }
+          } catch (error) {
+               console.error('Erreur UsageController.index:', error)
                return response.internalServerError({
-                    error: { name: 'usageError', description: 'Erreur lors de la récupération des usages' },
+                    error: { name: 'internalError', description: 'Erreur interne' }
                })
           }
      }

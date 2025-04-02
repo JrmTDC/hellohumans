@@ -16,7 +16,6 @@ export const usePanelStore = defineStore('panel', () => {
 
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-
           try {
                const [userData, usage] = await Promise.all([
                     apiFetch('/client'),
