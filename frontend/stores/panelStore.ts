@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { usePanelApi } from '@/composables/usePanelApi'
+import { usePanelApi } from '~/composables/usePanelApi'
 
 export const usePanelStore = defineStore('panel', {
      state: () => ({
@@ -12,6 +12,29 @@ export const usePanelStore = defineStore('panel', {
      }),
 
      actions: {
+
+          async initPanelSession(): Promise<boolean> {
+               const { apiFetch } = usePanelApi()
+
+               try {
+                    const [user, usage] = await Promise.all([
+                         apiFetch('/client'),
+                         apiFetch('/usage'),
+                    ])
+
+                    this.user = user.user
+                    this.isAuthenticated = true
+                    this.usageData = usage.usage || []
+                    this.modules = usage.modules || []
+
+                    return true
+               } catch (err) {
+                    console.warn('Session invalide / déconnectée', err)
+                    this.logout()
+                    return false
+               }
+          },
+
           async fetchUser() {
                const { apiFetch } = usePanelApi()
                try {
@@ -37,6 +60,7 @@ export const usePanelStore = defineStore('panel', {
                     console.error('Erreur récupération des usages :', error)
                }
           },
+
           logout() {
                if (import.meta.client) {
                     localStorage.removeItem('panel_token')

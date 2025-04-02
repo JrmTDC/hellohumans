@@ -1,5 +1,4 @@
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { usePanelStore } from '~/stores/panelStore'
 
 export const useUsageDefinitions = () => {
@@ -12,9 +11,9 @@ export const useUsageDefinitions = () => {
                showInHeader: true,
                showInDashboard: true,
                type: 'core',
-               title: t('panel.components.useUsageDefinitions.audience.title'),
-               description: t('panel.components.useUsageDefinitions.audience.description'),
-               titleUsage: t('panel.components.useUsageDefinitions.audience.titleUsage'),
+               title: t('panel.composables.useUsageDefinitions.audience.title'),
+               description: t('panel.composables.useUsageDefinitions.audience.description'),
+               titleUsage: t('panel.composables.useUsageDefinitions.audience.titleUsage'),
                autoColor: false,
                centerContent: 'infinity',
                progressColor: '#22c55e',
@@ -25,9 +24,9 @@ export const useUsageDefinitions = () => {
                showInHeader: true,
                showInDashboard: true,
                type: 'plan',
-               title: t('panel.components.useUsageDefinitions.interactions.title'),
-               description: t('panel.components.useUsageDefinitions.interactions.description'),
-               titleUsage: t('panel.components.useUsageDefinitions.interactions.titleUsage'),
+               title: t('panel.composables.useUsageDefinitions.interactions.title'),
+               description: t('panel.composables.useUsageDefinitions.interactions.description'),
+               titleUsage: t('panel.composables.useUsageDefinitions.interactions.titleUsage'),
                autoColor: true,
                centerContent: 'none',
                progressColor: '#f59e0b',
@@ -39,9 +38,9 @@ export const useUsageDefinitions = () => {
                showInDashboard: true,
                type: 'module',
                requiredModule: 'rando_plus',
-               title: t('panel.components.useUsageDefinitions.rando.title'),
-               description: t('panel.components.useUsageDefinitions.rando.description'),
-               titleUsage: t('panel.components.useUsageDefinitions.rando.titleUsage'),
+               title: t('panel.composables.useUsageDefinitions.rando.title'),
+               description: t('panel.composables.useUsageDefinitions.rando.description'),
+               titleUsage: t('panel.composables.useUsageDefinitions.rando.titleUsage'),
                autoColor: true,
                centerContent: 'none',
                progressColor: '#10b981',

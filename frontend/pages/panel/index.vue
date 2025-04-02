@@ -1,5 +1,5 @@
 <template>
-     <LoadingOverlay />
+     <LoadingOverlay v-if="isChecking" :progress="progress" />
 </template>
 
 <script setup lang="ts">

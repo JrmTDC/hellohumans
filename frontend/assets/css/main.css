@@ -36,6 +36,20 @@
 #app-content{
      font-family: euclidcircularb;
 }
+#hellohumans-loading{
+     .animate-fade-in {
+          animation: fade-in 0.6s ease-out;
+     }
+
+     .fade-enter-active,
+     .fade-leave-active {
+          transition: opacity 0.4s;
+     }
+     .fade-enter-from,
+     .fade-leave-to {
+          opacity: 0;
+     }
+}
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
 }
@@ -63,6 +77,16 @@ button:hover .hhcss_iconChatFillPath{
           stroke-dashoffset: 1;
           -webkit-animation: animation-qivclq 0.8s ease-in-out 1 forwards 0.9s;
           animation: animation-qivclq 0.8s ease-in-out 1 forwards 0.9s;
+     }
+}
+@keyframes fade-in {
+     from {
+          opacity: 0;
+          transform: translateY(4px);
+     }
+     to {
+          opacity: 1;
+          transform: translateY(0);
      }
 }
 @keyframes blink{

@@ -2,10 +2,8 @@ import { HttpContext } from '@adonisjs/core/http'
 import supabaseService from '#services/supabaseService'
 
 class AuthController {
-     /**
-      * POST /api/panel/auth/forgot-password
-      * Envoie un email de réinitialisation de mot de passe
-      */
+
+     // Envoie un email de réinitialisation de mot de passe
      public async forgotPassword({ request, response }: HttpContext) {
           try {
                const { email } = request.all()
@@ -38,10 +36,7 @@ class AuthController {
           }
      }
 
-     /**
-      * POST /api/panel/auth/reset-password
-      * Réinitialise le mot de passe avec un nouveau (après avoir cliqué sur le lien)
-      */
+     // Réinitialise le mot de passe avec un nouveau (après avoir cliqué sur le lien)
      public async resetPassword({ request, response }: HttpContext) {
           try {
                const { password } = request.all()
@@ -75,10 +70,7 @@ class AuthController {
           }
      }
 
-     /**
-      * POST /api/panel/auth/change-password
-      * Permet à un utilisateur connecté de changer son mot de passe
-      */
+     // Permet à un utilisateur connecté de changer son mot de passe
      public async changePassword({ request, response, auth }: HttpContext) {
           try {
                const { oldPassword, newPassword } = request.all()
@@ -129,10 +121,7 @@ class AuthController {
           }
      }
 
-     /**
-      * POST /api/panel/auth/register
-      * Inscription utilisateur (email, password, acceptation CG)
-      */
+     // Inscription utilisateur (email, password, acceptation CG)
      public async register({ request, response }: HttpContext) {
           try {
                const { email, password, siteweb, accept_cg } = request.all()
@@ -175,10 +164,7 @@ class AuthController {
           }
      }
 
-     /**
-      * POST /api/panel/auth/login
-      * Vérification des identifiants via Supabase, retour JWT
-      */
+     // Vérification des identifiants via Supabase, retour JWT
      public async login({ request, response }: HttpContext) {
           try {
                const { email, password } = request.all()
@@ -213,10 +199,7 @@ class AuthController {
           }
      }
 
-     /**
-      * GET /api/panel/auth/verify
-      * Vérifie la validité du JWT via Supabase
-      */
+    // Vérifie la validité du JWT via Supabase
      public async verify({ request, response }: HttpContext) {
           try {
                // Récupérer le token d'authentification depuis le header Authorization
@@ -238,8 +221,7 @@ class AuthController {
                }
 
                return response.ok({
-                    valid: true,
-                    user: data.user,
+                    valid: true
                })
           } catch (error) {
                console.error('Erreur AuthController.verify:', error)

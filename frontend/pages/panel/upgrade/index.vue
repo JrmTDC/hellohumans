@@ -1,6 +1,6 @@
 <template>
      <LoadingOverlay v-if="isChecking" />
-     <div id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
+     <div v-else id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
           <div class="flex flex-col justify-start items-[normal] h-full">
                <StepperHeader :step="1" @goStep="goStep" @close="closePanel" />
 

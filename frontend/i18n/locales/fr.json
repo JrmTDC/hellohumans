@@ -164,6 +164,19 @@
                }
           },
           "components": {
+               "loadingOverlay": {
+                    "messages": {
+                         "int_1": "Connexion sécurisée...",
+                         "int_2": "Chargement des données...",
+                         "int_3": "Vérification de votre session...",
+                         "int_4": "Préparation du tableau de bord..."
+                    }
+               },
+               "SideMenu": {
+                    "title": "Menu"
+               }
+          },
+          "composables": {
                "useUsageDefinitions": {
                     "audience": {
                          "title": "Audience",
@@ -180,9 +193,6 @@
                          "description": "Conversations Rando+ gérées par le bot.",
                          "titleUsage": "Conversations traitées"
                     }
-               },
-               "SideMenu": {
-                    "title": "Menu"
                }
           }
      }
