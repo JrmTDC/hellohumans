@@ -307,7 +307,7 @@ class AuthController {
                     })
                }
 
-               const { data, error } = await supabase.auth.getUser(token)
+               const { data, error } = await supabaseService.auth.getUser(token)
 
                if (error || !data?.user) {
                     return response.unauthorized({
