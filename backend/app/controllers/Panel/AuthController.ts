@@ -295,10 +295,7 @@ class AuthController {
           }
      }
 
-<<<<<<< Updated upstream
       // Vérifie que le token Supabase est valide pour une tentative de reset
-=======
->>>>>>> Stashed changes
      public async verifyResetToken({ request, response }: HttpContext) {
           try {
                const {token} = request.only(['token'])
@@ -308,15 +305,8 @@ class AuthController {
                          error: {name: 'missingToken', description: 'Token manquant'},
                     })
                }
-<<<<<<< Updated upstream
-               // Rechercher un utilisateur via le "recovery_token"
-               const { data, error } = await supabaseService.auth.getUser(token)
-=======
-
                // Échange du recovery token contre une session
                const {data, error} = await exchangeRecoveryTokenForSession(token)
->>>>>>> Stashed changes
-
                if (error || !data?.session) {
                     return response.unauthorized({
                          //error: {name: 'invalidToken', description: 'Token invalide ou expiré'},
