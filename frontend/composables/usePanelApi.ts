@@ -4,26 +4,27 @@ export function usePanelApi() {
      const config = useRuntimeConfig()
      const apiUrl = `${config.public.apiBaseUrl}/panel`
      const router = useRouter()
+     const supabase = useSupabaseClient()
 
-     const isClient = () => typeof window !== 'undefined'
-
-     const token = () => {
-          if (isClient()) {
-               return localStorage.getItem('panel_token') || ''
-          }
-          return ''
+     // Récupère le token Supabase dynamiquement
+     const getToken = async () => {
+          const { data, error } = await supabase.auth.getSession()
+          if (error || !data?.session?.access_token) return null
+          return data.session.access_token
      }
-
+     
      async function apiFetch(path: string, options: RequestInit = {}) {
+          const token = await getToken()
+
           const headers = {
                'Content-Type': 'application/json',
-               'Authorization': `Bearer ${token()}`,
-               ...(options.headers || {})
+               ...(token ? { Authorization: `Bearer ${token}` } : {}),
+               ...(options.headers || {}),
           }
 
           const response = await fetch(`${apiUrl}${path}`, {
                ...options,
-               headers
+               headers,
           })
 
           const isJson = response.headers.get('Content-Type')?.includes('application/json')
@@ -31,10 +32,8 @@ export function usePanelApi() {
 
           if (!response.ok) {
                if (isJson && data?.error?.name === 'invalidToken') {
-                    if (isClient()) {
-                         localStorage.removeItem('panel_token')
-                         await router.push('/panel/login')
-                    }
+                    await supabase.auth.signOut()
+                    await router.push('/panel/login')
                }
 
                const message = isJson

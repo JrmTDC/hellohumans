@@ -2,7 +2,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import supabase from '#services/supabaseService'
 
 class ClientController {
-     public async client({ auth, response }: HttpContext) {
+     public async getClient({ auth, response }: HttpContext) {
           try {
                const authUuid = auth?.user?.id
                if (!authUuid) {
@@ -32,7 +32,7 @@ class ClientController {
           }
      }
 
-     public async projects({ auth, response }: HttpContext) {
+     public async getProjects({ auth, response }: HttpContext) {
           try {
                const authUuid = auth?.user?.id
                if (!authUuid) {

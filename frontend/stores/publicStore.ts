@@ -9,60 +9,33 @@ function isClient() {
 export const usePublicStore = defineStore('public', () => {
      const loading = ref(false)
      const error = ref<string | null>(null)
-     const token = ref<string | null>(isClient() ? localStorage.getItem('panel_token') : null)
 
-     async function login(email: string, password: string) {
-          const { apiFetch } = usePublicApi()
+     const login = async (email: string, password: string) => {
           loading.value = true
           error.value = null
-          try {
-               const data = await apiFetch('/auth/login', {
-                    method: 'POST',
-                    body: JSON.stringify({ email, password })
-               })
-               if (isClient()) {
-                    localStorage.setItem('panel_token', data.success.token)
-               }
-               token.value = data.success.token
-               return true
-          } catch (err: any) {
-               error.value = err.message
+
+          const supabase = useSupabaseClient()
+          const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+
+          loading.value = false
+          if (authError) {
+               error.value = authError.message
                return false
-          } finally {
-               loading.value = false
           }
+
+          return true
      }
 
-     async function register(email: string, password: string, website: string, accept_cg: boolean, lang: string) {
-          const { apiFetch } = usePublicApi()
+     const register = async (email: string, password: string, website: string, accept_cg: boolean, lang: string) => {
           loading.value = true
           error.value = null
-          try {
-               const data = await apiFetch('/auth/register', {
-                    method: 'POST',
-                    body: JSON.stringify({ email, password, website, accept_cg, lang })
-               })
-               if (isClient()) {
-                    localStorage.setItem('panel_token', data.success.token)
-               }
-               token.value = data.success.token
-               return true
-          } catch (err: any) {
-               error.value = err.message
-               return false
-          } finally {
-               loading.value = false
-          }
-     }
 
-     async function forgotPassword(email: string) {
-          const { apiFetch } = usePublicApi()
-          loading.value = true
-          error.value = null
+          // garde le call API si tu crées un compte + client + projet
           try {
-               await apiFetch('/auth/forgot-password', {
+               const { apiFetch } = usePublicApi()
+               await apiFetch('/auth/register', {
                     method: 'POST',
-                    body: JSON.stringify({ email })
+                    body: JSON.stringify({ email, password, website, accept_cg, lang }),
                })
                return true
           } catch (err: any) {
@@ -73,53 +46,32 @@ export const usePublicStore = defineStore('public', () => {
           }
      }
 
-     async function resetPasswordToken(token: string) {
-          const { apiFetch } = usePublicApi()
+     const forgotPassword = async (email: string) => {
           loading.value = true
           error.value = null
-          try {
-               await apiFetch('/auth/verify-reset-token', {
-                    method: 'POST',
-                    body: JSON.stringify({ token })
-               })
-               return true
-          } catch (err: any) {
-               error.value = err.message
-               return false
-          } finally {
-               loading.value = false
-          }
-     }
 
-     async function resetPasswordAttempt(password: string) {
-          const { apiFetch } = usePublicApi()
-          loading.value = true
-          error.value = null
-          try {
-               await apiFetch('/auth/reset-password', {
-                    method: 'POST',
-                    body: JSON.stringify({ password })
-               })
-               return true
-          } catch (err: any) {
-               error.value = err.message
+          const supabase = useSupabaseClient()
+          const { error: forgotError } = await supabase.auth.resetPasswordForEmail(email, {
+               redirectTo: '/panel/reset-password',
+          })
+
+          loading.value = false
+          if (forgotError) {
+               error.value = forgotError.message
                return false
-          } finally {
-               loading.value = false
           }
+
+          return true
      }
 
      return {
           // state
           loading,
           error,
-          token,
 
           // actions
           login,
           register,
-          forgotPassword,
-          resetPasswordToken,
-          resetPasswordAttempt
+          forgotPassword
      }
 })

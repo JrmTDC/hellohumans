@@ -21,11 +21,7 @@ router.group(() => {
 // Routes d'authentification et de gestion du mot de passe
 router.group(() => {
      router.post('/login', (ctx) => AuthController.login(ctx))
-     router.get('/verify', (ctx) => AuthController.verify(ctx))
      router.post('/register', (ctx) => AuthController.register(ctx))
-     router.post('/forgot-password', (ctx) => AuthController.forgotPassword(ctx))
-     router.post('/reset-password', (ctx) => AuthController.resetPassword(ctx))
-     router.post('/change-password', (ctx) => AuthController.changePassword(ctx))
 })
      .prefix('/panel/auth')
 
@@ -33,8 +29,8 @@ router.group(() => {
 router.group(() => {
      router.get('/upgrade/plans', (ctx) => UpgradeController.getPlans(ctx))
      router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
-     router.get('/client', (ctx) => ClientController.client(ctx))
-     router.get('/projects', (ctx) => ClientController.projects(ctx))
+     router.get('/client', (ctx) => ClientController.getClient(ctx))
+     router.get('/projects', (ctx) => ClientController.getProjects(ctx))
      router.get('/usage', (ctx) => UsageController.index(ctx))
 })
      .prefix('/panel')

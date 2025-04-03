@@ -9,7 +9,8 @@ export default defineNuxtConfig({
        '@nuxtjs/color-mode',
        'nuxt-echarts',
        'dayjs-nuxt',
-       '@nuxtjs/i18n'
+       '@nuxtjs/i18n',
+       '@nuxtjs/supabase'
      ],
      css: [
           '@/assets/css/fonts/mulish.css',
@@ -42,11 +43,26 @@ export default defineNuxtConfig({
                fallbackLocale: 'en'
           }
      },
+     supabase: {
+          url: process.env.NUXT_PUBLIC_SUPABASE_URL,
+          key: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY,
+          redirect:true,
+          redirectOptions: {
+               login: '/panel/login',
+               callback: '/panel/',
+               include: ['/panel/**'],
+               exclude: ['/panel/login', '/panel/register', '/panel/forgot-password', '/panel/reset-password'],
+               saveRedirectToCookie: false,
+          }
+     },
      runtimeConfig: {
           public: {
                apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "",
                appName: process.env.NUXT_PUBLIC_APP_NAME || "",
-               appYear: process.env.NUXT_PUBLIC_APP_YEAR || ""
+               appYear: process.env.NUXT_PUBLIC_APP_YEAR || "",
+               supabaseRedirect: process.env.NUXT_PUBLIC_SUPABASE_REDIRECT || "",
+               supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL || "",
+               supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || "",
           },
      }
 })

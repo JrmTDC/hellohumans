@@ -1,5 +1,5 @@
 ﻿<template>
-     <div v-auto-animate id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
+     <div id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
           <!-- Header -->
           <div class="flex flex-row justify-start items-center relative p-[32px_40px] z-[1]">
                <div class="mr-auto">
@@ -15,7 +15,7 @@
                <div class="py-[40px] px-0 m-0">
 
                     <!-- Vérification du token -->
-                    <div v-if="tokenLoading" class="flex flex-col items-center justify-center">
+                    <div v-if="resetPasswordStatus === 'loading'" class="flex flex-col items-center justify-center">
                          <div class="flex items-center justify-center space-x-2 mb-4 h-8">
                               <div class="w-2.5 h-2.5 bg-[#0569FF] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                               <div class="w-2.5 h-2.5 bg-[#0569FF] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
@@ -24,23 +24,7 @@
                          <p class="text-gray-500 text-sm text-center">{{ t('panel.pages.resetPassword.messageTokenLoading') }}</p>
                     </div>
 
-                    <!-- Token invalide -->
-                    <div v-else-if="!resetAttempt" class="text-center text-sm">
-                         <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
-                              {{ messageTokenStatus }}
-                         </h1>
-
-                         <!-- Bouton Renvoyer un lien -->
-                         <button
-                              @click="router.push('/panel/forgot-password')"
-                              class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
-                         >
-                              {{ t('panel.pages.resetPassword.resendCta') }}
-                         </button>
-
-                    </div>
-
-                    <div v-else-if="!resetPassword">
+                    <div v-else-if="resetPasswordStatus === 'newpassword'">
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleReset">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
@@ -108,7 +92,7 @@
                     </div>
 
                     <!-- Message de succès -->
-                    <div v-else class="flex flex-col items-center w-full">
+                    <div v-else-if="resetPasswordStatus === 'success'" class="flex flex-col items-center w-full">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
                                    {{ t('panel.pages.resetPassword.submit') }}
@@ -126,6 +110,22 @@
                          <p class="mt-4 text-gray-600 text-[16px] text-center">
                               <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.resetPassword.loginLink') }}</a>
                          </p>
+                    </div>
+
+                    <!-- Token invalide -->
+                    <div v-else class="text-center text-sm">
+                         <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
+                              {{ t('panel.pages.resetPassword.messageTokenExpired') }}
+                         </h1>
+
+                         <!-- Bouton Renvoyer un lien -->
+                         <button
+                              @click="router.push('/panel/forgot-password')"
+                              class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
+                         >
+                              {{ t('panel.pages.resetPassword.resendCta') }}
+                         </button>
+
                     </div>
                </div>
           </div>
@@ -149,9 +149,7 @@ if (typeof route.query.resetAttempt === 'string') {
 
 // Champs du formulaire
 const errors = ref({ password: false, confirmPassword: false })
-const resetPassword = ref(false)
-const resetAttempt = ref(false)
-const messageTokenStatus = ref(t('panel.pages.resetPassword.messageTokenLoading'))
+const resetPasswordStatus = ref("loading")
 const loading = ref(false)
 const errorPassword = ref('')
 const password = ref('')
@@ -161,8 +159,7 @@ const passwordStrength = ref('')
 const progressWidth = ref('0%')
 const progressColor = ref('rgb(226,232,239)')
 const passwordFocused = ref(false)
-const tokenLoading = ref(true)
-
+const supabase = useSupabaseClient()
 
 const validateForm = () => {
      errors.value = { password: false, confirmPassword: false }
@@ -230,11 +227,14 @@ const handleReset = async () => {
      if (!validateForm()) return
      loading.value = true
 
-     const success = await publicStore.resetPasswordAttempt(password.value)
-     if (success) {
-          resetPassword.value = true
+     const { error } = await supabase.auth.updateUser({
+          password: password.value
+     })
+
+     if (error) {
+          console.error('Erreur lors du changement de mot de passe:', error.message)
      } else {
-          console.error('Erreur reset:', publicStore.error)
+          resetPasswordStatus.value = "success"
      }
 
      loading.value = false
@@ -242,20 +242,28 @@ const handleReset = async () => {
 
 
 onMounted(async () => {
-     if (!getResetAttempt.value) {
-          tokenLoading.value = false
-          messageTokenStatus.value = t('panel.pages.resetPassword.messageTokenMissing')
-          return
-     }
+     const hash = window.location.hash
+     const params = new URLSearchParams(hash.substring(1))
 
-     const valid = await publicStore.resetPasswordToken(getResetAttempt.value)
-     tokenLoading.value = false
+     const access_token = params.get('access_token')
+     const refresh_token = params.get('refresh_token')
+     const type = params.get('type')
+     if (type === 'recovery' && access_token) {
+          const { data, error } = await supabase.auth.setSession({
+               access_token,
+               refresh_token
+          })
 
-     if (valid) {
-          resetAttempt.value = true
+          if (error) {
+               console.error('Erreur session recovery:', error.message)
+               resetPasswordStatus.value = "expired"
+               return
+          }
+          resetPasswordStatus.value = "newpassword"
      } else {
-          messageTokenStatus.value = t('panel.pages.resetPassword.messageTokenExpired')
+          resetPasswordStatus.value = "expired"
      }
+
 })
 
 </script>
