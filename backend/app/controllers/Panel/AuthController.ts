@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import supabaseService, {exchangeRecoveryTokenForSession } from '#services/supabaseService'
+import supabaseService from '#services/supabaseService'
 
 class AuthController {
 
@@ -294,40 +294,6 @@ class AuthController {
                })
           }
      }
-
-      // Vérifie que le token Supabase est valide pour une tentative de reset
-     public async verifyResetToken({ request, response }: HttpContext) {
-          try {
-               const {token} = request.only(['token'])
-
-               if (!token) {
-                    return response.badRequest({
-                         error: {name: 'missingToken', description: 'Token manquant'},
-                    })
-               }
-               // Échange du recovery token contre une session
-               const {data, error} = await exchangeRecoveryTokenForSession(token)
-               if (error || !data?.session) {
-                    return response.unauthorized({
-                         //error: {name: 'invalidToken', description: 'Token invalide ou expiré'},
-                         error: {name: 'invalidToken', description: error}
-                    })
-               }
-
-               return response.ok({
-                    message: 'Token valide',
-                    access_token: data.session.access_token,
-                    refresh_token: data.session.refresh_token,
-                    user: data.user,
-               })
-          } catch (error) {
-               console.error('Erreur AuthController.verifyResetToken:', error)
-               return response.internalServerError({
-                    error: {name: 'internalError', description: 'Erreur serveur'},
-               })
-          }
-     }
-
 }
 
 export default new AuthController()
