@@ -1,5 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import supabaseService from '#services/supabaseService'
+import MailService from "#services/mail/MailService";
 
 class AuthController {
 
@@ -144,6 +145,27 @@ class AuthController {
                     error: {name: 'internalError', description: 'Une erreur interne est survenue.'}
                })
           }
+     }
+
+     // Envoie un email de réinitialisation de mot de passe
+     public async forgotPassword({ request, response }: HttpContext) {
+          const { email, lang = 'fr' } = request.all()
+
+          const { data, error } = await supabaseService.auth.admin.generateLink({
+               type: 'recovery',
+               email,
+               options: {
+                    redirectTo: process.env.SUPABASE_BASE_URL_REDIRECT + '/panel/reset-password',
+               },
+          })
+
+          if (error || !data?.properties.action_link) {
+               return response.badRequest({ error: { name: 'resetLinkFailed', description: error?.message } })
+          }
+
+          await MailService.sendForgotPasswordEmail(email, data.properties.action_link, lang)
+
+          return response.ok({ message: 'Email envoyé.' })
      }
 }
 

@@ -1,5 +1,5 @@
 ﻿<template>
-     <div v-auto-animate id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
+     <div id="hellohumans-panel" class="w-full min-h-screen grid grid-rows-[auto_1fr]">
           <!-- Header -->
           <div class="flex flex-row justify-start items-center relative p-[32px_40px] z-[1]">
                <div class="mr-auto">

@@ -1,6 +1,5 @@
 <template>
-     <LoadingOverlay v-if="isChecking" />
-     <div v-else id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
+     <div id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
           <div class="flex flex-col justify-start items-[normal] h-full">
                <StepperHeader :step="2" @goStep="goStep" @close="closePanel" />
 
@@ -83,12 +82,10 @@ import { useUpgradeStore } from '@/stores/upgradeStore'
 import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
 import ModuleCard from '~/components/panel/upgrade/ModuleCard.vue'
 import SubscriptionSummary from '~/components/panel/upgrade/SubscriptionSummary.vue'
-import LoadingOverlay from '~/components/panel/common/loadingOverlay.vue'
 import PaymentModal from '~/components/panel/upgrade/PaymentModal.vue'
 
 const store = useUpgradeStore()
 const router = useRouter()
-const isChecking = ref(true)
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
 
@@ -103,8 +100,6 @@ onMounted(async () => {
           await router.replace('/panel/upgrade')
           return
      }
-
-     isChecking.value = false
 })
 
 function toggleModule(moduleId: string, checked: boolean) {

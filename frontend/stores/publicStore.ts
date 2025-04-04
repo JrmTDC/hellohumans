@@ -9,12 +9,12 @@ function isClient() {
 export const usePublicStore = defineStore('public', () => {
      const loading = ref(false)
      const error = ref<string | null>(null)
+     const supabase = useSupabaseClient()
 
      const login = async (email: string, password: string) => {
           loading.value = true
           error.value = null
 
-          const supabase = useSupabaseClient()
           const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
           loading.value = false
@@ -47,21 +47,21 @@ export const usePublicStore = defineStore('public', () => {
      }
 
      const forgotPassword = async (email: string) => {
+          const { apiFetch } = usePublicApi()
           loading.value = true
           error.value = null
-
-          const supabase = useSupabaseClient()
-          const { error: forgotError } = await supabase.auth.resetPasswordForEmail(email, {
-               redirectTo: '/panel/reset-password',
-          })
-
-          loading.value = false
-          if (forgotError) {
-               error.value = forgotError.message
+          try {
+               await apiFetch('/auth/forgot-password', {
+                    method: 'POST',
+                    body: JSON.stringify({ email })
+               })
+               return true
+          } catch (err: any) {
+               error.value = err.message
                return false
+          } finally {
+               loading.value = false
           }
-
-          return true
      }
 
      return {

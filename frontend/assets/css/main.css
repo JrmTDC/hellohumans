@@ -64,6 +64,9 @@ button:hover .hhcss_iconChatFillPath{
      stroke-dasharray: 1;
      stroke-dashoffset: 0;
 }
+.hhcss_tourBox{
+     animation: 0.4s ease-in-out 0s 1 normal none running animation-1fuykbj;
+}
 @media (min-width: 1200px) {
      .hhcss_waveLandingPage {
           display: block;
@@ -77,6 +80,16 @@ button:hover .hhcss_iconChatFillPath{
           stroke-dashoffset: 1;
           -webkit-animation: animation-qivclq 0.8s ease-in-out 1 forwards 0.9s;
           animation: animation-qivclq 0.8s ease-in-out 1 forwards 0.9s;
+     }
+}
+@keyframes animation-1fuykbj {
+     0% {
+          opacity: 0;
+          transform: translateY(12px);
+     }
+     100% {
+          opacity: 1;
+          transform: translateY(0px);
      }
 }
 @keyframes fade-in {

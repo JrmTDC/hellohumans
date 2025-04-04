@@ -1,6 +1,5 @@
 <template>
-     <LoadingOverlay v-if="isChecking" />
-     <div v-else id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
+     <div id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
           <div class="flex flex-col justify-start items-[normal] h-full">
                <StepperHeader :step="1" @goStep="goStep" @close="closePanel" />
 
@@ -62,12 +61,10 @@ import { useUpgradeStore } from '~/stores/upgradeStore'
 import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
 import PlanCard from '~/components/panel/upgrade/PlanCard.vue'
 import SubscriptionSummary from '~/components/panel/upgrade/SubscriptionSummary.vue'
-import LoadingOverlay from "~/components/panel/common/loadingOverlay.vue";
 
 const store = useUpgradeStore()
 const router = useRouter()
 const trialActive = ref(false)
-const isChecking = ref(true)
 
 onMounted(async () => {
      if (!store.plans.length) await store.fetchPlans()
@@ -78,8 +75,6 @@ onMounted(async () => {
      if (!store.selectedPlanId && store.plans.length) {
           store.setPlan(store.plans[0].id)
      }
-
-     isChecking.value = false
 })
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)

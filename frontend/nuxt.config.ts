@@ -4,7 +4,6 @@ export default defineNuxtConfig({
      modules: [
        '@pinia/nuxt',
        '@nuxtjs/tailwindcss',
-       '@formkit/auto-animate',
        'nuxt-svgo',
        '@nuxtjs/color-mode',
        'nuxt-echarts',
@@ -60,7 +59,7 @@ export default defineNuxtConfig({
                apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "",
                appName: process.env.NUXT_PUBLIC_APP_NAME || "",
                appYear: process.env.NUXT_PUBLIC_APP_YEAR || "",
-               supabaseRedirect: process.env.NUXT_PUBLIC_SUPABASE_REDIRECT || "",
+               supabaseBaseUrlRedirect: process.env.NUXT_PUBLIC_SUPABASE_BASE_URL_REDIRECT || "",
                supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL || "",
                supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || "",
           },

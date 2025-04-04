@@ -1,5 +1,5 @@
 <template>
-     <div v-auto-animate class="bg-white flex flex-[1_1_0%] flex-col items-center h-screen font-[euclidcircularb,sans-serif]">
+     <div class="bg-white flex flex-[1_1_0%] flex-col items-center h-screen font-[euclidcircularb,sans-serif]">
           <div class="absolute left-[40px] top-[40px]">
                <svgo-logo-hello-humans-full class="w-[200px] fill-[#303f9f]"/>
           </div>

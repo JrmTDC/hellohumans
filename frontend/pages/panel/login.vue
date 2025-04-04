@@ -6,9 +6,6 @@
                     <svgo-logo-hello-humans-full class="w-[220px]"/>
                </div>
                <div class="login-container">
-                    <!-- Autres éléments du login -->
-
-                    <!-- Sélecteur de langue -->
                     <LanguageSelector />
                </div>
           </div>

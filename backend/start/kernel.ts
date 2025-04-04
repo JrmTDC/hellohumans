@@ -10,9 +10,9 @@ server.use([
   () => import('@adonisjs/cors/cors_middleware'),            // Gestion du CORS
 ])
 
-router.use([() => import('@adonisjs/core/bodyparser_middleware')])
+router.use([() => import('@adonisjs/core/bodyparser_middleware'), () => import('#middleware/detect_user_locale_middleware')])
 
 export const middleware = router.named({
-     chat_security: () => import('#middleware/chat_security_middleware'),
-     panel_auth: () => import('#middleware/panel_auth_middleware'),
+  chat_security: () => import('#middleware/chat_security_middleware'),
+  panel_auth: () => import('#middleware/panel_auth_middleware'),
 })

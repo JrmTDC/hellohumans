@@ -1,0 +1,13 @@
+{
+     "mailTemplate": {
+          "forgotPassword": {
+               "subject": "Réinitialisez votre mot de passe",
+               "hello": "Bonjour,",
+               "instruction": "Vous pouvez définir votre nouveau mot de passe en cliquant sur le lien ci-dessous :",
+               "cta": "Réinitialiser mon mot de passe",
+               "expire": "(Ce lien est valable pendant une heure)",
+               "ignore": "Si vous ne voulez pas réinitialiser votre mot de passe, ignorez simplement ce message.",
+               "signature": "Le support client HelloHumans"
+          }
+     }
+}

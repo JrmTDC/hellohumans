@@ -22,6 +22,7 @@ router.group(() => {
 router.group(() => {
      router.post('/login', (ctx) => AuthController.login(ctx))
      router.post('/register', (ctx) => AuthController.register(ctx))
+     router.post('/forgot-password', (ctx) => AuthController.forgotPassword(ctx))
 })
      .prefix('/panel/auth')
 

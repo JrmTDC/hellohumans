@@ -12,7 +12,7 @@ export function usePanelApi() {
           if (error || !data?.session?.access_token) return null
           return data.session.access_token
      }
-     
+
      async function apiFetch(path: string, options: RequestInit = {}) {
           const token = await getToken()
 
