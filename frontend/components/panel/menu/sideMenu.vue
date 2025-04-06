@@ -62,7 +62,7 @@ const currentLangLabel = computed(() => {
 })
 
 const currentProjectName = computed(() => {
-     return panelStore.projects?.find(p => p.uuid === panelStore.user?.selected_project_uuid)?.website || 'Projet inconnu'
+     return panelStore.project?.website || 'Projet inconnu'
 })
 
 const showLangMenu = ref(false)

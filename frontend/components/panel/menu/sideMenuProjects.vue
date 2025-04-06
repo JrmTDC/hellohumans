@@ -29,8 +29,9 @@ const emit = defineEmits(['open-create-project','close'])
 const projectMenuRef = ref()
 
 const projects = computed(() => panelStore.projects)
-const selectedProject = computed(() => panelStore.user?.selected_project_uuid)
+const selectedProject = computed(() => panelStore.project?.uuid)
 
+console.log(selectedProject)
 const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)' })
 
 const selectProject = async (uuid: string) => {

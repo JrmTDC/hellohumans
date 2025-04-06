@@ -16,7 +16,7 @@ export const usePanelStore = defineStore('panel', () => {
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
-               const [user, client, project_usages, project, projects] = await Promise.all([
+               const [userRes, clientRes, usagesRes, projectRes, projectsRes] = await Promise.all([
                     apiFetch('/user'),
                     apiFetch('/client'),
                     apiFetch('/usages'),
@@ -24,13 +24,13 @@ export const usePanelStore = defineStore('panel', () => {
                     apiFetch('/projects'),
                ])
 
-               user.value = user
-               client.value = client
-               project.value = project
-               projects.value = projects.success.projects || []
-               project_usages.value = project_usages.success.usages || []
-               modules.value = project_usages.modules || []
-               subscription.value = project_usages.subscription || []
+               user.value = userRes.success.user
+               client.value = clientRes.success.client
+               project.value = projectRes.success.project
+               projects.value = projectsRes.success.projects || []
+               project_usages.value = usagesRes.success.usages || []
+               modules.value = usagesRes.modules || []
+               subscription.value = usagesRes.subscription || []
 
                return true
           } catch (err) {
