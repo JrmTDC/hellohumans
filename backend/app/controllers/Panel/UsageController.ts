@@ -11,34 +11,80 @@ class UsageController {
                     })
                }
 
-               // Récupérer l'utilisateur -> client
-               const { data: client, error: clientError } = await supabase
-                    .from('clients')
-                    .select('uuid, selected_project_uuid')
+               // 1. Récupération de l'utilisateur interne
+               const { data: user, error: userError } = await supabase
+                    .from('users')
+                    .select('uuid, selected_client_uuid')
                     .eq('auth_uuid', authUuid)
-                    .single()
+                    .maybeSingle()
 
-               if (clientError || !client) {
+               if (!user || userError) {
                     return response.notFound({
-                         error: { name: 'clientNotFound', description: 'Client introuvable.' }
+                         error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
                     })
                }
 
-               const projectId = client.selected_project_uuid
-               if (!projectId) {
+               const userUuid = user.uuid
+               let selectedClientUuid = user.selected_client_uuid
+
+               // 2. Vérifier que ce client est bien lié à l’utilisateur
+               let { data: clientUser, error: clientUserError } = await supabase
+                    .from('client_users')
+                    .select('uuid, client_uuid, selected_project_uuid')
+                    .eq('user_uuid', userUuid)
+                    .eq('client_uuid', selectedClientUuid)
+                    .maybeSingle()
+
+               // 3. Si aucun client défini, on en prend un (le + récent)
+               if (!clientUser || clientUserError) {
+                    const { data: lastClientUser } = await supabase
+                         .from('client_users')
+                         .select('uuid, client_uuid, selected_project_uuid')
+                         .eq('user_uuid', userUuid)
+                         .order('created_at', { ascending: false })
+                         .limit(1)
+                         .maybeSingle()
+
+                    if (!lastClientUser) {
+                         return response.notFound({
+                              error: { name: 'clientUserMissing', description: 'Aucun client trouvé pour cet utilisateur.' }
+                         })
+                    }
+
+                    clientUser = lastClientUser
+                    selectedClientUuid = clientUser.client_uuid
+
+                    // Mettre à jour la sélection client dans `users`
+                    await supabase
+                         .from('users')
+                         .update({ selected_client_uuid: selectedClientUuid })
+                         .eq('uuid', userUuid)
+               }
+
+               const selectedProjectUuid = clientUser.selected_project_uuid
+
+               if (!selectedProjectUuid) {
                     return response.badRequest({
-                         error: { name: 'missingProject', description: 'Aucun projet sélectionné.' }
+                         error: { name: 'missingProject', description: 'Aucun projet sélectionné pour ce client.' }
                     })
                }
 
-               // TODO: Récupérer dynamiquement les données d’usage réelles plus tard
-               const usage = [
-                    { id: 'audience', usage: 320 },
-                    { id: 'interactions', usage: 4600, limit: 5000 },
-                    { id: 'guideplus', usage: 87, limit: 100 },
-               ]
+               // 4. Récupérer les usages liés à ce projet
+               const { data: project_usages, error: usageError } = await supabase
+                    .from('client_project_usages')
+                    .select('id, usage, limit')
+                    .eq('project_uuid', selectedProjectUuid)
 
-               return { usage }
+               if (usageError) {
+                    console.error('Erreur récupération usage:', usageError)
+                    return response.internalServerError({
+                         error: { name: 'usageError', description: 'Impossible de récupérer les données d’usage.' }
+                    })
+               }
+
+               return {
+                    usages: project_usages || []
+               }
           } catch (error) {
                console.error('Erreur UsageController.index:', error)
                return response.internalServerError({

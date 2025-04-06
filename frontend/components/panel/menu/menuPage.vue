@@ -62,24 +62,31 @@
           </ul>
           <SideMenu
                v-if="showSideUserMenu"
-               @closeSideUserMenu="showSideUserMenu = false" />
+               @closeSideUserMenu="showSideUserMenu = false"
+               @openCreateProjectModal="openCreateProjectModal" />
      </nav>
+     <createProjectModal
+          v-if="showCreateProjectModal"
+          @close="showCreateProjectModal = false"
+          @create="handleCreateProject"
+     />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { rawIcon } from '@/utils/rawIcon'
-import Tooltip from '@/components/panel/common/Tooltip.vue'
-import SideMenu from '@/components/panel/SideMenu.vue'
+import { rawIcon } from '~/utils/rawIcon'
+import Tooltip from '~/components/panel/common/Tooltip.vue'
+import SideMenu from '~/components/panel/menu/sideMenu.vue'
 
-import iconMenuLogo from '@/assets/icons/panel/logoHelloHumansMini.svg'
-import iconMenuRobot from '@/assets/icons/panel/iconMenuRobot.svg'
-import iconMenuFlow from '@/assets/icons/panel/iconMenuFlow.svg'
-import iconMenuSetting from '@/assets/icons/panel/iconMenuSetting.svg'
-import iconUserPicture from '@/assets/icons/panel/iconMenuUserPicture.svg'
-import iconMenuModule from '@/assets/icons/panel/iconMenuModule.svg'
-import iconMenuBulb from '@/assets/icons/panel/iconMenuBulb.svg'
-import iconMenuAnalytic from '@/assets/icons/panel/iconMenuAnalytic.svg'
+import iconMenuLogo from '~/assets/icons/panel/logoHelloHumansMini.svg'
+import iconMenuRobot from '~/assets/icons/panel/iconMenuRobot.svg'
+import iconMenuFlow from '~/assets/icons/panel/iconMenuFlow.svg'
+import iconMenuSetting from '~/assets/icons/panel/iconMenuSetting.svg'
+import iconUserPicture from '~/assets/icons/panel/iconMenuUserPicture.svg'
+import iconMenuModule from '~/assets/icons/panel/iconMenuModule.svg'
+import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
+import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
+import createProjectModal from '~/components/panel/modal/createProjectModal.vue'
 
 const menuItems = ref([
      { position: 'top', type:'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
@@ -97,8 +104,28 @@ const bottomItems = computed(() => menuItems.value.filter(item => item.position 
 
 const hoveredItem = ref(null)
 const showSideUserMenu = ref(false)
+const showCreateProjectModal = ref(false)
+
+const openCreateProjectModal = () => {
+     showCreateProjectModal.value = true
+     showSideUserMenu.value = false // Ferme le menu utilisateur
+}
 
 const toggleSideMenuUser = () => {
      showSideUserMenu.value = !showSideUserMenu.value
+}
+
+const panelStore = usePanelStore()
+
+const handleCreateProject = async (website: string) => {
+     const success = await panelStore.createProject(website)
+     if (success) {
+          showCreateProjectModal.value = false
+          await panelStore.fetchUser()
+          const project = panelStore.projects.at(-1) // le dernier projet
+          if (project?.uuid) {
+               await router.push(`/panel/project/${project.uuid}/config`)
+          }
+     }
 }
 </script>

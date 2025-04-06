@@ -58,14 +58,6 @@ import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({
      text: { type: String, required: true },
-     topAjust: {
-          type: Number,
-          default: 0
-     },
-     leftAjust: {
-          type: Number,
-          default: 0
-     },
      placement: {
           type: String,
           default: 'top'
@@ -96,8 +88,8 @@ const updateTooltipPosition = () => {
 
      switch (props.placement) {
           case 'right':
-               top = props.topAjust + rect.top + rect.height / 2
-               left = props.leftAjust + rect.right + props.offset
+               top = rect.top + rect.height / 2
+               left = rect.right + props.offset
                tooltipStyle.value = {
                     top: `${top}px`,
                     left: `${left}px`,
@@ -112,8 +104,8 @@ const updateTooltipPosition = () => {
                }
                break
           case 'left':
-               top = props.topAjust + rect.top + rect.height / 2
-               left = props.leftAjust + rect.left - props.offset
+               top = rect.top + rect.height / 2
+               left = rect.left - props.offset
                tooltipStyle.value = {
                     top: `${top}px`,
                     left: `${left}px`,
@@ -128,8 +120,8 @@ const updateTooltipPosition = () => {
                }
                break
           case 'top':
-               top = props.topAjust + rect.top - props.offset
-               left = props.leftAjust + rect.left + rect.width / 2
+               top = rect.top - props.offset
+               left = rect.left + rect.width / 2
                tooltipStyle.value = {
                     top: `${top}px`,
                     left: `${left}px`,
@@ -144,8 +136,8 @@ const updateTooltipPosition = () => {
                }
                break
           case 'bottom':
-               top = props.topAjust + rect.bottom + props.offset
-               left = props.leftAjust + rect.left + rect.width / 2
+               top = rect.bottom + props.offset
+               left = rect.left + rect.width / 2
                tooltipStyle.value = {
                     top: `${top}px`,
                     left: `${left}px`,

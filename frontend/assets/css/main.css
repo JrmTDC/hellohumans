@@ -21,6 +21,23 @@
           left: auto;
      }
 }
+#hellohumans-panel-modal {
+     font-family: euclidcircularb;
+     letter-spacing: -0.24px;
+}
+#hellohumans-panel-modal .hhcss_1iwez1q label:has(input[value=""]:not(:focus):not([hidden])) .hhcss_e1uwiaj07 {
+     font-size: 16px;
+     line-height: 20px;
+     letter-spacing: -0.01em;
+     transform: translate(0px, 15px);
+     transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+     background-color: transparent;
+     position: absolute;
+     top: 0;
+     align-self: flex-start;
+     display: inline-block;
+     padding: 0 8px 2px;
+}
 #hellohumans-chat-iframe{
      font-family: Mulish;
      letter-spacing: -0.24px;

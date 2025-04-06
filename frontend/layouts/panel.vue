@@ -15,8 +15,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { usePanelStore } from '@/stores/panelStore'
-import menuNavPage from '~/components/panel/common/menuNavPage.vue'
+import { usePanelStore } from '~/stores/panelStore'
+import menuNavPage from '~/components/panel/menu/menuPage.vue'
 import headerPage from '~/components/panel/common/headerPage.vue'
 import LoadingOverlay from "~/components/panel/common/loadingOverlay.vue";
 

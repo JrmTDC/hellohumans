@@ -5,23 +5,32 @@ import { usePanelApi } from '~/composables/usePanelApi'
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
-     const user = ref<{ id: string; email: string } | null>(null)
-     const usageData = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
+     const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string;  } | null>(null)
+     const client = ref<{} | null>(null)
+     const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const subscription = ref<{ id: string; name: string; status: string }[]>([])
      const modules = ref<string[]>([])
+     const project = ref<any[]>([])
+     const projects = ref<any[]>([])
 
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
-               const [userData, usage] = await Promise.all([
+               const [user, client, project_usages, project, projects] = await Promise.all([
+                    apiFetch('/user'),
                     apiFetch('/client'),
-                    apiFetch('/usage'),
+                    apiFetch('/usages'),
+                    apiFetch('/project'),
+                    apiFetch('/projects'),
                ])
 
-               user.value = userData.user
-               usageData.value = usage.usage || []
-               modules.value = usage.modules || []
-               subscription.value = usage.subscription || []
+               user.value = user
+               client.value = client
+               project.value = project
+               projects.value = projects.success.projects || []
+               project_usages.value = project_usages.success.usages || []
+               modules.value = project_usages.modules || []
+               subscription.value = project_usages.subscription || []
 
                return true
           } catch (err) {
@@ -45,7 +54,7 @@ export const usePanelStore = defineStore('panel', () => {
           const { apiFetch } = usePanelApi()
           try {
                const data = await apiFetch('/usage')
-               usageData.value = data.usage || []
+               project_usages.value = data.usage || []
                subscription.value = data.subscription || []
                modules.value = data.modules || []
           } catch (error) {
@@ -53,10 +62,53 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function createProject(website: string) {
+          const { apiFetch } = usePanelApi()
+          try {
+               await apiFetch('/projects', {
+                    method: 'POST',
+                    body: JSON.stringify({ website }),
+               })
+               return true
+          } catch (err: any) {
+               return false
+          }
+     }
+
+     async function updateUserLang(lang: string): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          try {
+               await apiFetch('/lang', {
+                    method: 'POST',
+                    body: JSON.stringify({ lang }),
+               })
+               await fetchUser()
+               return true
+          } catch (err) {
+               console.error('Erreur update lang:', err)
+               return false
+          }
+     }
+
+     async function switchProject(uuid: string): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          try {
+               await apiFetch(`/switch-project/${uuid}`, {
+                    method: 'POST'
+               })
+
+               await fetchUser()
+               return true
+          } catch (error) {
+               console.error('Erreur switch project:', error)
+               return false
+          }
+     }
+
      async function logout() {
           await supabase.auth.signOut()
           user.value = null
-          usageData.value = []
+          project_usages.value = []
           subscription.value = []
           modules.value = []
      }
@@ -64,14 +116,20 @@ export const usePanelStore = defineStore('panel', () => {
      return {
           // state
           user,
-          usageData,
+          client,
+          project_usages,
           subscription,
           modules,
+          project,
+          projects,
 
           // actions
           initPanelSession,
           fetchUser,
           fetchUsage,
+          createProject,
+          updateUserLang,
+          switchProject,
           logout,
      }
 })

@@ -7,34 +7,88 @@ class AuthController {
      // Vérification des identifiants via Supabase, retour JWT
      public async login({ request, response }: HttpContext) {
           try {
-               const { email, password } = request.all()
+               const email = request.input('email')?.trim()
+               const password = request.input('password')?.trim()
 
-               if (!email || !password) {
+               // Vérifications
+               if (!email) {
                     return response.badRequest({
-                         error: { name: 'missingFields', description: 'Email et mot de passe sont requis' }
+                         error: { name: 'missingEmail', description: 'Adresse e-mail manquante.' }
                     })
                }
 
-               // Connexion via Supabase
-               const { data, error } = await supabaseService.auth.signInWithPassword({
+               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+               if (!emailRegex.test(email)) {
+                    return response.badRequest({
+                         error: { name: 'invalidEmail', description: 'Adresse e-mail invalide.' }
+                    })
+               }
+
+               if (!password) {
+                    return response.badRequest({
+                         error: { name: 'missingPassword', description: 'Mot de passe manquant.' }
+                    })
+               }
+
+               // Étape 1 : Authentification via Supabase
+               const { data: sessionData, error: sessionError } = await supabaseService.auth.signInWithPassword({
                     email,
                     password,
                })
 
-               if (error) {
+               if (sessionError || !sessionData.user) {
                     return response.unauthorized({
-                         error: { name: 'invalidCredentials', description: 'Identifiants invalides' }
+                         error: { name: 'invalidCredentials', description: 'Identifiants incorrects.' }
+                    })
+               }
+
+               const authUUID = sessionData.user.id
+
+               // Étape 2 : Récupération de l'utilisateur interne
+               const { data: userData, error: userError } = await supabaseService
+                    .from('users')
+                    .select('uuid, lang')
+                    .eq('auth_uuid', authUUID)
+                    .maybeSingle()
+
+               if (userError || !userData) {
+                    return response.badRequest({
+                         error: { name: 'userNotFound', description: 'Utilisateur introuvable dans la base.' }
+                    })
+               }
+
+               // Étape 3 : Récupération des infos client_user
+               const { data: clientUserData, error: clientUserError } = await supabaseService
+                    .from('client_users')
+                    .select('uuid, selected_project_uuid')
+                    .eq('auth_uuid', authUUID)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .maybeSingle()
+
+               if (clientUserError || !clientUserData) {
+                    return response.badRequest({
+                         error: {
+                              name: 'clientUserNotFound',
+                              description: 'Impossible de récupérer les informations du client associé à cet utilisateur.'
+                         }
                     })
                }
 
                return response.ok({
-                    token: data.session?.access_token,
-                    refresh_token: data.session?.refresh_token
+                    token: sessionData.session?.access_token,
+                    refresh_token: sessionData.session?.refresh_token,
+                    user: {
+                         uuid: userData.uuid,
+                         email,
+                         lang: userData.lang,
+                         selected_project_uuid: clientUserData.selected_project_uuid
+                    }
                })
           } catch (error) {
                console.error('Erreur AuthController.login:', error)
                return response.internalServerError({
-                    error: { name: 'internalError', description: 'Erreur interne' }
+                    error: { name: 'internalError', description: 'Une erreur interne est survenue.' }
                })
           }
      }
@@ -42,107 +96,162 @@ class AuthController {
      // Inscription utilisateur (email, password, site web, acceptation CG)
      public async register({ request, response }: HttpContext) {
           try {
-               const {email, password, website, accept_cg, lang } = request.all()
+               const email = request.input('email')?.trim()
+               const password = request.input('password')?.trim()
+               const website = request.input('website')?.trim()
+               const lang = request.input('lang') || 'fr'
+               const accept_cg = request.input('accept_cg')
 
-               if (!email || !password || !website) {
+               // Vérification des champs obligatoires
+               if (!email) {
                     return response.badRequest({
-                         error: {name: 'missingFields', description: 'Email, mot de passe et site web sont requis.'}
+                         error: { name: 'missingEmail', description: 'Adresse e-mail manquante.' }
+                    })
+               }
+
+               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+               if (!emailRegex.test(email)) {
+                    return response.badRequest({
+                         error: { name: 'invalidEmail', description: 'Adresse e-mail invalide.' }
+                    })
+               }
+
+               if (!password || password.length < 6) {
+                    return response.badRequest({
+                         error: { name: 'weakPassword', description: 'Le mot de passe est trop court (min 6 caractères).' }
+                    })
+               }
+
+               if (!website) {
+                    return response.badRequest({
+                         error: { name: 'missingWebsite', description: 'L\'URL du site est requise.' }
+                    })
+               }
+
+               const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/
+               if (!urlRegex.test(website)) {
+                    return response.badRequest({
+                         error: { name: 'invalidWebsite', description: 'L\'URL du site est invalide.' }
                     })
                }
 
                if (!accept_cg) {
                     return response.badRequest({
-                         error: {name: 'cgNotAccepted', description: 'Vous devez accepter les CG pour vous inscrire.'}
+                         error: { name: 'cgNotAccepted', description: 'Vous devez accepter les CG pour vous inscrire.' }
                     })
                }
 
-               // Étape 1 : Créer l'utilisateur via Supabase
-               const {data: authData, error: authError} = await supabaseService.auth.signUp({
+               // Étape 1 : Créer l'utilisateur via Supabase Auth
+               const { data: authData, error: authError } = await supabaseService.auth.signUp({
                     email,
-                    password,
-                    options: {
-                         data: {accept_cg: true}
-                    }
+                    password
                })
 
                if (authError || !authData.user) {
+                    console.error('Erreur Supabase signUp:', authError)
                     return response.badRequest({
-                         error: {name: 'registrationFailed', description: authError?.message || 'Erreur Supabase.'}
+                         error: { name: 'registrationFailed', description: authError?.message || 'Erreur Supabase.' }
                     })
                }
 
-               const auth_uuid = authData.user.id
+               const authUUID = authData.user.id
 
-               // Étape 2 : Créer le client dans la table `clients`
-               const {data: clientData, error: clientError} = await supabaseService
+               // Étape 2 : Créer le client
+               const { data: clientData, error: clientError } = await supabaseService
                     .from('clients')
-                    .insert({
-                         auth_uuid,
-                         email,
-                         selected_project_uuid: null,
-                         lang: lang || null
-                    })
+                    .insert({})
                     .select()
                     .single()
 
                if (clientError || !clientData) {
+                    console.error('Erreur création client:', clientError)
                     return response.badRequest({
-                         error: {name: 'clientCreationFailed', description: 'Impossible de créer le client.' }
+                         error: { name: 'clientCreationFailed', description: 'Impossible de créer le client.' }
                     })
                }
 
-               // Étape 3 : Créer un projet associé au client
-               const {data: projectData, error: projectError} = await supabaseService
+               // Étape 3 : Créer l'utilisateur interne
+               const { data: userData, error: userError } = await supabaseService
+                    .from('users')
+                    .insert({
+                         auth_uuid: authUUID,
+                         lang,
+                         selected_client_uuid: clientData.uuid
+                    })
+                    .select()
+                    .single()
+
+               if (userError || !userData) {
+                    console.error('Erreur création user:', userError)
+                    return response.badRequest({
+                         error: { name: 'userCreationFailed', description: 'Impossible de créer l\'utilisateur.' }
+                    })
+               }
+
+               // Étape 4 : Créer le projet principal
+               const { data: projectData, error: projectError } = await supabaseService
                     .from('client_projets')
                     .insert({
                          client_uuid: clientData.uuid,
-                         website: website
+                         website
                     })
                     .select()
                     .single()
 
                if (projectError || !projectData) {
+                    console.error('Erreur création projet:', projectError)
                     return response.badRequest({
-                         error: {name: 'projectCreationFailed', description: website }
-                         // description: 'Impossible de créer le projet.'}
+                         error: { name: 'projectCreationFailed', description: 'Impossible de créer le projet.' }
                     })
                }
 
-               // Étape 4 : Mettre à jour le client avec le projet sélectionné
-               await supabaseService
-                    .from('clients')
-                    .update({selected_project_uuid: projectData.uuid})
-                    .eq('uuid', clientData.uuid)
+               // Étape 5 : Relier user <=> client
+               const { data: clientUserData, error: clientUserError } = await supabaseService
+                    .from('client_users')
+                    .insert({
+                         client_uuid: clientData.uuid,
+                         user_uuid: userData.uuid,
+                         auth_uuid: authUUID,
+                         role: 'admin',
+                         selected_project_uuid: projectData.uuid
+                    })
+                    .select()
+                    .single()
 
-               // Étape 5 : Récupérer un token de session (connexion auto)
-               const {data: sessionData, error: sessionError} = await supabaseService.auth.signInWithPassword({
+               if (clientUserError || !clientUserData) {
+                    console.error('Erreur liaison client_users:', clientUserError)
+                    return response.badRequest({
+                         error: { name: 'clientUserLinkFailed', description: 'Impossible de lier l\'utilisateur au client.' }
+                    })
+               }
+
+               // Étape 6 : Connexion automatique post-inscription
+               const { data: sessionData, error: sessionError } = await supabaseService.auth.signInWithPassword({
                     email,
                     password
                })
 
                if (sessionError || !sessionData.session) {
+                    console.error('Erreur création session post-inscription:', sessionError)
                     return response.internalServerError({
-                         error: {
-                              name: 'sessionCreationFailed',
-                              description: sessionError?.message || 'Impossible de récupérer le token.'
-                         }
+                         error: { name: 'sessionCreationFailed', description: 'Impossible de récupérer une session.' }
                     })
                }
 
+               // Réponse finale
                return response.created({
                     token: sessionData.session.access_token,
                     user: {
-                         uuid: clientData.uuid,
+                         uuid: userData.uuid,
                          email,
                          selected_project_uuid: projectData.uuid,
-                         lang: clientData.lang
-                    },
-                    project: projectData
+                         lang: userData.lang
+                    }
                })
           } catch (error) {
                console.error('Erreur AuthController.register:', error)
                return response.internalServerError({
-                    error: {name: 'internalError', description: 'Une erreur interne est survenue.'}
+                    error: { name: 'internalError', description: 'Une erreur interne est survenue.' }
                })
           }
      }

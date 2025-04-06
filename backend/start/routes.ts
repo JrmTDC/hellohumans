@@ -6,6 +6,7 @@ import AuthController from '#controllers/Panel/AuthController'
 import UpgradeController from '#controllers/Panel/UpgradeController'
 import UsageController from '#controllers/Panel/UsageController'
 import ClientController from '#controllers/Panel/ClientController'
+import UserController from '#controllers/Panel/UserController'
 
 import { middleware } from '#start/kernel'
 
@@ -30,9 +31,14 @@ router.group(() => {
 router.group(() => {
      router.get('/upgrade/plans', (ctx) => UpgradeController.getPlans(ctx))
      router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
+     router.get('/user', (ctx) => UserController.getUser(ctx))
      router.get('/client', (ctx) => ClientController.getClient(ctx))
+     router.get('/clients', (ctx) => ClientController.getClients(ctx))
+     router.get('/project', (ctx) => ClientController.getProject(ctx))
      router.get('/projects', (ctx) => ClientController.getProjects(ctx))
-     router.get('/usage', (ctx) => UsageController.index(ctx))
+     router.get('/usages', (ctx) => UsageController.index(ctx))
+     router.post('/switch-project/:uuid', (ctx) => ClientController.switchProject(ctx))
+     router.post('/panel/lang', (ctx) => UserController.updateLang(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_auth())

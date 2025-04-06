@@ -57,7 +57,7 @@ export const useUsageDefinitions = () => {
                     return true
                })
                .map((def) => {
-                    const usageEntry = panelStore.usageData.find((u) => u.id === def.id)
+                    const usageEntry = panelStore.project_usages.find((u) => u.id === def.id)
                     const usage = usageEntry?.usage || 0
                     const limit = usageEntry?.limit ?? '∞'
                     const isNumeric = !isNaN(Number(limit))
