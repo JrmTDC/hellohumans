@@ -56,12 +56,12 @@ export default defineNuxtConfig({
      },
      runtimeConfig: {
           public: {
-               apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "",
-               appName: process.env.NUXT_PUBLIC_APP_NAME || "",
-               appYear: process.env.NUXT_PUBLIC_APP_YEAR || "",
-               supabaseBaseUrlRedirect: process.env.NUXT_PUBLIC_SUPABASE_BASE_URL_REDIRECT || "",
-               supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL || "",
-               supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || "",
+               apiBaseUrl: process.env.API_BASE_URL || process.env.NUXT_PUBLIC_API_BASE_URL || "",
+               appName: process.env.APP_NAME || process.env.NUXT_PUBLIC_APP_NAME || "",
+               appYear: process.env.APP_YEAR || process.env.NUXT_PUBLIC_APP_YEAR || "",
+               supabaseBaseUrlRedirect: process.env.SUPABASE_BASE_URL_REDIRECT || process.env.NUXT_PUBLIC_SUPABASE_BASE_URL_REDIRECT || "",
+               supabaseUrl: process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL || "",
+               supabaseAnonKey: process.env.SUPABASE_ANON_KEY || process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || "",
           },
      }
 })
