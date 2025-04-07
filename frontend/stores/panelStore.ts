@@ -111,6 +111,26 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function updatePassword(current: string, newPass: string) {
+          try {
+               // Pas de vérification du mot de passe actuel côté client
+               const { data, error } = await supabase.auth.updateUser({
+                    password: newPass
+               })
+
+               if (error || !data) {
+                    console.error('Erreur modification mot de passe:', error)
+                    return false
+               }
+
+               return true
+          } catch (err) {
+               console.error('Erreur updatePassword:', err)
+               return false
+          }
+     }
+
+
      async function logout() {
           await supabase.auth.signOut()
           user.value = null
@@ -136,6 +156,7 @@ export const usePanelStore = defineStore('panel', () => {
           createProject,
           updateUserLang,
           switchProject,
+          updatePassword,
           logout,
      }
 })

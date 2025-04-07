@@ -1,12 +1,12 @@
 <template>
      <div class="dashboard-content flex-1 overflow-x-hidden overflow-y-auto relative">
-          <div class="grid grid-cols-1 grid-rows-1 h-full max-h-full overflow-hidden ml-[24px]">
+          <div class="grid grid-cols-1 grid-rows-1 h-full max-h-full overflow-hidden ml-[24px] ">
                <div class="min-h-full h-full pr-[12px]">
                     <div class="border border-[rgb(226,232,239)] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%] p-0 flex">
 
                          <div class="grid grid-cols-[1fr_340px] grid-rows-1 flex-[1_1_0%]">
                               <div class="flex flex-col justify-start items-start p-[24px_20px_24px_28px] min-w-0">
-                                   <div class="flex flex-row justify-start items-center border border-[rgb(226,232,239)] rounded-[12px] bg-[rgb(245,247,249)] p-[20px] mt-0 mb-0">
+                                   <div class="flex flex-row justify-start items-center border border-[rgb(226,232,239)] rounded-[12px] bg-[rgb(245,247,249)] p-[20px] mt-0 mb-0 w-full">
                                         <div class="w-[48px] h-[48px] relative">
                                              <ProgressCircle
                                                   :percentage="16"
