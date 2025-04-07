@@ -27,7 +27,7 @@
                          @click="selectLanguage(lang.code)"
                          class="text-[14px] leading-[18px] tracking-[-0.01em] h-[44px] px-[24px] flex items-center text-[rgb(8,15,26)] hover:bg-[rgb(239,242,246)] cursor-pointer"
                     >
-                         {{ lang.name }}
+                         {{ lang.shortName }}
                     </div>
                </div>
           </div>
