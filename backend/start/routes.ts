@@ -38,7 +38,7 @@ router.group(() => {
      router.get('/projects', (ctx) => ClientController.getProjects(ctx))
      router.get('/usages', (ctx) => UsageController.index(ctx))
      router.post('/switch-project/:uuid', (ctx) => ClientController.switchProject(ctx))
-     router.post('/panel/lang', (ctx) => UserController.updateLang(ctx))
+     router.post('/lang', (ctx) => UserController.updateLang(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_auth())

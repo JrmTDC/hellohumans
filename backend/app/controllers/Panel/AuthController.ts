@@ -258,8 +258,35 @@ class AuthController {
 
      // Envoie un email de réinitialisation de mot de passe
      public async forgotPassword({ request, response }: HttpContext) {
-          const { email, lang = 'fr' } = request.all()
+          const { email } = request.all()
 
+          // 1. Récupère l'utilisateur via l'API Admin Supabase
+          const { data: userList, error: userListError } = await supabaseService.auth.admin.listUsers()
+          if (userListError || !userList?.users) {
+               return response.badRequest({
+                    error: { name: 'userLookupFailed', description: 'Impossible de rechercher l’utilisateur.' }
+               })
+          }
+
+          const foundUser = userList.users.find(u => u.email?.toLowerCase() === email.toLowerCase())
+          if (!foundUser) {
+               return response.badRequest({
+                    error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
+               })
+          }
+
+          const authUUID = foundUser.id
+
+          // 2. Récupère la langue depuis ta table `users`
+          const { data: userData, error: userError } = await supabaseService
+               .from('users')
+               .select('lang')
+               .eq('auth_uuid', authUUID)
+               .maybeSingle()
+
+          const lang = userData?.lang || 'fr' // fallback si la langue n'est pas définie
+
+          // 3. Génére le lien de récupération de mot de passe
           const { data, error } = await supabaseService.auth.admin.generateLink({
                type: 'recovery',
                email,
@@ -269,12 +296,17 @@ class AuthController {
           })
 
           if (error || !data?.properties.action_link) {
-               return response.badRequest({ error: { name: 'resetLinkFailed', description: error?.message } })
+               return response.badRequest({
+                    error: { name: 'resetLinkFailed', description: error?.message || 'Erreur lien de réinitialisation.' }
+               })
           }
 
+          // 4. Envoie l’email avec la langue définie
           await MailService.sendForgotPasswordEmail(email, data.properties.action_link, lang)
-
-          return response.ok({ message: 'Email envoyé.' })
+          
+          return response.ok({
+               message: 'Email envoyé.'
+          })
      }
 }
 

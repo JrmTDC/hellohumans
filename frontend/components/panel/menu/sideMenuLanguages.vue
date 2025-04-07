@@ -12,21 +12,24 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
+import {usePanelStore} from "~/stores/panelStore";
 
+const panelStore = usePanelStore()
 const { locale, locales, setLocale } = useI18n()
 const langMenuRef = ref()
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'closeAllMenus'])
 
 const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)' })
 
 const selectLanguage = async (code: string) => {
      if (code !== locale.value) {
-          await setLocale(code as any)
-          // Enregistrer en base si utilisateur connecté (optionnel)
-          //location.reload()
+          //await setLocale(code as any)
+          await panelStore.updateUserLang(code)
+          location.reload()
      }
      emit('close')
+     emit('closeAllMenus')
 }
 
 let skipNextClick = true

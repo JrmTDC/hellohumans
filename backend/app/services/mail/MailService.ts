@@ -18,7 +18,7 @@ export async function svgToBase64DataUrl(relativePath: string): Promise<string> 
 }
 
 export default class MailService {
-
+     
      static async sendConfirmationInscriptionEmail(email: string, tokenUrl: string, lang: string = 'fr') {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')

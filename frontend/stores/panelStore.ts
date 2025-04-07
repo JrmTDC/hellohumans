@@ -13,8 +13,10 @@ export const usePanelStore = defineStore('panel', () => {
      const project = ref<any[]>([])
      const projects = ref<any[]>([])
 
+
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
+          const { setLocale } = useI18n()
           try {
                const [userRes, clientRes, usagesRes, projectRes, projectsRes] = await Promise.all([
                     apiFetch('/user'),
@@ -32,6 +34,10 @@ export const usePanelStore = defineStore('panel', () => {
                modules.value = usagesRes.modules || []
                subscription.value = usagesRes.subscription || []
 
+               // Mettre à jour la langue locale
+               if (userRes.success.user?.lang) {
+                    await setLocale(userRes.success.user.lang)
+               }
                return true
           } catch (err) {
                console.warn('Session invalide / déconnectée', err)
