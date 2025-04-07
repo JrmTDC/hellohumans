@@ -1,6 +1,79 @@
 {
      "mailTemplate": {
+          "confirmationInscription": {
+               "subject": "Confirm your registration",
+               "greeting": "Hello,",
+               "thank": "Thank you for signing up to HelloHumans!",
+               "cta": "Confirm my email address",
+               "expiration": "(This link is valid for 24h)",
+               "signature": "See you soon,\nThe HelloHumans team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – All rights reserved",
+                    "support": "support@hellohumans.fr"
+               }
+          },
           "forgotPassword": {
+               "subject": "Reset your password",
+               "greeting": "Hello,",
+               "instruction": "You can set your new password by clicking the link below:",
+               "cta": "Reset my password",
+               "expiration": "This link will expire in 60 minutes.",
+               "note": "If you don’t want to reset your password, simply ignore this message.",
+               "signature": "HelloHumans Support Team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – All rights reserved",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "invitationUtilisateur": {
+               "subject": "You're invited to join a team",
+               "greeting": "Hello,",
+               "name": "{{name}}",
+               "invitation": "has invited you to join their team on HelloHumans.",
+               "cta": "Accept the invitation",
+               "expiration": "(This invitation expires in 48h)",
+               "signature": "See you soon,\nThe HelloHumans team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – All rights reserved",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "lienMagique": {
+               "subject": "Your magic link to sign in",
+               "greeting": "Hello,",
+               "text": "You requested to sign in with a magic link.",
+               "cta": "Sign in",
+               "expiration": "(Valid for 10 minutes)",
+               "warning": "If it wasn't you, please ignore this message.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – All rights reserved",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "modificationEmail": {
+               "subject": "Confirm your email address change",
+               "greeting": "Hello,",
+               "text": "You requested to change your email address.",
+               "cta": "Confirm email address",
+               "expiration": "(This link is valid for 1 hour)",
+               "warning": "If you didn’t make this request, please contact our support.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – All rights reserved",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "reauthentification": {
+               "subject": "Please log in again to continue",
+               "greeting": "Hello,",
+               "text": "For security reasons, you need to log in again to continue this action.",
+               "cta": "Log in again",
+               "security": "(Secure login)",
+               "thanks": "Thank you for your understanding,",
+               "team": "The HelloHumans team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – All rights reserved",
+                    "support": "support@hellohumans.fr"
+               }
           }
      }
 }

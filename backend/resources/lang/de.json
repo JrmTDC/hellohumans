@@ -1,13 +1,79 @@
 {
      "mailTemplate": {
+          "confirmationInscription": {
+               "subject": "Bestätigen Sie Ihre Registrierung",
+               "greeting": "Hallo,",
+               "thank": "Vielen Dank für Ihre Anmeldung bei HelloHumans!",
+               "cta": "Meine E-Mail-Adresse bestätigen",
+               "expiration": "(Dieser Link ist 24 Stunden lang gültig)",
+               "signature": "Bis bald,\nIhr HelloHumans-Team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Alle Rechte vorbehalten",
+                    "support": "support@hellohumans.fr"
+               }
+          },
           "forgotPassword": {
-               "subject": "Réinitialisez votre mot de passe",
-               "hello": "Bonjour,",
-               "instruction": "Vous pouvez définir votre nouveau mot de passe en cliquant sur le lien ci-dessous :",
-               "cta": "Réinitialiser mon mot de passe",
-               "expire": "(Ce lien est valable pendant une heure)",
-               "ignore": "Si vous ne voulez pas réinitialiser votre mot de passe, ignorez simplement ce message.",
-               "signature": "Le support client HelloHumans"
+               "subject": "Setzen Sie Ihr Passwort zurück",
+               "greeting": "Hallo,",
+               "instruction": "Sie können Ihr neues Passwort festlegen, indem Sie auf den folgenden Link klicken:",
+               "cta": "Passwort zurücksetzen",
+               "expiration": "Dieser Link ist 60 Minuten gültig.",
+               "note": "Wenn Sie Ihr Passwort nicht zurücksetzen möchten, ignorieren Sie einfach diese Nachricht.",
+               "signature": "Der HelloHumans-Kundensupport",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Alle Rechte vorbehalten",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "invitationUtilisateur": {
+               "subject": "Sie wurden eingeladen, einem Team beizutreten",
+               "greeting": "Hallo,",
+               "name": "{{name}}",
+               "invitation": "hat Sie eingeladen, seinem Team bei HelloHumans beizutreten.",
+               "cta": "Einladung annehmen",
+               "expiration": "(Diese Einladung läuft in 48 Stunden ab)",
+               "signature": "Bis bald,\nIhr HelloHumans-Team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Alle Rechte vorbehalten",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "lienMagique": {
+               "subject": "Ihr magischer Link zur Anmeldung",
+               "greeting": "Hallo,",
+               "text": "Sie haben den Login mit einem magischen Link angefordert.",
+               "cta": "Anmelden",
+               "expiration": "(Gültig für 10 Minuten)",
+               "warning": "Wenn Sie das nicht waren, ignorieren Sie bitte diese Nachricht.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Alle Rechte vorbehalten",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "modificationEmail": {
+               "subject": "Bestätigen Sie Ihre E-Mail-Änderung",
+               "greeting": "Hallo,",
+               "text": "Sie haben die Änderung Ihrer E-Mail-Adresse angefordert.",
+               "cta": "E-Mail-Adresse bestätigen",
+               "expiration": "(Dieser Link ist 1 Stunde gültig)",
+               "warning": "Wenn Sie diese Anfrage nicht gestellt haben, kontaktieren Sie bitte unseren Support.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Alle Rechte vorbehalten",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "reauthentification": {
+               "subject": "Bitte melden Sie sich erneut an, um fortzufahren",
+               "greeting": "Hallo,",
+               "text": "Aus Sicherheitsgründen müssen Sie sich erneut anmelden, um fortzufahren.",
+               "cta": "Erneut anmelden",
+               "security": "(Sichere Anmeldung)",
+               "thanks": "Vielen Dank für Ihr Verständnis,",
+               "team": "Ihr HelloHumans-Team",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Alle Rechte vorbehalten",
+                    "support": "support@hellohumans.fr"
+               }
           }
      }
 }

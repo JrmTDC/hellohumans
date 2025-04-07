@@ -1,6 +1,79 @@
 {
      "mailTemplate": {
+          "confirmationInscription": {
+               "subject": "Confirme seu cadastro",
+               "greeting": "Olá,",
+               "thank": "Obrigado por se inscrever no HelloHumans!",
+               "cta": "Confirmar meu endereço de e-mail",
+               "expiration": "(Este link é válido por 24 horas)",
+               "signature": "Até breve,\nEquipe HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos os direitos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
           "forgotPassword": {
+               "subject": "Redefina sua senha",
+               "greeting": "Olá,",
+               "instruction": "Você pode definir sua nova senha clicando no link abaixo:",
+               "cta": "Redefinir minha senha",
+               "expiration": "Este link expirará em 60 minutos.",
+               "note": "Se você não quiser redefinir sua senha, basta ignorar esta mensagem.",
+               "signature": "Suporte ao cliente HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos os direitos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "invitationUtilisateur": {
+               "subject": "Você foi convidado para se juntar a uma equipe",
+               "greeting": "Olá,",
+               "name": "{{name}}",
+               "invitation": "convidou você para se juntar à equipe dele no HelloHumans.",
+               "cta": "Aceitar o convite",
+               "expiration": "(Este convite expira em 48 horas)",
+               "signature": "Até breve,\nEquipe HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos os direitos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "lienMagique": {
+               "subject": "Seu link mágico para entrar",
+               "greeting": "Olá,",
+               "text": "Você solicitou fazer login com um link mágico.",
+               "cta": "Entrar",
+               "expiration": "(Válido por 10 minutos)",
+               "warning": "Se não foi você, ignore esta mensagem.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos os direitos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "modificationEmail": {
+               "subject": "Confirme a alteração do seu e-mail",
+               "greeting": "Olá,",
+               "text": "Você solicitou a alteração do seu endereço de e-mail.",
+               "cta": "Confirmar e-mail",
+               "expiration": "(Este link é válido por 1 hora)",
+               "warning": "Se você não fez essa solicitação, entre em contato com o nosso suporte.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos os direitos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "reauthentification": {
+               "subject": "Faça login novamente para continuar",
+               "greeting": "Olá,",
+               "text": "Por motivos de segurança, é necessário fazer login novamente para continuar esta ação.",
+               "cta": "Fazer login novamente",
+               "security": "(Login seguro)",
+               "thanks": "Obrigado pela sua compreensão,",
+               "team": "Equipe HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos os direitos reservados",
+                    "support": "support@hellohumans.fr"
+               }
           }
      }
 }

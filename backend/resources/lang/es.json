@@ -1,6 +1,79 @@
 {
      "mailTemplate": {
+          "confirmationInscription": {
+               "subject": "Confirma tu registro",
+               "greeting": "Hola,",
+               "thank": "¡Gracias por registrarte en HelloHumans!",
+               "cta": "Confirmar mi dirección de correo electrónico",
+               "expiration": "(Este enlace es válido durante 24 horas)",
+               "signature": "¡Hasta pronto!\nEl equipo de HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos los derechos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
           "forgotPassword": {
+               "subject": "Restablece tu contraseña",
+               "greeting": "Hola,",
+               "instruction": "Puedes establecer tu nueva contraseña haciendo clic en el siguiente enlace:",
+               "cta": "Restablecer mi contraseña",
+               "expiration": "Este enlace caducará en 60 minutos.",
+               "note": "Si no deseas restablecer tu contraseña, simplemente ignora este mensaje.",
+               "signature": "El soporte de HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos los derechos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "invitationUtilisateur": {
+               "subject": "Has sido invitado a unirte a un equipo",
+               "greeting": "Hola,",
+               "name": "{{name}}",
+               "invitation": "te ha invitado a unirte a su equipo en HelloHumans.",
+               "cta": "Aceptar la invitación",
+               "expiration": "(Esta invitación expira en 48 horas)",
+               "signature": "Hasta pronto,\nEl equipo de HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos los derechos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "lienMagique": {
+               "subject": "Tu enlace mágico para iniciar sesión",
+               "greeting": "Hola,",
+               "text": "Has solicitado iniciar sesión con un enlace mágico.",
+               "cta": "Iniciar sesión",
+               "expiration": "(Válido durante 10 minutos)",
+               "warning": "Si no fuiste tú, ignora este mensaje.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos los derechos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "modificationEmail": {
+               "subject": "Confirma el cambio de tu correo electrónico",
+               "greeting": "Hola,",
+               "text": "Has solicitado cambiar tu dirección de correo electrónico.",
+               "cta": "Confirmar dirección de correo",
+               "expiration": "(Este enlace es válido durante 1 hora)",
+               "warning": "Si no realizaste esta solicitud, contacta con nuestro soporte.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos los derechos reservados",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "reauthentification": {
+               "subject": "Vuelve a iniciar sesión para continuar",
+               "greeting": "Hola,",
+               "text": "Por razones de seguridad, debes iniciar sesión nuevamente para continuar con esta acción.",
+               "cta": "Iniciar sesión",
+               "security": "(Inicio de sesión seguro)",
+               "thanks": "Gracias por tu comprensión,",
+               "team": "El equipo de HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Todos los derechos reservados",
+                    "support": "support@hellohumans.fr"
+               }
           }
      }
 }

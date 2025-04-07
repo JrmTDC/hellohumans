@@ -1,13 +1,79 @@
 {
      "mailTemplate": {
+          "confirmationInscription": {
+               "subject": "Confirmez votre inscription",
+               "greeting": "Bonjour,",
+               "thank": "Merci de vous être inscrit sur HelloHumans !",
+               "cta": "Confirmer mon adresse e-mail",
+               "expiration": "(Ce lien est valide pendant 24h)",
+               "signature": "À très vite,\nL’équipe HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Tous droits réservés",
+                    "support": "support@hellohumans.fr"
+               }
+          },
           "forgotPassword": {
                "subject": "Réinitialisez votre mot de passe",
-               "hello": "Bonjour,",
+               "greeting": "Bonjour,",
                "instruction": "Vous pouvez définir votre nouveau mot de passe en cliquant sur le lien ci-dessous :",
                "cta": "Réinitialiser mon mot de passe",
-               "expire": "(Ce lien est valable pendant une heure)",
-               "ignore": "Si vous ne voulez pas réinitialiser votre mot de passe, ignorez simplement ce message.",
-               "signature": "Le support client HelloHumans"
+               "expiration": "Ce lien expirera dans 60 minutes.",
+               "note": "Si vous ne voulez pas réinitialiser votre mot de passe, ignorez simplement ce message.",
+               "signature": "Le support client HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Tous droits réservés",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "invitationUtilisateur": {
+               "subject": "Vous êtes invité à rejoindre une équipe",
+               "greeting": "Bonjour,",
+               "name": "{{name}}",
+               "invitation": " vous a invité à rejoindre son équipe sur HelloHumans.",
+               "cta": "Accepter l’invitation",
+               "expiration": "(Cette invitation expire dans 48h)",
+               "signature": "À bientôt,\nL’équipe HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Tous droits réservés",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "lienMagique": {
+               "subject": "Votre lien magique pour vous connecter",
+               "greeting": "Bonjour,",
+               "text": "Vous avez demandé à vous connecter avec un lien magique.",
+               "cta": "Se connecter",
+               "expiration": "(Valable 10 minutes)",
+               "warning": "Si ce n’était pas vous, ignorez ce message.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Tous droits réservés",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "modificationEmail": {
+               "subject": "Confirmez la modification de votre e-mail",
+               "greeting": "Bonjour,",
+               "text": "Vous avez demandé à modifier votre adresse e-mail.",
+               "cta": "Confirmer l’adresse e-mail",
+               "expiration": "(Ce lien est valable 1h)",
+               "warning": "Si vous n’avez pas fait cette demande, contactez notre support.",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Tous droits réservés",
+                    "support": "support@hellohumans.fr"
+               }
+          },
+          "reauthentification": {
+               "subject": "Reconnectez-vous pour continuer",
+               "greeting": "Bonjour,",
+               "text": "Pour des raisons de sécurité, vous devez vous reconnecter pour poursuivre cette action.",
+               "cta": "Me reconnecter",
+               "security": "(Connexion sécurisée)",
+               "thanks": "Merci de votre compréhension,",
+               "team": "L’équipe HelloHumans",
+               "footer": {
+                    "copyright": "Copyright © 2025 HelloHumans – Tous droits réservés",
+                    "support": "support@hellohumans.fr"
+               }
           }
      }
 }
