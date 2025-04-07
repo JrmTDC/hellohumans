@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+    <style>
+        body, table, td {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f3f5f8;
+        }
+        img {
+            display: block;
+            border: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 6px;
+        }
+        .header {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 4px solid #303f9f;
+        }
+        .header img {
+            height: 26px;
+        }
+        .content {
+            padding: 30px 40px;
+            color: #080f1a;
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .btn {
+            display: inline-block;
+            margin: 15px auto;
+            padding: 12px 24px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #303f9f;
+            border-radius: 3px;
+            text-decoration: none;
+            text-align: center;
+            width: 280px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #939eb4;
+        }
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px;
+            }
+            .btn {
+                width:fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+         <a href="https://www.hellohumans.fr/"><img src="{{ image_svg_header }}" alt="HelloHumans"></a>
+    </div>
+    <div class="content">
+        <p>{{ greeting }}</p>
+        <p><strong>{{name}}</strong>{{ invitation }}</p>
+        <p style="text-align:center;margin-bottom: 0;">
+            <a href="https://hellohumans.fr/panel/invite?token=xyz" class="btn" target="_blank" rel="noopener noreferrer">
+                {{ cta }}
+            </a>
+        </p>
+        <p style="text-align:center;font-size: 14px;color: #8894ab;margin-top: 0;margin-bottom: 25px;">{{ expiration }}</p>
+        <p>{{ signature }}</p>
+    </div>
+    <div class="footer">
+        <p>
+             <a href="https://www.hellohumans.fr/">
+                                <img src="{{ image_svg_footer }}" alt="HelloHumans" style="height:30px;width:auto;margin:auto;text-align:center;margin-bottom: 10px;">
+                           </a>
+                           <br>{{ footer_copyright }}<br>
+            <a href="mailto:support@hellohumans.fr">{{ footer_support }}</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>
