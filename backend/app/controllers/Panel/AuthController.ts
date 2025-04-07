@@ -278,7 +278,7 @@ class AuthController {
           const authUUID = foundUser.id
 
           // 2. Récupère la langue depuis ta table `users`
-          const { data: userData, error: userError } = await supabaseService
+          const { data: userData } = await supabaseService
                .from('users')
                .select('lang')
                .eq('auth_uuid', authUUID)
@@ -303,7 +303,7 @@ class AuthController {
 
           // 4. Envoie l’email avec la langue définie
           await MailService.sendForgotPasswordEmail(email, data.properties.action_link, lang)
-          
+
           return response.ok({
                message: 'Email envoyé.'
           })

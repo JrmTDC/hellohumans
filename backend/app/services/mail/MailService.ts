@@ -18,8 +18,8 @@ export async function svgToBase64DataUrl(relativePath: string): Promise<string> 
 }
 
 export default class MailService {
-     
-     static async sendConfirmationInscriptionEmail(email: string, tokenUrl: string, lang: string = 'fr') {
+
+     static async sendConfirmationInscriptionEmail(email: string, tokenUrl: string, lang: string) {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')
 
@@ -54,7 +54,7 @@ export default class MailService {
           })
      }
 
-     static async sendForgotPasswordEmail(email: string, tokenUrl: string, lang: string = 'fr') {
+     static async sendForgotPasswordEmail(email: string, tokenUrl: string, lang: string) {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')
 
@@ -90,7 +90,7 @@ export default class MailService {
           })
      }
 
-     static async sendInvitationUtilisateurEmail(email: string, tokenUrl: string, lang: string = 'fr') {
+     static async sendInvitationUtilisateurEmail(email: string, tokenUrl: string, lang: string) {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')
 
@@ -125,7 +125,7 @@ export default class MailService {
           })
      }
 
-     static async sendLienMagiqueEmail(email: string, tokenUrl: string, lang: string = 'fr') {
+     static async sendLienMagiqueEmail(email: string, tokenUrl: string, lang: string) {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')
 
@@ -160,7 +160,7 @@ export default class MailService {
           })
      }
 
-     static async sendModificationEmailEmail(email: string, tokenUrl: string, lang: string = 'fr') {
+     static async sendModificationEmailEmail(email: string, tokenUrl: string, lang: string) {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')
 
@@ -195,7 +195,7 @@ export default class MailService {
           })
      }
 
-     static async sendReauthentificationEmail(email: string, tokenUrl: string, lang: string = 'fr') {
+     static async sendReauthentificationEmail(email: string, tokenUrl: string, lang: string) {
           const t = i18nManager.locale(lang)
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/logoHellohumansFull.svg')
 
