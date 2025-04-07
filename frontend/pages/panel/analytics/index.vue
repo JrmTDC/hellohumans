@@ -48,11 +48,6 @@ import AnalyticsChart from '~/components/panel/analytics/AnalyticsChart.vue'
 import DatePicker from "~/components/panel/DatePicker.vue";
 const { t } = useI18n()
 
-
-definePageMeta({
-     layout: 'panel'
-})
-
 const router = useRouter()
 
 // Exemple de données
@@ -61,19 +56,19 @@ const dateRange = ref({ start: '2025-02-23', end: '2025-03-23' })
 function updateDateRange(range: any) {
      dateRange.value = range
 }
-onMounted(() => {
-     const token = localStorage.getItem('token')
-     if (!token) {
-          router.push('/panel/login')
-     }
-     const pageTitle = useState('pageTitle')
+
+
+const pageTitle = useState('pageTitle', () => '')
+const pageIsBilled = useState('pageIsBilled', () => false)
+const pageIsPaid = useState('pageIsPaid', () => false)
+
+onMounted(async () => {
      pageTitle.value = 'Analytique'
-
-     const pageIsBilled = useState('pageIsBilled')
      pageIsBilled.value = true
-
-     const pageIsPaid = useState('pageIsPaid')
      pageIsPaid.value = true
+})
+definePageMeta({
+     layout: 'panel'
 })
 </script>
 

@@ -3,26 +3,18 @@
      </div>
 </template>
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+
+const pageTitle = useState('pageTitle', () => '')
+const pageIsBilled = useState('pageIsBilled', () => false)
+const pageIsPaid = useState('pageIsPaid', () => false)
+
+onMounted(async () => {
+     pageTitle.value = 'Paramètres'
+     pageIsBilled.value = false
+     pageIsPaid.value = false
+})
 definePageMeta({
      layout: 'panel'
-})
-
-const router = useRouter()
-
-onMounted(() => {
-     const token = localStorage.getItem('token')
-     if (!token) {
-          router.push('/panel/login')
-     }
-     const pageTitle = useState('pageTitle')
-     pageTitle.value = 'Paramètres'
-
-     const pageIsBilled = useState('pageIsBilled')
-     pageIsBilled.value = false
-
-     const pageIsPaid = useState('pageIsPaid')
-     pageIsPaid.value = false
 })
 </script>

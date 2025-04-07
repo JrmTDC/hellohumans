@@ -6,8 +6,9 @@
                          <svgo-panel-icon-menu-user-picture class="w-[30px] h-[30px]" />
                     </div>
                     <div class="flex flex-col justify-start items-[normal] min-w-0 ml-[12px]">
-                         <div class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap mt-0 mb-0">Jérémy</div>
-                         <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">Des infos (je ne sais pas encore)</div>
+                         <div class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap mt-0 mb-0">
+                              {{ userDisplayName }}</div>
+                         <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">Offre : Growth</div>
                     </div>
                </div>
 
@@ -62,6 +63,10 @@ const { locale, locales } = useI18n()
 
 const currentLangLabel = computed(() => {
      return locales.value.find((l: any) => l.code === locale.value)?.name || locale.value.toUpperCase()
+})
+
+const userDisplayName = computed(() => {
+     return panelStore.user?.email || 'Utilisateur inconnu'
 })
 
 const currentProjectName = computed(() => {

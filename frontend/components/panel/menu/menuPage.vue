@@ -94,7 +94,7 @@ const menuItems = ref([
      { position: 'top', type:'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'Analytique' },
      { position: 'bottom', type:'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'x' },
      { position: 'bottom', type:'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'Intégrations' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings', tooltip: 'Paramètres' },
+     { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: 'Paramètres' },
      { position: 'bottom', type:'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'Votre compte' }
 ])
 

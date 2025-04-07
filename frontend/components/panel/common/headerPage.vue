@@ -6,7 +6,14 @@
                     <div v-if="isBilled" :class="isPaid ? 'bg-[rgb(190,255,203)]' : 'bg-[rgb(255,219,186)]'" class="p-[3px_5px] rounded-[4px] block ml-[8px]" > <div class="flex flex-row justify-start items-center"> <svgo-panel-icon-premium class="w-[14px] h-[14px] block fill-[rgb(8,15,26)] transition-none mr-0" /> <p class="mt-0 mb-0 ml-[2px] font-normal text-[12px] leading-[16px] tracking-[-0.01em]"> {{ isPaid ? 'Payé' : 'Payant' }} </p> </div> </div>
                </h1>
                <div class="flex flex-row justify-start items-center ml-[16px]" ref="usageMenuRef">
-                    <div @click="toggleUsageMenu" class="flex flex-row justify-start items-center p-[6px] rounded-[6px] cursor-pointer text-[rgb(58,35,0)] bg-transparent hover:bg-[rgb(220,233,255)] group">
+
+                    <div class="inline-flex relative align-top">
+                         <button class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[30px] h-[30px] hover:bg-[#dce9ff] group">
+                              <svgo-panel-icon-help class="w-[22px] h-[22px] fill-[#8796af] group-hover:fill-[#0566ff]" />
+                         </button>
+                    </div>
+
+                    <div @click="toggleUsageMenu" class="flex ml-[8px] flex-row justify-start items-center p-[6px] rounded-[6px] cursor-pointer text-[rgb(58,35,0)] bg-transparent hover:bg-[rgb(220,233,255)] group">
                          <svgo-panel-icon-usage-menu class="w-[20px] h-[20px] fill-[#8796af] transition-transform group-hover:fill-[rgb(5,102,255)]" :class="{ 'rotate-180': isUsageMenuOpen }" />
                          <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
                          <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(8,15,26)]">Utilisation et offre</p>

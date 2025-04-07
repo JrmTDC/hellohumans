@@ -23,7 +23,13 @@ class UserController {
                     })
                }
 
-               return { user: user }
+               return { user: {
+                    uuid: user.uuid,
+                    email: auth?.user?.email,
+                    lang: user.lang,
+                    selected_client_uuid: user.selected_client_uuid
+                    }
+               }
           } catch (error) {
                console.error('Erreur UserController.me:', error)
                return response.internalServerError({

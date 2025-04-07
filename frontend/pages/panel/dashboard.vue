@@ -76,26 +76,18 @@ import ProgressCircle from '~/components/panel/ProgressCircle.vue'
 const { t } = useI18n()
 const panelStore = usePanelStore()
 
+const allUsages = useUsageDefinitions()
+const usages = computed(() => allUsages.value.filter((u) => u.showInDashboard))
+
 const pageTitle = useState('pageTitle', () => '')
 const pageIsBilled = useState('pageIsBilled', () => false)
 const pageIsPaid = useState('pageIsPaid', () => false)
-
-const allUsages = useUsageDefinitions()
-const usages = computed(() => allUsages.value.filter((u) => u.showInDashboard))
 
 onMounted(async () => {
      pageTitle.value = t('panel.pages.dashboard.pageTitle')
      pageIsBilled.value = false
      pageIsPaid.value = false
-
-     try {
-         //await panelStore.fetchUsage()
-
-     } catch (error) {
-          console.error('Erreur de chargement des usages :', error)
-     }
 })
-
 definePageMeta({
      layout: 'panel'
 })
