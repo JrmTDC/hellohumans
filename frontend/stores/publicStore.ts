@@ -2,10 +2,6 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { usePublicApi } from '~/composables/usePublicApi'
 
-function isClient() {
-     return typeof window !== 'undefined'
-}
-
 export const usePublicStore = defineStore('public', () => {
      const loading = ref(false)
      const error = ref<string | null>(null)

@@ -26,10 +26,10 @@
                                              <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[31px] tracking-[-0.01em]">Vue d’ensemble</h2>
                                         </div>
                                         <div class="relative flex items-center mt-[20px] mb-0">
-                                             <DatePicker @update="onDateChange" />
+                                             <datePicker />
                                         </div>
                                         <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0">
-                                             <AnalyticsChart></AnalyticsChart>
+                                             <analyticsChart></analyticsChart>
                                         </div>
                                    </div>
                               </div>
@@ -44,19 +44,11 @@
 
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
-import AnalyticsChart from '~/components/panel/analytics/AnalyticsChart.vue'
-import DatePicker from "~/components/panel/DatePicker.vue";
+import analyticsChart from '~/components/panel/analytics/analyticsChart.vue'
+import datePicker from "~/components/panel/common/commonDatePicker.vue";
 const { t } = useI18n()
 
 const router = useRouter()
-
-// Exemple de données
-const dateRange = ref({ start: '2025-02-23', end: '2025-03-23' })
-
-function updateDateRange(range: any) {
-     dateRange.value = range
-}
-
 
 const pageTitle = useState('pageTitle', () => '')
 const pageIsBilled = useState('pageIsBilled', () => false)
