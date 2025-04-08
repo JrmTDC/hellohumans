@@ -115,13 +115,18 @@ const agreed = ref(false)
 const errors = ref({ email: false, password: false, website: false, agreed: false })
 const loginError = ref(false)
 const loading = ref(false)
-const errorMessageEmail = ref('');
-const errorMessagePassword = ref('');
-const errorMessageWebsite = ref('');
-const errorsMessageAgreed = ref('');
 const lang = locale.value
-
 const router = useRouter()
+
+const errorMessageEmailKey = ref('')
+const errorMessagePasswordKey = ref('')
+const errorMessageWebsiteKey = ref('')
+const errorMessageAgreedKey = ref('')
+const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '')
+const errorMessagePassword = computed(() => errorMessagePasswordKey.value ? t(errorMessagePasswordKey.value) : '')
+const errorMessageWebsite = computed(() => errorMessageWebsiteKey.value ? t(errorMessageWebsiteKey.value) : '')
+const errorsMessageAgreed = computed(() => errorMessageAgreedKey.value ? t(errorMessageAgreedKey.value) : '')
+
 
 // Fonction pour valider le formulaire
 const validateForm = () => {
@@ -130,31 +135,38 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmail.value = t('panel.pages.register.errorEmailEmpty')
+          errorMessageEmailKey.value = 'panel.pages.register.errorEmailEmpty'
           valid = false
-
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
-          errors.value.password = true
-          errorMessageEmail.value  =  t('panel.pages.register.errorEmailInvalid')
+          errors.value.email = true
+          errorMessageEmailKey.value = 'panel.pages.register.errorEmailInvalid'
           valid = false
+     } else {
+          errorMessageEmailKey.value = ''
      }
 
      if (!password.value) {
           errors.value.password = true
-          errorMessagePassword.value = t('panel.pages.register.errorPasswordEmpty')
+          errorMessagePasswordKey.value = 'panel.pages.register.errorPasswordEmpty'
           valid = false
+     } else {
+          errorMessagePasswordKey.value = ''
      }
 
      if (!website.value) {
           errors.value.website = true
-          errorMessageWebsite.value = t('panel.pages.register.errorWebsiteEmpty')
+          errorMessageWebsiteKey.value = 'panel.pages.register.errorWebsiteEmpty'
           valid = false
+     } else {
+          errorMessageWebsiteKey.value = ''
      }
 
      if (!agreed.value) {
           errors.value.agreed = true
-          errorsMessageAgreed.value = t('panel.pages.register.errorAgreementRequired')
+          errorMessageAgreedKey.value = 'panel.pages.register.errorAgreementRequired'
           valid = false
+     } else {
+          errorMessageAgreedKey.value = ''
      }
 
      return valid
@@ -169,10 +181,10 @@ const handleRegister = async () => {
      const success = await publicStore.register(inputEmail.value, password.value, website.value, agreed.value, lang)
      if (success) {
           loginError.value = false
-          errorMessageEmail.value = ''
-          errorMessagePassword.value = ''
-          errorMessageWebsite.value = ''
-          errorsMessageAgreed.value = ''
+          errorMessageEmailKey.value = ''
+          errorMessagePasswordKey.value = ''
+          errorMessageWebsiteKey.value = ''
+          errorMessageAgreedKey.value = ''
 
           await router.push('/panel')
      } else {

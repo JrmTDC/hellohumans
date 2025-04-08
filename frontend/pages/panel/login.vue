@@ -93,8 +93,12 @@ const password = ref('')
 const errors = ref({ email: false, password: false })
 const loginError = ref(false)
 const loading = ref(false)
-const errorMessageEmail = ref('');
-const errorMessagePassword = ref('');
+
+const errorMessageEmailKey = ref('');
+const errorMessagePasswordKey = ref('');
+const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
+const errorMessagePassword = computed(() => errorMessagePasswordKey.value ? t(errorMessagePasswordKey.value) : '');
+
 
 // Fonction pour valider le formulaire
      const validateForm = () => {
@@ -103,19 +107,20 @@ const errorMessagePassword = ref('');
 
           if (!inputEmail.value) {
                errors.value.email = true
-               errorMessageEmail.value = t('panel.pages.login.errorEmailEmpty')
+               errorMessageEmailKey.value = 'panel.pages.login.errorEmailEmpty'
                valid = false
 
           } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
                errors.value.password = true
-               errorMessageEmail.value  = t('panel.pages.login.errorEmailInvalid')
+               errorMessageEmailKey.value = 'panel.pages.login.errorEmailInvalid'
+
                valid = false
           }
 
 
      if (!password.value) {
           errors.value.password = true
-          errorMessagePassword.value = t('panel.pages.login.errorPasswordEmpty')
+          errorMessagePasswordKey.value = 'panel.pages.login.errorPasswordEmpty'
           valid = false
      }
 
@@ -131,8 +136,8 @@ const handleLogin = async () => {
      const success = await publicStore.login(inputEmail.value, password.value)
      if (success) {
           loginError.value = false
-          errorMessageEmail.value = ''
-          errorMessagePassword.value = ''
+          errorMessageEmailKey.value = ''
+          errorMessagePasswordKey.value = ''
           await router.push('/panel')
      } else {
           loginError.value = true

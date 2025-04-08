@@ -60,7 +60,7 @@
                               </p>
 
                               <!-- Message d'erreur -->
-                              <p v-if="errorMessage" class="text-red-600 mt-3 text-sm">
+                              <p v-if="errorMessageEmail" class="text-red-600 mt-3 text-sm">
                                    {{ t('panel.pages.forgotPassword.errorMessage') }}
                               </p>
                          </form>
@@ -103,9 +103,11 @@ const inputEmail = ref('')
 const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
-const errorMessage = ref('')
-const errorMessageEmail = ref('');
 const publicStore = usePublicStore()
+
+const errorMessageEmailKey = ref('');
+const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
+
 
 // Fonction de validation
 const validateForm = () => {
@@ -114,11 +116,11 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmail.value = t('panel.pages.forgotPassword.errorEmailEmpty')
+          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorEmailEmpty'
           valid = false
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
           errors.value.email = true
-          errorMessageEmail.value  = t('panel.pages.forgotPassword.errorEmailInvalid')
+          errorMessageEmailKey.value  = 'panel.pages.forgotPassword.errorEmailInvalid'
           valid = false
      }
 
@@ -127,14 +129,14 @@ const validateForm = () => {
 
 const handleForgot = async () => {
      if (!validateForm()) return
-     errorMessageEmail.value = ''
+     errorMessageEmailKey.value = ''
      loading.value = true
 
      const success = await publicStore.forgotPassword(inputEmail.value)
      if (success) {
           emailSent.value = true
      } else {
-          errorMessageEmail.value = t('panel.pages.forgotPassword.errorMessage')
+          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorMessage'
      }
 
      loading.value = false

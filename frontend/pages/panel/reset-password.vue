@@ -151,15 +151,20 @@ if (typeof route.query.resetAttempt === 'string') {
 const errors = ref({ password: false, confirmPassword: false })
 const resetPasswordStatus = ref("loading")
 const loading = ref(false)
-const errorPassword = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const errorConfirmPassword = ref('')
 const passwordStrength = ref('')
 const progressWidth = ref('0%')
 const progressColor = ref('rgb(226,232,239)')
 const passwordFocused = ref(false)
 const supabase = useSupabaseClient()
+
+
+const errorPasswordKey = ref('')
+const errorConfirmPasswordKey = ref('')
+const errorPassword = computed(() => errorPasswordKey.value ? t(errorPasswordKey.value) : '')
+const errorConfirmPassword = computed(() => errorConfirmPasswordKey.value ? t(errorConfirmPasswordKey.value) : '')
+
 
 const validateForm = () => {
      errors.value = { password: false, confirmPassword: false }
@@ -167,18 +172,22 @@ const validateForm = () => {
 
      if (!password.value) {
           errors.value.password = true
-          errorPassword.value = t('panel.pages.resetPassword.errorPasswordEmpty')
+          errorPasswordKey.value = 'panel.pages.resetPassword.errorPasswordEmpty'
           valid = false
      } else if (password.value.length < 6) {
           errors.value.password = true
-          errorPassword.value = t('panel.pages.resetPassword.errorPasswordTooShort')
+          errorPasswordKey.value = 'panel.pages.resetPassword.errorPasswordTooShort'
           valid = false
+     } else {
+          errorPasswordKey.value = ''
      }
 
      if (password.value !== confirmPassword.value) {
           errors.value.confirmPassword = true
-          errorConfirmPassword.value = t('panel.pages.resetPassword.errorPasswordMismatch')
+          errorConfirmPasswordKey.value = 'panel.pages.resetPassword.errorPasswordMismatch'
           valid = false
+     } else {
+          errorConfirmPasswordKey.value = ''
      }
 
      return valid
