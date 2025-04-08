@@ -12,6 +12,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^7.0.0",
     "@vuepic/vue-datepicker": "^11.0.2",
     "colord": "^2.9.3",
     "date-fns": "^4.1.0",

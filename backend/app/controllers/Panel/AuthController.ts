@@ -284,7 +284,7 @@ class AuthController {
                .eq('auth_uuid', authUUID)
                .maybeSingle()
 
-          const lang = userData?.lang || 'fr' // fallback si la langue n'est pas définie
+          const lang = userData?.lang || 'en' // fallback si la langue n'est pas définie
 
           // 3. Génére le lien de récupération de mot de passe
           const { data, error } = await supabaseService.auth.admin.generateLink({

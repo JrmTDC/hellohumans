@@ -55,13 +55,13 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      async function fetchPlans() {
           const { apiFetch } = usePanelApi()
           const res = await apiFetch('/upgrade/plans')
-          plans.value = res.plans
+          plans.value = res.success.plans
      }
 
      async function fetchModules() {
           const { apiFetch } = usePanelApi()
           const res = await apiFetch('/upgrade/modules')
-          availableModules.value = res.modules
+          availableModules.value = res.success.modules
      }
 
      function setPlan(planId: string) {

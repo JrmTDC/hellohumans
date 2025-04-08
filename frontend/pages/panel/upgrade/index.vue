@@ -1,7 +1,7 @@
 <template>
      <div id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
           <div class="flex flex-col justify-start items-[normal] h-full">
-               <StepperHeader :step="1" @goStep="goStep" @close="closePanel" />
+               <stepperHeader :step="1" @goStep="goStep" @close="closePanel" />
 
                <div class="flex flex-row justify-start items-start self-stretch flex-grow">
                     <!-- Liste d'offres -->
@@ -19,7 +19,7 @@
                                         class="w-max max-w-none grid gap-y-0 gap-x-[20px] [grid-auto-flow:row] [grid-template-columns:326px_326px] p-0"
                                    >
                                         <!-- Boucle sur store.plans -->
-                                        <PlanCard
+                                        <planCard
                                              v-for="plan in store.plans"
                                              :key="plan.id"
                                              :plan="plan"
@@ -39,7 +39,7 @@
                     </div>
 
                     <!-- Résumé -->
-                    <SubscriptionSummary
+                    <subscriptionSummary
                          :selectedPlan="store.currentPlan"
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
@@ -58,9 +58,9 @@
 import {onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useUpgradeStore } from '~/stores/upgradeStore'
-import StepperHeader from '~/components/panel/upgrade/StepperHeader.vue'
-import PlanCard from '~/components/panel/upgrade/PlanCard.vue'
-import SubscriptionSummary from '~/components/panel/upgrade/SubscriptionSummary.vue'
+import stepperHeader from '~/components/panel/upgrade/stepperHeaderUpgrade.vue'
+import planCard from '~/components/panel/upgrade/planCardUpgrade.vue'
+import subscriptionSummary from '~/components/panel/upgrade/subscriptionSummaryUpgrade.vue'
 
 const store = useUpgradeStore()
 const router = useRouter()

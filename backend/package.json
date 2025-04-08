@@ -60,7 +60,8 @@
     "@supabase/supabase-js": "^2.49.1",
     "@vinejs/vine": "^3.0.0",
     "edge": "^7.10.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "stripe": "^18.0.0"
   },
   "hotHook": {
     "boundaries": [

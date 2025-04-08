@@ -35,9 +35,6 @@
           </div>
 
           <!-- Sélecteur de dates -->
-          <div class="mb-4">
-               <DateRangePicker @update:range="updateRange" />
-          </div>
 
           <!-- Graphique -->
           <EChart :option="chartOptions" autoresize class="h-[300px]" />
@@ -51,7 +48,6 @@ import { TooltipComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
 import Tooltip from '@/components/panel/common/Tooltip.vue'
-import DateRangePicker from '@/components/ui/DateRangePicker.vue'
 
 use([TooltipComponent, CanvasRenderer])
 

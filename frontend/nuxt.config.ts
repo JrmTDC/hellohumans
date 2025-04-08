@@ -58,6 +58,7 @@ export default defineNuxtConfig({
                appName: process.env.APP_NAME || "",
                appYear: process.env.APP_YEAR || "",
                supabaseBaseUrlRedirect: process.env.SUPABASE_BASE_URL_REDIRECT || "",
+               stripeKey: process.env.PUBLIC_STRIPE_KEY || "",
           },
      }
 })

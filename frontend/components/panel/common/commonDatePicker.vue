@@ -32,9 +32,10 @@
                               <div class="DayPicker-NavBar"></div>
                               <div class="DayPicker-Months flex flex-wrap justify-center w-full">
 
-                                   <DatePicker
+                                   <VueDatePicker
                                         v-model="range"
                                         @update:model-value="onRangeSelect"
+                                        :internal-model-value="internalModel"
                                         range
                                         multiCalendars
                                         format="yyyy-MM-dd"
@@ -44,11 +45,12 @@
                                         :close-on-auto-apply="false"
                                         :enable-time-picker="false"
                                         calendar-class="custom-calendar"
-                                        :action-row="false"
+                                        :action-row="{ showSelect: false, showCancel: false, showNow: false }"
                                         :teleport="false"
                                         :hide-offset-dates="true"
                                         :auto-apply="true"
-                                        :hide-navigation="true"
+                                        :month-picker="false"
+                                        :year-picker="false"
                                    />
 
                                    <div class="DayPicker-Month table border-collapse border-spacing-0 mt-[24px] mx-[15px] select-none" role="grid">
@@ -84,7 +86,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { format, subDays, startOfMonth } from 'date-fns'
-import DatePicker from '@vuepic/vue-datepicker'
+import VueDatePicker from '@vuepic/vue-datepicker'
 
 const box = ref<HTMLElement | null>(null)
 
@@ -94,9 +96,11 @@ const start = ref(format(subDays(new Date(), 7), 'yyyy-MM-dd'))
 const end = ref(format(new Date(), 'yyyy-MM-dd'))
 const range = ref([start.value, end.value])
 const button = ref<HTMLElement | null>(null)
+const internalModel = ref([...range.value])
 
 const toggle = async () => {
      await nextTick()
+     internalModel.value = [...range.value]
      open.value = !open.value
 }
 
@@ -155,7 +159,7 @@ const presets = [
 function selectPreset(selected: { start: string, end: string }) {
      range.value = [selected.start, selected.end]
      start.value = range.value[0]
-     end.value = range.value[1]
+     internalModel.value = [...range.value]
 }
 
 function apply() {
@@ -198,9 +202,3 @@ onUnmounted(() => {
      document.removeEventListener('click', handleClickOutside)
 })
 </script>
-
-<style scoped>
-input[type="date"]::-webkit-calendar-picker-indicator {
-     filter: invert(0.5);
-}
-</style>
