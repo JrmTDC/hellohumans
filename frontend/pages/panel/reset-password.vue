@@ -33,49 +33,36 @@
                               </fieldset>
 
                               <!-- Champ Mot de passe -->
-                              <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
-                                   <fieldset>
-                                        <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                             <PasswordInput
-                                                  v-model="password"
-                                                  :placeholder="t('panel.pages.resetPassword.passwordPlaceholder')"
-                                                  :error="!!errors.password"
-                                                  @input="evaluatePasswordStrength"
-                                                  @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
-                                                  @blur="() => { passwordFocused = false; evaluatePasswordStrength() }"
-                                                  extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                                  :iconSize="20"
-                                             />
-                                             <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
-                                             {{ errorPassword }}
-                                             </span>
-                                        </fieldset>
+                              <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)] mb-[16px]">
 
-                                        <!-- Barre de progression et texte -->
-                                        <Transition name="slide-fade" appear>
-                                             <div v-if="passwordFocused" class="relative translate-y-[-8px] pl-[4px] self-start h-[0.1px] overflow-hidden h-[15.9px] mb-[8px]">
-                                                  <div class="flex items-center">
-                                                       <div class="w-[100px] h-[4px] rounded-[3.5px] bg-[#eff2f6] inline-block mr-[12px]">
-                                                            <div class="block h-[4px] rounded-[3.5px]" :style="{ width: progressWidth, backgroundColor: progressColor }"></div>
-                                                       </div>
-                                                       <span class="text-[12px] font-medium leading-normal tracking-[-0.09px] text-[rgb(135,150,175)]">{{ passwordStrength }}</span>
-                                                  </div>
-                                             </div>
-                                        </Transition>
-
-                                   </fieldset>
-                                   <!-- Champ Confirmation du mot de passe -->
-                                   <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                        <PasswordInput
-                                             v-model="confirmPassword"
-                                             :placeholder="t('panel.pages.resetPassword.confirmPasswordPlaceholder')"
-                                             :error="!!errors.confirmPassword"
+                                   <fieldset class="border-0 p-0 m-0 flex flex-col items-center">
+                                        <staticInputCommon
+                                             type="password"
+                                             ref="passwordInputRef"
+                                             v-model="passwordInputValue"
+                                             :placeholder="t('panel.pages.resetPassword.passwordPlaceholder')"
+                                             :enableStrengthEvaluation="true"
                                              extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                              :iconSize="20"
+                                             :error-text=errorMessagePassword
+                                             :validator="isValidPassword"
                                         />
-                                        <span v-if="errors.confirmPassword" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
-                                              {{ errorConfirmPassword }}
-                                        </span>
+
+                                   </fieldset>
+
+                                   <!-- Champ Confirmation du mot de passe -->
+                                   <fieldset class="border-0 p-0 m-0 flex flex-col items-center">
+                                        <staticInputCommon
+                                             type="confirmPassword"
+                                             ref="confirmInputRef"
+                                             v-model="confirmPasswordInputValue"
+                                             :placeholder="t('panel.pages.resetPassword.confirmPasswordPlaceholder')"
+                                             :enableStrengthEvaluation="false"
+                                             extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
+                                             :iconSize="20"
+                                             :error-text=errorMessageConfirmPassword
+                                             :validator="isValidConfirmPassword"
+                                        />
                                    </fieldset>
                               </fieldset>
 
@@ -134,8 +121,8 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import PasswordInput from '@/components/panel/PasswordInput.vue'
-import LanguageSelector from '@/components/panel/LanguageSelector.vue'
+import LanguageSelector from '~/components/panel/LanguageSelector.vue'
+import StaticInputCommon from "~/components/panel/common/staticInputCommon.vue";
 
 const { t } = useI18n()
 const router = useRouter()
@@ -148,101 +135,32 @@ if (typeof route.query.resetAttempt === 'string') {
 }
 
 // Champs du formulaire
-const errors = ref({ password: false, confirmPassword: false })
 const resetPasswordStatus = ref("loading")
 const loading = ref(false)
-const password = ref('')
-const confirmPassword = ref('')
-const passwordStrength = ref('')
-const progressWidth = ref('0%')
-const progressColor = ref('rgb(226,232,239)')
-const passwordFocused = ref(false)
-const supabase = useSupabaseClient()
 
+const passwordInputRef = ref()
+const confirmInputRef = ref()
 
-const errorPasswordKey = ref('')
-const errorConfirmPasswordKey = ref('')
-const errorPassword = computed(() => errorPasswordKey.value ? t(errorPasswordKey.value) : '')
-const errorConfirmPassword = computed(() => errorConfirmPasswordKey.value ? t(errorConfirmPasswordKey.value) : '')
+const passwordInputValue = ref('')
+const confirmPasswordInputValue = ref('')
 
+const errorMessagePassword = computed(() => t('panel.pages.resetPassword.errorPasswordTooShort'))
+const errorMessageConfirmPassword = computed(() => t('panel.pages.resetPassword.errorPasswordMismatch'))
 
-const validateForm = () => {
-     errors.value = { password: false, confirmPassword: false }
-     let valid = true
-
-     if (!password.value) {
-          errors.value.password = true
-          errorPasswordKey.value = 'panel.pages.resetPassword.errorPasswordEmpty'
-          valid = false
-     } else if (password.value.length < 6) {
-          errors.value.password = true
-          errorPasswordKey.value = 'panel.pages.resetPassword.errorPasswordTooShort'
-          valid = false
-     } else {
-          errorPasswordKey.value = ''
-     }
-
-     if (password.value !== confirmPassword.value) {
-          errors.value.confirmPassword = true
-          errorConfirmPasswordKey.value = 'panel.pages.resetPassword.errorPasswordMismatch'
-          valid = false
-     } else {
-          errorConfirmPasswordKey.value = ''
-     }
-
-     return valid
-}
-
-const evaluatePasswordStrength = () => {
-     const pass = password.value
-
-     if (!passwordFocused.value) {
-          passwordStrength.value = ''
-          progressWidth.value = '0%'
-          progressColor.value = 'rgb(226,232,239)'
-          return
-     }
-
-     if (pass.length === 0) {
-          passwordStrength.value = t('panel.pages.resetPassword.strengthLabel')
-          progressWidth.value = '0%'
-          progressColor.value = 'rgb(226,232,239)'
-     } else if (pass.length <= 4 ) {
-          passwordStrength.value = t('panel.pages.resetPassword.veryWeak')
-          progressWidth.value = '20%'
-          progressColor.value = 'rgb(246, 48, 62)'
-     } else if (pass.length <= 7) {
-          passwordStrength.value = t('panel.pages.resetPassword.weak')
-          progressWidth.value = '40%'
-          progressColor.value = 'rgb(246, 135, 48)'
-     } else if (pass.length <= 9) {
-          passwordStrength.value = t('panel.pages.resetPassword.medium')
-          progressWidth.value = '60%'
-          progressColor.value = 'rgb(255, 200, 89)'
-     } else if (pass.length <= 13) {
-          passwordStrength.value = t('panel.pages.resetPassword.strong')
-          progressWidth.value = '80%'
-          progressColor.value = 'rgb(52, 184, 87)'
-     } else {
-          passwordStrength.value = t('panel.pages.resetPassword.veryStrong')
-          progressWidth.value = '100%'
-          progressColor.value = 'rgb(52, 184, 87)'
-     }
-}
+const isValidPassword = (val: string) => val.length >= 6
+const isValidConfirmPassword = (val: string) => val === passwordInputValue.value
 
 const publicStore = usePublicStore()
 
 const handleReset = async () => {
-     if (!validateForm()) return
+     const checkValidPassword = passwordInputRef.value?.validate()
+     const checkValidConfirm = confirmInputRef.value?.validate()
+     if (!checkValidPassword || !checkValidConfirm) return
+
      loading.value = true
 
-     const { error } = await supabase.auth.updateUser({
-          password: password.value
-     })
-
-     if (error) {
-          console.error('Erreur lors du changement de mot de passe:', error.message)
-     } else {
+     const success = await publicStore.resetPasswordUpdate(passwordInputValue.value)
+     if (success) {
           resetPasswordStatus.value = "success"
      }
 
@@ -253,22 +171,17 @@ const handleReset = async () => {
 onMounted(async () => {
      const hash = window.location.hash
      const params = new URLSearchParams(hash.substring(1))
-
-     const access_token = params.get('access_token')
-     const refresh_token = params.get('refresh_token')
+     const access_token = params.get('access_token') || ''
+     const refresh_token = params.get('refresh_token') || ''
      const type = params.get('type')
-     if (type === 'recovery' && access_token) {
-          const { data, error } = await supabase.auth.setSession({
-               access_token,
-               refresh_token
-          })
 
-          if (error) {
-               console.error('Erreur session recovery:', error.message)
+     if (type === 'recovery' && access_token) {
+          const success = await publicStore.resetPasswordSession(access_token,refresh_token)
+          if (success) {
+               resetPasswordStatus.value = "newpassword"
+          }else{
                resetPasswordStatus.value = "expired"
-               return
           }
-          resetPasswordStatus.value = "newpassword"
      } else {
           resetPasswordStatus.value = "expired"
      }

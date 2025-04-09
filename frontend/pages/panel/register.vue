@@ -40,46 +40,58 @@
                               <h1 class="text-[rgb(8,15,26)] font-semibold mb-[28px] text-center relative text-[32px] leading-[41px] tracking-[-0.01em]">{{ t('panel.pages.register.title') }}</h1>
                               <span class="block text-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] -mt-[20px] mb-[12px]">{{ t('panel.pages.register.subtitle') }}</span>
                          </fieldset>
-                         <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="inputEmail" type="email" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.email }" :placeholder="t('panel.pages.register.emailPlaceholder')">
-                              <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}</span>
-                         </fieldset>
-                         <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <PasswordInput
-                                   v-model="password"
-                                  :placeholder="t('panel.pages.register.passwordPlaceholder')"
-                                  extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                   :error=errors.password
-                                  :iconSize=20
+                         <fieldset class="border-0 p-0 flex flex-col items-center">
+                              <staticInputCommon
+                                   type="email"
+                                   ref="emailInputRef"
+                                   v-model="emailInputValue"
+                                   :error-text=errorMessageEmail
+                                   :placeholder="t('panel.pages.register.emailPlaceholder')"
+                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                               />
-                              <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessagePassword }}</span>
                          </fieldset>
-                         <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <input v-model="website" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.website }" :placeholder=" t('panel.pages.register.websitePlaceholder')">
+                         <fieldset class="border-0 p-0 m-0 flex flex-col items-center">
+                              <staticInputCommon
+                                   type="password"
+                                   ref="passwordInputRef"
+                                   v-model="passwordInputValue"
+                                   :placeholder="t('panel.pages.register.passwordPlaceholder')"
+                                   :enableStrengthEvaluation="true"
+                                   :iconSize="20"
+                                   :error-text=errorMessagePassword
+                                   :validator="isValidPassword"
+                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
+                              />
+                         </fieldset>
 
-
-                              <span v-if="errors.website" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageWebsite }}</span>
+                         <fieldset class="border-0 p-0 flex flex-col items-center">
+                              <staticInputCommon
+                                   type="url"
+                                   ref="websiteInputRef"
+                                   v-model="websiteInputValue"
+                                   :placeholder=" t('panel.pages.register.websitePlaceholder')"
+                                   :error-text=errorMessageWebsite
+                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
+                              />
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center mt-[13px]">
                               <label class="flex items-start max-w-[365px] text-[14px] leading-[18px] tracking-[-0.01em] cursor-pointer">
                                    <!-- Case visuelle custom -->
-                                   <span>
-                                        <!-- Input caché -->
-                                        <input
-                                             type="checkbox"
-                                             v-model="agreed"
-                                             tabindex="0"
-                                             class="sr-only peer"
-                                        />
-                                        <span
-                                             class="float-left block w-[20px] h-[20px] rounded-[3px] border-[2px] border-[rgb(226,232,239)] cursor-pointer mr-[14px] mb-[16px] translate-y-[1px] transition-all duration-100 ease-in-out peer-checked:bg-[rgb(5,102,255)] peer-checked:border-[rgb(5,102,255)] peer-checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMTg2LjMwMSAzMzkuODkzTDk2IDI0OS40NjFsLTMyIDMwLjUwN0wxODYuMzAxIDQwMiA0NDggMTQwLjUwNiA0MTYgMTEweiIvPjwvc3ZnPg==')] peer-checked:bg-center peer-checked:bg-no-repeat peer-checked:bg-[length:16px_16px]" :class="{ 'border-[rgb(232,19,50)]': errors.agreed }"
-                                        ></span>
-                                        <span class="mt-0 mb-0">
-                                            {{ t('panel.pages.register.acceptLabel') }}
-                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> {{ t('panel.pages.register.andLabel') }} <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> {{ appName }}.
-                                        </span>
-                                        <span v-if="errors.agreed" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorsMessageAgreed }}</span>
-                                   </span>
+                                   <staticInputCommon
+                                        ref="agreedInputRef"
+                                        :v-model=agreedInputValue
+                                        type="checkbox"
+                                        :error-text="errorsMessageAgreed"
+
+                                   >
+                                        <template #label>
+                                             <a class="text-[#000]">{{ t('panel.pages.register.acceptLabel') }}</a>
+                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a>
+                                             <a class="text-[#000]">{{ t('panel.pages.register.andLabel') }}</a>
+                                             <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a>
+                                             <a class="text-[#000]">{{ appName }}.</a>
+                                        </template>
+                                   </staticInputCommon>
                               </label>
                          </fieldset>
 
@@ -97,9 +109,9 @@
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import PasswordInput from "~/components/panel/PasswordInput.vue";
 import LanguageSelector from "~/components/panel/LanguageSelector.vue";
 import { usePublicStore } from "~/stores/publicStore";
+import StaticInputCommon from "~/components/panel/common/staticInputCommon.vue";
 
 const { appName } = useAppInfo()
 const { t } = useI18n()
@@ -108,84 +120,46 @@ const { locale } = useI18n()
 const publicStore = usePublicStore()
 
 // Champs du formulaire
-const inputEmail = ref('')
-const password = ref('')
-const website = ref('')
-const agreed = ref(false)
-const errors = ref({ email: false, password: false, website: false, agreed: false })
+const emailInputRef = ref()
+const emailInputValue = ref('')
+
+const passwordInputValue = ref('')
+const passwordInputRef = ref()
+
+const websiteInputValue = ref('')
+const websiteInputRef = ref()
+
+const agreedInputValue = ref(false)
+const agreedInputRef = ref()
+
+
 const loginError = ref(false)
 const loading = ref(false)
 const lang = locale.value
 const router = useRouter()
 
-const errorMessageEmailKey = ref('')
-const errorMessagePasswordKey = ref('')
-const errorMessageWebsiteKey = ref('')
-const errorMessageAgreedKey = ref('')
-const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '')
-const errorMessagePassword = computed(() => errorMessagePasswordKey.value ? t(errorMessagePasswordKey.value) : '')
-const errorMessageWebsite = computed(() => errorMessageWebsiteKey.value ? t(errorMessageWebsiteKey.value) : '')
-const errorsMessageAgreed = computed(() => errorMessageAgreedKey.value ? t(errorMessageAgreedKey.value) : '')
+const errorMessageEmail = computed(() => t('panel.pages.register.errorEmailInvalid'))
+const errorMessagePassword = computed(() => t('panel.pages.register.errorPasswordEmpty'))
+const errorMessageWebsite = computed(() => t('panel.pages.register.errorWebsiteEmpty'))
+const errorsMessageAgreed = computed(() => t('panel.pages.register.errorAgreementRequired'))
 
-
-// Fonction pour valider le formulaire
-const validateForm = () => {
-     errors.value = { email: false, password: false, website: false, agreed: false }
-     let valid = true
-
-     if (!inputEmail.value) {
-          errors.value.email = true
-          errorMessageEmailKey.value = 'panel.pages.register.errorEmailEmpty'
-          valid = false
-     } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
-          errors.value.email = true
-          errorMessageEmailKey.value = 'panel.pages.register.errorEmailInvalid'
-          valid = false
-     } else {
-          errorMessageEmailKey.value = ''
-     }
-
-     if (!password.value) {
-          errors.value.password = true
-          errorMessagePasswordKey.value = 'panel.pages.register.errorPasswordEmpty'
-          valid = false
-     } else {
-          errorMessagePasswordKey.value = ''
-     }
-
-     if (!website.value) {
-          errors.value.website = true
-          errorMessageWebsiteKey.value = 'panel.pages.register.errorWebsiteEmpty'
-          valid = false
-     } else {
-          errorMessageWebsiteKey.value = ''
-     }
-
-     if (!agreed.value) {
-          errors.value.agreed = true
-          errorMessageAgreedKey.value = 'panel.pages.register.errorAgreementRequired'
-          valid = false
-     } else {
-          errorMessageAgreedKey.value = ''
-     }
-
-     return valid
-}
+const isValidPassword = (val: string) => val.length >= 6
 
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
-     if (!validateForm()) return
+
+     const checkValidEmail = emailInputRef.value?.validate()
+     const checkValidPassowrd = passwordInputRef.value?.validate()
+     const checkValidWebsite = websiteInputRef.value?.validate()
+     const checkValidAgreed = agreedInputRef.value?.validate()
+     if (!checkValidEmail || !checkValidPassowrd || !checkValidWebsite || !checkValidAgreed) return
+
      loginError.value = false
      loading.value = true
 
-     const success = await publicStore.register(inputEmail.value, password.value, website.value, agreed.value, lang)
+     const success = await publicStore.register(emailInputValue.value, passwordInputValue.value, websiteInputValue.value, agreedInputValue.value, lang)
      if (success) {
           loginError.value = false
-          errorMessageEmailKey.value = ''
-          errorMessagePasswordKey.value = ''
-          errorMessageWebsiteKey.value = ''
-          errorMessageAgreedKey.value = ''
-
           await router.push('/panel')
      } else {
           loginError.value = true

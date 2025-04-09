@@ -29,16 +29,14 @@
                               <!-- Champ Email -->
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                        <input
+                                        <staticInputCommon
                                              type="email"
-                                             v-model="inputEmail"
-                                             :placeholder="t('panel.pages.forgotPassword.emailPlaceholder')"
-                                             class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                             :class="{ 'border-[rgb(232,19,50)]': errors.email }"
+                                             ref="emailInputRef"
+                                             v-model="emailInputValue"
+                                             :placeholder="t('panel.pages.login.emailPlaceholder')"
+                                             extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
+                                             :error-text=errorMessageEmail
                                         />
-                                        <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
-                                             {{ errorMessageEmail }}
-                                        </span>
                                    </fieldset>
                               </fieldset>
 
@@ -96,6 +94,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import LanguageSelector from '~/components/panel/LanguageSelector.vue'
+import StaticInputCommon from "~/components/panel/common/staticInputCommon.vue";
 
 const { t } = useI18n()
 
@@ -105,40 +104,24 @@ const loading = ref(false)
 const emailSent = ref(false)
 const publicStore = usePublicStore()
 
-const errorMessageEmailKey = ref('');
-const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
-
-
-// Fonction de validation
-const validateForm = () => {
-     errors.value = { email: false }
-     let valid = true
-
-     if (!inputEmail.value) {
-          errors.value.email = true
-          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorEmailEmpty'
-          valid = false
-     } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
-          errors.value.email = true
-          errorMessageEmailKey.value  = 'panel.pages.forgotPassword.errorEmailInvalid'
-          valid = false
-     }
-
-     return valid
-}
+const emailInputRef = ref()
+const emailInputValue = ref('')
+const errorMessageEmail = computed(() => t('panel.pages.login.errorEmailInvalid'));
 
 const handleForgot = async () => {
-     if (!validateForm()) return
-     errorMessageEmailKey.value = ''
+     const checkValidEmail = emailInputRef.value?.validate()
+     if (!checkValidEmail) return
+
+
      loading.value = true
 
      const success = await publicStore.forgotPassword(inputEmail.value)
      if (success) {
           emailSent.value = true
-     } else {
-          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorMessage'
      }
 
      loading.value = false
+
+
 }
 </script>

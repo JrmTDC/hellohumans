@@ -8,18 +8,8 @@ export const usePublicStore = defineStore('public', () => {
      const supabase = useSupabaseClient()
 
      const login = async (email: string, password: string) => {
-          loading.value = true
-          error.value = null
-
           const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
-
-          loading.value = false
-          if (authError) {
-               error.value = authError.message
-               return false
-          }
-
-          return true
+          return !authError;
      }
 
      const register = async (email: string, password: string, website: string, accept_cg: boolean, lang: string) => {
@@ -60,6 +50,16 @@ export const usePublicStore = defineStore('public', () => {
           }
      }
 
+     const resetPasswordUpdate = async (password: string) => {
+          const { error : authError} = await supabase.auth.updateUser({ password: password })
+
+          return !authError;
+     }
+     const resetPasswordSession = async (access_token: string, refresh_token: string) => {
+          const { error: sessionError } = await supabase.auth.setSession({access_token, refresh_token})
+          return !sessionError;
+     }
+
      return {
           // state
           loading,
@@ -68,6 +68,8 @@ export const usePublicStore = defineStore('public', () => {
           // actions
           login,
           register,
-          forgotPassword
+          forgotPassword,
+          resetPasswordUpdate,
+          resetPasswordSession
      }
 })

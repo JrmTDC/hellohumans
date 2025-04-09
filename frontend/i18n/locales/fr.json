@@ -12,7 +12,7 @@
                     "forgotPassword": "Mot de passe oublié ?",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
-                    "errorPasswordEmpty": "Ne peut être vide !",
+                    "errorPasswordEmpty": "mot de passe incorrect !",
                     "loginError": "E-mail ou mot de passe incorrect !",
                     "submit": "Se connecter",
                     "loading": "Chargement...",
@@ -22,17 +22,17 @@
                "register": {
                     "title": "Créer un compte gratuit",
                     "subtitle": "Aucune carte de crédit requise",
-                    "emailPlaceholder": "Votre adresse e-mail",
+                    "emailPlaceholder": "Adresse e-mail",
                     "passwordPlaceholder": "Mot de passe",
                     "websitePlaceholder": "Site Web",
                     "acceptLabel": "J’accepte les",
-                    "terms": "Conditions générales",
-                    "andLabel": "et la",
-                    "privacy": "Politique de confidentialité",
+                    "terms": " Conditions générales",
+                    "andLabel": " et la",
+                    "privacy": " Politique de confidentialité ",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
-                    "errorPasswordEmpty": "Ne peut être vide !",
-                    "errorWebsiteEmpty": "Ne peut être vide !",
+                    "errorPasswordEmpty": "Le mot de passe doit contenir au moins 6 caractères.",
+                    "errorWebsiteEmpty": "Lien du site Web requis !",
                     "errorAgreementRequired": "Un accord est requis",
                     "cta": "Débuter gratuitement",
                     "alreadyHaveAccount": "Vous avez déjà un compte ?",
@@ -69,12 +69,6 @@
                     "loading": "Chargement...",
                     "success": "Opération réussie ! Votre mot de passe a été réinitialisé.",
                     "loginLink": "Se connecter",
-                    "strengthLabel": "Niveau de sécurité du mot de passe",
-                    "veryWeak": "Très Faible",
-                    "weak": "Faible",
-                    "medium": "Moyen",
-                    "strong": "Fort",
-                    "veryStrong": "Très Fort",
                     "messageTokenLoading": "Vérification du lien de réinitialisation.",
                     "messageTokenExpired": "Le lien est invalide ou a expiré.",
                     "messageTokenMissing": "Le lien est invalide ou a expiré.",
@@ -166,6 +160,17 @@
                }
           },
           "components": {
+               "common": {
+                    "staticInput": {
+                         "champInvalide": "Champ invalide.",
+                         "strengthLabel": "Niveau de sécurité du mot de passe",
+                         "veryWeak": "Très Faible",
+                         "weak": "Faible",
+                         "medium": "Moyen",
+                         "strong": "Fort",
+                         "veryStrong": "Très Fort"
+                    }
+               },
                "loadingOverlay": {
                     "messages": {
                          "int_1": "Connexion sécurisée...",
@@ -176,6 +181,9 @@
                },
                "SideMenu": {
                     "title": "Menu"
+               },
+               "staticInputCommon": {
+
                }
           },
           "composables": {
