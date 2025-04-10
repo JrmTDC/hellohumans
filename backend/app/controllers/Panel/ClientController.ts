@@ -4,8 +4,8 @@ import supabase from '#services/supabaseService'
 class ClientController {
      public async getClient({ auth, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
@@ -14,8 +14,8 @@ class ClientController {
                // 1. Récupération de l'utilisateur interne
                const { data: userData, error: userError } = await supabase
                     .from('users')
-                    .select('uuid, selected_client_uuid')
-                    .eq('auth_uuid', authUUID)
+                    .select('id, selected_client_id')
+                    .eq('auth_id', auth_id)
                     .single()
 
                if (userError || !userData) {
@@ -24,34 +24,34 @@ class ClientController {
                     })
                }
 
-               const userUuid = userData.uuid
-               let selectedClientUuid = userData.selected_client_uuid
+               const user_id = userData.id
+               let selected_client_id = userData.selected_client_id
 
-               // 2. Vérifie si selected_client_uuid correspond à un lien dans client_users
-               let clientUsersData = null
+               // 2. Vérifie si selected_client_id correspond à un lien dans client_users
+               let client_users_data = null
 
-               if (selectedClientUuid) {
+               if (selected_client_id) {
                     const { data } = await supabase
                          .from('client_users')
-                         .select('client_uuid')
-                         .eq('user_uuid', userUuid)
-                         .eq('client_uuid', selectedClientUuid)
+                         .select('client_id')
+                         .eq('user_id', user_id)
+                         .eq('client_id', selected_client_id)
                          .maybeSingle()
 
-                    clientUsersData = data
+                    client_users_data = data
 
                     // Si le client n’est pas associé à l'utilisateur → on l’ignore
-                    if (!clientUsersData) {
-                         selectedClientUuid = null
+                    if (!client_users_data) {
+                         selected_client_id = null
                     }
                }
 
                // 3. Si aucun client sélectionné ou invalide → prendre le plus récent
-               if (!selectedClientUuid) {
+               if (!selected_client_id) {
                     const { data: fallbackClientUsers, error: fallbackError } = await supabase
                          .from('client_users')
-                         .select('client_uuid')
-                         .eq('user_uuid', userUuid)
+                         .select('client_id')
+                         .eq('user_id', user_id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
@@ -62,20 +62,20 @@ class ClientController {
                          })
                     }
 
-                    selectedClientUuid = fallbackClientUsers.client_uuid
+                    selected_client_id = fallbackClientUsers.client_id
 
-                    // Mettre à jour selected_client_uuid dans la table users
+                    // Mettre à jour selected_client_id dans la table users
                     await supabase
                          .from('users')
-                         .update({ selected_client_uuid: selectedClientUuid })
-                         .eq('uuid', userUuid)
+                         .update({ selected_client_id: selected_client_id })
+                         .eq('id', user_id)
                }
 
                // 4. Récupérer le client final
                const { data: clientData, error: clientError } = await supabase
                     .from('clients')
                     .select('*')
-                    .eq('uuid', selectedClientUuid)
+                    .eq('id', selected_client_id)
                     .single()
 
                if (clientError || !clientData) {
@@ -98,18 +98,18 @@ class ClientController {
 
      public async getClients({ auth, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
                }
 
-               // 1. On récupère l’utilisateur interne (par auth_uuid)
+               // 1. On récupère l’utilisateur interne (par auth_id)
                const { data: userData, error: userError } = await supabase
                     .from('users')
-                    .select('uuid')
-                    .eq('auth_uuid', authUUID)
+                    .select('id')
+                    .eq('auth_id', auth_id)
                     .single()
 
                if (userError || !userData) {
@@ -121,8 +121,8 @@ class ClientController {
                // 2. On récupère tous les clients associés via client_users
                const { data: clientUsers, error: clientUsersError } = await supabase
                     .from('client_users')
-                    .select('client_uuid')
-                    .eq('user_uuid', userData.uuid)
+                    .select('client_id')
+                    .eq('user_id', userData.id)
 
                if (clientUsersError || !clientUsers || clientUsers.length === 0) {
                     return response.notFound({
@@ -130,13 +130,13 @@ class ClientController {
                     })
                }
 
-               const clientUuids = clientUsers.map((cu) => cu.client_uuid)
+               const client_id = clientUsers.map((cu) => cu.client_id)
 
                // 3. On récupère les infos des clients
                const { data: clients, error: clientsError } = await supabase
                     .from('clients')
                     .select('*')
-                    .in('uuid', clientUuids)
+                    .in('id', client_id)
 
                if (clientsError || !clients) {
                     return response.internalServerError({
@@ -158,8 +158,8 @@ class ClientController {
 
      public async getProject({ auth, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
@@ -168,8 +168,8 @@ class ClientController {
                // 1. Récupération de l'utilisateur interne
                const { data: userData, error: userError } = await supabase
                     .from('users')
-                    .select('uuid, selected_client_uuid')
-                    .eq('auth_uuid', authUUID)
+                    .select('id, selected_client_id')
+                    .eq('auth_id', auth_id)
                     .single()
 
                if (userError || !userData) {
@@ -178,23 +178,23 @@ class ClientController {
                     })
                }
 
-               const userUuid = userData.uuid
-               let selectedClientUuid = userData.selected_client_uuid
+               const user_id = userData.id
+               let selected_client_id = userData.selected_client_id
 
                // 2. Vérifier que ce client est bien lié à l'utilisateur
                let { data: clientUser, error: clientUserError } = await supabase
                     .from('client_users')
-                    .select('uuid, client_uuid, selected_project_uuid')
-                    .eq('user_uuid', userUuid)
-                    .eq('client_uuid', selectedClientUuid)
+                    .select('id, client_id, selected_project_id')
+                    .eq('user_id', user_id)
+                    .eq('client_id', selected_client_id)
                     .maybeSingle()
 
                if (!clientUser || clientUserError) {
                     // Si non trouvé → on récupère le dernier client lié
                     const { data: lastClientUser, error: lastClientError } = await supabase
                          .from('client_users')
-                         .select('client_uuid, uuid, selected_project_uuid')
-                         .eq('user_uuid', userUuid)
+                         .select('client_id, id, selected_project_id')
+                         .eq('user_id', user_id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
@@ -205,39 +205,39 @@ class ClientController {
                          })
                     }
 
-                    selectedClientUuid = lastClientUser.client_uuid
+                    selected_client_id = lastClientUser.client_id
                     clientUser = lastClientUser
 
-                    // Mise à jour du selected_client_uuid
+                    // Mise à jour du selected_client_id
                     await supabase
                          .from('users')
-                         .update({ selected_client_uuid: selectedClientUuid })
-                         .eq('uuid', userUuid)
+                         .update({ selected_client_id: selected_client_id })
+                         .eq('id', user_id)
                }
 
-               const clientUserUuid = clientUser.uuid
-               let selectedProjectUuid = clientUser.selected_project_uuid
+               const client_user_id = clientUser.id
+               let selected_project_id = clientUser.selected_project_id
 
                // 3. Vérifie si le projet sélectionné est bien lié au client
-               if (selectedProjectUuid) {
+               if (selected_project_id) {
                     const { data: validProject } = await supabase
-                         .from('client_projets')
-                         .select('uuid')
-                         .eq('uuid', selectedProjectUuid)
-                         .eq('client_uuid', selectedClientUuid)
+                         .from('client_projects')
+                         .select('id')
+                         .eq('id', selected_project_id)
+                         .eq('client_id', client_user_id)
                          .maybeSingle()
 
                     if (!validProject) {
-                         selectedProjectUuid = null
+                         selected_project_id = null
                     }
                }
 
                // 4. Si aucun projet sélectionné → on récupère le dernier du client
-               if (!selectedProjectUuid) {
+               if (!selected_project_id) {
                     const { data: lastProject } = await supabase
-                         .from('client_projets')
-                         .select('uuid')
-                         .eq('client_uuid', selectedClientUuid)
+                         .from('client_projects')
+                         .select('id')
+                         .eq('client_id', selected_client_id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
@@ -248,20 +248,20 @@ class ClientController {
                          })
                     }
 
-                    selectedProjectUuid = lastProject.uuid
+                    selected_project_id = lastProject.id
 
-                    // Mise à jour selected_project_uuid dans client_users
+                    // Mise à jour selected_project_id dans client_users
                     await supabase
                          .from('client_users')
-                         .update({ selected_project_uuid: selectedProjectUuid })
-                         .eq('uuid', clientUserUuid)
+                         .update({ selected_project_id: selected_project_id })
+                         .eq('id', client_user_id)
                }
 
                // 5. On retourne uniquement le projet sélectionné
                const { data: selectedProject, error: selectedProjectError } = await supabase
-                    .from('client_projets')
+                    .from('client_projects')
                     .select('*')
-                    .eq('uuid', selectedProjectUuid)
+                    .eq('id', selected_project_id)
                     .single()
 
                if (selectedProjectError || !selectedProject) {
@@ -284,8 +284,8 @@ class ClientController {
 
      public async getProjects({ auth, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
@@ -294,8 +294,8 @@ class ClientController {
                // 1. Récupération de l'utilisateur interne
                const { data: userData, error: userError } = await supabase
                     .from('users')
-                    .select('uuid, selected_client_uuid')
-                    .eq('auth_uuid', authUUID)
+                    .select('id, selected_client_id')
+                    .eq('auth_id', auth_id)
                     .single()
 
                if (userError || !userData) {
@@ -304,23 +304,23 @@ class ClientController {
                     })
                }
 
-               const userUuid = userData.uuid
-               let selectedClientUuid = userData.selected_client_uuid
+               const user_id = userData.id
+               let selected_client_id = userData.selected_client_id
 
                // 2. Vérification du lien utilisateur ↔ client
                let { data: clientUser, error: clientUserError } = await supabase
                     .from('client_users')
-                    .select('uuid, client_uuid')
-                    .eq('user_uuid', userUuid)
-                    .eq('client_uuid', selectedClientUuid)
+                    .select('id, client_id')
+                    .eq('user_id', user_id)
+                    .eq('client_id', selected_client_id)
                     .maybeSingle()
 
                // 3. Si le lien est invalide ou non existant, on prend le dernier client
                if (!clientUser || clientUserError) {
                     const { data: lastClientUser, error: lastClientError } = await supabase
                          .from('client_users')
-                         .select('client_uuid')
-                         .eq('user_uuid', userUuid)
+                         .select('client_id')
+                         .eq('user_id', user_id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
@@ -331,20 +331,20 @@ class ClientController {
                          })
                     }
 
-                    selectedClientUuid = lastClientUser.client_uuid
+                    selected_client_id = lastClientUser.client_id
 
                     // Mise à jour du client sélectionné dans la table users
                     await supabase
                          .from('users')
-                         .update({ selected_client_uuid: selectedClientUuid })
-                         .eq('uuid', userUuid)
+                         .update({ selected_client_id: selected_client_id })
+                         .eq('id', user_id)
                }
 
                // 4. Récupération des projets du client
                const { data: projects, error: projectsError } = await supabase
-                    .from('client_projets')
+                    .from('client_projects')
                     .select('*')
-                    .eq('client_uuid', selectedClientUuid)
+                    .eq('client_id', selected_client_id)
                     .order('created_at', { ascending: false })
 
                if (projectsError) {
@@ -366,10 +366,10 @@ class ClientController {
 
      public async switchProject({ auth, params, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               const projectUuid = params.uuid
+               const auth_id = auth?.user?.id
+               const project_id = params.uuid
 
-               if (!authUUID || !projectUuid) {
+               if (!auth_id || !project_id) {
                     return response.badRequest({
                          error: { name: 'invalidRequest', description: 'Paramètre manquant ou utilisateur non connecté.' }
                     })
@@ -378,8 +378,8 @@ class ClientController {
                // 1. Récupération de l'utilisateur interne
                const { data: userData, error: userError } = await supabase
                     .from('users')
-                    .select('uuid, selected_client_uuid')
-                    .eq('auth_uuid', authUUID)
+                    .select('id, selected_client_id')
+                    .eq('auth_id', auth_id)
                     .single()
 
                if (!userData || userError) {
@@ -388,15 +388,15 @@ class ClientController {
                     })
                }
 
-               const userUuid = userData.uuid
-               const selectedClientUuid = userData.selected_client_uuid
+               const user_id = userData.id
+               const selected_client_id = userData.selected_client_id
 
                // 2. Vérifie que le client est bien lié à cet utilisateur
                const { data: clientUser, error: clientUserError } = await supabase
                     .from('client_users')
-                    .select('uuid')
-                    .eq('user_uuid', userUuid)
-                    .eq('client_uuid', selectedClientUuid)
+                    .select('id')
+                    .eq('user_id', user_id)
+                    .eq('client_id', selected_client_id)
                     .maybeSingle()
 
                if (!clientUser || clientUserError) {
@@ -407,10 +407,10 @@ class ClientController {
 
                // 3. Vérifie que le projet est bien lié à ce client
                const { data: validProject, error: projectError } = await supabase
-                    .from('client_projets')
-                    .select('uuid')
-                    .eq('uuid', projectUuid)
-                    .eq('client_uuid', selectedClientUuid)
+                    .from('client_projects')
+                    .select('id')
+                    .eq('id', project_id)
+                    .eq('client_id', selected_client_id)
                     .maybeSingle()
 
                if (!validProject || projectError) {
@@ -419,11 +419,11 @@ class ClientController {
                     })
                }
 
-               // 4. Mise à jour de selected_project_uuid dans client_users
+               // 4. Mise à jour de selected_project_id dans client_users
                const { error: updateError } = await supabase
                     .from('client_users')
-                    .update({ selected_project_uuid: projectUuid })
-                    .eq('uuid', clientUser.uuid)
+                    .update({ selected_project_id: project_id })
+                    .eq('id', clientUser.id)
 
                if (updateError) {
                     return response.internalServerError({
@@ -433,7 +433,7 @@ class ClientController {
 
                return {
                     user: {
-                         selected_project_uuid: projectUuid
+                         selected_project_id: project_id
                     }
                }
 

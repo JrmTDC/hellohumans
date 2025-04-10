@@ -42,13 +42,13 @@ class AuthController {
                     })
                }
 
-               const authUUID = sessionData.user.id
+               const auth_id = sessionData.user.id
 
                // Étape 2 : Récupération de l'utilisateur interne
                const { data: userData, error: userError } = await supabaseService
                     .from('users')
-                    .select('uuid, lang')
-                    .eq('auth_uuid', authUUID)
+                    .select('id, lang')
+                    .eq('auth_id', auth_id)
                     .maybeSingle()
 
                if (userError || !userData) {
@@ -60,8 +60,8 @@ class AuthController {
                // Étape 3 : Récupération des infos client_user
                const { data: clientUserData, error: clientUserError } = await supabaseService
                     .from('client_users')
-                    .select('uuid, selected_project_uuid')
-                    .eq('auth_uuid', authUUID)
+                    .select('id, selected_project_id')
+                    .eq('auth_id', auth_id)
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .maybeSingle()
@@ -79,10 +79,10 @@ class AuthController {
                     token: sessionData.session?.access_token,
                     refresh_token: sessionData.session?.refresh_token,
                     user: {
-                         uuid: userData.uuid,
+                         id: userData.id,
                          email,
                          lang: userData.lang,
-                         selected_project_uuid: clientUserData.selected_project_uuid
+                         selected_project_id: clientUserData.selected_project_id
                     }
                })
           } catch (error) {
@@ -102,149 +102,134 @@ class AuthController {
                const lang = request.input('lang') || 'fr'
                const accept_cg = request.input('accept_cg')
 
-               // Vérification des champs obligatoires
-               if (!email) {
-                    return response.badRequest({
-                         error: { name: 'missingEmail', description: 'Adresse e-mail manquante.' }
-                    })
+               // Vérification des champs
+               if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    return response.badRequest({ error: { name: 'invalidEmail', description: 'Email invalide.' } })
                }
-
-               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-               if (!emailRegex.test(email)) {
-                    return response.badRequest({
-                         error: { name: 'invalidEmail', description: 'Adresse e-mail invalide.' }
-                    })
-               }
-
                if (!password || password.length < 6) {
-                    return response.badRequest({
-                         error: { name: 'weakPassword', description: 'Le mot de passe est trop court (min 6 caractères).' }
-                    })
+                    return response.badRequest({ error: { name: 'weakPassword', description: 'Mot de passe trop court.' } })
                }
-
-               if (!website) {
-                    return response.badRequest({
-                         error: { name: 'missingWebsite', description: 'L\'URL du site est requise.' }
-                    })
+               if (!website || !/^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(website)) {
+                    return response.badRequest({ error: { name: 'invalidWebsite', description: 'URL invalide.' } })
                }
-
-               const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/
-               if (!urlRegex.test(website)) {
-                    return response.badRequest({
-                         error: { name: 'invalidWebsite', description: 'L\'URL du site est invalide.' }
-                    })
-               }
-
                if (!accept_cg) {
-                    return response.badRequest({
-                         error: { name: 'cgNotAccepted', description: 'Vous devez accepter les CG pour vous inscrire.' }
-                    })
+                    return response.badRequest({ error: { name: 'cgNotAccepted', description: 'CG non acceptées.' } })
                }
 
-               // Étape 1 : Créer l'utilisateur via Supabase Auth
-               const { data: authData, error: authError } = await supabaseService.auth.signUp({
-                    email,
-                    password
-               })
-
+               // Étape 1 - Supabase Auth
+               const { data: authData, error: authError } = await supabaseService.auth.signUp({ email, password })
                if (authError || !authData.user) {
-                    console.error('Erreur Supabase signUp:', authError)
-                    return response.badRequest({
-                         error: { name: 'registrationFailed', description: authError?.message || 'Erreur Supabase.' }
-                    })
+                    return response.badRequest({ error: { name: 'registrationFailed', description: authError?.message || 'Erreur Supabase' } })
                }
 
-               const authUUID = authData.user.id
+               const auth_id = authData.user.id
 
-               // Étape 2 : Créer le client
-               const { data: clientData, error: clientError } = await supabaseService
-                    .from('clients')
-                    .insert({})
-                    .select()
-                    .single()
-
-               if (clientError || !clientData) {
-                    console.error('Erreur création client:', clientError)
-                    return response.badRequest({
-                         error: { name: 'clientCreationFailed', description: 'Impossible de créer le client.' }
-                    })
-               }
-
-               // Étape 3 : Créer l'utilisateur interne
+               // Étape 2 - Création de l'utilisateur interne
                const { data: userData, error: userError } = await supabaseService
                     .from('users')
                     .insert({
-                         auth_uuid: authUUID,
-                         lang,
-                         selected_client_uuid: clientData.uuid
+                         auth_id: auth_id,
+                         lang
                     })
                     .select()
                     .single()
 
                if (userError || !userData) {
-                    console.error('Erreur création user:', userError)
-                    return response.badRequest({
-                         error: { name: 'userCreationFailed', description: 'Impossible de créer l\'utilisateur.' }
-                    })
+                    return response.badRequest({ error: { name: 'userCreationFailed', description: 'Création utilisateur échouée.' } })
                }
 
-               // Étape 4 : Créer le projet principal
-               const { data: projectData, error: projectError } = await supabaseService
-                    .from('client_projets')
+               // Étape 3 - Création du client
+               const { data: clientData, error: clientError } = await supabaseService
+                    .from('clients')
                     .insert({
-                         client_uuid: clientData.uuid,
+                         owner_user_id: userData.id,
+                    })
+                    .select()
+                    .single()
+
+               if (clientError || !clientData) {
+                    return response.badRequest({ error: { name: 'clientCreationFailed', description: 'Création client impossible.' } })
+               }
+
+               // Étape 4 - Mettre à jour l'utilisateur avec le client séléctionné
+               await supabaseService
+                    .from('users')
+                    .update({
+                         selected_client_id: clientData.id,
+                    })
+                    .eq('id', userData.id)
+
+               // Étape 5 - Projet principal
+               const { data: projectData, error: projectError } = await supabaseService
+                    .from('client_projects')
+                    .insert({
+                         client_id: clientData.id,
                          website
                     })
                     .select()
                     .single()
 
                if (projectError || !projectData) {
-                    console.error('Erreur création projet:', projectError)
-                    return response.badRequest({
-                         error: { name: 'projectCreationFailed', description: 'Impossible de créer le projet.' }
-                    })
+                    return response.badRequest({ error: { name: 'projectCreationFailed', description: 'Création projet échouée.' } })
                }
 
-               // Étape 5 : Relier user <=> client
-               const { data: clientUserData, error: clientUserError } = await supabaseService
-                    .from('client_users')
-                    .insert({
-                         client_uuid: clientData.uuid,
-                         user_uuid: userData.uuid,
-                         auth_uuid: authUUID,
-                         role: 'admin',
-                         selected_project_uuid: projectData.uuid
-                    })
-                    .select()
-                    .single()
-
-               if (clientUserError || !clientUserData) {
-                    console.error('Erreur liaison client_users:', clientUserError)
-                    return response.badRequest({
-                         error: { name: 'clientUserLinkFailed', description: 'Impossible de lier l\'utilisateur au client.' }
-                    })
-               }
-
-               // Étape 6 : Connexion automatique post-inscription
-               const { data: sessionData, error: sessionError } = await supabaseService.auth.signInWithPassword({
-                    email,
-                    password
+               // Étape 6 - Relier user <=> client
+               await supabaseService.from('client_users').insert({
+                    client_id: clientData.id,
+                    user_id: userData.id,
+                    auth_id: auth_id,
+                    role: 'owner',
+                    selected_project_id: projectData.id
                })
 
+               // ✅ Étape 7 - Ajout du plan gratuit (free)
+               const { data: freePlan } = await supabaseService
+                    .from('subscription_plans')
+                    .select('id, key')
+                    .eq('key', 'free')
+                    .single()
+
+               if (!freePlan?.id) {
+                    await supabaseService
+                         .from('client_project_subscriptions')
+                         .insert({
+                              project_id: projectData.id,
+                              current_plan_id:null,
+                              status: 'inactive',
+                              billing_cycle: 'monthly',
+                              current_modules: [],
+                              is_trial: false,
+                              payment_failed: false
+                         })
+               }else{
+                    await supabaseService
+                         .from('client_project_subscriptions')
+                         .insert({
+                              project_id: projectData.id,
+                              current_plan_id: freePlan.id,
+                              status: 'active',
+                              billing_cycle: 'monthly',
+                              current_modules: [],
+                              is_trial: false,
+                              payment_failed: false
+                         })
+               }
+
+               // Étape 8 - Connexion auto
+               const { data: sessionData, error: sessionError } = await supabaseService.auth.signInWithPassword({ email, password })
+
                if (sessionError || !sessionData.session) {
-                    console.error('Erreur création session post-inscription:', sessionError)
                     return response.internalServerError({
-                         error: { name: 'sessionCreationFailed', description: 'Impossible de récupérer une session.' }
+                         error: { name: 'sessionCreationFailed', description: 'Impossible de créer une session.' }
                     })
                }
 
-               // Réponse finale
                return response.created({
                     token: sessionData.session.access_token,
                     user: {
-                         uuid: userData.uuid,
+                         id: userData.id,
                          email,
-                         selected_project_uuid: projectData.uuid,
+                         selected_project_id: projectData.id,
                          lang: userData.lang
                     }
                })
@@ -275,13 +260,13 @@ class AuthController {
                })
           }
 
-          const authUUID = foundUser.id
+          const auth_id = foundUser.id
 
           // 2. Récupère la langue depuis ta table `users`
           const { data: userData } = await supabaseService
                .from('users')
                .select('lang')
-               .eq('auth_uuid', authUUID)
+               .eq('auth_id', auth_id)
                .maybeSingle()
 
           const lang = userData?.lang || 'en' // fallback si la langue n'est pas définie

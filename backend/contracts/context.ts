@@ -6,10 +6,13 @@ declare module '@adonisjs/core/http' {
           userIp?: string
           auth?: {
                user: {
-                    id?: string // Rendre `id` optionnel
-                    email?: string // Rendre `email` optionnel
-                    [key: string]: any // Accepte d'autres propriétés
+                    id?: string
+                    email?: string
+                    [key: string]: any
                }
+               user_id?: string
+               project_id?: string
+               client_id?: string
           }
      }
 }

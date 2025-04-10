@@ -4,8 +4,8 @@ import supabase from '#services/supabaseService'
 class UsageController {
      public async index({ auth, response }: HttpContext) {
           try {
-               const authUuid = auth?.user?.id
-               if (!authUuid) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
@@ -14,8 +14,8 @@ class UsageController {
                // 1. Récupération de l'utilisateur interne
                const { data: user, error: userError } = await supabase
                     .from('users')
-                    .select('uuid, selected_client_uuid')
-                    .eq('auth_uuid', authUuid)
+                    .select('id, selected_client_id')
+                    .eq('auth_id', auth_id)
                     .maybeSingle()
 
                if (!user || userError) {
@@ -24,23 +24,23 @@ class UsageController {
                     })
                }
 
-               const userUuid = user.uuid
-               let selectedClientUuid = user.selected_client_uuid
+               const user_id = user.id
+               let selected_client_id = user.selected_client_id
 
                // 2. Vérifier que ce client est bien lié à l’utilisateur
                let { data: clientUser, error: clientUserError } = await supabase
                     .from('client_users')
-                    .select('uuid, client_uuid, selected_project_uuid')
-                    .eq('user_uuid', userUuid)
-                    .eq('client_uuid', selectedClientUuid)
+                    .select('id, client_id, selected_project_id')
+                    .eq('user_id', user_id)
+                    .eq('client_id', selected_client_id)
                     .maybeSingle()
 
                // 3. Si aucun client défini, on en prend un (le + récent)
                if (!clientUser || clientUserError) {
                     const { data: lastClientUser } = await supabase
                          .from('client_users')
-                         .select('uuid, client_uuid, selected_project_uuid')
-                         .eq('user_uuid', userUuid)
+                         .select('id, client_id, selected_project_id')
+                         .eq('user_id', user_id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
@@ -52,18 +52,18 @@ class UsageController {
                     }
 
                     clientUser = lastClientUser
-                    selectedClientUuid = clientUser.client_uuid
+                    selected_client_id = clientUser.client_id
 
                     // Mettre à jour la sélection client dans `users`
                     await supabase
                          .from('users')
-                         .update({ selected_client_uuid: selectedClientUuid })
-                         .eq('uuid', userUuid)
+                         .update({ selected_client_id: selected_client_id })
+                         .eq('id', user_id)
                }
 
-               const selectedProjectUuid = clientUser.selected_project_uuid
+               const selected_project_id = clientUser.selected_project_id
 
-               if (!selectedProjectUuid) {
+               if (!selected_project_id) {
                     return response.badRequest({
                          error: { name: 'missingProject', description: 'Aucun projet sélectionné pour ce client.' }
                     })
@@ -73,7 +73,7 @@ class UsageController {
                const { data: project_usages, error: usageError } = await supabase
                     .from('client_project_usages')
                     .select('id, usage, limit')
-                    .eq('project_uuid', selectedProjectUuid)
+                    .eq('project_id', selected_project_id)
 
                if (usageError) {
                     console.error('Erreur récupération usage:', usageError)

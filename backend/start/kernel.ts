@@ -13,6 +13,8 @@ server.use([
 router.use([() => import('@adonisjs/core/bodyparser_middleware'), () => import('#middleware/detect_user_locale_middleware')])
 
 export const middleware = router.named({
-  chat_security: () => import('#middleware/chat_security_middleware'),
-  panel_auth: () => import('#middleware/panel_auth_middleware'),
+     chat_security: () => import('#middleware/chat_security_middleware'),
+     panel_ensure_user: () => import('#middleware/panel_ensure_user_middleware'),
+     panel_ensure_client: () => import('#middleware/panel_ensure_client_middleware'),
+     panel_ensure_project: () => import('#middleware/panel_ensure_project_middleware')
 })

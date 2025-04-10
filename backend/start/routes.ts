@@ -7,8 +7,12 @@ import UpgradeController from '#controllers/Panel/UpgradeController'
 import UsageController from '#controllers/Panel/UsageController'
 import ClientController from '#controllers/Panel/ClientController'
 import UserController from '#controllers/Panel/UserController'
+//import SubscriptionController from '#controllers/Panel/SubscriptionController'
+//import StripeWebhookController from "#controllers/Panel/StripeWebhookController";
 
 import { middleware } from '#start/kernel'
+
+
 
 // Routes de chat
 router.group(() => {
@@ -41,4 +45,22 @@ router.group(() => {
      router.post('/lang', (ctx) => UserController.updateLang(ctx))
 })
      .prefix('/panel')
-     .use(middleware.panel_auth())
+     .use(middleware.panel_ensure_user())
+
+// Routes Stripe protégées par l'authentification
+router.group(() => {
+     //router.post('/create-subscription', (ctx) => SubscriptionController.create(ctx))
+     // router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
+     //router.post('/cancel-subscription', (ctx) => SubscriptionController.cancel(ctx))
+     //router.post('/subscription/:project_uuid', (ctx) => SubscriptionController.create(ctx))
+     //router.post('/preview', (ctx) => SubscriptionController.preview(ctx))
+
+})
+     .prefix('/panel/stripe')
+     .use(middleware.panel_ensure_project())
+
+// Routes Stripe sans authentification
+router.group(() => {
+     //router.post('/stripe', (ctx) => StripeWebhookController.handle(ctx))
+})
+     .prefix('/panel/webhook')

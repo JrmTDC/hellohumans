@@ -104,6 +104,9 @@ function goStep(step: number) {
 }
 
 function closePanel() {
-     router.push('/panel')
+     router.push('/panel/dashboard')
 }
+definePageMeta({
+     layout: 'panel'
+})
 </script>
