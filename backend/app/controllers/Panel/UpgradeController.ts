@@ -2,11 +2,11 @@ import { HttpContext } from '@adonisjs/core/http'
 import supabase from '#services/supabaseService'
 
 class UpgradeController {
-     private async getUserLang(authUUID: string): Promise<string> {
+     private async getUserLang(auth_id: string): Promise<string> {
           const { data, error } = await supabase
                .from('users')
                .select('lang')
-               .eq('auth_uuid', authUUID)
+               .eq('auth_id', auth_id)
                .single()
 
           if (error || !data?.lang) {
@@ -19,14 +19,14 @@ class UpgradeController {
 
      public async getPlans({ auth, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' },
                     })
                }
 
-               const lang = await this.getUserLang(authUUID)
+               const lang = await this.getUserLang(auth_id)
 
                const { data, error } = await supabase
                     .from('subscription_plans')
@@ -66,14 +66,14 @@ class UpgradeController {
 
      public async getModules({ auth, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' },
                     })
                }
 
-               const lang = await this.getUserLang(authUUID)
+               const lang = await this.getUserLang(auth_id)
 
                const { data, error } = await supabase
                     .from('subscription_modules')

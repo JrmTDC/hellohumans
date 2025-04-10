@@ -4,8 +4,8 @@ import supabase from '#services/supabaseService'
 class UserController {
      public async getUser({ auth, response }: HttpContext) {
           try {
-               const authUuid = auth?.user?.id
-               if (!authUuid) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
@@ -14,7 +14,7 @@ class UserController {
                const { data: user, error } = await supabase
                     .from('users')
                     .select('*')
-                    .eq('auth_uuid', authUuid)
+                    .eq('auth_id', auth_id)
                     .single()
 
                if (error || !user) {
@@ -24,10 +24,10 @@ class UserController {
                }
 
                return { user: {
-                    uuid: user.uuid,
+                    id: user.id,
                     email: auth?.user?.email,
                     lang: user.lang,
-                    selected_client_uuid: user.selected_client_uuid
+                    selected_client_id: user.selected_client_id
                     }
                }
           } catch (error) {
@@ -40,8 +40,8 @@ class UserController {
 
      public async updateLang({ auth, request, response }: HttpContext) {
           try {
-               const authUUID = auth?.user?.id
-               if (!authUUID) {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
                     return response.unauthorized({
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
@@ -58,7 +58,7 @@ class UserController {
                const { error } = await supabase
                     .from('users')
                     .update({ lang })
-                    .eq('auth_uuid', authUUID)
+                    .eq('auth_id', auth_id)
 
                if (error) {
                     console.error(error)

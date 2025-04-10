@@ -68,7 +68,6 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { usePanelStore } from '~/stores/panelStore'
 import { useUsageDefinitions } from '~/composables/useUsageDefinitions'
 import usageItem from '~/components/panel/dashboard/usageItem.vue'
 import ProgressCircle from '~/components/panel/ProgressCircle.vue'

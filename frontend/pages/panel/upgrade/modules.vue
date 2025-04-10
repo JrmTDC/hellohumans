@@ -84,6 +84,7 @@ import moduleCard from '~/components/panel/upgrade/moduleCardUpgrade.vue'
 import subscriptionSummary from '~/components/panel/upgrade/subscriptionSummaryUpgrade.vue'
 import paymentModal from '~/components/panel/modal/upgradePaymentModal.vue'
 
+const panelStore = usePanelStore()
 const store = useUpgradeStore()
 const router = useRouter()
 const trialActive = ref(false)
@@ -159,12 +160,28 @@ function handlePaymentClick() {
 }
 
 function submitPayment(cardDetails: any) {
-     // 1) Envoyer la requête vers ton backend (ou Stripe direct si usage client-only)
-     // 2) En cas de succès, tu fermes la modal
-     showPaymentModal.value = false
-     // 3) Gérer la suite (e.g. router.push('/panel/upgrade/success'))
+     const result = panelStore.createStripeSubscription({
+          plan_id: store.selectedPlanId!,
+          modules: store.billableAddOns.map((mod) => mod.id),
+          billing_cycle: store.billingCycle,
+          payment_method: cardDetails.paymentMethodId, // par exemple obtenu via Stripe Elements
+     })
+
+     // Gestion succès / erreur
+     if (result.subscription) {
+          showPaymentModal.value = false
+          router.push('/panel/upgrade/success')
+     }
 }
 
+const hasActiveSubscription = computed(() => {
+     return (
+          panelStore.subscription &&
+          Array.isArray(panelStore.subscription) &&
+          panelStore.subscription.length > 0 &&
+          panelStore.subscription[0].status !== 'canceled'
+     )
+})
 
 function goStep(step: number) {
      if (step === 1) router.push('/panel/upgrade')
@@ -173,6 +190,9 @@ function goStep(step: number) {
 }
 
 function closePanel() {
-     router.push('/panel')
+     router.push('/panel/dashboard')
 }
+definePageMeta({
+     layout: 'panel'
+})
 </script>
