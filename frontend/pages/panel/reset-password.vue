@@ -144,7 +144,12 @@ const confirmInputRef = ref()
 const passwordInputValue = ref('')
 const confirmPasswordInputValue = ref('')
 
-const errorMessagePassword = computed(() => t('panel.pages.resetPassword.errorPasswordTooShort'))
+const passwordAlreadyUsed = ref(false)
+
+const errorMessagePassword = computed(() => {
+     if (passwordAlreadyUsed.value) return t('panel.pages.resetPassword.errorPasswordAlreadyUsed')
+     return t('panel.pages.resetPassword.errorPasswordTooShort')
+})
 const errorMessageConfirmPassword = computed(() => t('panel.pages.resetPassword.errorPasswordMismatch'))
 
 const isValidPassword = (val: string) => val.length >= 6
@@ -160,8 +165,13 @@ const handleReset = async () => {
      loading.value = true
 
      const success = await publicStore.resetPasswordUpdate(passwordInputValue.value)
+
      if (success) {
           resetPasswordStatus.value = "success"
+     } else {
+          if (publicStore.error === 'PASSWORD_ALREADY_USED') {
+               passwordAlreadyUsed.value = true
+          }
      }
 
      loading.value = false

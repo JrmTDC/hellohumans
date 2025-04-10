@@ -64,9 +64,18 @@ export const usePublicStore = defineStore('public', () => {
      }
 
      const resetPasswordUpdate = async (password: string) => {
-          const { error : authError} = await supabase.auth.updateUser({ password: password })
+          const { error: authError } = await supabase.auth.updateUser({ password })
 
-          return !authError;
+          if (authError) {
+               const msg = authError.message?.toLowerCase() || ''
+               if (msg.includes('identical') || msg.includes('same') || msg.includes('ancien')) {
+                    error.value = 'PASSWORD_ALREADY_USED'
+               } else {
+                    error.value = msg
+               }
+          }
+
+          return !authError
      }
 
      const resetPasswordSession = async (access_token: string, refresh_token: string) => {
