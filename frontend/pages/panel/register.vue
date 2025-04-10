@@ -66,11 +66,12 @@
 
                          <fieldset class="border-0 p-0 flex flex-col items-center">
                               <staticInputCommon
-                                   type="url"
-                                   ref="websiteInputRef"
-                                   v-model="websiteInputValue"
-                                   :placeholder=" t('panel.pages.register.websitePlaceholder')"
-                                   :error-text=errorMessageWebsite
+                                   type="text"
+                                   ref="displayNameInputRef"
+                                   v-model="displayNameInputValue"
+                                   :placeholder=" t('panel.pages.register.displayNamePlaceholder')"
+                                   :error-text=errorMessageDisplayName
+                                   :validator="isValidDisplayName"
                                    extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                               />
                          </fieldset>
@@ -81,9 +82,7 @@
                                         ref="agreedInputRef"
                                         :v-model=agreedInputValue
                                         type="checkbox"
-                                        :error-text="errorsMessageAgreed"
-
-                                   >
+                                        :error-text="errorsMessageAgreed">
                                         <template #label>
                                              <a class="text-[#000]">{{ t('panel.pages.register.acceptLabel') }}</a>
                                              <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a>
@@ -126,8 +125,8 @@ const emailInputValue = ref('')
 const passwordInputValue = ref('')
 const passwordInputRef = ref()
 
-const websiteInputValue = ref('')
-const websiteInputRef = ref()
+const displayNameInputValue = ref('')
+const displayNameInputRef = ref()
 
 const agreedInputValue = ref(false)
 const agreedInputRef = ref()
@@ -140,24 +139,25 @@ const router = useRouter()
 
 const errorMessageEmail = computed(() => t('panel.pages.register.errorEmailInvalid'))
 const errorMessagePassword = computed(() => t('panel.pages.register.errorPasswordEmpty'))
-const errorMessageWebsite = computed(() => t('panel.pages.register.errorWebsiteEmpty'))
+const errorMessageDisplayName = computed(() => t('panel.pages.register.errorDisplayNameEmpty'))
 const errorsMessageAgreed = computed(() => t('panel.pages.register.errorAgreementRequired'))
 
 const isValidPassword = (val: string) => val.length >= 6
+const isValidDisplayName = (val: string) => val.length >= 3
 
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
 
      const checkValidEmail = emailInputRef.value?.validate()
      const checkValidPassowrd = passwordInputRef.value?.validate()
-     const checkValidWebsite = websiteInputRef.value?.validate()
+     const checkValidDisplayName = displayNameInputRef.value?.validate()
      const checkValidAgreed = agreedInputRef.value?.validate()
-     if (!checkValidEmail || !checkValidPassowrd || !checkValidWebsite || !checkValidAgreed) return
+     if (!checkValidEmail || !checkValidPassowrd || !checkValidDisplayName || !checkValidAgreed) return
 
      loginError.value = false
      loading.value = true
 
-     const success = await publicStore.register(emailInputValue.value, passwordInputValue.value, websiteInputValue.value, agreedInputValue.value, lang)
+     const success = await publicStore.register(emailInputValue.value, passwordInputValue.value, displayNameInputValue.value, agreedInputValue.value, lang)
      if (success) {
           loginError.value = false
           await router.push('/panel')
