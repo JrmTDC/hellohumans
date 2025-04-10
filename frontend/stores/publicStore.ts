@@ -24,10 +24,23 @@ export const usePublicStore = defineStore('public', () => {
                     body: JSON.stringify({ email, password, website, accept_cg, lang }),
                })
                return true
-          } catch (err: any) {
-               error.value = err.message
+          }
+          catch (err: any) {
+               const message = err?.data?.message || err?.message || ''
+
+               // Détection spécifique de l’erreur e-mail déjà utilisé
+               if (
+                    message.toLowerCase().includes('email') &&
+                    (message.toLowerCase().includes('existe') || message.toLowerCase().includes('used'))
+               ) {
+                    error.value = 'EMAIL_ALREADY_USED'
+               } else {
+                    error.value = message
+               }
+
                return false
-          } finally {
+          }
+          finally {
                loading.value = false
           }
      }
@@ -55,6 +68,7 @@ export const usePublicStore = defineStore('public', () => {
 
           return !authError;
      }
+
      const resetPasswordSession = async (access_token: string, refresh_token: string) => {
           const { error: sessionError } = await supabase.auth.setSession({access_token, refresh_token})
           return !sessionError;

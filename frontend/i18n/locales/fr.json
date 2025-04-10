@@ -31,6 +31,7 @@
                     "privacy": " Politique de confidentialité ",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
+                    "emailAlreadyUsed": "Cette adresse e-mail est déjà utilisée.",
                     "errorPasswordEmpty": "Le mot de passe doit contenir au moins 6 caractères.",
                     "errorDisplayNameEmpty": "Doit contenir au moins 3 caractères.",
                     "errorAgreementRequired": "Un accord est requis",

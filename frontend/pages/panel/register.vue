@@ -45,10 +45,9 @@
                                    type="email"
                                    ref="emailInputRef"
                                    v-model="emailInputValue"
-                                   :error-text=errorMessageEmail
+                                   :error-text="emailErrorText"
                                    :placeholder="t('panel.pages.register.emailPlaceholder')"
-                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                              />
+                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"/>
                          </fieldset>
                          <fieldset class="border-0 p-0 m-0 flex flex-col items-center">
                               <staticInputCommon
@@ -60,8 +59,7 @@
                                    :iconSize="20"
                                    :error-text=errorMessagePassword
                                    :validator="isValidPassword"
-                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                              />
+                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"/>
                          </fieldset>
 
                          <fieldset class="border-0 p-0 flex flex-col items-center">
@@ -72,8 +70,7 @@
                                    :placeholder=" t('panel.pages.register.displayNamePlaceholder')"
                                    :error-text=errorMessageDisplayName
                                    :validator="isValidDisplayName"
-                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                              />
+                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"/>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center mt-[13px]">
                               <label class="flex items-start max-w-[365px] text-[14px] leading-[18px] tracking-[-0.01em] cursor-pointer">
@@ -118,7 +115,6 @@ const { locale } = useI18n()
 
 const publicStore = usePublicStore()
 
-// Champs du formulaire
 const emailInputRef = ref()
 const emailInputValue = ref('')
 
@@ -131,43 +127,62 @@ const displayNameInputRef = ref()
 const agreedInputValue = ref(false)
 const agreedInputRef = ref()
 
-
-const loginError = ref(false)
+const loginError= ref(false)
 const loading = ref(false)
 const lang = locale.value
 const router = useRouter()
 
+const emailErrorText = computed(() => {
+     if (emailAlreadyUsed.value) return t('panel.pages.register.emailAlreadyUsed')
+     return errorMessageEmail.value
+})
 const errorMessageEmail = computed(() => t('panel.pages.register.errorEmailInvalid'))
 const errorMessagePassword = computed(() => t('panel.pages.register.errorPasswordEmpty'))
 const errorMessageDisplayName = computed(() => t('panel.pages.register.errorDisplayNameEmpty'))
 const errorsMessageAgreed = computed(() => t('panel.pages.register.errorAgreementRequired'))
+
+
+
+const emailAlreadyUsed = ref(false)
 
 const isValidPassword = (val: string) => val.length >= 6
 const isValidDisplayName = (val: string) => val.length >= 3
 
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
+     emailAlreadyUsed.value = false
 
      const checkValidEmail = emailInputRef.value?.validate()
      const checkValidPassowrd = passwordInputRef.value?.validate()
      const checkValidDisplayName = displayNameInputRef.value?.validate()
      const checkValidAgreed = agreedInputRef.value?.validate()
+
      if (!checkValidEmail || !checkValidPassowrd || !checkValidDisplayName || !checkValidAgreed) return
 
      loginError.value = false
      loading.value = true
 
-     const success = await publicStore.register(emailInputValue.value, passwordInputValue.value, displayNameInputValue.value, agreedInputValue.value, lang)
+     const success = await publicStore.register(
+          emailInputValue.value,
+          passwordInputValue.value,
+          displayNameInputValue.value,
+          agreedInputValue.value,
+          lang
+     )
+
      if (success) {
           loginError.value = false
           await router.push('/panel')
      } else {
           loginError.value = true
+
+          if (publicStore.error === 'EMAIL_ALREADY_USED') {
+               emailAlreadyUsed.value = true
+               emailInputRef.value?.validate()
+          }
      }
 
      loading.value = false
 }
+
 </script>
-
-
-
