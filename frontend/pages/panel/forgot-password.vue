@@ -99,7 +99,6 @@ import StaticInputCommon from "~/components/panel/common/staticInputCommon.vue";
 const { t } = useI18n()
 
 const inputEmail = ref('')
-const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
 const publicStore = usePublicStore()

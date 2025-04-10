@@ -23,7 +23,7 @@
                     </label>
                     <Transition name="slide-fade" appear>
                          <span
-                              v-if="showError"
+                              v-if="shouldShowError"
                               class="_inputError text-[rgb(232,19,50)] inline-flex text-[12px] font-medium leading-normal tracking-[-0.09px] items-center pl-[2px]"
                          >
                               {{ errorText }}
@@ -38,7 +38,7 @@
                               v-model="inputValue"
                               :type="inputType"
                               :placeholder="placeholder"
-                              :class="[extraClassInput, { 'border-[rgb(232,19,50)]': showError }]"
+                              :class="[extraClassInput, { 'border-[rgb(232,19,50)]': shouldShowError}]"
                               :autocomplete="isPasswordType ? 'new-password' : 'off'"
                               autocorrect="off"
                               autocapitalize="off"
@@ -49,8 +49,9 @@
                          />
 
                          <!-- Custom bouton mot de passe -->
+                         <!-- Bouton mot de passe -->
                          <button
-                              v-if="isPasswordType && inputValue?.length"
+                              v-if="isPasswordType && inputString.length > 0"
                               type="button"
                               class="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-500"
                               @click="togglePasswordVisibility"
@@ -87,7 +88,7 @@
                               </div>
 
                               <div
-                                   v-else-if="showError && !focused"
+                                   v-else-if="shouldShowError && !focused"
                                    class="relative translate-y-[-8px] pl-[4px] mb-[8px]"
                               >
                                    <span
@@ -124,7 +125,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const inputValue = ref(props.modelValue)
+const inputValue = ref(props.modelValue) as Ref<string | boolean | undefined>
+
 const showPassword = ref(false)
 const focused = ref(false)
 const touched = ref(false)
@@ -143,6 +145,10 @@ const inputType = computed(() => {
      }
      return props.type
 })
+
+const inputString = computed(() =>
+     typeof inputValue.value === 'string' ? inputValue.value : ''
+)
 
 const defaultEmailValidator = (val: string) =>
      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
@@ -164,7 +170,7 @@ const getIsValid = (val: any): boolean => {
      return true
 }
 
-const showError = computed(() => {
+const shouldShowError = computed(() => {
      return touched.value && !getIsValid(inputValue.value)
 })
 
@@ -182,7 +188,7 @@ const handleBlur = () => {
 
 const handleInput = () => {
      emit('update:modelValue', inputValue.value)
-     if (touched.value) showError.value
+     if (touched.value) shouldShowError.value
      if (props.enableStrengthEvaluation && focused.value && isPasswordType.value) {
           evaluatePasswordStrength()
      }
@@ -193,10 +199,10 @@ const togglePasswordVisibility = () => {
 }
 
 const evaluatePasswordStrength = () => {
-     const pass = inputValue.value || ''
+     const pass = inputString.value
+
      if (!props.enableStrengthEvaluation || !focused.value || !isPasswordType.value) {
           passwordStrength.value = ''
-
           progressWidth.value = '0%'
           progressColor.value = 'rgb(226,232,239)'
           return
@@ -234,7 +240,7 @@ watch(() => props.modelValue, val => {
 }, { immediate: true })
 
 watch(inputValue, () => {
-     if (touched.value) showError.value
+     if (touched.value) shouldShowError.value
 })
 
 const validate = () => {
@@ -244,5 +250,3 @@ const validate = () => {
 
 defineExpose({ validate })
 </script>
-
-
