@@ -45,7 +45,7 @@
                                    type="email"
                                    ref="emailInputRef"
                                    v-model="emailInputValue"
-                                   :error-text="emailErrorText"
+                                   :error-text="errorEmailInvalid"
                                    :placeholder="t('panel.pages.register.emailPlaceholder')"
                                    extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"/>
                          </fieldset>
@@ -77,7 +77,7 @@
                                    <!-- Case visuelle custom -->
                                    <staticInputCommon
                                         ref="agreedInputRef"
-                                        :v-model=agreedInputValue
+                                        v-model="agreedInputValue"
                                         type="checkbox"
                                         :error-text="errorsMessageAgreed">
                                         <template #label>
@@ -89,10 +89,16 @@
                                         </template>
                                    </staticInputCommon>
                               </label>
+                              <p v-if="errorMessageEmail" class="text-red-600 mt-3 text-sm">
+                                   {{ errorMessageAlreadyUsed }}
+                              </p>
                          </fieldset>
 
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 [width:min(370px,_calc(-32px+100vw))]">
-                              <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}</button>
+                              <button
+                                   type="submit"
+                                   class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}
+                              </button>
                               <span class="block text-center mt-[40px] pt-[20px] text-[16px]  text-[#647491] border-t border-[#e2e8ef]">{{ t('panel.pages.register.alreadyHaveAccount') }} <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.register.loginCta') }}</a>
                               </span>
                          </fieldset>
@@ -132,10 +138,8 @@ const loading = ref(false)
 const lang = locale.value
 const router = useRouter()
 
-const emailErrorText = computed(() => {
-     if (emailAlreadyUsed.value) return t('panel.pages.register.emailAlreadyUsed')
-     return errorMessageEmail.value
-})
+const errorMessageAlreadyUsed = computed(() => t('panel.pages.register.emailAlreadyUsed'))
+
 const errorMessageEmail = computed(() => t('panel.pages.register.errorEmailInvalid'))
 const errorMessagePassword = computed(() => t('panel.pages.register.errorPasswordEmpty'))
 const errorMessageDisplayName = computed(() => t('panel.pages.register.errorDisplayNameEmpty'))
@@ -147,6 +151,7 @@ const emailAlreadyUsed = ref(false)
 
 const isValidPassword = (val: string) => val.length >= 6
 const isValidDisplayName = (val: string) => val.length >= 3
+
 
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
@@ -162,7 +167,7 @@ const handleRegister = async () => {
      loginError.value = false
      loading.value = true
 
-     const success = await publicStore.register(
+     await publicStore.register(
           emailInputValue.value,
           passwordInputValue.value,
           displayNameInputValue.value,
@@ -170,13 +175,12 @@ const handleRegister = async () => {
           lang
      )
 
-     if (success) {
+     if (publicStore.apiReturn?.success) {
           loginError.value = false
           await router.push('/panel')
      } else {
           loginError.value = true
-
-          if (publicStore.error === 'EMAIL_ALREADY_USED') {
+          if(publicStore.apiReturn?.error.name === 'user_already_exists') {
                emailAlreadyUsed.value = true
                emailInputRef.value?.validate()
           }

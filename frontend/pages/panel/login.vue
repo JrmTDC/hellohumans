@@ -63,7 +63,6 @@
                          >
                               {{ loading ? t('panel.pages.login.loading') : t('panel.pages.login.submit')  }}
                          </button>
-
                          <!-- Lien vers l'inscription -->
                          <div class="mt-[40px] border-t border-[#e2e8ef] pt-[20px] w-full text-center">
                               <p class="mt-4 text-gray-600 text-[16px]">{{ t('panel.pages.login.noAccount') }} <a href="/panel/register" class="text-blue-500 hover:underline">{{ t('panel.pages.login.registerCta') }}</a></p>
@@ -103,17 +102,20 @@ const handleLogin = async () => {
      const checkValidPassowrd = passwordInputRef.value?.validate()
      if (!checkValidEmail || !checkValidPassowrd) return
 
-     loginError.value = false
      loading.value = true
+     loginError.value = false
 
-     const success = await publicStore.login(emailInputValue.value, passwordInputValue.value)
-     if (success) {
+     await publicStore.login(
+          emailInputValue.value,
+          passwordInputValue.value
+     )
+     if (!publicStore.publicReturn?.error && publicStore.publicReturn?.data.session.access_token) {
           loginError.value = false
           await router.push('/panel')
+          loading.value = false
      } else {
           loginError.value = true
+          loading.value = false
      }
-
-     loading.value = false
 }
 </script>

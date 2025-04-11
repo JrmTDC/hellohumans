@@ -19,7 +19,7 @@ export function usePublicApi() {
           const isJson = contentType.includes('application/json')
           const data = isJson ? await response.json() : await response.text()
 
-          if (response.ok) {
+          if (response) {
                return data
           }
 

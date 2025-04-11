@@ -56,11 +56,6 @@
                                    <span class="mx-3"></span>
                                    <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.login') }}</a>
                               </p>
-
-                              <!-- Message d'erreur -->
-                              <p v-if="errorMessageEmail" class="text-red-600 mt-3 text-sm">
-                                   {{ t('panel.pages.forgotPassword.errorMessage') }}
-                              </p>
                          </form>
                     </div>
 
@@ -80,7 +75,6 @@
                                    </span>
                               </div>
                          </fieldset>
-
                          <!-- Retour à la connexion -->
                          <p class="mt-4 text-gray-600 text-center text-[16px] ">
                               <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.loginLink') }}</a>
