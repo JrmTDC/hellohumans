@@ -143,6 +143,7 @@ class AuthController {
                     .from('clients')
                     .insert({
                          owner_user_id: userData.id,
+                         name: displayName,
                     })
                     .select()
                     .single()
@@ -164,7 +165,7 @@ class AuthController {
                     .from('client_projects')
                     .insert({
                          client_id: clientData.id,
-                         displayName
+                         website : null
                     })
                     .select()
                     .single()
