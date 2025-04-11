@@ -112,6 +112,7 @@
                          >
                               {{ t('panel.pages.resetPassword.resendCta') }}
                          </button>
+
                     </div>
                </div>
           </div>

@@ -58,7 +58,6 @@
                               </p>
                          </form>
                     </div>
-
                     <!-- Message de succès  -->
                     <div v-else class="flex flex-col items-center w-full">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
@@ -108,7 +107,7 @@ const handleForgot = async () => {
 
      loading.value = true
 
-     const success = await publicStore.forgotPassword(inputEmail.value)
+     const success = await publicStore.forgotPassword(emailInputValue.value)
      if (success) {
           emailSent.value = true
      }

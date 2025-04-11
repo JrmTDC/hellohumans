@@ -45,7 +45,7 @@
                                    type="email"
                                    ref="emailInputRef"
                                    v-model="emailInputValue"
-                                   :error-text="errorEmailInvalid"
+                                   :error-text="errorMessageEmail"
                                    :placeholder="t('panel.pages.register.emailPlaceholder')"
                                    extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"/>
                          </fieldset>
@@ -89,7 +89,7 @@
                                         </template>
                                    </staticInputCommon>
                               </label>
-                              <p v-if="errorMessageEmail" class="text-red-600 mt-3 text-sm">
+                              <p v-if="errorAlreadyUsed" class="text-red-600 mt-3 text-sm">
                                    {{ errorMessageAlreadyUsed }}
                               </p>
                          </fieldset>
@@ -123,6 +123,7 @@ const publicStore = usePublicStore()
 
 const emailInputRef = ref()
 const emailInputValue = ref('')
+const errorAlreadyUsed = ref(false)
 
 const passwordInputValue = ref('')
 const passwordInputRef = ref()
@@ -175,14 +176,13 @@ const handleRegister = async () => {
           lang
      )
 
-     if (publicStore.apiReturn?.success) {
+     if (publicStore.publicReturn?.success) {
           loginError.value = false
           await router.push('/panel')
      } else {
           loginError.value = true
-          if(publicStore.apiReturn?.error.name === 'user_already_exists') {
-               emailAlreadyUsed.value = true
-               emailInputRef.value?.validate()
+          if(publicStore.publicReturn?.error.name === 'user_already_exists') {
+               errorAlreadyUsed.value = true
           }
      }
 
