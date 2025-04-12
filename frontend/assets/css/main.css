@@ -76,7 +76,7 @@ button:hover .hhcss_iconChatFillPath{
      stroke-dasharray: 1;
      stroke-dashoffset: 0;
 }
-.hhcss_tourBox{
+.hhcss_onboardingBox{
      animation: 0.4s ease-in-out 0s 1 normal none running animation-1fuykbj;
 }
 @media (min-width: 1200px) {
@@ -267,4 +267,36 @@ button:hover .hhcss_iconChatFillPath{
      max-height: 0;
      opacity: 0;
      margin-bottom: 0;
+}
+.dp__instance_calendar{
+     font-family: euclidcircularb;
+}
+.dp__instance_calendar .dp__calendar_header_item{
+     color: #6c7d9f;
+     display: table-cell;
+     font-size: 14px;
+     text-align: center;
+     font-weight: normal;
+}
+.dp__instance_calendar .dp--future{
+     color: #6c7d9f;
+     opacity: .5;
+     font-size: 14px;
+     border: 1px solid #dde0eb;
+     background-color: #fff;
+     border-radius:0;
+}
+.dp__instance_calendar .dp__range_start,.dp__range_end{
+     border: 0;
+     cursor: pointer;
+     display: table-cell;
+     height: 35px;
+     min-width: 35px;
+     text-align: center;
+     vertical-align: middle;
+     width: 35px;
+     background-color: #0566ff;
+}
+.dp__range_between{
+
 }
