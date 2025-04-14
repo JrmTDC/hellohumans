@@ -6,11 +6,11 @@ export function parseApiError(err: any, baseLocalKey: string): {
      if (!err) return { name: 'unknown', description: 'Une erreur inconnue est survenue.', key: 'errors.api.unknown' }
 
      // Supabase error
-     if (err.message && baseLocalKey) {
+     if (err.message && err.code && baseLocalKey) {
           return {
-               name: err.name || 'supabase_error',
+               name: err.name || 'sb_error',
                description: err.message,
-               key: `${baseLocalKey}.api.${err.name}` || `errors.api.unknown`
+               key: `${baseLocalKey}.api.${err.code}` || `errors.api.unknown`
           }
      }
 

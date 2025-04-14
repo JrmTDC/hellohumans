@@ -10,6 +10,9 @@
                     "loading": "Connexion ..."
                },
                "login": {
+                    "api":{
+                         "invalid_credentials": "E-mail ou mot de passe incorrect !"
+                    },
                     "title": "Bon retour parmi nous",
                     "subtitle": "Connectez-vous à votre compte HelloHumans",
                     "emailPlaceholder": "Adresse e-mail",
@@ -17,8 +20,7 @@
                     "forgotPassword": "Mot de passe oublié ?",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
-                    "errorPasswordEmpty": "Ne peut être vide !",
-                    "loginError": "E-mail ou mot de passe incorrect !",
+                    "errorPasswordEmpty": "Mot de passe incorrect !",
                     "submit": "Se connecter",
                     "loading": "Chargement...",
                     "noAccount": "Vous n’avez pas de compte ?",
@@ -45,15 +47,26 @@
                     "errorDisplayNameTooShort": "Doit contenir au moins 3 caractères.",
                     "errorAgreementRequired": "Un accord est requis",
                     "cta": "Débuter gratuitement",
+                    "loading": "Chargement...",
                     "alreadyHaveAccount": "Vous avez déjà un compte ?",
                     "loginCta": "Se connecter",
                     "asideTitle": "Développez votre activité grâce à une assistance intelligente",
                     "asideText": "Automatisez les réponses aux questions fréquentes et améliorez l’expérience de vos visiteurs grâce à un chatbot IA conçu pour booster votre support client.",
                     "benefit1": "Répondez instantanément 24h/24 aux demandes de vos visiteurs",
                     "benefit2": "Automatisez jusqu’à 70 % des questions récurrentes grâce à l’IA",
-                    "benefit3": "Gagnez du temps tout en améliorant la satisfaction client"
+                    "benefit3": "Gagnez du temps tout en améliorant la satisfaction client",
+                    "champInvalide": "Champ invalide.",
+                    "strengthLabel": "Niveau de sécurité du mot de passe",
+                    "veryWeak": "Très Faible",
+                    "weak": "Faible",
+                    "medium": "Moyen",
+                    "strong": "Fort",
+                    "veryStrong": "Très Fort"
                },
                "forgotPassword": {
+                    "api":{
+                         "invalidEmail": "L’adresse e-mail est invalide !"
+                    },
                     "title": "Mot de passe oublié ?",
                     "subtitle": "Nous vous enverrons les instructions de réinitialisation par e-mai.",
                     "emailPlaceholder": "Adresse e-mail",
@@ -69,12 +82,14 @@
                     "loginLink": "Se connecter"
                },
                "resetPassword": {
+                    "api":{
+                         "same_password": "Le mot de passe doit être différent de l’ancien."
+                    },
                     "title": "Réinitialiser le mot de passe",
                     "passwordPlaceholder": "Nouveau mot de passe",
                     "confirmPasswordPlaceholder": "Confirmer le mot de passe",
                     "errorPasswordEmpty": "Ne peut être vide !",
                     "errorPasswordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
-                    "errorPasswordAlreadyUsed": "Le nouveau mot de passe doit être différent de l’ancien.",
                     "errorPasswordMismatch": "Les mots de passe ne correspondent pas",
                     "submit": "Réinitialiser le mot de passe",
                     "loading": "Chargement...",
@@ -83,7 +98,14 @@
                     "messageTokenLoading": "Vérification du lien de réinitialisation.",
                     "messageTokenExpired": "Le lien est invalide ou a expiré.",
                     "messageTokenMissing": "Le lien est invalide ou a expiré.",
-                    "resendCta": "Renvoyer un lien"
+                    "resendCta": "Renvoyer un lien",
+                    "champInvalide": "Champ invalide.",
+                    "strengthLabel": "Niveau de sécurité du mot de passe",
+                    "veryWeak": "Très Faible",
+                    "weak": "Faible",
+                    "medium": "Moyen",
+                    "strong": "Fort",
+                    "veryStrong": "Très Fort"
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",

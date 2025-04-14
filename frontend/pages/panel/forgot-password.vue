@@ -43,7 +43,7 @@
                               </fieldset>
 
                               <!-- Erreur d'authentification -->
-                              <span v-if="forgotError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.forgotPassword.errorMessage') }}</span>
+                              <span v-if="apiError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ getErrorMessageByKey(publicStore.publicReturn) }}</span>
 
 
                               <!-- Bouton d'envoi -->
@@ -104,7 +104,7 @@ const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
 const publicStore = usePublicStore()
-const forgotError = ref(false)
+const apiError = ref(false)
 
 const errorMessageEmailKey = ref('');
 const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
@@ -130,14 +130,14 @@ const validateForm = () => {
 
 const handleForgot = async () => {
      if (!validateForm()) return
-     errorMessageEmailKey.value = ''
+     apiError.value = false
      loading.value = true
 
      const success = await publicStore.forgotPassword(inputEmail.value)
      if (success) {
           emailSent.value = true
      } else {
-          forgotError.value = true
+          apiError.value = true
      }
 
      loading.value = false
