@@ -1,4 +1,9 @@
 {
+     "errors": {
+          "api": {
+               "unknown": "Une erreur inconnue s'est produite. Veuillez réessayer."
+          }
+     },
      "panel": {
           "pages": {
                "index": {
@@ -20,6 +25,9 @@
                     "registerCta": "C'est parti"
                },
                "register": {
+                    "api":{
+                         "user_already_exists": "Cette adresse e-mail est déjà utilisée."
+                    },
                     "title": "Créer un compte gratuit",
                     "subtitle": "Aucune carte de crédit requise",
                     "emailPlaceholder": "Adresse e-mail",
@@ -29,6 +37,7 @@
                     "terms": " Conditions générales",
                     "andLabel": " et la",
                     "privacy": " Politique de confidentialité ",
+                    "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
                     "emailAlreadyUsed": "Cette adresse e-mail est déjà utilisée.",

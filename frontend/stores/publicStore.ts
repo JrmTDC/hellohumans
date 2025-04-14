@@ -24,7 +24,7 @@ export const usePublicStore = defineStore('public', () => {
 
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.login')
                return false
           }
      }
@@ -40,7 +40,7 @@ export const usePublicStore = defineStore('public', () => {
                })
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.register')
                return false
           }
      }
@@ -56,7 +56,7 @@ export const usePublicStore = defineStore('public', () => {
                })
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.forgotPassword')
                return false
           }
      }
@@ -69,7 +69,7 @@ export const usePublicStore = defineStore('public', () => {
                return !error;
 
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.resetPassword')
                return false
           }
      }
@@ -92,7 +92,7 @@ export const usePublicStore = defineStore('public', () => {
 
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.resetPasswordSession')
                return false
           }
      }

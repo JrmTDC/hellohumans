@@ -82,6 +82,8 @@
                               </label>
                          </fieldset>
 
+                         <span v-if="apiError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ getErrorMessageByKey(publicStore.publicReturn) }}</span>
+
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 [width:min(370px,_calc(-32px+100vw))]">
                               <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}</button>
                               <span class="block text-center mt-[40px] pt-[20px] text-[16px]  text-[#647491] border-t border-[#e2e8ef]">{{ t('panel.pages.register.alreadyHaveAccount') }} <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.register.loginCta') }}</a>
@@ -115,7 +117,7 @@ const password = ref('')
 const displayName = ref('')
 const agreed = ref(false)
 const errors = ref({ email: false, password: false, displayName: false, agreed: false })
-const loginError = ref(false)
+const apiError = ref(false)
 const loading = ref(false)
 const errorMessageEmail = ref('');
 const errorMessagePassword = ref('');
@@ -165,20 +167,14 @@ const validateForm = () => {
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
      if (!validateForm()) return
-     loginError.value = false
+     apiError.value = false
      loading.value = true
 
      const success = await publicStore.register(inputEmail.value, password.value, displayName.value, agreed.value, lang)
      if (success) {
-          loginError.value = false
-          errorMessageEmail.value = ''
-          errorMessagePassword.value = ''
-          errorMessageDisplayName.value = ''
-          errorsMessageAgreed.value = ''
-
           await router.push('/panel')
      } else {
-          loginError.value = true
+         apiError.value = true
      }
 
      loading.value = false

@@ -31,7 +31,7 @@ export function usePanelApi() {
           const data = isJson ? await response.json() : await response.text()
 
           if (!response.ok) {
-               const parsed = isJson ? parseApiError(data) : { name: 'http_error', description: `${response.status} - ${data}` }
+               const parsed = isJson ? data: { name: 'http_error', description: `${response.status} - ${data}` }
 
                if (parsed.name === 'invalidToken') {
                     await supabase.auth.signOut()
