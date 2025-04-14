@@ -246,6 +246,13 @@ class AuthController {
      public async forgotPassword({ request, response }: HttpContext) {
           const { email } = request.all()
 
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          if (!emailRegex.test(email)) {
+               return response.badRequest({
+                    error: { name: 'invalidEmail', description: 'Adresse e-mail invalide.' }
+               })
+          }
+
           // 1. Récupère l'utilisateur via l'API Admin Supabase
           const { data: userList, error: userListError } = await supabaseService.auth.admin.listUsers()
           if (userListError || !userList?.users) {
