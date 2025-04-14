@@ -24,7 +24,7 @@
                          <p class="text-gray-500 text-sm text-center">{{ t('panel.pages.resetPassword.messageTokenLoading') }}</p>
                     </div>
 
-                    <div v-else-if="resetPasswordStatus === 'newpassword'">
+                    <div v-else-if="resetPasswordStatus === 'newPassword'">
                          <form class="flex flex-col items-center w-full" @submit.prevent="handleReset">
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
@@ -39,7 +39,7 @@
                                              <PasswordInput
                                                   v-model="password"
                                                   :placeholder="t('panel.pages.resetPassword.passwordPlaceholder')"
-                                                  :error="!!errors.password"
+                                                  :error="errors.password"
                                                   @input="evaluatePasswordStrength"
                                                   @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
                                                   @blur="() => { passwordFocused = false; evaluatePasswordStrength() }"
@@ -79,6 +79,7 @@
                                    </fieldset>
                               </fieldset>
 
+                              <span v-if="apiError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ getErrorMessageByKey(publicStore.publicReturn) }}</span>
                               <!-- Bouton de soumission -->
                               <button
                                    type="submit"
@@ -92,7 +93,7 @@
                     </div>
 
                     <!-- Message de succès -->
-                    <div v-else-if="resetPasswordStatus === 'success'" class="flex flex-col items-center w-full">
+                    <div v-else-if="resetPasswordStatus === 'successGoLogin'" class="flex flex-col items-center w-full">
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                               <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
                                    {{ t('panel.pages.resetPassword.submit') }}
@@ -109,6 +110,26 @@
                          </fieldset>
                          <p class="mt-4 text-gray-600 text-[16px] text-center">
                               <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.resetPassword.loginLink') }}</a>
+                         </p>
+                    </div>
+
+                    <div v-else-if="resetPasswordStatus === 'successGoDashbord'" class="flex flex-col items-center w-full">
+                         <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
+                              <h1 class="text-[rgb(8,15,26)] font-semibold m-0 mb-[28px] text-center text-[32px] leading-[41px] tracking-[-0.01em]">
+                                   {{ t('panel.pages.resetPassword.submit') }}
+                              </h1>
+                              <span class="block w-2 min-w-[8px] h-2 min-h-[20px]"></span>
+                              <div class="self-center border-0 flex flex-col items-center p-0">
+                                   <span class="flex flex-row items-center justify-center mb-[15px]  text-[16px] max-w-[370px]">
+                                        <svgo-panel-icon-info class="h-[18px] w-[18px] mx-[9px] my-0 fill-[#0569FF] min-w-[18px] min-h-[18px]"/>
+                                        <p class="text-[16px] leading-[18px] text-[#303f9f]">
+                                            {{ t('panel.pages.resetPassword.success') }}
+                                        </p>
+                                   </span>
+                              </div>
+                         </fieldset>
+                         <p class="mt-4 text-gray-600 text-[16px] text-center">
+                                   <a href="/panel/dashboard" class="text-blue-500 hover:underline">Allez au tab</a>
                          </p>
                     </div>
 
@@ -157,7 +178,10 @@ const passwordStrength = ref('')
 const progressWidth = ref('0%')
 const progressColor = ref('rgb(226,232,239)')
 const passwordFocused = ref(false)
-const supabase = useSupabaseClient()
+const apiError = ref(false)
+
+const user = useSupabaseUser()
+const email = computed(() => user.value?.email || '')
 
 
 const errorPasswordKey = ref('')
@@ -234,21 +258,21 @@ const publicStore = usePublicStore()
 
 const handleReset = async () => {
      if (!validateForm()) return
+     apiError.value = false
      loading.value = true
 
-     const { error } = await supabase.auth.updateUser({
-          password: password.value
-     })
-
-     if (error) {
-          console.error('Erreur lors du changement de mot de passe:', error.message)
+     const success = await publicStore.resetPasswordUpdate(password.value, email.value)
+     if (success) {
+          resetPasswordStatus.value = "successGoDashbord"
      } else {
-          resetPasswordStatus.value = "success"
+          if(publicStore.publicReturn){
+               apiError.value = true
+          }else{
+               resetPasswordStatus.value = "successGoLogin"
+          }
      }
-
      loading.value = false
 }
-
 
 onMounted(async () => {
      const hash = window.location.hash
@@ -258,20 +282,14 @@ onMounted(async () => {
      const refresh_token = params.get('refresh_token')
      const type = params.get('type')
      if (type === 'recovery' && access_token) {
-          const { data, error } = await supabase.auth.setSession({
-               access_token,
-               refresh_token
-          })
-
-          if (error) {
-               console.error('Erreur session recovery:', error.message)
+          const success = await publicStore.resetPasswordSession(access_token, refresh_token)
+          if (success) {
+               resetPasswordStatus.value = "newPassword"
+          } else {
                resetPasswordStatus.value = "expired"
-               return
           }
-          resetPasswordStatus.value = "newpassword"
      } else {
           resetPasswordStatus.value = "expired"
      }
-
 })
 </script>
