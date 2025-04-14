@@ -27,10 +27,10 @@
                                         :placeholder="t('panel.pages.login.emailPlaceholder')"
                                         class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :class="{ 'border-[rgb(232,19,50)]': errors.email }"
+                                        data-1p="username"
                                    />
                                    <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}
                                    </span>
-
                               </fieldset>
 
                               <!-- Champ Mot de passe -->
@@ -38,12 +38,11 @@
                                    <PasswordInput
                                         v-model="password"
                                         :placeholder="t('panel.pages.login.passwordPlaceholder')"
-                                        :error="!!errors.password"
+                                        :error="errors.password"
                                         extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                         :iconSize=20
                                    />
-                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessagePassword }}
-                                   </span>
+                                   <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessagePassword }}</span>
                               </fieldset>
                          </fieldset>
 
@@ -107,16 +106,15 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmailKey.value = 'panel.pages.login.errorEmailEmpty'
+          errorMessageEmailKey.value = 'panel.pages.login.errorEmailInvalid'
           valid = false
 
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
-          errors.value.password = true
+          errors.value.email = true
           errorMessageEmailKey.value = 'panel.pages.login.errorEmailInvalid'
 
           valid = false
      }
-
 
      if (!password.value) {
           errors.value.password = true

@@ -15,19 +15,14 @@ export function usePublicApi() {
                headers
           })
 
-          const contentType = response.headers.get('Content-Type') || ''
-          const isJson = contentType.includes('application/json')
+          const isJson = response.headers.get('Content-Type')?.includes('application/json')
           const data = isJson ? await response.json() : await response.text()
 
-          if (response) {
-               return data
+          if (!response.ok) {
+               throw isJson ? parseApiError(data) : { name: 'http_error', description: `${response.status} - ${data}` }
           }
+          return data
 
-          const message = isJson
-               ? data?.error?.description || JSON.stringify(data)
-               : data
-
-          throw new Error(`Erreur API publique: ${response.status} - ${message}`)
      }
 
      return { apiFetch }

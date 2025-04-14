@@ -12,6 +12,7 @@
                @input="emit('update:modelValue', password)"
                @focus="emit('focus')"
                @blur="emit('blur')"
+               data-1p="password"
           />
 
           <!-- Bouton pour afficher/masquer le mot de passe -->

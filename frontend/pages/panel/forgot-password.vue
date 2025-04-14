@@ -42,6 +42,10 @@
                                    </fieldset>
                               </fieldset>
 
+                              <!-- Erreur d'authentification -->
+                              <span v-if="forgotError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.forgotPassword.errorMessage') }}</span>
+
+
                               <!-- Bouton d'envoi -->
                               <button
                                    type="submit"
@@ -59,10 +63,6 @@
                                    <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.forgotPassword.login') }}</a>
                               </p>
 
-                              <!-- Message d'erreur -->
-                              <p v-if="errorMessageEmail" class="text-red-600 mt-3 text-sm">
-                                   {{ t('panel.pages.forgotPassword.errorMessage') }}
-                              </p>
                          </form>
                     </div>
 
@@ -104,6 +104,7 @@ const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
 const publicStore = usePublicStore()
+const forgotError = ref(false)
 
 const errorMessageEmailKey = ref('');
 const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
@@ -116,7 +117,7 @@ const validateForm = () => {
 
      if (!inputEmail.value) {
           errors.value.email = true
-          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorEmailEmpty'
+          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorEmailInvalid'
           valid = false
      } else if (!/\S+@\S+\.\S+/.test(inputEmail.value)) {
           errors.value.email = true
@@ -136,7 +137,7 @@ const handleForgot = async () => {
      if (success) {
           emailSent.value = true
      } else {
-          errorMessageEmailKey.value = 'panel.pages.forgotPassword.errorMessage'
+          forgotError.value = true
      }
 
      loading.value = false

@@ -12,7 +12,7 @@
                     "forgotPassword": "Mot de passe oublié ?",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
-                    "errorPasswordEmpty": "mot de passe incorrect !",
+                    "errorPasswordEmpty": "Ne peut être vide !",
                     "loginError": "E-mail ou mot de passe incorrect !",
                     "submit": "Se connecter",
                     "loading": "Chargement...",
