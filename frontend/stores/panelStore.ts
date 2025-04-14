@@ -137,34 +137,6 @@ export const usePanelStore = defineStore('panel', () => {
           modules.value = []
      }
 
-     async function previewSubscription(projectId: string, planId: string, modules: string[]) {
-          const { apiFetch } = usePanelApi()
-          try {
-               const response = await apiFetch('/stripe/preview', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                         project_id: projectId,
-                         plan_id: planId,
-                         modules,
-                    }),
-               })
-
-               const invoice = response.invoice
-               const todayAmount = invoice.amount_due / 100
-               const monthlyAmount = invoice.lines.data.reduce((acc: number, line: any) => {
-                    if (line.recurring && line.period?.start !== line.period?.end) {
-                         return acc + line.amount / 100
-                    }
-                    return acc
-               }, 0)
-
-               return { todayAmount, monthlyAmount }
-          } catch (err: any) {
-               console.error('Erreur preview abonnement:', err)
-               return { todayAmount: 0, monthlyAmount: 0 }
-          }
-     }
-
 
      return {
           // state
@@ -184,7 +156,6 @@ export const usePanelStore = defineStore('panel', () => {
           updateUserLang,
           switchProject,
           updatePassword,
-          logout,
-          previewSubscription,
+          logout
      }
 })

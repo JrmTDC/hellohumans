@@ -98,7 +98,7 @@ class AuthController {
           try {
                const email = request.input('email')?.trim()
                const password = request.input('password')?.trim()
-               const website = request.input('website')?.trim()
+               const displayName = request.input('displayName')?.trim()
                const lang = request.input('lang') || 'fr'
                const accept_cg = request.input('accept_cg')
 
@@ -109,8 +109,8 @@ class AuthController {
                if (!password || password.length < 6) {
                     return response.badRequest({ error: { name: 'weakPassword', description: 'Mot de passe trop court.' } })
                }
-               if (!website || !/^(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(website)) {
-                    return response.badRequest({ error: { name: 'invalidWebsite', description: 'URL invalide.' } })
+               if (!displayName || displayName.length < 3) {
+                    return response.badRequest({ error: { name: 'invalidDisplayName', description: 'Prénom ou Pseudonyme trop court.' } })
                }
                if (!accept_cg) {
                     return response.badRequest({ error: { name: 'cgNotAccepted', description: 'CG non acceptées.' } })
@@ -119,7 +119,7 @@ class AuthController {
                // Étape 1 - Supabase Auth
                const { data: authData, error: authError } = await supabaseService.auth.signUp({ email, password })
                if (authError || !authData.user) {
-                    return response.badRequest({ error: { name: 'registrationFailed', description: authError?.message || 'Erreur Supabase' } })
+                    return response.badRequest({ error: { name: authError?.code || 'registrationFailed', description: authError?.message || 'Erreur inconnue' } })
                }
 
                const auth_id = authData.user.id
@@ -143,6 +143,7 @@ class AuthController {
                     .from('clients')
                     .insert({
                          owner_user_id: userData.id,
+                         name: displayName,
                     })
                     .select()
                     .single()
@@ -164,7 +165,7 @@ class AuthController {
                     .from('client_projects')
                     .insert({
                          client_id: clientData.id,
-                         website
+                         website : null
                     })
                     .select()
                     .single()
@@ -249,14 +250,15 @@ class AuthController {
           const { data: userList, error: userListError } = await supabaseService.auth.admin.listUsers()
           if (userListError || !userList?.users) {
                return response.badRequest({
-                    error: { name: 'userLookupFailed', description: 'Impossible de rechercher l’utilisateur.' }
+                    //error: { name: 'userLookupFailed', description: 'Impossible de rechercher l’utilisateur.' }
                })
           }
 
           const foundUser = userList.users.find(u => u.email?.toLowerCase() === email.toLowerCase())
           if (!foundUser) {
                return response.badRequest({
-                    error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
+                   //error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
+
                })
           }
 

@@ -10,8 +10,8 @@
                               <input
                                    type="checkbox"
                                    v-model="inputValue"
-                                   tabindex="0"
                                    class="sr-only peer"
+                                   @change="emit('update:modelValue', inputValue)"
                               />
                               <span
                                    class="float-left block w-[20px] h-[20px] rounded-[3px] border-[2px] border-[rgb(226,232,239)] cursor-pointer mr-[14px] mb-[16px] translate-y-[1px] transition-all duration-100 ease-in-out peer-checked:bg-[rgb(5,102,255)] peer-checked:border-[rgb(5,102,255)] peer-checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMTg2LjMwMSAzMzkuODkzTDk2IDI0OS40NjFsLTMyIDMwLjUwN0wxODYuMzAxIDQwMiA0NDggMTQwLjUwNiA0MTYgMTEweiIvPjwvc3ZnPg==')] peer-checked:bg-center peer-checked:bg-no-repeat peer-checked:bg-[length:16px_16px]"
@@ -239,10 +239,15 @@ const evaluatePasswordStrength = () => {
 
 watch(() => props.modelValue, val => {
      inputValue.value = val
-}, { immediate: true })
+}, { immediate: true
+})
 
 watch(inputValue, () => {
      if (touched.value) shouldShowError.value
+})
+
+watch(inputValue, (val) => {
+     emit('update:modelValue', val)
 })
 
 const validate = () => {

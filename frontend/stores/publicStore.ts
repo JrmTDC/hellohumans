@@ -1,92 +1,106 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { usePublicApi } from '~/composables/usePublicApi'
+import type { User, Session } from '@supabase/supabase-js'
 
 export const usePublicStore = defineStore('public', () => {
-     const loading = ref(false)
-     const error = ref<string | null>(null)
      const supabase = useSupabaseClient()
 
+     const publicReturn = ref<string | null>(null) // message d'erreur ou clé de traduction
+     const publicSession = ref<{ user: User; session: Session } | null>(null) // session actuelle
+
+     // Connexion
      const login = async (email: string, password: string) => {
-          const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
-          return !authError;
+          publicReturn.value = null
+          publicSession.value = null
+
+          try {
+               const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+               if (error) return false
+
+               publicSession.value = {
+                    user: data.user,
+                    session: data.session
+               }
+
+               return true
+          } catch (err: any) {
+               setApiError(publicReturn, err)
+               return false
+          }
      }
 
-     const register = async (email: string, password: string, website: string, accept_cg: boolean, lang: string) => {
-          loading.value = true
-          error.value = null
-
-          // garde le call API si tu crées un compte + client + projet
+     // Inscription
+     const register = async (email: string, password: string, displayName: string, accept_cg: boolean, lang: string) => {
+          publicReturn.value = null
           try {
                const { apiFetch } = usePublicApi()
                await apiFetch('/auth/register', {
                     method: 'POST',
-                    body: JSON.stringify({ email, password, website, accept_cg, lang }),
+                    body: JSON.stringify({ email, password, displayName, accept_cg, lang })
                })
                return true
-          }
-          catch (err: any) {
-               const message = err?.data?.message || err?.message || ''
-
-               // Détection spécifique de l’erreur e-mail déjà utilisé
-               if (
-                    message.toLowerCase().includes('email') &&
-                    (message.toLowerCase().includes('existe') || message.toLowerCase().includes('used'))
-               ) {
-                    error.value = 'EMAIL_ALREADY_USED'
-               } else {
-                    error.value = message
-               }
-
+          } catch (err: any) {
+               setApiError(publicReturn, err)
                return false
-          }
-          finally {
-               loading.value = false
           }
      }
 
+     // Mot de passe oublié
      const forgotPassword = async (email: string) => {
-          const { apiFetch } = usePublicApi()
-          loading.value = true
-          error.value = null
+          publicReturn.value = null
           try {
+               const { apiFetch } = usePublicApi()
                await apiFetch('/auth/forgot-password', {
                     method: 'POST',
                     body: JSON.stringify({ email })
                })
                return true
           } catch (err: any) {
-               error.value = err.message
+               setApiError(publicReturn, err)
                return false
-          } finally {
-               loading.value = false
           }
      }
 
+     // Mise à jour du mot de passe (après reset)
      const resetPasswordUpdate = async (password: string) => {
-          const { error: authError } = await supabase.auth.updateUser({ password })
+          publicReturn.value = null
+          try {
+               const { error } = await supabase.auth.updateUser({ password })
+               return !error;
 
-          if (authError) {
-               const msg = authError.message?.toLowerCase() || ''
-               if (msg.includes('identical') || msg.includes('same') || msg.includes('ancien')) {
-                    error.value = 'PASSWORD_ALREADY_USED'
-               } else {
-                    error.value = msg
-               }
+          } catch (err: any) {
+               setApiError(publicReturn, err)
+               return false
           }
-
-          return !authError
      }
 
+     // Session après reset (avec token)
      const resetPasswordSession = async (access_token: string, refresh_token: string) => {
-          const { error: sessionError } = await supabase.auth.setSession({access_token, refresh_token})
-          return !sessionError;
+          publicReturn.value = null
+          try {
+               const { data, error } = await supabase.auth.setSession({ access_token, refresh_token })
+               if (error) return false
+
+               if (!data.user || !data.session) {
+                    return false
+               }
+
+               publicSession.value = {
+                    user: data.user,
+                    session: data.session
+               }
+
+               return true
+          } catch (err: any) {
+               setApiError(publicReturn, err)
+               return false
+          }
      }
 
      return {
-          // state
-          loading,
-          error,
+          // states
+          publicReturn,
+          publicSession,
 
           // actions
           login,
