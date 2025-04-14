@@ -92,6 +92,7 @@
                     "errorPasswordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
                     "errorPasswordMismatch": "Les mots de passe ne correspondent pas",
                     "submit": "Réinitialiser le mot de passe",
+                    "submitDashboard": "Tableau de bord",
                     "loading": "Chargement...",
                     "success": "Opération réussie ! Votre mot de passe a été réinitialisé.",
                     "loginLink": "Se connecter",

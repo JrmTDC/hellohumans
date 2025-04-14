@@ -44,8 +44,7 @@
                                                   @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
                                                   @blur="() => { passwordFocused = false; evaluatePasswordStrength() }"
                                                   extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                                  :iconSize="20"
-                                             />
+                                                  :iconSize="20"/>
                                              <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
                                              {{ errorPassword }}
                                              </span>
@@ -71,8 +70,7 @@
                                              :placeholder="t('panel.pages.resetPassword.confirmPasswordPlaceholder')"
                                              :error="!!errors.confirmPassword"
                                              extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] p-[22px_18px_20px] w-[min(370px,-32px+100vw)] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
-                                             :iconSize="20"
-                                        />
+                                             :iconSize="20"/>
                                         <span v-if="errors.confirmPassword" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">
                                               {{ errorConfirmPassword }}
                                         </span>
@@ -85,8 +83,7 @@
                                    type="submit"
                                    :disabled="loading"
                                    class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
-                                   :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
-                              >
+                                   :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }">
                                    {{ loading ? t('panel.pages.resetPassword.loading') : t('panel.pages.resetPassword.submit')  }}
                               </button>
                          </form>
@@ -103,8 +100,7 @@
                                    <span class="flex flex-row items-center justify-center mb-[15px]  text-[16px] max-w-[370px]">
                                         <svgo-panel-icon-info class="h-[18px] w-[18px] mx-[9px] my-0 fill-[#0569FF] min-w-[18px] min-h-[18px]"/>
                                         <p class="text-[16px] leading-[18px] text-[#303f9f]">
-                                            {{ t('panel.pages.resetPassword.success') }}
-                                        </p>
+                                            {{ t('panel.pages.resetPassword.success') }}</p>
                                    </span>
                               </div>
                          </fieldset>
@@ -123,14 +119,18 @@
                                    <span class="flex flex-row items-center justify-center mb-[15px]  text-[16px] max-w-[370px]">
                                         <svgo-panel-icon-info class="h-[18px] w-[18px] mx-[9px] my-0 fill-[#0569FF] min-w-[18px] min-h-[18px]"/>
                                         <p class="text-[16px] leading-[18px] text-[#303f9f]">
-                                            {{ t('panel.pages.resetPassword.success') }}
-                                        </p>
+                                            {{ t('panel.pages.resetPassword.success') }}</p>
                                    </span>
                               </div>
                          </fieldset>
-                         <p class="mt-4 text-gray-600 text-[16px] text-center">
-                                   <a href="/panel/dashboard" class="text-blue-500 hover:underline">Allez au tab</a>
-                         </p>
+                         <button
+                              type="submit"
+                              :disabled="loading"
+                              @click="router.push('/panel/dashboard')"
+                              class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
+                              :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }">
+                              {{ loading ? t('panel.pages.resetPassword.loading') : t('panel.pages.resetPassword.submitDashboard') }}
+                         </button>
                     </div>
 
                     <!-- Token invalide -->
@@ -142,8 +142,7 @@
                          <!-- Bouton Renvoyer un lien -->
                          <button
                               @click="router.push('/panel/forgot-password')"
-                              class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
-                         >
+                              class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]">
                               {{ t('panel.pages.resetPassword.resendCta') }}
                          </button>
 
@@ -188,7 +187,6 @@ const errorPasswordKey = ref('')
 const errorConfirmPasswordKey = ref('')
 const errorPassword = computed(() => errorPasswordKey.value ? t(errorPasswordKey.value) : '')
 const errorConfirmPassword = computed(() => errorConfirmPasswordKey.value ? t(errorConfirmPasswordKey.value) : '')
-
 
 const validateForm = () => {
      errors.value = { password: false, confirmPassword: false }
@@ -278,9 +276,10 @@ onMounted(async () => {
      const hash = window.location.hash
      const params = new URLSearchParams(hash.substring(1))
 
-     const access_token = params.get('access_token')
-     const refresh_token = params.get('refresh_token')
+     const access_token = params.get('access_token')!
+     const refresh_token = params.get('refresh_token')!
      const type = params.get('type')
+
      if (type === 'recovery' && access_token) {
           const success = await publicStore.resetPasswordSession(access_token, refresh_token)
           if (success) {
