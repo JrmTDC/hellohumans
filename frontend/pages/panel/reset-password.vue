@@ -294,4 +294,5 @@ onMounted(async () => {
           resetPasswordStatus.value = "expired"
      }
 })
+usePanelPageMeta( t('panel.pages.resetPassword.megaTitle'), t('panel.pages.resetPassword.megaDescription'))
 </script>

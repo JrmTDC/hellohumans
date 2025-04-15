@@ -9,9 +9,9 @@
                          <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>
                          <div class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center">
                               <div class="flex flex-col justify-start items-[normal] self-start">
-                                   <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">Votre essai complet se termine dans 0 jours</span>
-                                   <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">Sélectionner votre offre</h2>
-                                   <p class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]">Choisissez une offre et choisissez des modules à l'étape suivante.</p>
+                                   <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">{{ t('panel.pages.upgrade.Index.trialRemainingZero') }}</span>
+                                   <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">{{ t('panel.pages.upgrade.Index.selectPlan') }}</h2>
+                                   <p class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]"> {{ t('panel.pages.upgrade.Index.choosePlanDescription') }}</p>
                               </div>
 
                               <div class="flex flex-col justify-start items-[normal] mt-[32px]">
@@ -32,7 +32,7 @@
                                    <button
                                         class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0"
                                    >
-                                        <span>Voir toutes les fonctionnalités</span>
+                                        <span>{{ t('panel.pages.upgrade.Index.viewAllFeatures') }}</span>
                                    </button>
                               </div>
 
@@ -46,7 +46,7 @@
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
                          :selectedModules="store.selectedAddOns"
-                         nextButtonLabel="Prochaine étape"
+                         nextButtonLabel="t('panel.pages.upgrade.Index.nextStep')"
                          @updateBillingCycle="store.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
@@ -57,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
 const store = useUpgradeStore()
 const router = useRouter()
 const trialActive = ref(false)
@@ -104,4 +105,5 @@ function closePanel() {
 definePageMeta({
      layout: 'panel-empty'
 })
+usePanelPageMeta( t('panel.pages.upgrade.Index.megaTitle'), t('panel.pages.upgrade.Index.megaDescription'))
 </script>

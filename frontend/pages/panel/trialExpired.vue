@@ -95,6 +95,7 @@
 <script setup lang="ts">
 const { appName } = useAppInfo()
 const { t } = useI18n()
+usePanelPageMeta( t('panel.pages.trialExpired.megaTitle'), t('panel.pages.trialExpired.megaDescription'))
 </script>
 
 

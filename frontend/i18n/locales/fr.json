@@ -7,7 +7,10 @@
      "panel": {
           "pages": {
                "index": {
-                    "loading": "Connexion ..."
+                    "loading": "Connexion ...",
+                    "megaTitle": "Chargement...",
+                    "megaDescription": "Redirection en cours vers votre tableau de bord personnalisé HelloHumans."
+
                },
                "login": {
                     "api":{
@@ -24,7 +27,10 @@
                     "submit": "Se connecter",
                     "loading": "Chargement...",
                     "noAccount": "Vous n’avez pas de compte ?",
-                    "registerCta": "C'est parti"
+                    "registerCta": "C'est parti",
+                    "megaTitle": "Se connecter",
+                    "megaDescription": "Connectez-vous à votre espace administrateur Hellohumans."
+
                },
                "register": {
                     "api":{
@@ -61,7 +67,10 @@
                     "weak": "Faible",
                     "medium": "Moyen",
                     "strong": "Fort",
-                    "veryStrong": "Très Fort"
+                    "veryStrong": "Très Fort",
+                    "megaTitle": "Créer votre compte HelloHumans",
+                    "megaDescription": "Inscrivez-vous gratuitement pour accéder à notre plateforme et bénéficier de tous les outils intelligents HelloHumans."
+
                },
                "forgotPassword": {
                     "api":{
@@ -79,7 +88,10 @@
                     "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
                     "emailSentTitle": "Vérifiez votre boîte de réception !",
                     "emailSentNote": "Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.",
-                    "loginLink": "Se connecter"
+                    "loginLink": "Se connecter",
+                    "megaTitle": "Mot de passe oublié",
+                    "megaDescription": "Réinitialisez l’accès à votre compte HelloHumans en recevant un lien sécurisé par e-mail."
+
                },
                "resetPassword": {
                     "api":{
@@ -106,7 +118,9 @@
                     "weak": "Faible",
                     "medium": "Moyen",
                     "strong": "Fort",
-                    "veryStrong": "Très Fort"
+                    "veryStrong": "Très Fort",
+                    "megaTitle": "Réinitialisation du mot de passe",
+                    "megaDescription": "Choisissez un nouveau mot de passe pour accéder à votre compte HelloHumans."
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",
@@ -115,10 +129,17 @@
                     "setupCta": "Terminer l'intégration",
                     "performanceTitle": "Performance",
                     "calendarRange": "21 févr. 2025 - 22 mars 2025",
-                    "usageTitle": "Utilisation actuelle"
+                    "usageTitle": "Utilisation actuelle",
+                    "megaTitle": "Tableau de bord",
+                    "megaDescription": "Consultez la performance et l’utilisation de votre agent AI."
+
                },
                "analytics": {
                     "index" : {
+                         "menuLabel": "Vue d’ensemble",
+                         "heading": "Vue d’ensemble",
+                         "megaTitle": "Vue d’ensemble",
+                         "megaDescription": "Consultez les performances et les statistiques de votre chatbot sur une période donnée."
                     }
                },
                "trialExpired": {
@@ -138,31 +159,46 @@
                          "highlight1": "JUSQU’À {count}"
                     },
                     "tooltipProcessedConversations": "Les conversations représentent le nombre total de conversations dans le chat en direct",
-                    "downgradeButton": "Passer à une version antérieure"
+                    "downgradeButton": "Passer à une version antérieure",
+                    "megaTitle": "Essai expiré",
+                    "megaDescription": "Votre période d'essai est terminée. Choisissez une offre pour continuer à utiliser HelloHumans."
                },
-               "upgrade": {
+               "gettingStarted": {
+                    "index": {
+                         "megaTitle": "Commencez avec HelloHumans",
+                         "megaDescription": "Configurez rapidement votre espace pour profiter pleinement des fonctionnalités d’HelloHumans dès aujourd’hui."
+                    }
+               },
+               "upgrade":{
                     "Index": {
-                         "trial_remaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
-                         "select_plan": "Sélectionner votre abonnement",
-                         "choose_plan_description": "Choisissez un abonnement et choisissez des modules à l'étape suivante.",
-                         "view_all_features": "Voir toutes les fonctionnalités",
-                         "next_step": "Prochaine étape : choisissez des modules complémentaires"
+                         "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
+                         "selectPlan": "Sélectionner votre offre",
+                         "choosePlanDescription": "Choisissez une offre et choisissez des modules à l'étape suivante.",
+                         "viewAllFeatures": "Voir toutes les fonctionnalités",
+                         "nextStep": "Prochaine étape",
+                         "megaTitle": "Choisissez votre offre",
+                         "megaDescription": "Comparez les formules disponibles et sélectionnez celle qui correspond le mieux à vos besoins avant de passer à l'étape suivante."
+
                     },
                     "Modules": {
-                         "trialRemaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
+                         "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
                          "title": "Sélectionner votre offre",
                          "description": "Choisissez une offre et choisissez des modules à l'étape suivante.",
                          "chooseModules": "Choisissez les modules complémentaires",
-                         "nextButtonLabel": "Paiement"
+                         "nextButtonLabel": "Paiement",
+                         "megaTitle": "Ajoutez des modules complémentaires",
+                         "megaDescription": "Personnalisez votre offre avec des fonctionnalités avancées adaptées à votre entreprise."
                     }
                },
                "settings": {
                     "index": {
-
+                         "megaTitle": "Paramètres",
+                         "megaDescription": "Accédez à l’ensemble des paramètres de votre compte HelloHumans."
                     },
                     "chat": {
                          "appearance": {
-
+                              "megaTitle": "Apparence du chatbot",
+                              "megaDescription": "Personnalisez le style, les couleurs et l’apparence de votre assistant HelloHumans pour qu’il corresponde à votre identité visuelle."
                          }
                     }
                },
@@ -170,7 +206,9 @@
                     "notFound": {
                          "title": "Erreur 403",
                          "description": "Vous n’avez pas l’autorisation d’accéder à cette ressource.",
-                         "backToHome": "Revenir à l’accueil"
+                         "backToHome": "Revenir à l’accueil",
+                         "megaTitle": "Accès refusé",
+                         "megaDescription": "Vous n’avez pas l’autorisation d’accéder à cette page. Veuillez vérifier vos droits ou revenir à l’accueil."
                     },
                     "serverError": {
                          "title": "Oups, un problème est survenu.",
@@ -178,18 +216,25 @@
                          "reload": "Recharger la page",
                          "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
                          "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :",
-                         "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème."
+                         "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème.",
+                         "megaTitle": "Erreur serveur",
+                         "megaDescription": "Un problème est survenu de notre côté. Veuillez recharger la page ou contacter notre support si le problème persiste."
+
                     },
                     "unauthorized": {
                          "title": "Oups, page introuvable.",
                          "description": "Nous sommes désolés, la page que vous recherchez est introuvable.",
                          "hint": "Le lien que vous avez suivi est peut-être cassé ou n'existe plus.",
-                         "goHome": "Aller à la page d'accueil"
+                         "goHome": "Aller à la page d'accueil",
+                         "megaTitle": "Page introuvable",
+                         "megaDescription": "La page que vous recherchez est introuvable ou n’existe plus. Veuillez vérifier l’URL ou retourner à la page d’accueil."
                     },
                     "default": {
                          "title": "Erreur Inattendue",
                          "description": "Une erreur s’est produite, mais elle n’est pas répertoriée ici.",
-                         "backToHome": "Revenir à l’accueil"
+                         "backToHome": "Revenir à l’accueil",
+                         "megaTitle": "Une erreur est survenue",
+                         "megaDescription": "Une erreur inattendue s’est produite. Veuillez réessayer ou revenir à l’accueil."
                     }
                }
           },

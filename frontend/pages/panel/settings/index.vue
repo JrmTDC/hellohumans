@@ -1,7 +1,9 @@
 <template>
 </template>
 <script setup lang="ts">
-     import { useRouter } from 'vue-router'
-     const router = useRouter()
-     router.push("/panel/settings/chat/appearance")
+import { useRouter } from 'vue-router'
+const { t } = useI18n()
+const router = useRouter()
+router.push("/panel/settings/chat/appearance")
+usePanelPageMeta( t('panel.pages.settings.index.megaTitle'), t('panel.pages.settings.index.megaDescription'))
 </script>

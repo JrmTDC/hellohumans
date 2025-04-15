@@ -85,5 +85,6 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel-menu'
 })
-usePanelPageMeta('Tableau de bord', 'Consultez la performance et l’utilisation de votre agent AI.')
+usePanelPageMeta(t('panel.pages.dashboard.megaTitle'), t('panel.pages.dashboard.megaDescription'))
 </script>
+

@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+usePanelPageMeta( t('panel.pages.error.notFound.megaTitle'), t('panel.pages.error.notFound.megaDescription'))
 </script>
 
 

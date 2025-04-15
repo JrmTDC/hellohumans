@@ -27,5 +27,6 @@ const refreshPage = () => {
      clearError()
      location.reload()
 }
+usePanelPageMeta( t('panel.pages.error.serverError.megaTitle'), t('panel.pages.error.serverError.megaDescription'))
 </script>
 

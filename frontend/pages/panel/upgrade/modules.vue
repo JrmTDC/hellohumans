@@ -13,22 +13,22 @@
                    v-if="trialActive"
                    class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start"
               >
-                Votre essai complet se termine dans 0 jours
+                 {{ t('panel.pages.upgrade.Modules.trialRemainingZero') }}
               </span>
                                    <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">
-                                        Sélectionner votre offre
+                                        {{ t('panel.pages.upgrade.Modules.title') }}
                                    </h2>
                                    <p
                                         class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]"
                                    >
-                                        Choisissez une offre et choisissez des modules à l'étape suivante.
+                                        {{ t('panel.pages.upgrade.Modules.description') }}
                                    </p>
                               </div>
 
                               <span class="block w-[32px] h-[32px]"></span>
                               <div class="flex flex-row items-center h-[34px]">
                                    <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">
-                                        Choisissez les modules complémentaires
+                                        {{ t('panel.pages.upgrade.Modules.chooseModules') }}
                                    </h2>
                               </div>
                               <span class="block w-[16px] h-[16px]"></span>
@@ -57,7 +57,7 @@
                          :totalPrice="computedTotalPrice"
                          @updateBillingCycle="store.setBillingCycle"
                          @goNext="handlePaymentClick"
-                         nextButtonLabel="Paiement"
+                         nextButtonLabel="t('panel.pages.upgrade.Modules.nextButtonLabel')"
                          :disableIfZero="true"
                     />
 
@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
 const panelStore = usePanelStore()
 const store = useUpgradeStore()
 const router = useRouter()
@@ -186,4 +187,5 @@ function closePanel() {
 definePageMeta({
      layout: 'panel-empty'
 })
+usePanelPageMeta( t('panel.pages.upgrade.Modules.megaTitle'), t('panel.pages.upgrade.Modules.megaDescription'))
 </script>

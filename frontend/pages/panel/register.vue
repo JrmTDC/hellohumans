@@ -239,4 +239,5 @@ const handleRegister = async () => {
 
      loading.value = false
 }
+usePanelPageMeta( t('panel.pages.register.megaTitle'), t('panel.pages.register.megaDescription'))
 </script>

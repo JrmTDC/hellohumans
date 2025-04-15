@@ -139,5 +139,5 @@ const handleLogin = async () => {
 
      loading.value = false
 }
-usePanelPageMeta('Se connecter', 'Connectez-vous à votre espace administrateur Hellohumans.')
+usePanelPageMeta( t('panel.pages.login.megaTitle'), t('panel.pages.login.megaDescription'))
 </script>
