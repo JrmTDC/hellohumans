@@ -35,7 +35,7 @@ const props = defineProps({
      modelValue: String, // Permet la liaison v-model
      placeholder: {
           type: String,
-          default: 'Mot de passe',
+          default:  'panel.components.common.passwordInput.placeholder',
      },
      error: { // Pour gérer l'affichage des erreurs
           type: Boolean,

@@ -120,7 +120,7 @@ const props = defineProps({
      iconSize: { type: Number, default: 24 },
      extraClassInput: String,
      validator: Function,
-     errorText: { type: String, default: 'Champ invalide.' },
+     errorText: { type: String, default: 'panel.components.common.staticInput.placeholder' },
      enableStrengthEvaluation: Boolean,
      labelText: { type: String, default: '' },
 })

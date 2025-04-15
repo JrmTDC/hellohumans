@@ -3,7 +3,7 @@
           <div class="flex flex-row justify-start items-center flex-grow w-full">
                <h1 class="inline-flex items-center text-[20px] font-medium tracking-[-0.01em] leading-[26px] mb-0 mr-auto mt-0 max-w-[calc(100%-268px)]">
                     {{ title }}
-                    <div v-if="isBilled" :class="isPaid ? 'bg-[rgb(190,255,203)]' : 'bg-[rgb(255,219,186)]'" class="p-[3px_5px] rounded-[4px] block ml-[8px]" > <div class="flex flex-row justify-start items-center"> <svgo-panel-icon-premium class="w-[14px] h-[14px] block fill-[rgb(8,15,26)] transition-none mr-0" /> <p class="mt-0 mb-0 ml-[2px] font-normal text-[12px] leading-[16px] tracking-[-0.01em]"> {{ isPaid ? 'Payé' : 'Payant' }} </p> </div> </div>
+                    <div v-if="isBilled" :class="isPaid ? 'bg-[rgb(190,255,203)]' : 'bg-[rgb(255,219,186)]'" class="p-[3px_5px] rounded-[4px] block ml-[8px]" > <div class="flex flex-row justify-start items-center"> <svgo-panel-icon-premium class="w-[14px] h-[14px] block fill-[rgb(8,15,26)] transition-none mr-0" /> <p class="mt-0 mb-0 ml-[2px] font-normal text-[12px] leading-[16px] tracking-[-0.01em]"> {{ isPaid ? t('panel.components.layout.herderPage.paid') : t('panel.components.layout.herderPage.billing') }} </p> </div> </div>
                </h1>
                <div class="flex flex-row justify-start items-center ml-[16px]" ref="usageMenuRef">
 
@@ -16,7 +16,7 @@
                     <div @click="toggleUsageMenu" class="flex ml-[8px] flex-row justify-start items-center p-[6px] rounded-[6px] cursor-pointer text-[rgb(58,35,0)] bg-transparent hover:bg-[rgb(220,233,255)] group">
                          <svgo-panel-icon-usage-menu class="w-[20px] h-[20px] fill-[#8796af] transition-transform group-hover:fill-[rgb(5,102,255)]" :class="{ 'rotate-180': isUsageMenuOpen }" />
                          <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
-                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(8,15,26)]">Utilisation et offre</p>
+                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(8,15,26)]"> {{ t('panel.components.layout.herderPage.usageAndPlan') }}</p>
                          <span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span>
                          <svgo-panel-icon-triangle-caret-down class="w-[24px] h-[24px fill-[#8796af] transition-transform group-hover:fill-[rgb(135,150,175)]" :class="{ 'rotate-180': isUsageMenuOpen }" />
                     </div>
@@ -32,7 +32,7 @@
                                    :class="index > 0 ? 'mt-[16px]' : ''"
                               />
                               <p class="mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] mt-[16px]">
-                                   <span>⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h.</span>
+                                   <span>{{ t('panel.components.layout.herderPage.usageNote') }}</span>
                               </p>
                          </div>
 
@@ -45,6 +45,7 @@
 
 <script setup lang="ts">
 
+const { t } = useI18n()
 const props = defineProps({
      title: String,
      isBilled: Boolean,
