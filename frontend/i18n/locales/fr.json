@@ -1,6 +1,6 @@
 {
-     "errors": {
-          "api": {
+     "api": {
+          "errors": {
                "unknown": "Une erreur inconnue s'est produite. Veuillez réessayer."
           }
      },
@@ -194,12 +194,6 @@
                     "index": {
                          "megaTitle": "Paramètres",
                          "megaDescription": "Accédez à l’ensemble des paramètres de votre compte HelloHumans."
-                    },
-                    "chat": {
-                         "appearance": {
-                              "megaTitle": "Apparence du chatbot",
-                              "megaDescription": "Personnalisez le style, les couleurs et l’apparence de votre assistant HelloHumans pour qu’il corresponde à votre identité visuelle."
-                         }
                     }
                },
                "error": {
@@ -239,6 +233,9 @@
                }
           },
           "components": {
+               "analytics": {
+
+               },
                "common": {
                     "staticInput": {
                          "champInvalide": "Champ invalide.",
