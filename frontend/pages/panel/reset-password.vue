@@ -275,11 +275,15 @@ onMounted(async () => {
      const hash = window.location.hash
      const params = new URLSearchParams(hash.substring(1))
 
-     const access_token = params.get('access_token')!
-     const refresh_token = params.get('refresh_token')!
+     const access_token = params.get('access_token')
+     const refresh_token = params.get('refresh_token')
      const type = params.get('type')
 
-     if (type === 'recovery' && access_token) {
+     if (
+          type === 'recovery' &&
+          typeof access_token === 'string' &&
+          typeof refresh_token === 'string')
+     {
           const success = await publicStore.resetPasswordSession(access_token, refresh_token)
           if (success) {
                resetPasswordStatus.value = "newPassword"
