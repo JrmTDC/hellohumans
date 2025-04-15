@@ -10,7 +10,6 @@
                     "loading": "Connexion ...",
                     "metaTitle": "Chargement...",
                     "metaDescription": "Redirection en cours vers votre tableau de bord personnalisé."
-
                },
                "login": {
                     "api":{
@@ -235,7 +234,6 @@
           "components": {
                "analytics": {
                     "chart": {
-                         "tabs": {
 
                     },
                     "overview": {
