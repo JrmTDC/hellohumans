@@ -10,7 +10,7 @@
                          <div class="h-[100px] flex-[0_0_100px] px-[40px] justify-start w-full flex items-center">
                               <svgo-logo-hello-humans-full class="w-[180px] fill-[#3886ff]"/>
                               <div class="ml-auto">
-                                   <LanguageSelector />
+                                   <PanelCommonLanguageSelector />
                               </div>
                          </div>
 
@@ -25,7 +25,7 @@
                                    <div class="flex flex-col gap-[32px] sm:gap-[48px]">
 
                                         <!--  SECTION 1 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Quelle est l'adresse URL de votre site web</h2>
                                                   <p class="mt-[2px] mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] text-[#647491]">Vos réponses nous aideront à personnaliser votre expérience</p>
@@ -37,13 +37,12 @@
                                                        <label class="font-normal max-w-full flex flex-col relative">
                                                             <input name="name" type="text" placeholder="Votre nom" class="block w-full text-[16px] leading-[20px] tracking-[-0.01em] h-[51px] text-[#080f1a] border-2 border-solid border-[#d3dbe5] rounded-[8px] px-[14px] py-[16px] outline-none">
                                                        </label>
-
                                                   </div>
                                              </div>
                                         </div>
 
                                         <!--  SECTION 2 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Dans quel service travaillez-vous ?</h2>
                                              </div>
@@ -55,7 +54,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-dev-web-site class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-dev-web-site class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Développement de sites</span>
@@ -66,7 +65,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-sale class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-sale class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Vente</span>
@@ -77,7 +76,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Marketing</span>
@@ -90,7 +89,7 @@
                                         </div>
 
                                         <!--  SECTION 3 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Actuellement comment vous communiquer avec vos clients ?</h2>
                                                   <p class="mt-[2px] mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] text-[#647491]">Sélectionnez tout ce qui s'applique</p>
@@ -103,7 +102,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-mail class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-mail class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Par e-mail</span>
@@ -114,7 +113,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-phone class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-phone class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Par téléphone</span>
@@ -125,7 +124,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Sur place</span>
@@ -136,7 +135,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Siteweb / Blog</span>
@@ -147,7 +146,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-marketing class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Aucun</span>
@@ -167,7 +166,7 @@
                                    <div class="flex flex-col gap-[32px] sm:gap-[48px]">
 
                                         <!--  SECTION 1 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Quel est votre principal modèle économique ?</h2>
                                              </div>
@@ -180,7 +179,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-service class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-service class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Je fournis des services</span>
@@ -191,7 +190,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-ecommerce class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-ecommerce class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">E-commerce</span>
@@ -216,13 +215,13 @@
                                         </div>
 
                                         <!--  SECTION 2 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Quel est le secteur d'activité de votre entreprise ?</h2>
                                              </div>
                                              <div class="mt-0 mb-0 mt-[16px] ">
 
-                                                  <!--  Contenu du faux select -->
+                                                  <!--  Contenu du select -->
                                                   <div class="relative text-left h-fit pointer-events-auto rounded-[8px]">
                                                        <fieldset class="absolute inset-[-7px_0px_0px] m-0 pl-[5px] overflow-hidden pointer-events-none rounded-[8px] border-[2px] border-[#d3dbe5]">
                                                             <legend class="text-[12px] leading-[16px] tracking-[-0.01em] invisible w-auto block p-0 max-w-0 border-none m-0 whitespace-nowrap font-normal transition-[max-width] duration-[100ms] ease-[cubic-bezier(0,_0,_0.2,_1)]">
@@ -269,7 +268,7 @@
                                         </div>
 
                                         <!--  SECTION 3 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Combien de conversations avec les clients votre entreprise traite-t-elle par mois ?</h2>
                                              </div>
@@ -347,7 +346,7 @@
                                    <div class="flex flex-col gap-[32px] sm:gap-[48px]">
 
                                         <!--  SECTION 1 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Combien de visiteurs votre site Web attire-t-il chaque mois ?</h2>
                                              </div>
@@ -421,7 +420,7 @@
                                         </div>
 
                                         <!--  SECTION 2 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">Quelle plateforme héberge votre site Web ?</h2>
                                              </div>
@@ -433,7 +432,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-website class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-website class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Site web personnalisé</span>
@@ -444,7 +443,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-presta-shop class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-presta-shop class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">PrestaShop</span>
@@ -455,7 +454,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-woo-commerce class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-woo-commerce class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">WooCommerce</span>
@@ -466,7 +465,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-shopify class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-shopify class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">Shopify</span>
@@ -477,7 +476,7 @@
                                                        <!--  BOUTON Séléction -->
                                                        <div class="flex flex-col justify-start items-[normal]">
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex items-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
-                                                                 <svgo-panel-icon-tour-wordpress class="w-[24px] h-[24px] fill-[#647491]"/>
+                                                                 <svgo-panel-onboarding-icon-wordpress class="w-[24px] h-[24px] fill-[#647491]"/>
                                                                  <label class="text-[16px] leading-[20px] tracking-[-0.01em] font-medium text-[#080f1a]">
                                                                       <input type="radio" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,_0px,_0px,_0px)] border-0">
                                                                       <span class="ml-[8px]">WordPress</span>
@@ -506,7 +505,7 @@
                                    <div class="flex flex-col gap-[32px] sm:gap-[48px]">
 
                                         <!--  SECTION 1 -->
-                                        <div class="hhcss_tourBox flex flex-col justify-start items-[normal]">
+                                        <div class="hhcss_onboardingBox flex flex-col justify-start items-[normal]">
                                              <div class="flex flex-col justify-start items-[normal] mt-0 mb-0">
                                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em] sm:text-[20px] sm:leading-[26px]">J'utilise Hellohumans avant tout pour…</h2>
                                              </div>
@@ -520,7 +519,7 @@
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex flex-col flex-nowrap content-center items-start justify-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
 
                                                                  <div class="flex flex-row justify-start items-center">
-                                                                      <svgo-panel-icon-tour-bot  class="w-[24px] h-[24px] fill-[#647491] min-w-[24px]"/>
+                                                                      <svgo-panel-onboarding-icon-bot  class="w-[24px] h-[24px] fill-[#647491] min-w-[24px]"/>
                                                                       <p class="mt-0 mb-0 ml-[8px] font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Automatiser mon système d'assistance grâce au AI Agent</p>
                                                                  </div>
                                                                  <span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span>
@@ -536,7 +535,7 @@
                                                             <div class="select-none min-w-[120px] bg-white p-[12px] border border-[#e2e8ef] outline-none rounded-[8px] relative flex flex-col flex-nowrap content-center items-start justify-center hover:border-[#0566ff] hover:bg-white hover:text-[#080f1a] sm:p-[20px]">
 
                                                                  <div class="flex flex-row justify-start items-center">
-                                                                      <svgo-panel-icon-tour-bot  class="w-[24px] h-[24px] min-w-[24px] fill-[#647491]"/>
+                                                                      <svgo-panel-onboarding-icon-bot  class="w-[24px] h-[24px] min-w-[24px] fill-[#647491]"/>
                                                                       <p class="mt-0 mb-0 ml-[8px] font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Automatiser mon système d'assistance grâce au AI Agent</p>
                                                                  </div>
                                                                  <span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span>
@@ -585,5 +584,4 @@
 </template>
 
 <script setup lang="ts">
-import LanguageSelector from "~/components/panel/LanguageSelector.vue";
 </script>
