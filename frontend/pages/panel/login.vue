@@ -139,5 +139,5 @@ const handleLogin = async () => {
 
      loading.value = false
 }
-usePanelPageMeta( t('panel.pages.login.megaTitle'), t('panel.pages.login.megaDescription'))
+usePanelPageMeta( t('panel.pages.login.metaTitle'), t('panel.pages.login.metaDescription'))
 </script>

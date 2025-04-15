@@ -105,5 +105,5 @@ function closePanel() {
 definePageMeta({
      layout: 'panel-empty'
 })
-usePanelPageMeta( t('panel.pages.upgrade.Index.megaTitle'), t('panel.pages.upgrade.Index.megaDescription'))
+usePanelPageMeta( t('panel.pages.upgrade.Index.metaTitle'), t('panel.pages.upgrade.Index.metaDescription'))
 </script>

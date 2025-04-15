@@ -11,5 +11,5 @@ const router = useRouter()
 onMounted(async () => {
      await router.replace('/panel/dashboard')
 })
-usePanelPageMeta( t('panel.pages.index.megaTitle'), t('panel.pages.index.megaDescription'))
+usePanelPageMeta( t('panel.pages.index.metaTitle'), t('panel.pages.index.metaDescription'))
 </script>

@@ -55,6 +55,6 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel-menu'
 })
-usePanelPageMeta( t('panel.pages.analytics.index.megaTitle'), t('panel.pages.analytics.index.megaDescription'))
+usePanelPageMeta( t('panel.pages.analytics.index.metaTitle'), t('panel.pages.analytics.index.metaDescription'))
 </script>
 
