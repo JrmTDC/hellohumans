@@ -40,8 +40,6 @@
      </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
-
 const props = defineProps({
      percentage: {
           type: Number,

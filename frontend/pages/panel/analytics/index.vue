@@ -26,10 +26,10 @@
                                              <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[31px] tracking-[-0.01em]">Vue d’ensemble</h2>
                                         </div>
                                         <div class="relative flex items-center mt-[20px] mb-0">
-                                             <datePicker />
+                                             <PanelCommonDatePicker />
                                         </div>
                                         <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0">
-                                             <analyticsChart></analyticsChart>
+                                             <PanelAnalyticsChart></PanelAnalyticsChart>
                                         </div>
                                    </div>
                               </div>
@@ -41,11 +41,6 @@
      </div>
 </template>
 <script setup lang="ts">
-
-import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
-import analyticsChart from '~/components/panel/analytics/analyticsChart.vue'
-import datePicker from "~/components/panel/common/commonDatePicker.vue";
 const { t } = useI18n()
 
 const router = useRouter()
@@ -60,7 +55,7 @@ onMounted(async () => {
      pageIsPaid.value = true
 })
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel-menu'
 })
 </script>
 

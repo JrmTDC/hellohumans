@@ -1,7 +1,7 @@
 <template>
-     <baseModal title="Nouveau projet" @close="emit('close')">
+     <PanelModalBase title="Nouveau projet" @close="emit('close')">
           <form @submit.prevent="submit">
-               <floatingInput
+               <PanelCommonFloatingInput
                     v-model="url"
                     label="URL de votre site"
                     hint="par exemple, monsiteweb.com"
@@ -15,14 +15,10 @@
                     </button>
                </div>
           </form>
-     </baseModal>
+     </PanelModalBase>
 </template>
 
 <script setup lang="ts">
-import baseModal from '~/components/panel/modal/baseModal.vue'
-import floatingInput from '~/components/panel/common/floatingInput.vue'
-import { ref } from 'vue'
-
 const emit = defineEmits(['close', 'create'])
 
 const url = ref('')

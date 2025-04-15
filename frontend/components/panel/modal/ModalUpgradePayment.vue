@@ -1,10 +1,10 @@
 <template>
-     <baseModal title="Payer à l’aide d’une carte" @close="handleClose">
+     <PanelModalBase title="Payer à l’aide d’une carte" @close="handleClose">
           <form @submit.prevent="submit">
                <!-- Carte de paiement -->
                <div class="mb-[24px]">
                     <label class="block text-[#647491] text-[14px] leading-[18px] mb-[6px]">Carte de crédit</label>
-                    <stripeCardInput v-model="cardDetails" @error="cardError = $event" />
+                    <PanelStripeCardInput v-model="cardDetails" @error="cardError = $event" />
                </div>
 
                <!-- Total -->
@@ -45,14 +45,10 @@
                     </button>
                </div>
           </form>
-     </baseModal>
+     </PanelModalBase>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import baseModal from '~/components/panel/modal/baseModal.vue'
-import stripeCardInput from '~/components/panel/stripe/stripeCardInput.vue'
-
 const emit = defineEmits(['close', 'submit'])
 const props = defineProps<{
      billingCycle: 'monthly' | 'annual'

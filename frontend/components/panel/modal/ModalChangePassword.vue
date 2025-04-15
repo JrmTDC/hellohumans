@@ -1,5 +1,5 @@
 <template>
-     <BaseModal title="Modifier le mot de passe" @close="emit('close')">
+     <PanelModalBase title="Modifier le mot de passe" @close="emit('close')">
           <form @submit.prevent="submit" class="w-full">
                <!-- Mot de passe actuel -->
                <div class="mb-4">
@@ -41,14 +41,10 @@
                     <button type="submit" class="btn btn-new btn-size-xl btn-primary">Modifier</button>
                </div>
           </form>
-     </BaseModal>
+     </PanelModalBase>
 </template>
 
 <script setup lang="ts">
-import BaseModal from './BaseModal.vue'
-import { ref } from 'vue'
-import { usePanelStore } from '~/stores/panelStore'
-
 const emit = defineEmits(['close'])
 
 const currentPassword = ref('')

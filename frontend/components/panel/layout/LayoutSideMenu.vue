@@ -22,7 +22,7 @@
                     </span>
                </div>
 
-               <sideMenuProjects
+               <PanelLayoutSideMenuProjects
                     v-if="showProjectsMenu"
                     @close="showProjectsMenu = false"
                     @open-create-project="handleOpenCreateProject"
@@ -36,7 +36,7 @@
                     </span>
                </div>
 
-               <sideMenuLanguages
+               <PanelLayoutSideMenuLanguages
                     v-if="showLangMenu"
                     @close="showLangMenu = false"
                     @closeAllMenus="emits('closeSideUserMenu')" />
@@ -54,8 +54,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePanelStore } from '~/stores/panelStore'
 import { useI18n } from 'vue-i18n'
-import sideMenuLanguages from '~/components/panel/menu/sideMenuLanguages.vue'
-import sideMenuProjects from '~/components/panel/menu/sideMenuProjects.vue'
 
 const router = useRouter()
 const panelStore = usePanelStore()

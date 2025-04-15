@@ -51,11 +51,11 @@
                               <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
-                                        <Tooltip text="Les conversations représentent le nombre total de conversations dans le chat en direct" placement="top" variant="white" :arrow="true">
+                                        <PanelCommonTooltip text="Les conversations représentent le nombre total de conversations dans le chat en direct" placement="top" variant="white" :arrow="true">
                                              <div class="w-full">
                                                   <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1', { count: 50 }) }}</strong></p>
                                              </div>
-                                        </Tooltip>
+                                        </PanelCommonTooltip>
                                    </div>
                               </div>
                               <div class="grid place-items-center bg-[#e2e8ef] w-5 h-5 rounded-full self-end ml-4">
@@ -69,11 +69,11 @@
                               <svgo-panel-icon-chat-bull class="w-[20px] h-[20px] fill-[#647491]"/>
                               <div class="inline-flex flex-grow max-w-full overflow-hidden ml-[16px]">
                                    <div class="flex flex-row justify-start items-center max-w-full">
-                                        <Tooltip text="{{ t('panel.pages.trialExpired.tooltipProcessedConversations') }}" placement="top" variant="white" :arrow="true">
+                                        <PanelCommonTooltip text="{{ t('panel.pages.trialExpired.tooltipProcessedConversations') }}" placement="top" variant="white" :arrow="true">
                                              <div class="w-full">
                                                   <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left overflow-hidden text-ellipsis whitespace-nowrap text-[#080f1a] border-b border-dashed border-[#acb8cb] cursor-default">{{ t('panel.pages.trialExpired.processedConversations.part1') }}<strong>{{ t('panel.pages.trialExpired.processedConversations.highlight1', { count: 50 }) }}</strong></p>
                                              </div>
-                                        </Tooltip>
+                                        </PanelCommonTooltip>
                                    </div>
                               </div>
                               <div class="grid place-items-center bg-[#e2e8ef] w-5 h-5 rounded-full self-end ml-4">
@@ -93,8 +93,6 @@
      </div>
 </template>
 <script setup lang="ts">
-import Tooltip from "~/components/panel/common/Tooltip.vue";
-
 const { appName } = useAppInfo()
 const { t } = useI18n()
 </script>

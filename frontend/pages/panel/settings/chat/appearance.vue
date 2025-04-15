@@ -15,6 +15,6 @@ onMounted(async () => {
      pageIsPaid.value = false
 })
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel-menu'
 })
 </script>

@@ -44,7 +44,7 @@
                               <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <PasswordInput
+                              <PanelCommonPasswordInput
                                    v-model="password"
                                    @input="evaluatePasswordStrength"
                                    @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
@@ -118,11 +118,6 @@
      </div>
 </template>
 <script setup lang="ts">
-
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import PasswordInput from "~/components/panel/common/CommonPasswordInput.vue";
-import { usePublicStore } from "~/stores/publicStore";
 
 const { appName } = useAppInfo()
 const { t } = useI18n()

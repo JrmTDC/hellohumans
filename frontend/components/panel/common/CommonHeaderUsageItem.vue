@@ -30,7 +30,7 @@
                               </div>
                          </div>
                          <div class="w-[32px] h-[32px] ml-[8px] relative">
-                              <ProgressCircle
+                              <PanelCommonProgressCircle
                                    :percentage="item.percentage"
                                    :progressColor="progressColor"
                                    :bgColor="item.bgColor"
@@ -47,7 +47,6 @@
 </template>
 
 <script setup lang="ts">
-import ProgressCircle from '~/components/panel/ProgressCircle.vue'
 const props = defineProps({
      item: Object,
 });

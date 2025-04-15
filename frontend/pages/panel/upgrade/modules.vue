@@ -1,7 +1,7 @@
 <template>
      <div id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
           <div class="flex flex-col justify-start items-[normal] h-full">
-               <stepperHeader :step="2" @goStep="goStep" @close="closePanel" />
+               <PanelUpgradeStepperHeader :step="2" @goStep="goStep" @close="closePanel" />
 
                <div class="flex flex-row justify-start items-start self-stretch flex-grow">
                     <!-- Liste des modules -->
@@ -35,7 +35,7 @@
 
                               <div class="flex flex-col">
                                    <!-- Filtrer les modules pour ne pas afficher ceux "disabled" -->
-                                   <moduleCard
+                                   <PanelUpgradeModuleCard
                                         v-for="(module, idx) in store.availableModules.filter(m => !m.disabled)"
                                         :key="module.id"
                                         :module="module"
@@ -49,7 +49,7 @@
                          </div>
                     </div>
 
-                    <subscriptionSummary
+                    <PanelUpgradeSubscriptionSummary
                          :selectedPlan="store.currentPlan"
                          :billingCycle="store.billingCycle"
                          :selectedModules="store.selectedAddOns"
@@ -61,7 +61,7 @@
                          :disableIfZero="true"
                     />
 
-                    <paymentModal
+                    <PanelModalUpgradePayment
                          v-if="showPaymentModal"
                          :total="computedTotalPrice"
                          :billingCycle="store.billingCycle"
@@ -75,15 +75,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUpgradeStore } from '@/stores/upgradeStore'
-
-import stepperHeader from '~/components/panel/upgrade/stepperHeaderUpgrade.vue'
-import moduleCard from '~/components/panel/upgrade/moduleCardUpgrade.vue'
-import subscriptionSummary from '~/components/panel/upgrade/subscriptionSummaryUpgrade.vue'
-import paymentModal from '~/components/panel/modal/upgradePaymentModal.vue'
-
 const panelStore = usePanelStore()
 const store = useUpgradeStore()
 const router = useRouter()
@@ -193,6 +184,6 @@ function closePanel() {
      router.push('/panel/dashboard')
 }
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel-empty'
 })
 </script>

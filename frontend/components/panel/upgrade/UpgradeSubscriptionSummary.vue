@@ -1,7 +1,17 @@
 <template>
-     <div class="p-[32px] px-[40px] w-[448px] flex flex-col justify-start items-[normal] flex-grow-0 border border-[#e2e8ef] bg-[#f5f7f9] self-stretch flex-shrink-0">
+     <div class="flex flex-col justify-start items-[normal] flex-grow-0 w-[482px] px-[20px] py-[32px] border border-[#e2e8ef] bg-[#f5f7f9] self-stretch flex-shrink-0
+max-[1600px]:w-[400px] max-[1600px]:px-[20px] max-[1600px]:py-[32px]
+max-[1440px]:w-[336px]
+max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]
+">
           <div class="flex flex-col justify-start items-[normal] sticky top-[96px]">
                <p class="text-[18px] font-medium mb-0">Résumé de l'abonnement</p>
+
+               <div class="mt-[20px] flex flex-row justify-center items-center bg-[#e5e7f7] px-[20px] py-[16px] rounded-[12px]">
+                    <svgo-panel-upgrade-icon-diamon class="min-w-[24px] min-h-[24px] h-[24px] w-[24px] fill-[#303f9f]"/>
+                    <p class="mt-0 mb-0 text-[14px] leading-[18px] tracking-[-0.01em] text-[#151c46] ml-[8px]">
+                         <strong>Bénéficiez gratuitement de l'intégration simplifiée du support client</strong> avec tous les abonnements au-dessus de €250 par mois</p>
+               </div>
 
                <!-- Choix de cycle -->
                <p class="text-[12px] text-[#647491] mt-[20px] mb-0 font-medium">FACTURÉ</p>
@@ -96,8 +106,6 @@
      </div>
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-
 interface Plan {
      id: string
      name: string

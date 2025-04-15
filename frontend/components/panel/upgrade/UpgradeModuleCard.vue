@@ -1,6 +1,6 @@
 <template>
      <!-- On enveloppe tout le moduleCard dans un Tooltip si needed -->
-     <Tooltip
+     <PanelCommonTooltip
           v-if="module.comingSoon || isIncluded"
           :text="module.comingSoon ? 'Bientôt disponible' : 'Inclus dans votre abonnement'"
           placement="top"
@@ -95,7 +95,7 @@
                     </div>
                </div>
           </div>
-     </Tooltip>
+     </PanelCommonTooltip>
 
      <!-- Si aucun tooltip n'est nécessaire (pas comingSoon, pas included) -->
      <div v-else class="flex flex-col justify-start items-[normal] border border-[#e2e8ef] rounded-[12px]" :class="[ index >= 1 ? 'mt-[16px]' : '' ]">
@@ -187,12 +187,10 @@
      </div>
 </template>
 <script setup lang="ts">
-import { } from 'vue'
-import Tooltip from '@/components/panel/common/Tooltip.vue'
-import type { ModuleAddOn } from '@/stores/upgradeStore'
+import type { upgradeModule } from '~/stores/upgradeStore'
 
 const props = defineProps<{
-     module: ModuleAddOn
+     module: upgradeModule
      billingCycle: 'monthly' | 'annual'
      onToggle: (moduleId: string, checked: boolean) => void
      onChangeChoice: (moduleId: string, choiceIndex: number) => void
