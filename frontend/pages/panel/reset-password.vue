@@ -6,7 +6,7 @@
                     <svgo-logo-hello-humans-full class="w-[220px]" />
                </div>
                <div class="login-container">
-                    <LanguageSelector />
+                    <PanelCommonLanguageSelector />
                </div>
           </div>
 
@@ -155,7 +155,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import PasswordInput from '@/components/panel/common/CommonPasswordInput.vue'
-import LanguageSelector from '@/components/panel/LanguageSelector.vue'
 
 const { t } = useI18n()
 const router = useRouter()

@@ -6,7 +6,7 @@
                     <svgo-logo-hello-humans-full class="w-[220px]"/>
                </div>
                <div class="login-container">
-                    <LanguageSelector />
+                    <PanelCommonLanguageSelector />
                </div>
           </div>
           <!-- Formulaire de connexion -->
@@ -79,7 +79,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PasswordInput from '~/components/panel/common/CommonPasswordInput.vue'
-import LanguageSelector from '~/components/panel/LanguageSelector.vue'
 import {usePublicStore} from "~/stores/publicStore";
 const { t } = useI18n()
 
