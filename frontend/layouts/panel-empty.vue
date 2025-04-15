@@ -1,6 +1,6 @@
 <template>
-     <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
      <div v-else class="flex flex-col h-screen">
+          <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
           <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <div class="app-content">
                     <slot />
