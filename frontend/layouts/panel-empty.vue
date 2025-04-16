@@ -1,5 +1,13 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
+     <LayoutAccountBlocked v-else-if="AccountBlocked" />
+     <div v-else class="flex flex-col h-screen">
+          <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
+               <div class="app-content">
+                    <slot />
+               </div>
+          </div>
+     </div>
      <div v-else class="flex flex-col h-screen">
           <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <div class="app-content">
@@ -9,11 +17,14 @@
      </div>
 </template>
 <script setup lang="ts">
+import LayoutAccountBlocked from '~/components//panel/layout/LayoutAccountBlocked.vue'
+
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const router = useRouter()
 
 const isChecking = ref(true)
+const AccountBlocked = ref(true)
 const progress = ref(0)
 
 onMounted(async () => {
