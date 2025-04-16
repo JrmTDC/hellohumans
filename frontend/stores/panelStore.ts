@@ -13,7 +13,7 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<string[]>([])
      const project = ref<any[]>([])
      const projects = ref<any[]>([])
-
+     const activities = ref<any[]>([])
 
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
@@ -146,6 +146,16 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function fetchListActivity() {
+          const { apiFetch } = usePanelApi()
+          try {
+               const data = await apiFetch('/onboarding/activities')
+               activities.value = data.success.activities
+          } catch (error) {
+               console.error('Erreur activités :', error)
+          }
+     }
+
      async function logout() {
           await supabase.auth.signOut()
           user.value = null
@@ -165,6 +175,7 @@ export const usePanelStore = defineStore('panel', () => {
           modules,
           project,
           projects,
+          activities,
 
           // actions
           initPanelSession,
@@ -175,6 +186,7 @@ export const usePanelStore = defineStore('panel', () => {
           updateUserLang,
           switchProject,
           updatePassword,
+          fetchListActivity,
           logout
      }
 })
