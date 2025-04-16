@@ -10,7 +10,7 @@ class OnboardingController {
                .single()
 
           if (error || !data?.lang) {
-               console.warn('Langue non trouvée, fallback en')
+               console.warn('Langue non trouvée, fallback "en"')
                return 'en'
           }
 
@@ -25,9 +25,9 @@ class OnboardingController {
                          error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
                     })
                }
+
                const lang = await this.getUserLang(auth_id)
 
-               // 1. Récupération la liste des activités
                const { data: activitiesData, error: activitiesError } = await supabase
                     .from('onboarding_activities')
                     .select('id, name, slug')
@@ -46,12 +46,9 @@ class OnboardingController {
                     slug: activity.slug,
                }))
 
-               // 2. Retourne la liste des activités
-               return {
-                    activities
-               }
+               return response.status(200).send({ activities })
           } catch (error) {
-               console.error('Erreur ClientController.getClient:', error)
+               console.error('Erreur OnboardingController.getActivities:', error)
                return response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne' }
                })
