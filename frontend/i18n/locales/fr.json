@@ -374,7 +374,7 @@
                     "subscriptionSummary": {
                          "title": "Résumé de l'abonnement",
                          "highlight": "Bénéficiez gratuitement de l'intégration simplifiée du support client",
-                         "highlightFull": "avec tous les abonnements au-dessus de {price} par mois",
+                         "highlightFull": "avec tous les abonnements au-dessus de 250€ par mois",
                          "billingLabel": "FACTURÉ",
                          "billingMonthly": "Mensuel",
                          "billingAnnual": "Une fois par an",

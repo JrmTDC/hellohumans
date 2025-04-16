@@ -1,8 +1,9 @@
 import { computed } from 'vue'
 import { usePanelStore } from '~/stores/panelStore'
 
+const { t } = useI18n()
 export const useUsageDefinitions = () => {
-     const { t } = useI18n()
+
      const panelStore = usePanelStore()
 
      const rawDefinitions = computed(() => [
