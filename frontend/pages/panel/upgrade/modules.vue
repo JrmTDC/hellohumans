@@ -57,7 +57,7 @@
                          :totalPrice="computedTotalPrice"
                          @updateBillingCycle="store.setBillingCycle"
                          @goNext="handlePaymentClick"
-                         nextButtonLabel="t('panel.pages.upgrade.Modules.nextButtonLabel')"
+                         :nextButtonLabel="t('panel.pages.upgrade.Modules.nextButtonLabel')"
                          :disableIfZero="true"
                     />
 

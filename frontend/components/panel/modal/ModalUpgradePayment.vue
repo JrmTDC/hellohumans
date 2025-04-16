@@ -1,5 +1,5 @@
 <template>
-     <PanelModalBase title="t('panel.components.modal.upgradePayment.title')" @close="handleClose">
+     <PanelModalBase :title="t('panel.components.modal.upgradePayment.title')" @close="handleClose">
           <form @submit.prevent="submit">
                <!-- Carte de paiement -->
                <div class="mb-[24px]">

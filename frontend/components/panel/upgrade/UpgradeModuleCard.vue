@@ -2,7 +2,7 @@
      <!-- On enveloppe tout le moduleCard dans un Tooltip si needed -->
      <PanelCommonTooltip
           v-if="module.comingSoon || isIncluded"
-          :text="module.comingSoon ? 'Bientôt disponible' : 'Inclus dans votre abonnement'"
+          :text="module.comingSoon ? t('panel.components.upgrade.ModuleCard.comingSoon') : t('panel.components.upgrade.ModuleCard.included')"
           placement="top"
           variant="white"
           :arrow="false"
@@ -43,10 +43,11 @@
 
                          <div class="flex flex-col self-end">
                               <!-- "À partir de" si c'est un module multipleChoice NON coché -->
-                              <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">À partir de</p>
+                              <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ t('panel.components.upgrade.ModuleCard.startingAt') }}</p>
                               <span class="block w-[2px] h-[2px]"></span>
                          </div>
                     </div>
+
 
                     <div class="flex flex-row justify-start items-center">
                          <div class="flex flex-col justify-start items-[normal] flex-grow">
@@ -59,7 +60,7 @@
                               <div class="flex flex-row justify-start items-center">
                                    <span>
                                         <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ displayedPrice }}<span class="text-[24px] leading-[31px] tracking-[-0.01em] font-medium">€</span></span>
-                                        <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'monthly' ? '/mois' : '/an' }}</span>
+                                        <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'monthly' ? t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
                                    </span>
                               </div>
                          </div>
@@ -70,7 +71,7 @@
                <div v-if="module.multipleChoice && checked" class="flex flex-col justify-start items-[normal] px-[24px] pb-[24px] pt-0">
                     <div class="flex flex-row justify-start items-center">
                          <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">
-                              Choisissez une option :
+                              {{ t('panel.components.upgrade.ModuleCard.selectLabel') }}
                          </p>
                          <!-- info-bulle d'exemple -->
                          <div class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center">
@@ -88,7 +89,7 @@
                                         :value="idx"
                                         :selected="idx === module.selectedChoiceIndex"
                                    >
-                                        {{ choice.label }} ({{ choice.monthlyPrice }} €/mois)
+                                        {{ choice.label }} ({{ choice.monthlyPrice }} {{ t('panel.components.upgrade.ModuleCard.perMonth') }})
                                    </option>
                               </select>
                          </div>
@@ -133,7 +134,7 @@
                     </div>
 
                     <div class="flex flex-col self-end">
-                         <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]">À partir de</p>
+                         <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]">{{ t('panel.components.upgrade.ModuleCard.startingAt') }}</p>
                          <span class="block w-[2px] h-[2px]"></span>
                     </div>
                </div>
@@ -153,7 +154,7 @@
                               <span>
                                    <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[24px] leading-[31px] font-medium">€</span>
                                    </span>
-                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ billingCycle === 'monthly' ? '/mois' : '/an' }}</span>
+                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ billingCycle === 'monthly' ?  t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
                               </span>
                          </div>
                     </div>
@@ -162,7 +163,7 @@
 
           <div v-if="module.multipleChoice && checked" class="flex flex-col justify-start items-[normal] px-[24px] pb-[24px] pt-0">
                <div class="flex flex-row justify-start items-center">
-                    <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">Choisissez une option :</p>
+                    <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">{{ t('panel.components.upgrade.ModuleCard.selectLabel') }}</p>
                     <div class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center">
                          <svgo-panel-icon-helper class="w-[14px] h-[14px] fill-[#647491]" />
                     </div>
@@ -178,7 +179,7 @@
                                    :value="idx"
                                    :selected="idx === module.selectedChoiceIndex"
                               >
-                                   {{ choice.label }} ({{ choice.monthlyPrice }} €/mois)
+                                   {{ choice.label }} ({{ choice.monthlyPrice }} {{ t('panel.components.upgrade.ModuleCard.perMonth') }})
                               </option>
                          </select>
                     </div>
@@ -189,6 +190,7 @@
 <script setup lang="ts">
 import type { upgradeModule } from '~/stores/upgradeStore'
 
+const { t } = useI18n()
 const props = defineProps<{
      module: upgradeModule
      billingCycle: 'monthly' | 'annual'

@@ -46,7 +46,7 @@
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
                          :selectedModules="store.selectedAddOns"
-                         nextButtonLabel="t('panel.pages.upgrade.Index.nextStep')"
+                         :nextButtonLabel="t('panel.pages.upgrade.Index.nextStep')"
                          @updateBillingCycle="store.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"

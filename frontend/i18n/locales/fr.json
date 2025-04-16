@@ -5,6 +5,14 @@
           }
      },
      "panel": {
+          "layout": {
+               "empty": {
+                    "metaTitle": "Panel"
+               },
+               "menu": {
+                    "metaTitle": "Panel"
+               }
+          },
           "pages": {
                "index": {
                     "loading": "Connexion ...",
@@ -337,16 +345,49 @@
                },
                "upgrade": {
                     "ModuleCard": {
-
+                         "comingSoon": "Bientôt disponible",
+                         "included": "Inclus dans votre abonnement",
+                         "startingAt": "À partir de",
+                         "selectLabel": "Choisissez une option :",
+                         "perMonth": "/mois",
+                         "perYear": "/an"
                     },
                     "planCard": {
-
+                         "inCart": "Dans votre panier",
+                         "popular": "Le plus populaire",
+                         "selected": "Sélectionné",
+                         "selectPlan": "Sélectionner cette offre",
+                         "perMonth": "/mois",
+                         "perYear": "/an"
                     },
                     "stepperHeader": {
-
+                         "title": "Mettre à niveau",
+                         "step1": "Offre",
+                         "step2": "Modules",
+                         "step3": "Paiement",
+                         "tooltip": {
+                              "step1": "Revenir à l'étape 1",
+                              "step2": "Aller à l'étape 2",
+                              "step3": "Aller à l'étape 3"
+                         }
                     },
                     "subscriptionSummary": {
-
+                         "title": "Résumé de l'abonnement",
+                         "highlight": "Bénéficiez gratuitement de l'intégration simplifiée du support client",
+                         "highlightFull": "avec tous les abonnements au-dessus de {price} par mois",
+                         "billingLabel": "FACTURÉ",
+                         "billingMonthly": "Mensuel",
+                         "billingAnnual": "Une fois par an",
+                         "billingDiscountBadge": "2 MOIS GRATUITS",
+                         "planLabel": "OFFRE",
+                         "planNoneSelected": "Aucune offre sélectionnée.",
+                         "modulesLabel": "MODULES COMPLÉMENTAIRES",
+                         "included": "Inclus",
+                         "totalLabel": "Total",
+                         "perMonth": "/mois",
+                         "perYear": "/an",
+                         "defaultButtonLabel": "Prochaine étape",
+                         "changeOrCancelInfo": "Modifier ou annuler votre offre à tout moment"
                     }
                }
           },

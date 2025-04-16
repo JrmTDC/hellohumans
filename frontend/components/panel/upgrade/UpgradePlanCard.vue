@@ -16,7 +16,7 @@
                          <p
                               class="mt-0 mb-0 font-medium text-[11px] leading-[14px] tracking-[-0.01em] text-[#0049bd]"
                          >
-                              Dans votre panier
+                              {{ t('panel.components.upgrade.planCard.inCart') }}
                          </p>
                     </div>
                </div>
@@ -35,9 +35,8 @@
                               <svgo-panel-icon-selected class="w-[10px] h-[10px] fill-[#fff]" />
                          </div>
                          <p
-                              class="mt-0 mb-0 font-medium text-[12px] leading-[16px] tracking-[-0.01em] text-[#0d2d16]"
-                         >
-                              Le plus populaire
+                              class="mt-0 mb-0 font-medium text-[12px] leading-[16px] tracking-[-0.01em] text-[#0d2d16]">
+                              {{ t('panel.components.upgrade.planCard.popular') }}
                          </p>
                     </div>
                </div>
@@ -59,17 +58,18 @@
 
           <!-- Prix -->
           <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses ]">
-      <span>
-        <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">
-          {{ displayedPrice }}
-          <span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">
-            €
-          </span>
-        </span>
-        <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">
-          {{ billingCycle === 'monthly' ? '/mois' : '/an' }}
-        </span>
-      </span>
+               <span>
+                    <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">
+                         {{ displayedPrice }}
+                         <span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">
+                              €
+                         </span>
+                    </span>
+                    <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">
+                       {{ billingCycle === 'monthly' ? t('panel.components.upgrade.planCard.perMonth') : t('panel.components.upgrade.planCard.perYear') }}
+
+                    </span>
+               </span>
           </div>
 
           <!-- Bouton (ou étiquette) Sélectionné -->
@@ -79,18 +79,18 @@
                     class="block bg-[#eff2f6] border border-transparent text-[#acb8cb] max-w-full w-full rounded-[8px] text-[16px] h-[38px] leading-[20px] px-[16px] py-0"
                     disabled
                >
-        <span class="flex flex-row justify-center items-center">
-          <div class="flex flex-row justify-start items-center">
-            <svgo-panel-icon-selected class="w-[20px] h-[20px] fill-[#acb8cb] mr-[6px] ml-[-2px]" />
-            Sélectionné
-          </div>
-        </span>
+                    <span class="flex flex-row justify-center items-center">
+                         <div class="flex flex-row justify-start items-center">
+                              <svgo-panel-icon-selected class="w-[20px] h-[20px] fill-[#acb8cb] mr-[6px] ml-[-2px]" />
+                              {{ t('panel.components.upgrade.planCard.selected') }}
+                         </div>
+                    </span>
                </button>
                <button
                     v-else
                     class="block bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] max-w-full w-full rounded-[8px] text-[16px] h-[38px] leading-[20px] px-[16px] py-0 hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]"
                >
-                    Sélectionner cette offre
+                    {{ t('panel.components.upgrade.planCard.selectPlan') }}
                </button>
           </div>
 
@@ -133,7 +133,7 @@ interface Plan {
      popular?: boolean
      includedFeatures: string[]
 }
-
+const { t } = useI18n()
 const props = defineProps<{
      plan: Plan
      selected: boolean
