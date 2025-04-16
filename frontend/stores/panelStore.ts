@@ -155,6 +155,19 @@ export const usePanelStore = defineStore('panel', () => {
                console.error('Erreur activités :', error)
           }
      }
+     async function createOnboarding(data: Record<string, any>): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          try {
+               const res = await apiFetch('/onboarding', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+               })
+               return !!res.success
+          } catch (err) {
+               console.error('Erreur lors de la soumission de l’onboarding :', err)
+               return false
+          }
+     }
 
      async function logout() {
           await supabase.auth.signOut()
@@ -187,6 +200,7 @@ export const usePanelStore = defineStore('panel', () => {
           switchProject,
           updatePassword,
           fetchListActivity,
+          createOnboarding,
           logout
      }
 })
