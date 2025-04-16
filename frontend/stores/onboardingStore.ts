@@ -20,21 +20,25 @@ interface OnboardingAnswers {
      serviceModel: string,
      businessModel: string,
      communicationMethods: string,
-     selectedActivity:string
+     selectedActivity:string,
+     conversationsPerMonth:string,
+     monthlyWebsiteVisitors:string,
+     websiteHostingPlatform:string,
+     primaryUse:string
 }
 
 export const useOnboardingStore = defineStore('onboarding', () => {
      const router = useRouter()
-     const { apiFetch } = usePanelApi()
 
      // ----- ÉTAT -----
      const currentStep = ref(1)
-     const totalSteps = ref(3)
+     const totalSteps = ref(4)
 
      const stepSections = reactive<Record<number, SectionInfo>>({
           1: { total: 2, completed: 0 },
           2: { total: 3, completed: 0 },
-          3: { total: 3, completed: 0 },
+          3: { total: 4, completed: 0 },
+          4: { total: 1, completed: 0 }
      })
 
      const answers = ref<OnboardingAnswers>({
@@ -44,7 +48,11 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           serviceModel:'',
           businessModel: '',
           communicationMethods: '',
-          selectedActivity:''
+          selectedActivity:'',
+          conversationsPerMonth:'',
+          monthlyWebsiteVisitors:'',
+          websiteHostingPlatform:'',
+          primaryUse:''
      })
 
      const clientAccounts = ref<ClientAccount[]>([])
@@ -102,7 +110,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      }
 
      async function finishOnboarding() {
-          await router.push('/panel/dashboard')
+          await router.push('/panel/upgrade')
      }
 
 

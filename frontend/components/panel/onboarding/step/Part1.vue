@@ -2,7 +2,7 @@
      <div class="flex flex-col gap-[32px] sm:gap-[48px]">
 
           <PanelOnboardingSection title="Sélectionnez ou créez un compte client" description="Votre projet sera rattaché à ce compte client">
-               <PanelOnboardingSelectClient v-model="onboardingStore.answers.selectedClientId" :clients="panelStore.clients" />
+               <PanelOnboardingSelectClient v-model="onboardingStore.answers.selectedClientId" :clients="panelStore.clients" placeholder="Sélectionnez un compte client" placeholderCreate="Création d’un nouveau compte client"/>
           </PanelOnboardingSection>
 
 

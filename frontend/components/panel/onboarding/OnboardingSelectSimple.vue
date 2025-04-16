@@ -21,8 +21,8 @@
 const dropdownRef = ref<HTMLElement | null>(null)
 let skipNextClick = true
 interface SelectOption {
-     value: string
-     label: string
+     id: string
+     name: string
 }
 
 const props = defineProps<{
@@ -42,13 +42,13 @@ function toggleOpen() {
 }
 
 function selectOption(option: SelectOption) {
-     emit('update:modelValue', option.value)
+     emit('update:modelValue', option.id)
      isOpen.value = false
 }
 
 const displayLabel = computed(() => {
-     const found = props.options.find((o) => o.value === props.modelValue)
-     return found ? found.name : props.placeholder
+     const found = props.options.find((o) => o.id === props.modelValue)
+     return found?.name ?? props.placeholder
 })
 
 const handleClickOutside = (event: MouseEvent) => {

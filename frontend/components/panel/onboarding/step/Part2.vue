@@ -20,7 +20,7 @@
                          { value: 'phone', label: 'Par téléphone', icon: 'svgo-panel-onboarding-icon-phone' },
                          { value: 'place', label: 'Sur place', icon: 'svgo-panel-onboarding-icon-marketing' },
                          { value: 'website', label: 'Siteweb / Blog', icon: 'svgo-panel-onboarding-icon-marketing' },
-                         { value: 'none', label: 'Aucun', icon: 'svgo-panel-onboarding-icon-marketing' }
+                         { value: 'none', label: 'Aucun' }
                          ]"
                />
           </PanelOnboardingSection>

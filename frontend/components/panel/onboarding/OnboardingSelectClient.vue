@@ -38,6 +38,8 @@ interface ClientAccount {
 const props = defineProps<{
      modelValue: string | null
      clients: ClientAccount[]
+     placeholder?: string
+     placeholderCreate?: string
 }>()
 
 const emit = defineEmits<{
@@ -73,9 +75,9 @@ const enableCreateMode = () => {
 
 // Texte affiché dans le select
 const displayLabel = computed(() => {
-     if (createMode.value) return 'Création d’un nouveau compte client'
+     if (createMode.value) return props.placeholderCreate
      const client = props.clients.find((c) => c.id === props.modelValue)
-     return client?.name ?? 'Sélectionnez un compte client'
+     return client?.name ?? props.placeholder
 })
 
 const handleClickOutside = (event: MouseEvent) => {
