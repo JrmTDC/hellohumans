@@ -251,67 +251,88 @@
                          "apply": "Appliquer",
                          "cancel": "Annuler"
                     },
-                    "headerUsageltem": {
-
-                    },
-                    "languageSelector": {
-
+                    "floatingInput": {
+                         "invalidField": "Champ invalide."
                     },
                     "loadingOverlay": {
-
+                         "messages": {
+                              "int_1": "Connexion sécurisée...",
+                              "int_2": "Chargement des données...",
+                              "int_3": "Vérification de votre session...",
+                              "int_4": "Préparation du tableau de bord..."
+                         }
                     },
                     "passwordInput": {
-
-                    },
-                    "progressCircle": {
-
+                         "placeholder": "Mot de passe"
                     },
                     "staticInput": {
-
-                    },
-                    "tooltip": {
-
-                    }
-               },
-               "dashboard": {
-                    "usageltem": {
-
+                         "invalidField": "Champ invalide.",
+                         "strengthLabel": "Niveau de sécurité du mot de passe",
+                         "veryWeak": "Très faible",
+                         "weak": "Faible",
+                         "medium": "Moyen",
+                         "strong": "Fort",
+                         "veryStrong": "Très fort"
                     }
                },
                "layout": {
                     "herderPage": {
-
+                         "paid": "Payé",
+                         "billing": "Payant",
+                         "usageAndPlan": "Utilisation et offre",
+                         "usageNote": "⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h."
                     },
                     "menuNavPage": {
-
+                         "dashboard": "Tableau de bord",
+                         "siteAnalysis": "Analyse du site",
+                         "analytics": "Analytique",
+                         "gettingStarted": "Bien démarrer",
+                         "integrations": "Intégrations",
+                         "settings": "Paramètres",
+                         "account": "Votre compte"
                     },
                     "sideMenu": {
-
-                    },
-                    "sideMenuLanguages": {
-
+                         "planLabel": "Offre : {planName}",
+                         "project": "Projet",
+                         "language": "Langue",
+                         "logout": "Se déconnecter"
                     },
                     "sideMenuProjects": {
-
+                         "noName": "Projet sans nom",
+                         "addNew": "Créer un nouveau projet"
                     }
                },
                "modal": {
-                    "base": {
-
-                    },
                     "changePassword": {
-
+                         "title": "Modifier le mot de passe",
+                         "current": "Mot de passe actuel",
+                         "new": "Nouveau mot de passe",
+                         "confirm": "Confirmer le nouveau mot de passe",
+                         "required": "Champ requis",
+                         "mismatch": "Les mots de passe ne correspondent pas",
+                         "submit": "Modifier"
                     },
                     "createProject": {
-
+                         "title": "Nouveau projet",
+                         "label": "URL de votre site",
+                         "hint": "par exemple, monsiteweb.com",
+                         "error": "Cette URL est invalide.",
+                         "submit": "Ajouter un projet"
                     },
                     "upgradePayment": {
-
-                    }
-               },
-               "stripe": {
-                    "cardInput": {
-
+                         "title": "Payer à l’aide d’une carte",
+                         "cardLabel": "Carte de crédit",
+                         "totalLabel": "Total :",
+                         "monthly": "/mois",
+                         "annual": "/an",
+                         "todayLabel": "Frais d’aujourd’hui :",
+                         "monthlyLabel": "Frais mensuels :",
+                         "submitLabel": "Soumettre la commande",
+                         "processing": "Traitement en cours…",
+                         "back": "Retour",
+                         "errorPreview": "Impossible d’obtenir le montant. Veuillez réessayer.",
+                         "errorMissingInfo": "Informations d’abonnement incomplètes",
+                         "errorGeneric": "Une erreur est survenue"
                     }
                },
                "upgrade": {

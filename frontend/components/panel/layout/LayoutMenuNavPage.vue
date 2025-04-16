@@ -83,14 +83,15 @@ import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
 import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
 
 const menuItems = ref([
-     { position: 'top', type:'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
-     { position: 'top', type:'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'Analyse du site' },
-     { position: 'top', type:'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'Analytique' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'x' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'Intégrations' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: 'Paramètres' },
-     { position: 'bottom', type:'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'Votre compte' }
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'panel.components.layout.menuNavPage.dashboard' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'panel.components.layout.menuNavPage.siteAnalysis' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'panel.components.layout.menuNavPage.analytics' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'panel.components.layout.menuNavPage.gettingStarted' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'panel.components.layout.menuNavPage.integrations' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: 'panel.components.layout.menuNavPage.settings' },
+     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'panel.components.layout.menuNavPage.account' }
 ])
+
 
 // Séparer les éléments "top" et "bottom"
 const topItems = computed(() => menuItems.value.filter(item => item.position === 'top'))

@@ -3,7 +3,6 @@
           <!-- Bouton principal -->
           <button
                @click="toggleLangMenu"
-               aria-label="Sélectionner une langue"
                class="box-border h-[34px] px-[8px] pr-[6px] inline-flex items-center justify-center rounded-[3px] border border-transparent text-[rgb(100,116,145)] text-[14px] leading-[1] uppercase outline-none"
           >
                <svgo-panel-icon-earth class="w-[16px] h-[16px] mr-2 fill-[#647491]" aria-hidden="true" />

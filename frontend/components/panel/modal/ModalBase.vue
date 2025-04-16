@@ -30,6 +30,8 @@
 </template>
 
 <script setup lang="ts">
+
+const { t } = useI18n()
 const emit = defineEmits(['close'])
 const props = defineProps<{ title: string }>()
 

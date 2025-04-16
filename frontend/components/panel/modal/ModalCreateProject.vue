@@ -1,17 +1,17 @@
 <template>
-     <PanelModalBase title="Nouveau projet" @close="emit('close')">
+     <PanelModalBase title="t('panel.components.modal.createProject.title')" @close="emit('close')">
           <form @submit.prevent="submit">
                <PanelCommonFloatingInput
                     v-model="url"
-                    label="URL de votre site"
-                    hint="par exemple, monsiteweb.com"
-                    :error-text="'Cette URL est invalide.'"
+                    label="t('panel.components.modal.createProject.label')"
+                    hint="t('panel.components.modal.createProject.hint')"
+                    :error-text="t('panel.components.modal.createProject.error')"
                     :validator="isValidUrl"
                />
 
                <div class="flex justify-center pt-[20px]">
                     <button type="submit" class="rounded-[8px] text-[18px] h-[46px] px-[20px] bg-[#0566ff] text-white hover:bg-[#0049bd]">
-                         Ajouter un projet
+                         {{ t('panel.components.modal.createProject.submit') }}
                     </button>
                </div>
           </form>
@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 const emit = defineEmits(['close', 'create'])
+const { t } = useI18n()
 
 const url = ref('')
 const isValidUrl = (val: string) => {

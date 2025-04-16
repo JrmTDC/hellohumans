@@ -8,13 +8,13 @@
                     <div class="flex flex-col justify-start items-[normal] min-w-0 ml-[12px]">
                          <div class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap mt-0 mb-0">
                               {{ userDisplayName }}</div>
-                         <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">Offre : Growth</div>
+                         <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.components.layout.sideMenu.planLabel') }}</div>
                     </div>
                </div>
 
                <div class="m-[8px] bg-[rgb(226,232,239)] h-[1px]"></div>
 
-               <div class="text-[#647491] text-[12px] leading-[16px] tracking-[-0.01em] pt-[12px] px-[8px] pb-[4px]">Project</div>
+               <div class="text-[#647491] text-[12px] leading-[16px] tracking-[-0.01em] pt-[12px] px-[8px] pb-[4px]">{{ t('panel.components.layout.sideMenu.project') }}</div>
                <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] m-0 min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group" @click="toggleProjectMenu">
                     <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-[1_1_0%] text-left text-[14px]">{{ currentProjectName }}</span>
                     <span class="flex items-center ml-[12px]">
@@ -28,7 +28,7 @@
                     @open-create-project="handleOpenCreateProject"
                     @closeAllMenus="emits('closeSideUserMenu')"
                />
-               <div class="text-[#647491] text-[12px] leading-[16px] tracking-[-0.01em] pt-[12px] px-[8px] pb-[4px]">Langue</div>
+               <div class="text-[#647491] text-[12px] leading-[16px] tracking-[-0.01em] pt-[12px] px-[8px] pb-[4px]">{{ t('panel.components.layout.sideMenu.language') }}</div>
                <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] m-0 min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group" @click="toggleLangMenu">
                     <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-[1_1_0%] text-left text-[14px]">{{ currentLangLabel }}</span>
                     <span class="flex items-center ml-[12px]">
@@ -43,7 +43,7 @@
 
                <div class="m-[8px] bg-[rgb(226,232,239)] h-[1px]"></div>
                <div @click="logout" class="w-full flex items-center text-[rgb(8,15,26)] bg-transparent border-none rounded-[4px] m-0 min-h-[36px] p-[6px_8px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[rgb(0,20,51)]">
-                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-[1_1_0%] text-left text-[14px]">Se déconnecter</span>
+                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-[1_1_0%] text-left text-[14px]">{{ t('panel.components.layout.sideMenu.logout') }}</span>
                </div>
           </div>
      </div>
@@ -55,6 +55,7 @@ import { useRouter } from 'vue-router'
 import { usePanelStore } from '~/stores/panelStore'
 import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const panelStore = usePanelStore()
 const { locale, locales } = useI18n()

@@ -57,7 +57,7 @@ const props = defineProps({
      hint: String,
      errorText: {
           type: String,
-          default: 'Champ invalide.'
+          default: 'panel.components.common.floatingInput.invalidField'
      },
      validator: Function
 })
