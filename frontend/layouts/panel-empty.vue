@@ -9,6 +9,7 @@
      </div>
 </template>
 <script setup lang="ts">
+const { t } = useI18n()
 const panelStore = usePanelStore()
 const router = useRouter()
 
@@ -34,4 +35,5 @@ onMounted(async () => {
           if (!ok) router.push('/panel/login')
      }, 400)
 })
+usePanelPageMeta(t('panel.layout.empty.metaTitle'))
 </script>
