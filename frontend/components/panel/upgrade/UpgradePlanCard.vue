@@ -124,8 +124,6 @@
 </template>
 
 <script setup lang="ts">
-import { } from 'vue'
-
 interface Plan {
      id: string
      name: string

@@ -246,19 +246,31 @@ class AuthController {
      public async forgotPassword({ request, response }: HttpContext) {
           const { email } = request.all()
 
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          if (!emailRegex.test(email)) {
+               return response.badRequest({
+                    error: { name: 'invalidEmail', description: 'Adresse e-mail invalide.' }
+               })
+          }
+
           // 1. Récupère l'utilisateur via l'API Admin Supabase
           const { data: userList, error: userListError } = await supabaseService.auth.admin.listUsers()
           if (userListError || !userList?.users) {
-               return response.badRequest({
-                    //error: { name: 'userLookupFailed', description: 'Impossible de rechercher l’utilisateur.' }
+               //return response.badRequest({ error: { name: 'userLookupFailed', description: 'Impossible de rechercher l’utilisateur.' } })
+               return response.ok({
+                    user:{
+                         email: email,
+                    }
                })
           }
 
           const foundUser = userList.users.find(u => u.email?.toLowerCase() === email.toLowerCase())
           if (!foundUser) {
-               return response.badRequest({
-                   //error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
-
+               //return response.badRequest({ error: { name: 'userNotFound', description: 'Utilisateur introuvable.' } })
+               return response.ok({
+                    user:{
+                         email: email,
+                    }
                })
           }
 
@@ -283,8 +295,11 @@ class AuthController {
           })
 
           if (error || !data?.properties.action_link) {
-               return response.badRequest({
-                    error: { name: 'resetLinkFailed', description: error?.message || 'Erreur lien de réinitialisation.' }
+               //return response.badRequest({ error: { name: 'resetLinkFailed', description: error?.message || 'Erreur lien de réinitialisation.' } })
+               return response.ok({
+                    user:{
+                         email: email,
+                    }
                })
           }
 
@@ -292,7 +307,9 @@ class AuthController {
           await MailService.sendForgotPasswordEmail(email, data.properties.action_link, lang)
 
           return response.ok({
-               message: 'Email envoyé.'
+               user:{
+                    email: email,
+               }
           })
      }
 }

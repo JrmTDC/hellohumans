@@ -24,7 +24,7 @@
                >
                     <span :style="{ backgroundColor: legend.color }" class="w-3 h-3 rounded-full inline-block"></span>
                     <span class="text-sm text-gray-700">{{ legend.label }}</span>
-                    <Tooltip :text="legend.tooltip" />
+                    <PanelCommonTooltip :text="legend.tooltip" />
                </div>
 
                <!-- Boutons de type de graphique (exemple) -->
@@ -42,12 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { use } from 'echarts/core'
 import { TooltipComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
-
-import Tooltip from '@/components/panel/common/Tooltip.vue'
 
 use([TooltipComponent, CanvasRenderer])
 

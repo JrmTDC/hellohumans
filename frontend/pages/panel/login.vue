@@ -6,7 +6,7 @@
                     <svgo-logo-hello-humans-full class="w-[220px]"/>
                </div>
                <div class="login-container">
-                    <LanguageSelector />
+                    <PanelCommonLanguageSelector />
                </div>
           </div>
           <!-- Formulaire de connexion -->
@@ -53,7 +53,7 @@
                          </div>
 
                          <!-- Erreur d'authentification -->
-                         <span v-if="loginError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.login.loginError') }}</span>
+                         <span v-if="apiError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ getErrorMessageByKey(publicStore.publicReturn) }}</span>
 
                          <!-- Bouton de connexion -->
                          <button
@@ -79,7 +79,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PasswordInput from '~/components/panel/common/CommonPasswordInput.vue'
-import LanguageSelector from '~/components/panel/LanguageSelector.vue'
 import {usePublicStore} from "~/stores/publicStore";
 const { t } = useI18n()
 
@@ -90,7 +89,7 @@ const publicStore = usePublicStore()
 const inputEmail = ref('')
 const password = ref('')
 const errors = ref({ email: false, password: false })
-const loginError = ref(false)
+const apiError = ref(false)
 const loading = ref(false)
 
 const errorMessageEmailKey = ref('');
@@ -128,19 +127,17 @@ const validateForm = () => {
 // Fonction pour gérer la connexion
 const handleLogin = async () => {
      if (!validateForm()) return
-     loginError.value = false
+     apiError.value = false
      loading.value = true
 
      const success = await publicStore.login(inputEmail.value, password.value)
      if (success) {
-          loginError.value = false
-          errorMessageEmailKey.value = ''
-          errorMessagePasswordKey.value = ''
           await router.push('/panel')
      } else {
-          loginError.value = true
+          apiError.value = true
      }
 
      loading.value = false
 }
+usePanelPageMeta( t('panel.pages.login.metaTitle'), t('panel.pages.login.metaDescription'))
 </script>

@@ -8,7 +8,7 @@
                               <div class="flex flex-col justify-start items-start p-[24px_20px_24px_28px] min-w-0">
                                    <div class="flex flex-row justify-start items-center border border-[rgb(226,232,239)] rounded-[12px] bg-[rgb(245,247,249)] p-[20px] mt-0 mb-0 w-full">
                                         <div class="w-[48px] h-[48px] relative">
-                                             <ProgressCircle
+                                             <PanelCommonProgressCircle
                                                   :percentage="16"
                                                   progressColor="#34b857"
                                                   bgColor="#ccf1d5"
@@ -50,7 +50,7 @@
 
                                    <div class="flex flex-col justify-start items-start mt-0 mb-0 w-full">
                                         <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em]">{{ t('panel.pages.dashboard.usageTitle') }}</h2>
-                                        <usageItem
+                                        <PanelDashboardUsageItem
                                              v-for="(item, index) in usages"
                                              :key="item.id"
                                              :item="item"
@@ -67,11 +67,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useUsageDefinitions } from '~/composables/useUsageDefinitions'
-import usageItem from '~/components/panel/dashboard/usageItem.vue'
-import ProgressCircle from '~/components/panel/ProgressCircle.vue'
-
 const { t } = useI18n()
 const panelStore = usePanelStore()
 
@@ -88,6 +83,8 @@ onMounted(async () => {
      pageIsPaid.value = false
 })
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel-menu'
 })
+usePanelPageMeta(t('panel.pages.dashboard.metaTitle'), t('panel.pages.dashboard.metaDescription'))
 </script>
+

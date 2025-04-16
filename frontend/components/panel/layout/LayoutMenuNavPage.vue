@@ -4,7 +4,7 @@
 
                <!-- Éléments du haut -->
                <li v-for="item in topItems" :key="item.route">
-                    <Tooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
+                    <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
                          <NuxtLink
                               v-if="item.type === 'link'"
                               :to="item.route"
@@ -26,7 +26,7 @@
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[32px] h-[32px] hover:fill-[rgb(0,20,51)]" />
                               </span>
                          </button>
-                    </Tooltip>
+                    </PanelCommonTooltip>
 
                </li>
 
@@ -35,7 +35,7 @@
 
                <!-- Éléments du bas -->
                <li v-for="item in bottomItems" :key="item.route">
-                    <Tooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
+                    <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
                          <NuxtLink
                               v-if="item.type === 'link'"
                               :to="item.route"
@@ -57,15 +57,15 @@
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[32px] h-[32px] hover:fill-[rgb(0,20,51)]" />
                               </span>
                          </button>
-                    </Tooltip>
+                    </PanelCommonTooltip>
                </li>
           </ul>
-          <SideMenu
+          <PanelLayoutSideMenu
                v-if="showSideUserMenu"
                @closeSideUserMenu="showSideUserMenu = false"
                @openCreateProjectModal="openCreateProjectModal" />
      </nav>
-     <createProjectModal
+     <PanelModalCreateProject
           v-if="showCreateProjectModal"
           @close="showCreateProjectModal = false"
           @create="handleCreateProject"
@@ -73,11 +73,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { rawIcon } from '~/utils/rawIcon'
-import Tooltip from '~/components/panel/common/Tooltip.vue'
-import SideMenu from '~/components/panel/menu/sideMenu.vue'
-
 import iconMenuLogo from '~/assets/icons/panel/logoHelloHumansMini.svg'
 import iconMenuRobot from '~/assets/icons/panel/iconMenuRobot.svg'
 import iconMenuFlow from '~/assets/icons/panel/iconMenuFlow.svg'
@@ -86,17 +81,17 @@ import iconUserPicture from '~/assets/icons/panel/iconMenuUserPicture.svg'
 import iconMenuModule from '~/assets/icons/panel/iconMenuModule.svg'
 import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
 import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
-import createProjectModal from '~/components/panel/modal/createProjectModal.vue'
 
 const menuItems = ref([
-     { position: 'top', type:'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'Tableau de bord' },
-     { position: 'top', type:'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'Analyse du site' },
-     { position: 'top', type:'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'Analytique' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'x' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'Intégrations' },
-     { position: 'bottom', type:'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: 'Paramètres' },
-     { position: 'bottom', type:'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'Votre compte' }
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'panel.components.layout.menuNavPage.dashboard' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'panel.components.layout.menuNavPage.siteAnalysis' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'panel.components.layout.menuNavPage.analytics' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'panel.components.layout.menuNavPage.gettingStarted' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'panel.components.layout.menuNavPage.integrations' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: 'panel.components.layout.menuNavPage.settings' },
+     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'panel.components.layout.menuNavPage.account' }
 ])
+
 
 // Séparer les éléments "top" et "bottom"
 const topItems = computed(() => menuItems.value.filter(item => item.position === 'top'))

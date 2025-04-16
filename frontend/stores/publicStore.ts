@@ -6,25 +6,19 @@ export const usePublicStore = defineStore('public', () => {
      const supabase = useSupabaseClient()
 
      const publicReturn = ref<string | null>(null) // message d'erreur ou clé de traduction
-     const publicSession = ref<{ user: User; session: Session } | null>(null) // session actuelle
-
      // Connexion
      const login = async (email: string, password: string) => {
           publicReturn.value = null
-          publicSession.value = null
 
           try {
-               const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-               if (error) return false
-
-               publicSession.value = {
-                    user: data.user,
-                    session: data.session
+               const { error } = await supabase.auth.signInWithPassword({ email, password })
+               if (error){
+                    setApiError(publicReturn, error, 'panel.pages.login')
+                    return false
                }
-
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.login')
                return false
           }
      }
@@ -40,7 +34,7 @@ export const usePublicStore = defineStore('public', () => {
                })
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.register')
                return false
           }
      }
@@ -56,57 +50,66 @@ export const usePublicStore = defineStore('public', () => {
                })
                return true
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.forgotPassword')
                return false
           }
      }
 
      // Mise à jour du mot de passe (après reset)
-     const resetPasswordUpdate = async (password: string) => {
+     const resetPasswordUpdate = async (password: string, email: string) => {
           publicReturn.value = null
-          try {
-               const { error } = await supabase.auth.updateUser({ password })
-               return !error;
 
+          try {
+               const { error: updateError } = await supabase.auth.updateUser({ password })
+               if (updateError) {
+                    setApiError(publicReturn, updateError, 'panel.pages.resetPassword')
+                    return false
+               }
+               await supabase.auth.signOut()
+               const { error: loginError } = await supabase.auth.signInWithPassword({ email, password })
+               return !loginError;
           } catch (err: any) {
-               setApiError(publicReturn, err)
+               setApiError(publicReturn, err, 'panel.pages.resetPassword')
                return false
           }
      }
 
-     // Session après reset (avec token)
+     // Version de la session du reset de mot de passe
      const resetPasswordSession = async (access_token: string, refresh_token: string) => {
           publicReturn.value = null
           try {
                const { data, error } = await supabase.auth.setSession({ access_token, refresh_token })
-               if (error) return false
-
-               if (!data.user || !data.session) {
+               if (error){
                     return false
                }
-
-               publicSession.value = {
-                    user: data.user,
-                    session: data.session
-               }
-
-               return true
+               return !(!data.user || !data.session);
           } catch (err: any) {
-               setApiError(publicReturn, err)
                return false
           }
      }
 
+     const resetPasswordRefreshToken = async () => {
+          publicReturn.value = null
+          try {
+               await supabase.auth.signOut()
+               const { data: sessionData, error } = await supabase.auth.refreshSession()
+               return !(error || !sessionData.session);
+          } catch (err: any) {
+               return false
+          }
+     }
+
+
      return {
           // states
           publicReturn,
-          publicSession,
 
           // actions
           login,
           register,
           forgotPassword,
+          resetPasswordSession,
+          resetPasswordRefreshToken,
           resetPasswordUpdate,
-          resetPasswordSession
      }
 })

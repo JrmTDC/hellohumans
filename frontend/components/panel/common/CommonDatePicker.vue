@@ -74,8 +74,8 @@
                          </li>
                     </ul>
                     <div class="w-full flex flex-col">
-                         <button @click="apply" class="rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] bg-[#0566ff] border-[#0566ff] text-white items-center inline-flex justify-center shadow-none hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white">Appliquer</button>
-                         <button @click="open = false" class="bg-[rgba(136, 148, 171, 0)] border border-[#d1d9e0] text-[#333] mt-[10px] ml-0 shadow-none rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] items-center inline-flex justify-center hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333]">Annuler</button>
+                         <button @click="apply" class="rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] bg-[#0566ff] border-[#0566ff] text-white items-center inline-flex justify-center shadow-none hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white">{{ t('panel.components.common.dataPicker.apply') }}</button>
+                         <button @click="open = false" class="bg-[rgba(136, 148, 171, 0)] border border-[#d1d9e0] text-[#333] mt-[10px] ml-0 shadow-none rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] items-center inline-flex justify-center hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333]">{{ t('panel.components.common.dataPicker.cancel') }}</button>
                     </div>
                </div>
 
@@ -87,6 +87,8 @@
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { format, subDays, startOfMonth } from 'date-fns'
 import VueDatePicker from '@vuepic/vue-datepicker'
+
+const { t } = useI18n()
 
 const box = ref<HTMLElement | null>(null)
 
@@ -113,42 +115,42 @@ function formatDate(date: string | Date): string {
 
 const presets = [
      {
-          label: "Aujourd'hui",
+          label: 'panel.components.common.dataPicker.today',
           range: {
                start: format(new Date(), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'Hier',
+          label: 'panel.components.common.dataPicker.yesterday',
           range: {
                start: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
                end: format(subDays(new Date(), 1), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'Semaine dernière',
+          label: 'panel.components.common.dataPicker.lastWeek',
           range: {
                start: format(subDays(new Date(), 7), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'Ce mois',
+          label: 'panel.components.common.dataPicker.thisMonth',
           range: {
                start: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: '30 derniers jours',
+          label: 'panel.components.common.dataPicker.last30Days',
           range: {
                start: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: '90 derniers jours',
+          label: 'panel.components.common.dataPicker.last90Days',
           range: {
                start: format(subDays(new Date(), 90), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')

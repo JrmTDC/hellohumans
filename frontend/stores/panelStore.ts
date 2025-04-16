@@ -7,6 +7,7 @@ export const usePanelStore = defineStore('panel', () => {
 
      const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string;  } | null>(null)
      const client = ref<{} | null>(null)
+     const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const subscription = ref<{ id: string; name: string; status: string }[]>([])
      const modules = ref<string[]>([])
@@ -18,9 +19,10 @@ export const usePanelStore = defineStore('panel', () => {
           const { apiFetch } = usePanelApi()
           const { setLocale } = useI18n()
           try {
-               const [userRes, clientRes, usagesRes, projectRes, projectsRes] = await Promise.all([
+               const [userRes, clientRes, clientsRes, usagesRes, projectRes, projectsRes] = await Promise.all([
                     apiFetch('/user'),
                     apiFetch('/client'),
+                    apiFetch('/clients'),
                     apiFetch('/usages'),
                     apiFetch('/project'),
                     apiFetch('/projects'),
@@ -28,6 +30,7 @@ export const usePanelStore = defineStore('panel', () => {
 
                user.value = userRes.success.user
                client.value = clientRes.success.client
+               clients.value = clientsRes.success.clients || []
                project.value = projectRes.success.project
                projects.value = projectsRes.success.projects || []
                project_usages.value = usagesRes.success.usages || []
@@ -129,6 +132,20 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function createClient(name: string): Promise<{ id: string; name: string } | null> {
+          const { apiFetch } = usePanelApi()
+          try {
+               const res = await apiFetch('/clients', {
+                    method: 'POST',
+                    body: JSON.stringify({ name }),
+               })
+               return res.success.client
+          } catch (err) {
+               console.error('Erreur création compte client:', err)
+               return null
+          }
+     }
+
      async function logout() {
           await supabase.auth.signOut()
           user.value = null
@@ -142,6 +159,7 @@ export const usePanelStore = defineStore('panel', () => {
           // state
           user,
           client,
+          clients,
           project_usages,
           subscription,
           modules,
@@ -153,6 +171,7 @@ export const usePanelStore = defineStore('panel', () => {
           fetchUser,
           fetchUsage,
           createProject,
+          createClient,
           updateUserLang,
           switchProject,
           updatePassword,

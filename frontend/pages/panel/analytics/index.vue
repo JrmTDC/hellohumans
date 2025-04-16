@@ -8,7 +8,7 @@
                                    <div class="rounded-[8px] relative">
                                         <button class="relative outline-none border-none rounded-[8px] flex items-center w-full text-left cursor-pointer bg-[#dce9ff] font-medium text-[#001433] p-[8px_12px] min-h-[36px]">
                                              <svgo-panel-icon-usage-menu  class="w-[16px] h-[16px] fill-[#001433] mr-[8px]"/>
-                                             Vue d’ensemble
+                                             {{ t('panel.pages.analytics.index.menuLabel') }}
                                         </button>
                                    </div>
                               </li>
@@ -23,13 +23,13 @@
                               <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%] h-[650px]">
                                    <div class="flex flex-col justify-start items-start h-full max-w-[1280px]">
                                         <div class="flex flex-col justify-start items-start max-w-[1280px] mt-0 mb-0">
-                                             <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[31px] tracking-[-0.01em]">Vue d’ensemble</h2>
+                                             <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[31px] tracking-[-0.01em]"> {{ t('panel.pages.analytics.index.heading') }}</h2>
                                         </div>
                                         <div class="relative flex items-center mt-[20px] mb-0">
-                                             <datePicker />
+                                             <PanelCommonDatePicker />
                                         </div>
                                         <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0">
-                                             <analyticsChart></analyticsChart>
+                                             <PanelAnalyticsChart></PanelAnalyticsChart>
                                         </div>
                                    </div>
                               </div>
@@ -41,14 +41,7 @@
      </div>
 </template>
 <script setup lang="ts">
-
-import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
-import analyticsChart from '~/components/panel/analytics/analyticsChart.vue'
-import datePicker from "~/components/panel/common/commonDatePicker.vue";
 const { t } = useI18n()
-
-const router = useRouter()
 
 const pageTitle = useState('pageTitle', () => '')
 const pageIsBilled = useState('pageIsBilled', () => false)
@@ -60,7 +53,8 @@ onMounted(async () => {
      pageIsPaid.value = true
 })
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel-menu'
 })
+usePanelPageMeta( t('panel.pages.analytics.index.metaTitle'), t('panel.pages.analytics.index.metaDescription'))
 </script>
 

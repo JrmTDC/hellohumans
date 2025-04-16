@@ -1,25 +1,40 @@
 {
+     "api": {
+          "errors": {
+               "unknown": "Une erreur inconnue s'est produite. Veuillez réessayer."
+          }
+     },
      "panel": {
           "pages": {
                "index": {
-                    "loading": "Connexion ..."
+                    "loading": "Connexion ...",
+                    "metaTitle": "Chargement...",
+                    "metaDescription": "Redirection en cours vers votre tableau de bord personnalisé."
                },
                "login": {
+                    "api":{
+                         "invalid_credentials": "E-mail ou mot de passe incorrect !"
+                    },
                     "title": "Bon retour parmi nous",
-                    "subtitle": "Connectez-vous à votre compte HelloHumans",
+                    "subtitle": "Connectez-vous à votre compte",
                     "emailPlaceholder": "Adresse e-mail",
                     "passwordPlaceholder": "Mot de passe",
                     "forgotPassword": "Mot de passe oublié ?",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
-                    "errorPasswordEmpty": "Ne peut être vide !",
-                    "loginError": "E-mail ou mot de passe incorrect !",
+                    "errorPasswordEmpty": "Mot de passe incorrect !",
                     "submit": "Se connecter",
                     "loading": "Chargement...",
                     "noAccount": "Vous n’avez pas de compte ?",
-                    "registerCta": "C'est parti"
+                    "registerCta": "C'est parti",
+                    "metaTitle": "Se connecter",
+                    "metaDescription": "Connectez-vous à votre espace administrateur."
+
                },
                "register": {
+                    "api":{
+                         "user_already_exists": "Cette adresse e-mail est déjà utilisée."
+                    },
                     "title": "Créer un compte gratuit",
                     "subtitle": "Aucune carte de crédit requise",
                     "emailPlaceholder": "Adresse e-mail",
@@ -29,6 +44,7 @@
                     "terms": " Conditions générales",
                     "andLabel": " et la",
                     "privacy": " Politique de confidentialité ",
+                    "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
                     "errorEmailEmpty": "Ne peut être vide !",
                     "errorEmailInvalid": "L’adresse e-mail est invalide !",
                     "emailAlreadyUsed": "Cette adresse e-mail est déjà utilisée.",
@@ -36,15 +52,29 @@
                     "errorDisplayNameTooShort": "Doit contenir au moins 3 caractères.",
                     "errorAgreementRequired": "Un accord est requis",
                     "cta": "Débuter gratuitement",
+                    "loading": "Chargement...",
                     "alreadyHaveAccount": "Vous avez déjà un compte ?",
                     "loginCta": "Se connecter",
                     "asideTitle": "Développez votre activité grâce à une assistance intelligente",
                     "asideText": "Automatisez les réponses aux questions fréquentes et améliorez l’expérience de vos visiteurs grâce à un chatbot IA conçu pour booster votre support client.",
                     "benefit1": "Répondez instantanément 24h/24 aux demandes de vos visiteurs",
                     "benefit2": "Automatisez jusqu’à 70 % des questions récurrentes grâce à l’IA",
-                    "benefit3": "Gagnez du temps tout en améliorant la satisfaction client"
+                    "benefit3": "Gagnez du temps tout en améliorant la satisfaction client",
+                    "champInvalide": "Champ invalide.",
+                    "strengthLabel": "Niveau de sécurité du mot de passe",
+                    "veryWeak": "Très Faible",
+                    "weak": "Faible",
+                    "medium": "Moyen",
+                    "strong": "Fort",
+                    "veryStrong": "Très Fort",
+                    "metaTitle": "Créer votre compte",
+                    "metaDescription": "Inscrivez-vous gratuitement pour accéder à notre plateforme et bénéficier de tous les outils intelligents."
+
                },
                "forgotPassword": {
+                    "api":{
+                         "invalidEmail": "L’adresse e-mail est invalide !"
+                    },
                     "title": "Mot de passe oublié ?",
                     "subtitle": "Nous vous enverrons les instructions de réinitialisation par e-mai.",
                     "emailPlaceholder": "Adresse e-mail",
@@ -57,24 +87,39 @@
                     "errorMessage": "Une erreur est survenue. Veuillez réessayer.",
                     "emailSentTitle": "Vérifiez votre boîte de réception !",
                     "emailSentNote": "Si cette adresse e-mail est en notre possession, nous vous enverrons un e-mail contenant des instructions pour réinitialiser votre mot de passe.",
-                    "loginLink": "Se connecter"
+                    "loginLink": "Se connecter",
+                    "metaTitle": "Mot de passe oublié",
+                    "metaDescription": "Réinitialisez l’accès à votre compte HelloHumans en recevant un lien sécurisé par e-mail."
+
                },
                "resetPassword": {
+                    "api":{
+                         "same_password": "Le mot de passe doit être différent de l’ancien."
+                    },
                     "title": "Réinitialiser le mot de passe",
                     "passwordPlaceholder": "Nouveau mot de passe",
                     "confirmPasswordPlaceholder": "Confirmer le mot de passe",
                     "errorPasswordEmpty": "Ne peut être vide !",
                     "errorPasswordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
-                    "errorPasswordAlreadyUsed": "Le nouveau mot de passe doit être différent de l’ancien.",
                     "errorPasswordMismatch": "Les mots de passe ne correspondent pas",
                     "submit": "Réinitialiser le mot de passe",
+                    "submitDashboard": "Tableau de bord",
                     "loading": "Chargement...",
                     "success": "Opération réussie ! Votre mot de passe a été réinitialisé.",
                     "loginLink": "Se connecter",
                     "messageTokenLoading": "Vérification du lien de réinitialisation.",
                     "messageTokenExpired": "Le lien est invalide ou a expiré.",
                     "messageTokenMissing": "Le lien est invalide ou a expiré.",
-                    "resendCta": "Renvoyer un lien"
+                    "resendCta": "Renvoyer un lien",
+                    "champInvalide": "Champ invalide.",
+                    "strengthLabel": "Niveau de sécurité du mot de passe",
+                    "veryWeak": "Très Faible",
+                    "weak": "Faible",
+                    "medium": "Moyen",
+                    "strong": "Fort",
+                    "veryStrong": "Très Fort",
+                    "metaTitle": "Réinitialisation du mot de passe",
+                    "metaDescription": "Choisissez un nouveau mot de passe pour accéder à votre compte."
                },
                "dashboard": {
                     "pageTitle": "Tableau de bord",
@@ -83,10 +128,17 @@
                     "setupCta": "Terminer l'intégration",
                     "performanceTitle": "Performance",
                     "calendarRange": "21 févr. 2025 - 22 mars 2025",
-                    "usageTitle": "Utilisation actuelle"
+                    "usageTitle": "Utilisation actuelle",
+                    "metaTitle": "Tableau de bord",
+                    "metaDescription": "Consultez la performance et l’utilisation de votre agent AI."
+
                },
                "analytics": {
                     "index" : {
+                         "menuLabel": "Vue d’ensemble",
+                         "heading": "Vue d’ensemble",
+                         "metaTitle": "Vue d’ensemble",
+                         "metaDescription": "Consultez les performances et les statistiques de votre chatbot sur une période donnée."
                     }
                },
                "trialExpired": {
@@ -106,39 +158,50 @@
                          "highlight1": "JUSQU’À {count}"
                     },
                     "tooltipProcessedConversations": "Les conversations représentent le nombre total de conversations dans le chat en direct",
-                    "downgradeButton": "Passer à une version antérieure"
+                    "downgradeButton": "Passer à une version antérieure",
+                    "metaTitle": "Essai expiré",
+                    "metaDescription": "Votre période d'essai est terminée. Choisissez une offre pour continuer à utiliser HelloHumans."
                },
-               "upgrade": {
+               "gettingStarted": {
+                    "index": {
+                         "metaTitle": "Commencez avec HelloHumans",
+                         "metaDescription": "Configurez rapidement votre espace pour profiter pleinement des fonctionnalités d’HelloHumans dès aujourd’hui."
+                    }
+               },
+               "upgrade":{
                     "Index": {
-                         "trial_remaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
-                         "select_plan": "Sélectionner votre abonnement",
-                         "choose_plan_description": "Choisissez un abonnement et choisissez des modules à l'étape suivante.",
-                         "view_all_features": "Voir toutes les fonctionnalités",
-                         "next_step": "Prochaine étape : choisissez des modules complémentaires"
+                         "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
+                         "selectPlan": "Sélectionner votre offre",
+                         "choosePlanDescription": "Choisissez une offre et choisissez des modules à l'étape suivante.",
+                         "viewAllFeatures": "Voir toutes les fonctionnalités",
+                         "nextStep": "Prochaine étape",
+                         "metaTitle": "Choisissez votre offre",
+                         "metaDescription": "Comparez les formules disponibles et sélectionnez celle qui correspond le mieux à vos besoins avant de passer à l'étape suivante."
+
                     },
                     "Modules": {
-                         "trialRemaining": "Votre essai complet se termine dans {count} jour | Votre essai complet se termine dans {count} jours",
+                         "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
                          "title": "Sélectionner votre offre",
                          "description": "Choisissez une offre et choisissez des modules à l'étape suivante.",
                          "chooseModules": "Choisissez les modules complémentaires",
-                         "nextButtonLabel": "Paiement"
+                         "nextButtonLabel": "Paiement",
+                         "metaTitle": "Ajoutez des modules complémentaires",
+                         "metaDescription": "Personnalisez votre offre avec des fonctionnalités avancées adaptées à votre entreprise."
                     }
                },
                "settings": {
                     "index": {
-
-                    },
-                    "chat": {
-                         "appearance": {
-
-                         }
+                         "metaTitle": "Paramètres",
+                         "metaDescription": "Accédez à l’ensemble des paramètres de votre compte."
                     }
                },
                "error": {
                     "notFound": {
                          "title": "Erreur 403",
                          "description": "Vous n’avez pas l’autorisation d’accéder à cette ressource.",
-                         "backToHome": "Revenir à l’accueil"
+                         "backToHome": "Revenir à l’accueil",
+                         "metaTitle": "Accès refusé",
+                         "metaDescription": "Vous n’avez pas l’autorisation d’accéder à cette page. Veuillez vérifier vos droits ou revenir à l’accueil."
                     },
                     "serverError": {
                          "title": "Oups, un problème est survenu.",
@@ -146,46 +209,145 @@
                          "reload": "Recharger la page",
                          "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
                          "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :",
-                         "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème."
+                         "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème.",
+                         "metaTitle": "Erreur serveur",
+                         "metaDescription": "Un problème est survenu de notre côté. Veuillez recharger la page ou contacter notre support si le problème persiste."
+
                     },
                     "unauthorized": {
                          "title": "Oups, page introuvable.",
                          "description": "Nous sommes désolés, la page que vous recherchez est introuvable.",
                          "hint": "Le lien que vous avez suivi est peut-être cassé ou n'existe plus.",
-                         "goHome": "Aller à la page d'accueil"
+                         "goHome": "Aller à la page d'accueil",
+                         "metaTitle": "Page introuvable",
+                         "metaDescription": "La page que vous recherchez est introuvable ou n’existe plus. Veuillez vérifier l’URL ou retourner à la page d’accueil."
                     },
                     "default": {
                          "title": "Erreur Inattendue",
                          "description": "Une erreur s’est produite, mais elle n’est pas répertoriée ici.",
-                         "backToHome": "Revenir à l’accueil"
+                         "backToHome": "Revenir à l’accueil",
+                         "metaTitle": "Une erreur est survenue",
+                         "metaDescription": "Une erreur inattendue s’est produite. Veuillez réessayer ou revenir à l’accueil."
                     }
                }
           },
           "components": {
+               "analytics": {
+                    "chart": {
+
+                    },
+                    "overview": {
+
+                    }
+               },
                "common": {
+                    "dataPicker": {
+                         "today": "Aujourd'hui",
+                         "yesterday": "Hier",
+                         "lastWeek": "Semaine dernière",
+                         "thisMonth": "Ce mois",
+                         "last30Days": "30 derniers jours",
+                         "last90Days": "90 derniers jours",
+                         "apply": "Appliquer",
+                         "cancel": "Annuler"
+                    },
+                    "floatingInput": {
+                         "invalidField": "Champ invalide."
+                    },
+                    "loadingOverlay": {
+                         "messages": {
+                              "int_1": "Connexion sécurisée...",
+                              "int_2": "Chargement des données...",
+                              "int_3": "Vérification de votre session...",
+                              "int_4": "Préparation du tableau de bord..."
+                         }
+                    },
+                    "passwordInput": {
+                         "placeholder": "Mot de passe"
+                    },
                     "staticInput": {
-                         "champInvalide": "Champ invalide.",
+                         "invalidField": "Champ invalide.",
                          "strengthLabel": "Niveau de sécurité du mot de passe",
-                         "veryWeak": "Très Faible",
+                         "veryWeak": "Très faible",
                          "weak": "Faible",
                          "medium": "Moyen",
                          "strong": "Fort",
-                         "veryStrong": "Très Fort"
+                         "veryStrong": "Très fort"
                     }
                },
-               "loadingOverlay": {
-                    "messages": {
-                         "int_1": "Connexion sécurisée...",
-                         "int_2": "Chargement des données...",
-                         "int_3": "Vérification de votre session...",
-                         "int_4": "Préparation du tableau de bord..."
+               "layout": {
+                    "herderPage": {
+                         "paid": "Payé",
+                         "billing": "Payant",
+                         "usageAndPlan": "Utilisation et offre",
+                         "usageNote": "⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h."
+                    },
+                    "menuNavPage": {
+                         "dashboard": "Tableau de bord",
+                         "siteAnalysis": "Analyse du site",
+                         "analytics": "Analytique",
+                         "gettingStarted": "Bien démarrer",
+                         "integrations": "Intégrations",
+                         "settings": "Paramètres",
+                         "account": "Votre compte"
+                    },
+                    "sideMenu": {
+                         "planLabel": "Offre : {planName}",
+                         "project": "Projet",
+                         "language": "Langue",
+                         "logout": "Se déconnecter"
+                    },
+                    "sideMenuProjects": {
+                         "noName": "Projet sans nom",
+                         "addNew": "Créer un nouveau projet"
                     }
                },
-               "SideMenu": {
-                    "title": "Menu"
+               "modal": {
+                    "changePassword": {
+                         "title": "Modifier le mot de passe",
+                         "current": "Mot de passe actuel",
+                         "new": "Nouveau mot de passe",
+                         "confirm": "Confirmer le nouveau mot de passe",
+                         "required": "Champ requis",
+                         "mismatch": "Les mots de passe ne correspondent pas",
+                         "submit": "Modifier"
+                    },
+                    "createProject": {
+                         "title": "Nouveau projet",
+                         "label": "URL de votre site",
+                         "hint": "par exemple, monsiteweb.com",
+                         "error": "Cette URL est invalide.",
+                         "submit": "Ajouter un projet"
+                    },
+                    "upgradePayment": {
+                         "title": "Payer à l’aide d’une carte",
+                         "cardLabel": "Carte de crédit",
+                         "totalLabel": "Total :",
+                         "monthly": "/mois",
+                         "annual": "/an",
+                         "todayLabel": "Frais d’aujourd’hui :",
+                         "monthlyLabel": "Frais mensuels :",
+                         "submitLabel": "Soumettre la commande",
+                         "processing": "Traitement en cours…",
+                         "back": "Retour",
+                         "errorPreview": "Impossible d’obtenir le montant. Veuillez réessayer.",
+                         "errorMissingInfo": "Informations d’abonnement incomplètes",
+                         "errorGeneric": "Une erreur est survenue"
+                    }
                },
-               "staticInputCommon": {
+               "upgrade": {
+                    "ModuleCard": {
 
+                    },
+                    "planCard": {
+
+                    },
+                    "stepperHeader": {
+
+                    },
+                    "subscriptionSummary": {
+
+                    }
                }
           },
           "composables": {

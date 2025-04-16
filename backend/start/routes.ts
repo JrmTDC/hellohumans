@@ -7,6 +7,7 @@ import UpgradeController from '#controllers/Panel/UpgradeController'
 import UsageController from '#controllers/Panel/UsageController'
 import ClientController from '#controllers/Panel/ClientController'
 import UserController from '#controllers/Panel/UserController'
+import OnboardingController from '#controllers/Panel/OnboardingController'
 //import SubscriptionController from '#controllers/Panel/SubscriptionController'
 //import StripeWebhookController from "#controllers/Panel/StripeWebhookController";
 
@@ -43,6 +44,7 @@ router.group(() => {
      router.get('/usages', (ctx) => UsageController.index(ctx))
      router.post('/switch-project/:uuid', (ctx) => ClientController.switchProject(ctx))
      router.post('/lang', (ctx) => UserController.updateLang(ctx))
+     router.get('/onboarding/activities', (ctx) => OnboardingController.getActivities(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_ensure_user())

@@ -1,25 +1,25 @@
 <template>
      <div id="app-content" class="w-full h-full overflow-auto fixed left-0 top-0 z-[133] bg-white">
           <div class="flex flex-col justify-start items-[normal] h-full">
-               <stepperHeader :step="1" @goStep="goStep" @close="closePanel" />
+               <PanelUpgradeStepperHeader :step="1" @goStep="goStep" @close="closePanel" />
 
                <div class="flex flex-row justify-start items-start self-stretch flex-grow">
                     <!-- Liste d'offres -->
                     <div class="flex flex-col justify-start items-center flex-grow">
                          <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>
-                         <div class="flex flex-col justify-start items-[normal] w-[672px]">
+                         <div class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center">
                               <div class="flex flex-col justify-start items-[normal] self-start">
-                                   <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">Votre essai complet se termine dans 0 jours</span>
-                                   <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">Sélectionner votre offre</h2>
-                                   <p class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]">Choisissez une offre et choisissez des modules à l'étape suivante.</p>
+                                   <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">{{ t('panel.pages.upgrade.Index.trialRemainingZero') }}</span>
+                                   <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">{{ t('panel.pages.upgrade.Index.selectPlan') }}</h2>
+                                   <p class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]"> {{ t('panel.pages.upgrade.Index.choosePlanDescription') }}</p>
                               </div>
 
                               <div class="flex flex-col justify-start items-[normal] mt-[32px]">
                                    <div
-                                        class="w-max max-w-none grid gap-y-0 gap-x-[20px] [grid-auto-flow:row] [grid-template-columns:326px_326px] p-0"
+                                        class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
                                    >
                                         <!-- Boucle sur store.plans -->
-                                        <planCard
+                                        <PanelUpgradePlanCard
                                              v-for="plan in store.plans"
                                              :key="plan.id"
                                              :plan="plan"
@@ -32,19 +32,21 @@
                                    <button
                                         class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0"
                                    >
-                                        <span>Voir toutes les fonctionnalités</span>
+                                        <span>{{ t('panel.pages.upgrade.Index.viewAllFeatures') }}</span>
                                    </button>
                               </div>
+
+                              <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]"></div>
                          </div>
                     </div>
 
                     <!-- Résumé -->
-                    <subscriptionSummary
+                    <PanelUpgradeSubscriptionSummary
                          :selectedPlan="store.currentPlan"
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
                          :selectedModules="store.selectedAddOns"
-                         nextButtonLabel="Prochaine étape"
+                         nextButtonLabel="t('panel.pages.upgrade.Index.nextStep')"
                          @updateBillingCycle="store.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
@@ -55,13 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
-import { useRouter } from 'vue-router'
-import { useUpgradeStore } from '~/stores/upgradeStore'
-import stepperHeader from '~/components/panel/upgrade/stepperHeaderUpgrade.vue'
-import planCard from '~/components/panel/upgrade/planCardUpgrade.vue'
-import subscriptionSummary from '~/components/panel/upgrade/subscriptionSummaryUpgrade.vue'
-
+const { t } = useI18n()
 const store = useUpgradeStore()
 const router = useRouter()
 const trialActive = ref(false)
@@ -107,6 +103,7 @@ function closePanel() {
      router.push('/panel/dashboard')
 }
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel-empty'
 })
+usePanelPageMeta( t('panel.pages.upgrade.Index.metaTitle'), t('panel.pages.upgrade.Index.metaDescription'))
 </script>

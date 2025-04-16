@@ -19,7 +19,7 @@ export function usePublicApi() {
           const data = isJson ? await response.json() : await response.text()
 
           if (!response.ok) {
-               throw isJson ? parseApiError(data) : { name: 'http_error', description: `${response.status} - ${data}` }
+               throw isJson ? data : { name: 'http_error', description: `${response.status} - ${data}` }
           }
           return data
 

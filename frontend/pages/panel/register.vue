@@ -6,7 +6,7 @@
                     <svgo-logo-hello-humans-full class="w-[220px] fill-[#f7f0e5]"/>
                </div>
                <div class="login-container">
-                    <LanguageSelector />
+                    <PanelCommonLanguageSelector />
                </div>
           </div>
           <div class="[grid-area:1_/_2_/_3_/_4] relative z-0 overflow-hidden relative before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-z-10 before:bg-white before:[width:max(3000px,300vh)] before:[height:max(3000px,300vh)] before:[transform:translateX(-50%)]"></div>
@@ -44,8 +44,11 @@
                               <span v-if="errors.email" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessageEmail }}</span>
                          </fieldset>
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
-                              <PasswordInput
+                              <PanelCommonPasswordInput
                                    v-model="password"
+                                   @input="evaluatePasswordStrength"
+                                   @focus="() => { passwordFocused = true; evaluatePasswordStrength() }"
+                                   @blur="() => { passwordFocused = false; evaluatePasswordStrength() }"
                                    :placeholder="t('panel.pages.register.passwordPlaceholder')"
                                    extraClassInput="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0"
                                    :error=errors.password
@@ -53,6 +56,19 @@
                               />
                               <span v-if="errors.password" class="_inputError self-start text-[rgb(232,19,50)] inline-flex pl-[2px] pt-[4px] mb-[-7px] text-[12px] leading-[16px] tracking-[-0.01em]">{{ errorMessagePassword }}</span>
                          </fieldset>
+
+                         <!-- Barre de progression et texte -->
+                         <Transition name="slide-fade" appear>
+                              <div v-if="passwordFocused" class="relative translate-y-[-8px] pl-[4px] self-start h-[0.1px] overflow-hidden h-[15.9px] mb-[8px]">
+                                   <div class="flex items-center">
+                                        <div class="w-[100px] h-[4px] rounded-[3.5px] bg-[#eff2f6] inline-block mr-[12px]">
+                                             <div class="block h-[4px] rounded-[3.5px]" :style="{ width: progressWidth, backgroundColor: progressColor }"></div>
+                                        </div>
+                                        <span class="text-[12px] font-medium leading-normal tracking-[-0.09px] text-[rgb(135,150,175)]">{{ passwordStrength }}</span>
+                                   </div>
+                              </div>
+                         </Transition>
+
                          <fieldset class="border-0 p-0 mb-[16px] flex flex-col items-center">
                               <input v-model="displayName" type="text" class="box-border rounded-[4px] border border-[rgb(226,232,239)] text-[rgb(8,15,26)] text-[18px] px-[18px] pt-[22px] pb-[20px] [width:min(370px,_calc(-32px+100vw))] max-w-full focus:border-[rgb(5,102,255)] focus:shadow-[0px_0px_0px_1px_rgb(5,102,255)] focus:outline-0" :class="{ 'border-[rgb(232,19,50)]': errors.displayName }" :placeholder=" t('panel.pages.register.displayNamePlaceholder')">
 
@@ -82,8 +98,17 @@
                               </label>
                          </fieldset>
 
+                         <span v-if="apiError" class="_inputError text-[rgb(232,19,50)] flex items-center justify-center flex-row mb-[15px] max-w-[370px] text-[16px] leading-[20px] tracking-[-0.01em]">{{ getErrorMessageByKey(publicStore.publicReturn) }}</span>
+
                          <fieldset class="self-center border-0 flex flex-col items-center p-0 [width:min(370px,_calc(-32px+100vw))]">
-                              <button class="bg-[#64ed80] rounded-[8px] border border-[rgb(100,237,128)] text-[rgb(0,11,38)] cursor-pointer outline-none px-[20px] py-[15px] transition-[all] duration-200 ease-in-out w-full max-w-[370px] text-[20px] hover:bg-[#31e756] hover:border-[#31e756]">{{ t('panel.pages.register.cta') }}</button>
+                              <button
+                                   type="submit"
+                                   :disabled="loading"
+                                   class="bg-[rgb(100,237,128)] border border-[rgb(100,237,128)] cursor-pointer outline-none p-[15px_20px] transition duration-200 ease-in-out w-full max-w-[370px] text-[20px] leading-[26px] tracking-[-0.01em] rounded-[8px]"
+                                   :class="{ 'text-[#aab6c9] bg-[rgb(236,242,244)] border-[rgb(236,242,244)] cursor-not-allowed': loading }"
+                              >
+                                   {{ loading ? t('panel.pages.register.loading') : t('panel.pages.register.cta')  }}
+                              </button>
                               <span class="block text-center mt-[40px] pt-[20px] text-[16px]  text-[#647491] border-t border-[#e2e8ef]">{{ t('panel.pages.register.alreadyHaveAccount') }} <a href="/panel/login" class="text-blue-500 hover:underline">{{ t('panel.pages.register.loginCta') }}</a>
                               </span>
                          </fieldset>
@@ -93,12 +118,6 @@
      </div>
 </template>
 <script setup lang="ts">
-
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import PasswordInput from "~/components/panel/common/CommonPasswordInput.vue";
-import LanguageSelector from "~/components/panel/LanguageSelector.vue";
-import { usePublicStore } from "~/stores/publicStore";
 
 const { appName } = useAppInfo()
 const { t } = useI18n()
@@ -115,13 +134,18 @@ const password = ref('')
 const displayName = ref('')
 const agreed = ref(false)
 const errors = ref({ email: false, password: false, displayName: false, agreed: false })
-const loginError = ref(false)
+const apiError = ref(false)
 const loading = ref(false)
 const errorMessageEmail = ref('');
 const errorMessagePassword = ref('');
 const errorMessageDisplayName = ref('');
 const errorsMessageAgreed = ref('');
 const lang = locale.value
+
+const passwordStrength = ref('')
+const passwordFocused = ref(false)
+const progressWidth = ref('0%')
+const progressColor = ref('rgb(226,232,239)')
 
 const router = useRouter()
 
@@ -162,25 +186,58 @@ const validateForm = () => {
      return valid
 }
 
+
+const evaluatePasswordStrength = () => {
+     const pass = password.value
+
+     if (!passwordFocused.value) {
+          passwordStrength.value = ''
+          progressWidth.value = '0%'
+          progressColor.value = 'rgb(226,232,239)'
+          return
+     }
+
+     if (pass.length === 0) {
+          passwordStrength.value = t('panel.pages.register.strengthLabel')
+          progressWidth.value = '0%'
+          progressColor.value = 'rgb(226,232,239)'
+     } else if (pass.length <= 4 ) {
+          passwordStrength.value = t('panel.pages.register.veryWeak')
+          progressWidth.value = '20%'
+          progressColor.value = 'rgb(246, 48, 62)'
+     } else if (pass.length <= 7) {
+          passwordStrength.value = t('panel.pages.register.weak')
+          progressWidth.value = '40%'
+          progressColor.value = 'rgb(246, 135, 48)'
+     } else if (pass.length <= 9) {
+          passwordStrength.value = t('panel.pages.register.medium')
+          progressWidth.value = '60%'
+          progressColor.value = 'rgb(255, 200, 89)'
+     } else if (pass.length <= 13) {
+          passwordStrength.value = t('panel.pages.register.strong')
+          progressWidth.value = '80%'
+          progressColor.value = 'rgb(52, 184, 87)'
+     } else {
+          passwordStrength.value = t('panel.pages.register.veryStrong')
+          progressWidth.value = '100%'
+          progressColor.value = 'rgb(52, 184, 87)'
+     }
+}
+
 // Fonction pour gérer la connexion
 const handleRegister = async () => {
      if (!validateForm()) return
-     loginError.value = false
+     apiError.value = false
      loading.value = true
 
      const success = await publicStore.register(inputEmail.value, password.value, displayName.value, agreed.value, lang)
      if (success) {
-          loginError.value = false
-          errorMessageEmail.value = ''
-          errorMessagePassword.value = ''
-          errorMessageDisplayName.value = ''
-          errorsMessageAgreed.value = ''
-
           await router.push('/panel')
      } else {
-          loginError.value = true
+         apiError.value = true
      }
 
      loading.value = false
 }
+usePanelPageMeta( t('panel.pages.register.metaTitle'), t('panel.pages.register.metaDescription'))
 </script>

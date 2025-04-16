@@ -23,7 +23,7 @@
                     >
                          <div :style="{ backgroundColor: legend.color }" class="w-3 h-3 rounded-full"></div>
                          <span class="text-sm text-gray-700">{{ legend.label }}</span>
-                         <Tooltip :text="legend.tooltip" />
+                         <PanelCommonTooltip :text="legend.tooltip" />
                     </div>
                </div>
                <div class="flex gap-2">
@@ -42,8 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import Tooltip from '@/components/panel/common/Tooltip.vue'
 
 const activeTab = ref<'audience' | 'interactions'>('audience')
 const chartType = ref<'bar' | 'line'>('bar')
