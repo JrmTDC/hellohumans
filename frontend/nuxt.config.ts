@@ -52,11 +52,13 @@ export default defineNuxtConfig({
           detectBrowserLanguage: {
                useCookie: true,
                cookieKey: 'i18n_redirected',
-               alwaysRedirect: false, // Ne pas rediriger l'utilisateur
+               alwaysRedirect: false,
                fallbackLocale: 'en'
           }
      },
      supabase: {
+          url: process.env.SUPABASE_URL,
+          key: process.env.SUPABASE_KEY,
           redirect:true,
           redirectOptions: {
                login: '/panel/login',
