@@ -284,6 +284,11 @@
                     }
                },
                "layout": {
+                    "accountBlacked": {
+                         "bannedTitle": "Votre compte a été suspendu",
+                         "bannedDescription": "Pour des raisons de sécurité ou de conformité, votre accès a été restreint. Veuillez contacter le support pour en savoir plus.",
+                         "contactSupport": "Contacter le support"
+                    },
                     "herderPage": {
                          "paid": "Payé",
                          "billing": "Payant",

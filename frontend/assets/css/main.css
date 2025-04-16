@@ -46,9 +46,12 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      height: 100vh;
 }
 #app-content{
-     font-family: euclidcircularb;
+     font-family: Mulish;
+     letter-spacing: -0.24px;
 }
 #hellohumans-loading{
+     font-family: Mulish;
+     letter-spacing: -0.24px;
      .animate-fade-in {
           animation: fade-in 0.6s ease-out;
      }
@@ -61,6 +64,10 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      .fade-leave-to {
           opacity: 0;
      }
+}
+#hellohumans-blocked{
+     font-family: Mulish;
+     letter-spacing: -0.24px;
 }
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
