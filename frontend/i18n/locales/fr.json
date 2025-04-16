@@ -285,7 +285,7 @@
                },
                "layout": {
                     "accountBlacked": {
-                         "bannedTitle": "Votre compte a été suspendu",
+                         "bannedTitle": "Votre compte a été suspendu.",
                          "bannedDescription": "Pour des raisons de sécurité ou de conformité, votre accès a été restreint. Veuillez contacter le support pour en savoir plus.",
                          "contactSupport": "Contacter le support"
                     },
@@ -347,6 +347,51 @@
                          "errorMissingInfo": "Informations d’abonnement incomplètes",
                          "errorGeneric": "Une erreur est survenue"
                     }
+               },
+               "onboarding": {
+                    "step": {
+                         "part1": {
+                              "selectClient": {
+                                   "title": "Sélectionnez ou créez un compte client",
+                                   "description": "Votre projet sera rattaché à ce compte client",
+                                   "placeholder": "Sélectionnez un compte client",
+                                   "placeholderCreate": "Création d’un nouveau compte client"
+                              },
+                              "siteUrl": {
+                                   "title": "Quelle est l'adresse URL de votre site web",
+                                   "description": "Vos réponses nous aideront à personnaliser votre expérience",
+                                   "placeholder": "https://votre-site.com"
+                              }
+                         },
+                         "part2": {
+                         },
+                         "part3": {
+                         },
+                         "part4": {
+                         }
+                    },
+                    "boxSelect": {
+
+                    },
+                    "nav": {
+
+                    },
+                    "radioGroup": {
+
+                    },
+                    "section": {
+
+                    },
+                    "selectClient": {
+
+                    },
+                    "selectSimple": {
+
+                    },
+                    "steps": {
+
+                    }
+
                },
                "upgrade": {
                     "ModuleCard": {
