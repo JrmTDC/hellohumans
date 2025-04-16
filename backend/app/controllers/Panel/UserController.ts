@@ -23,11 +23,13 @@ class UserController {
                     })
                }
 
-               return { user: {
-                    id: user.id,
-                    email: auth?.user?.email,
-                    lang: user.lang,
-                    selected_client_id: user.selected_client_id
+               return {
+                    user: {
+                         id: user.id,
+                         email: auth?.user?.email,
+                         lang: user.lang,
+                         selected_client_id: user.selected_client_id,
+                         blocked: user.blocked
                     }
                }
           } catch (error) {

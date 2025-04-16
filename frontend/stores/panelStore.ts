@@ -5,7 +5,7 @@ import { usePanelApi } from '~/composables/usePanelApi'
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
-     const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string;  } | null>(null)
+     const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
      const client = ref<{} | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])

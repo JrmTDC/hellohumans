@@ -1,6 +1,6 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
-     <LayoutAccountBlocked v-else-if="AccountBlocked" />
+     <LayoutAccountBlocked v-else-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
           <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <div class="app-content">
@@ -24,7 +24,7 @@ const panelStore = usePanelStore()
 const router = useRouter()
 
 const isChecking = ref(true)
-const AccountBlocked = ref(true)
+const isAccountBlocked = ref(true)
 const progress = ref(0)
 
 onMounted(async () => {
@@ -38,6 +38,9 @@ onMounted(async () => {
      }, 500)
 
      const ok = await panelStore.initPanelSession()
+     if(panelStore.user?.blocked === false) {
+          isAccountBlocked.value = false
+     }
 
      clearInterval(interval)
      progress.value = 100
