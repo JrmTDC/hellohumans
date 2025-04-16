@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import supabaseService from '#services/supabaseService'
+import supabaseService, {supabaseAdmin} from '#services/supabaseService'
 import MailService from "#services/mail/MailService";
 
 class AuthController {
@@ -129,7 +129,8 @@ class AuthController {
                     .from('users')
                     .insert({
                          auth_id: auth_id,
-                         lang
+                         lang,
+                         email
                     })
                     .select()
                     .single()
@@ -253,40 +254,23 @@ class AuthController {
                })
           }
 
-          // 1. Récupère l'utilisateur via l'API Admin Supabase
-          const { data: userList, error: userListError } = await supabaseService.auth.admin.listUsers()
-          if (userListError || !userList?.users) {
-               //return response.badRequest({ error: { name: 'userLookupFailed', description: 'Impossible de rechercher l’utilisateur.' } })
-               return response.ok({
-                    user:{
-                         email: email,
-                    }
-               })
-          }
-
-          const foundUser = userList.users.find(u => u.email?.toLowerCase() === email.toLowerCase())
-          if (!foundUser) {
-               //return response.badRequest({ error: { name: 'userNotFound', description: 'Utilisateur introuvable.' } })
-               return response.ok({
-                    user:{
-                         email: email,
-                    }
-               })
-          }
-
-          const auth_id = foundUser.id
-
-          // 2. Récupère la langue depuis ta table `users`
-          const { data: userData } = await supabaseService
+          // 1. Vérifie si l'utilisateur existe via la table `users` (avec la anon key)
+          const { data: userData, error: userError } = await supabaseService
                .from('users')
-               .select('lang')
-               .eq('auth_id', auth_id)
+               .select('auth_id, lang')
+               .eq('email', email)
                .maybeSingle()
 
-          const lang = userData?.lang || 'en' // fallback si la langue n'est pas définie
+          if (userError || !userData?.auth_id) {
+               return response.ok({
+                    user: { email }
+               })
+          }
 
-          // 3. Génére le lien de récupération de mot de passe
-          const { data, error } = await supabaseService.auth.admin.generateLink({
+          const { lang = 'en' } = userData
+
+          // 2. Génére le lien de récupération de mot de passe
+          const { data, error } = await supabaseAdmin.auth.admin.generateLink({
                type: 'recovery',
                email,
                options: {
@@ -295,21 +279,16 @@ class AuthController {
           })
 
           if (error || !data?.properties.action_link) {
-               //return response.badRequest({ error: { name: 'resetLinkFailed', description: error?.message || 'Erreur lien de réinitialisation.' } })
                return response.ok({
-                    user:{
-                         email: email,
-                    }
+                    user: { email }
                })
           }
 
-          // 4. Envoie l’email avec la langue définie
+          // 3. Envoie l’e-mail
           await MailService.sendForgotPasswordEmail(email, data.properties.action_link, lang)
 
           return response.ok({
-               user:{
-                    email: email,
-               }
+               user: { email }
           })
      }
 }
