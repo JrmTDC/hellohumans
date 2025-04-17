@@ -42,11 +42,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-const panelStore = usePanelStore()
 const onboardingStore = useOnboardingStore()
-
-useSection(2, 1, () => !!onboardingStore.answers.serviceModel)
-useSection(2, 2, () => onboardingStore.answers.communicationMethods.length > 0)
-useSection(2, 3, () => !!onboardingStore.answers.businessModel)
+onboardingStore.validateSections(2)
 </script>

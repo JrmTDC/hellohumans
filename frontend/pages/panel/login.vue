@@ -140,4 +140,7 @@ const handleLogin = async () => {
      loading.value = false
 }
 usePanelPageMeta( t('panel.pages.login.metaTitle'), t('panel.pages.login.metaDescription'))
+onMounted(() => {
+     localStorage.removeItem('onboardingStore')
+})
 </script>

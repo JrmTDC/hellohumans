@@ -12,7 +12,7 @@
 
 
           <!-- SECTION 1 : URL du site -->
-          <PanelOnboardingSection
+          <PanelOnboardingSection v-if="onboardingStore.stepSections[1].completed >= 1"
                :title="t('panel.components.onboarding.step.part1.siteUrl.title')"
                :description="t('panel.components.onboarding.step.part1.siteUrl.description')">
                <label class="block font-normal max-w-full flex flex-col relative text-[16px] leading-[20px] tracking-[-0.01em] w-full text-left text-[#647491]">
@@ -29,18 +29,5 @@ const { t } = useI18n()
 const panelStore = usePanelStore()
 const onboardingStore = useOnboardingStore()
 
-// Auto validation
-// Section 1 : client valide
-useSection(1, 1, () => {
-     const { selectedClientId, newClientName } = onboardingStore.answers
-     const validClient = !!panelStore.clients.find(c => c.id === selectedClientId)
-     return validClient || newClientName.trim().length > 0
-})
-
-// Section 2 : URL valide
-useSection(1, 2, () => {
-     const { webSite } = onboardingStore.answers
-     const regex = /^(https?:\/\/)?([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/
-     return regex.test(webSite)
-})
+onboardingStore.validateSections(1)
 </script>

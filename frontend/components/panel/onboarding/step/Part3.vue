@@ -63,9 +63,5 @@
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const onboardingStore = useOnboardingStore()
-
-useSection(3, 1, () => !!onboardingStore.answers.selectedActivity)
-useSection(3, 2, () => !!onboardingStore.answers.conversationsPerMonth)
-useSection(3, 3, () => !!onboardingStore.answers.monthlyWebsiteVisitors)
-useSection(3, 4, () => !!onboardingStore.answers.websiteHostingPlatform)
+onboardingStore.validateSections(3)
 </script>

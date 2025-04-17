@@ -15,7 +15,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const onboardingStore = useOnboardingStore()
-useSection(4, 1, () => !!onboardingStore.answers.primaryUse)
+onboardingStore.validateSections(4)
 
 const goals = [
      {

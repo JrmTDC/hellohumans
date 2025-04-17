@@ -17,6 +17,25 @@ class OnboardingController {
           return data.lang
      }
 
+     public async index({ auth, response }: HttpContext) {
+          try {
+               const auth_id = auth?.user?.id
+               if (!auth_id) {
+                    return response.unauthorized({
+                         error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
+                    })
+               }
+               return {
+
+               }
+          } catch (error) {
+               console.error('Erreur OnboardingController.getActivities:', error)
+               return response.internalServerError({
+                    error: { name: 'internalError', description: 'Erreur interne' }
+               })
+          }
+     }
+
      public async getActivities({ auth, response }: HttpContext) {
           try {
                const auth_id = auth?.user?.id
@@ -46,7 +65,9 @@ class OnboardingController {
                     slug: activity.slug,
                }))
 
-               return response.status(200).send({ activities })
+               return {
+                    activities
+               }
           } catch (error) {
                console.error('Erreur OnboardingController.getActivities:', error)
                return response.internalServerError({
