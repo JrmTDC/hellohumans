@@ -19,17 +19,21 @@
                          <span class="flex items-center">
                               <svgo-panel-icon-add class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" />
                          </span>
-                         <span class="ml-[12px] text-[14px]">Créer un nouveau compte client</span>
+                         <span class="ml-[12px] text-[14px]">{{ t('panel.components.onboarding.selectClient.createNew') }}</span>
                     </div>
                </div>
 
                <div v-if="createMode" class="mt-[12px]">
-                    <input type="text" v-model="newClientName" placeholder="Nom du compte client" class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
+                    <input type="text"
+                           v-model="newClientName"
+                           :placeholder="t('panel.components.onboarding.selectClient.newClientName')"
+                           class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
                </div>
           </div>
      </div>
 </template>
 <script setup lang="ts">
+const { t } = useI18n()
 interface ClientAccount {
      id: string
      name: string
