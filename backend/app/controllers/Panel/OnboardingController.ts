@@ -152,7 +152,15 @@ class OnboardingController {
                     .from('client_projects')
                     .insert({
                          client_id: clientId,
-                         website: webSite
+                         website: webSite,
+                         service_model: serviceModel,
+                         business_model: businessModel,
+                         communication_methods: communicationMethods,
+                         selected_activity: selectedActivity,
+                         conversations_per_month: conversationsPerMonth,
+                         monthly_website_visitors: monthlyWebsiteVisitors,
+                         website_hosting_platform: websiteHostingPlatform,
+                         primary_use: primaryUse
                     })
                     .select()
                     .single()
