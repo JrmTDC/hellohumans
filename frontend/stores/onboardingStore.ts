@@ -136,12 +136,10 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                     await router.push('/panel/upgrade')
                } else {
                     resetStore()
-                    await router.push('/panel/onboarding')
                     window.location.reload()
                }
           } catch (error) {
                resetStore()
-               await router.push('/panel/onboarding')
                window.location.reload()
           }
      }

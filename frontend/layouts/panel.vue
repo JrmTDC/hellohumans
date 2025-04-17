@@ -9,8 +9,17 @@
           </div>
      </div>
      <div v-else class="flex flex-col h-screen">
-          <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
-               <div class="app-content">
+          <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
+               <PanelLayoutMenuNavPage />
+               <div class="app-content-wrapper items-stretch bg-[#f5f7f9] flex flex-1 flex-col justify-start max-w-[calc(100%-65px)] overflow-hidden relative">
+                    <PanelLayoutHeaderPage :title="pageHeaderTitle" :isBilled="pageHeaderBilled" :isPaid="pageHeaderPaid" />
+                    <div class="app-content">
+                         <slot />
+                    </div>
+               </div>
+          </div>
+          <div v-else class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
+               <div  class="app-content">
                     <slot />
                </div>
           </div>
@@ -27,6 +36,9 @@ const isChecking = ref(true)
 const isAccountBlocked = ref(true)
 const progress = ref(0)
 
+// États de page récupérés depuis le composable global
+const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel } = usePanelPageMeta()
+
 onMounted(async () => {
      const steps = [10, 30, 60, 100]
      let index = 0
@@ -42,7 +54,10 @@ onMounted(async () => {
      if(panelStore.user?.blocked === false) {
           isAccountBlocked.value = false
           if ((!panelStore.client || !panelStore.project) && router.currentRoute.value.path !== '/panel/onboarding') {
-               await router.push('/panel/onboarding')
+               //await router.push('/panel/onboarding')
+          }
+          if (!panelStore.project?.subscription && router.currentRoute.value.path !== '/panel/onboarding') {
+               //await router.push('/panel/onboarding')
           }
      }
 
@@ -53,5 +68,7 @@ onMounted(async () => {
           if (!ok) router.push('/panel/login')
      }, 400)
 })
-usePanelPageMeta(t('panel.layout.empty.metaTitle'))
+usePanelPageMeta().setMeta({
+     title: t('panel.layout.menu.metaTitle'),
+})
 </script>

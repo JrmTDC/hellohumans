@@ -8,7 +8,11 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-usePanelPageMeta( t('panel.pages.error.notFound.metaTitle'), t('panel.pages.error.notFound.metaDescription'))
+const { setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.error.notFound.metaTitle'),
+     description: t('panel.pages.error.notFound.metaDescription')
+})
 </script>
 
 

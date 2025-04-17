@@ -102,8 +102,15 @@ function goStep(step: number) {
 function closePanel() {
      router.push('/panel/dashboard')
 }
-definePageMeta({
-     layout: 'panel-empty'
+
+const { pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.upgrade.index.metaTitle'),
+     description: t('panel.pages.upgrade.index.metaDescription')
 })
-usePanelPageMeta( t('panel.pages.upgrade.Index.metaTitle'), t('panel.pages.upgrade.Index.metaDescription'))
+pageMenuPanel.value = false
+
+definePageMeta({
+     layout: 'panel'
+})
 </script>

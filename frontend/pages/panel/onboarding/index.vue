@@ -28,12 +28,9 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
 const panelStore = usePanelStore()
 const onboardingStore = useOnboardingStore()
-
-definePageMeta({
-     layout: 'panel-empty'
-})
 
 onMounted(async () => {
      const onboardingStore = useOnboardingStore()
@@ -47,5 +44,15 @@ onMounted(async () => {
           onboardingStore.validateSections(step)
      }
      onboardingStore.redirectIfInvalid()
+})
+
+const { pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.onboarding.index.metaTitle'),
+     description: t('panel.pages.onboarding.index.metaDescription')
+})
+pageMenuPanel.value = false
+definePageMeta({
+     layout: 'panel'
 })
 </script>

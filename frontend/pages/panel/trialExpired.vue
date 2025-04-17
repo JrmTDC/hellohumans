@@ -95,7 +95,17 @@
 <script setup lang="ts">
 const { appName } = useAppInfo()
 const { t } = useI18n()
-usePanelPageMeta( t('panel.pages.trialExpired.metaTitle'), t('panel.pages.trialExpired.metaDescription'))
+
+const { pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.trialExpired.megaTitle'),
+     description: t('panel.pages.trialExpired.megaDescription')
+})
+pageMenuPanel.value = false
+
+definePageMeta({
+     layout: 'panel'
+})
 </script>
 
 

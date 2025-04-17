@@ -31,6 +31,10 @@ const goHome = () => {
      clearError()
      router.push(isPanel.value ? '/panel' : '/')
 }
-usePanelPageMeta( t('panel.pages.error.unauthorized.metaTitle'), t('panel.pages.error.unauthorized.metaDescription'))
+const { setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.error.unauthorized.metaTitle'),
+     description: t('panel.pages.error.unauthorized.metaDescription')
+})
 </script>
 
