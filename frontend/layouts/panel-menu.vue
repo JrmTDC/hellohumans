@@ -21,7 +21,7 @@
      </div>
 </template>
 <script setup lang="ts">
-import LayoutAccountBlocked from '~/components//panel/layout/LayoutAccountBlocked.vue'
+import LayoutAccountBlocked from '~/components/panel/layout/LayoutAccountBlocked.vue'
 
 const { t } = useI18n()
 const panelStore = usePanelStore()
@@ -46,8 +46,12 @@ onMounted(async () => {
      }, 500)
 
      const ok = await panelStore.initPanelSession()
+
      if(panelStore.user?.blocked === false) {
           isAccountBlocked.value = false
+          if ((!panelStore.client || !panelStore.project) && router.currentRoute.value.path !== '/panel/onboarding') {
+               await router.push('/panel/onboarding')
+          }
      }
 
      clearInterval(interval)

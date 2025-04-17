@@ -1,49 +1,74 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import { usePanelApi } from '~/composables/usePanelApi'
 
 export const usePanelStore = defineStore('panel', () => {
+     const router = useRouter()
      const supabase = useSupabaseClient()
 
      const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
      const client = ref<{} | null>(null)
+     const project = ref<{} | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const subscription = ref<{ id: string; name: string; status: string }[]>([])
      const modules = ref<string[]>([])
-     const project = ref<any[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
+
+     const panelReturn = ref<string | null>(null)
 
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           const { setLocale } = useI18n()
+          panelReturn.value = null
           try {
-               const [userRes, clientRes, clientsRes, usagesRes, projectRes, projectsRes] = await Promise.all([
-                    apiFetch('/user'),
+
+               // 1) Vérifier la session / récupérer l’utilisateur
+               const userRes = await apiFetch('/user')
+               user.value = userRes.success.user || null
+
+               if (!user.value) {
+                    await logout()
+                    return false
+               }
+
+               // Mettre à jour la langue locale si disponible
+               if (userRes.success.user?.lang) {
+                    await setLocale(userRes.success.user.lang)
+               }
+
+               // 2) Vérifier si client et projet sont présents
+               const [clientRes, projectRes] = await Promise.all([
                     apiFetch('/client'),
-                    apiFetch('/clients'),
-                    apiFetch('/usages'),
                     apiFetch('/project'),
-                    apiFetch('/projects'),
                ])
 
-               user.value = userRes.success.user
-               client.value = clientRes.success.client
+               if(!clientRes.success || clientRes.success.client.length === 0) {
+                    client.value = null
+                    return true
+               }
+               if(!projectRes.success || projectRes.success.project.length === 0) {
+                    project.value = null
+                    return true
+               }
+
+               client.value = clientRes.success.client || null
+               project.value = projectRes.success.project || null
+
+               // 3) Puisque le client et le projet sont valides, on récupère d’autres informations
+               const [clientsRes, projectsRes, usagesRes] = await Promise.all([
+                    apiFetch('/clients'),
+                    apiFetch('/projects'),
+                    apiFetch('/usages'),
+               ])
                clients.value = clientsRes.success.clients || []
-               project.value = projectRes.success.project
                projects.value = projectsRes.success.projects || []
                project_usages.value = usagesRes.success.usages || []
                modules.value = usagesRes.modules || []
                subscription.value = usagesRes.subscription || []
 
-               // Mettre à jour la langue locale
-               if (userRes.success.user?.lang) {
-                    await setLocale(userRes.success.user.lang)
-               }
                return true
-          } catch (err) {
-               console.warn('Session invalide / déconnectée', err)
+          } catch (err: any) {
+               setApiError(panelReturn, err, 'panel.pages.layout')
                await logout()
                return false
           }

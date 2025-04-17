@@ -5,7 +5,7 @@ import type { User, Session } from '@supabase/supabase-js'
 export const usePublicStore = defineStore('public', () => {
      const supabase = useSupabaseClient()
 
-     const publicReturn = ref<string | null>(null) // message d'erreur ou clé de traduction
+     const publicReturn = ref<string | null>(null)
      // Connexion
      const login = async (email: string, password: string) => {
           publicReturn.value = null
