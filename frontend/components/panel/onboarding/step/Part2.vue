@@ -13,6 +13,7 @@
           </PanelOnboardingSection>
 
           <PanelOnboardingSection
+               v-if="onboardingStore.stepSections[2].completed >= 1"
                :title="t('panel.components.onboarding.step.part2.communication.title')"
                :description="t('panel.components.onboarding.step.part2.communication.description')">
                <PanelOnboardingRadioGroup
@@ -28,6 +29,7 @@
           </PanelOnboardingSection>
 
           <PanelOnboardingSection
+               v-if="onboardingStore.stepSections[2].completed >= 2"
                :title="t('panel.components.onboarding.step.part2.businessModel.title')"
                :description="t('panel.components.onboarding.step.part2.businessModel.description')">
                <PanelOnboardingRadioGroup
@@ -40,8 +42,8 @@
           </PanelOnboardingSection>
      </div>
 </template>
-
 <script setup lang="ts">
+const { t } = useI18n()
 const onboardingStore = useOnboardingStore()
 onboardingStore.validateSections(2)
 </script>

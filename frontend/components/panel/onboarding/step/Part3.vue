@@ -10,6 +10,7 @@
           </PanelOnboardingSection>
 
           <PanelOnboardingSection
+               v-if="onboardingStore.stepSections[3].completed >= 1"
                :title="t('panel.components.onboarding.step.part3.conversations.title')"
                :description="t('panel.components.onboarding.step.part3.conversations.description')">
                <PanelOnboardingRadioGroup
@@ -28,6 +29,7 @@
           </PanelOnboardingSection>
 
           <PanelOnboardingSection
+               v-if="onboardingStore.stepSections[3].completed >= 2"
                :title="t('panel.components.onboarding.step.part3.visitors.title')"
                :description="t('panel.components.onboarding.step.part3.visitors.description')">
                <PanelOnboardingRadioGroup
@@ -43,6 +45,7 @@
           </PanelOnboardingSection>
 
           <PanelOnboardingSection
+               v-if="onboardingStore.stepSections[3].completed >= 3"
                :title="t('panel.components.onboarding.step.part3.platform.title')"
                :description="t('panel.components.onboarding.step.part3.platform.description')">
                <PanelOnboardingRadioGroup
