@@ -232,7 +232,7 @@ const handleRegister = async () => {
 
      const success = await publicStore.register(inputEmail.value, password.value, displayName.value, agreed.value, lang)
      if (success) {
-          await router.push('/panel')
+          await router.push('/onboarding')
      } else {
          apiError.value = true
      }

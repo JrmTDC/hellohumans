@@ -139,85 +139,7 @@ class AuthController {
                     return response.badRequest({ error: { name: 'userCreationFailed', description: 'Création utilisateur échouée.' } })
                }
 
-               // Étape 3 - Création du client
-               const { data: clientData, error: clientError } = await supabaseService
-                    .from('clients')
-                    .insert({
-                         owner_user_id: userData.id,
-                         name: displayName,
-                    })
-                    .select()
-                    .single()
-
-               if (clientError || !clientData) {
-                    return response.badRequest({ error: { name: 'clientCreationFailed', description: 'Création client impossible.' } })
-               }
-
-               // Étape 4 - Mettre à jour l'utilisateur avec le client séléctionné
-               await supabaseService
-                    .from('users')
-                    .update({
-                         selected_client_id: clientData.id,
-                    })
-                    .eq('id', userData.id)
-
-               // Étape 5 - Projet principal
-               const { data: projectData, error: projectError } = await supabaseService
-                    .from('client_projects')
-                    .insert({
-                         client_id: clientData.id,
-                         website : null
-                    })
-                    .select()
-                    .single()
-
-               if (projectError || !projectData) {
-                    return response.badRequest({ error: { name: 'projectCreationFailed', description: 'Création projet échouée.' } })
-               }
-
-               // Étape 6 - Relier user <=> client
-               await supabaseService.from('client_users').insert({
-                    client_id: clientData.id,
-                    user_id: userData.id,
-                    auth_id: auth_id,
-                    role: 'owner',
-                    selected_project_id: projectData.id
-               })
-
-               // ✅ Étape 7 - Ajout du plan gratuit (free)
-               const { data: freePlan } = await supabaseService
-                    .from('subscription_plans')
-                    .select('id, key')
-                    .eq('key', 'free')
-                    .single()
-
-               if (!freePlan?.id) {
-                    await supabaseService
-                         .from('client_project_subscriptions')
-                         .insert({
-                              project_id: projectData.id,
-                              current_plan_id:null,
-                              status: 'inactive',
-                              billing_cycle: 'monthly',
-                              current_modules: [],
-                              is_trial: false,
-                              payment_failed: false
-                         })
-               }else{
-                    await supabaseService
-                         .from('client_project_subscriptions')
-                         .insert({
-                              project_id: projectData.id,
-                              current_plan_id: freePlan.id,
-                              status: 'active',
-                              billing_cycle: 'monthly',
-                              current_modules: [],
-                              is_trial: false,
-                              payment_failed: false
-                         })
-               }
-
-               // Étape 8 - Connexion auto
+               // Étape 3 - Connexion auto
                const { data: sessionData, error: sessionError } = await supabaseService.auth.signInWithPassword({ email, password })
 
                if (sessionError || !sessionData.session) {
@@ -231,7 +153,6 @@ class AuthController {
                     user: {
                          id: userData.id,
                          email,
-                         selected_project_id: projectData.id,
                          lang: userData.lang
                     }
                })
