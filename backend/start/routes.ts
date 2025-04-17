@@ -45,7 +45,7 @@ router.group(() => {
      router.post('/switch-project/:uuid', (ctx) => ClientController.switchProject(ctx))
      router.post('/lang', (ctx) => UserController.updateLang(ctx))
      router.get('/onboarding/activities', (ctx) => OnboardingController.getActivities(ctx))
-     router.post('/onboarding', (ctx) => OnboardingController.index(ctx))
+     router.post('/onboarding', (ctx) => OnboardingController.create(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_ensure_user())

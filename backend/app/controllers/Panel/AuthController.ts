@@ -61,7 +61,7 @@ class AuthController {
                const { data: clientUserData, error: clientUserError } = await supabaseService
                     .from('client_users')
                     .select('id, selected_project_id')
-                    .eq('auth_id', auth_id)
+                    .eq('user_id', userData.id)
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .maybeSingle()

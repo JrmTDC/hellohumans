@@ -54,10 +54,10 @@ onMounted(async () => {
      if(panelStore.user?.blocked === false) {
           isAccountBlocked.value = false
           if ((!panelStore.client || !panelStore.project) && router.currentRoute.value.path !== '/panel/onboarding') {
-               //await router.push('/panel/onboarding')
+               await router.push('/panel/onboarding')
           }
           if (!panelStore.project?.subscription && router.currentRoute.value.path !== '/panel/onboarding') {
-               //await router.push('/panel/onboarding')
+               await router.push('/panel/onboarding')
           }
      }
 
