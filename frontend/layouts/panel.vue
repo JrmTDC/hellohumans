@@ -1,7 +1,7 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
      <LayoutAccountBlocked v-else-if="isAccountBlocked" />
-     <div v-else class="flex flex-col h-screen">
+     <div id="hellohumans-panel" v-else class="flex flex-col h-screen">
           <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <div class="app-content">
                     <slot />
@@ -33,7 +33,7 @@ const panelStore = usePanelStore()
 const router = useRouter()
 
 const isChecking = ref(true)
-const isAccountBlocked = ref(true)
+const isAccountBlocked = ref(false)
 const progress = ref(0)
 
 // États de page récupérés depuis le composable global
@@ -50,14 +50,15 @@ onMounted(async () => {
      }, 500)
 
      const ok = await panelStore.initPanelSession()
+     isAccountBlocked.value = panelStore.user?.blocked || false
 
      if(panelStore.user?.blocked === false) {
-          isAccountBlocked.value = false
           if ((!panelStore.client || !panelStore.project) && router.currentRoute.value.path !== '/panel/onboarding') {
                await router.push('/panel/onboarding')
           }
-          if (!panelStore.project?.subscription && router.currentRoute.value.path !== '/panel/onboarding') {
-               await router.push('/panel/onboarding')
+
+          if ((!panelStore.project?.subscription || panelStore.project?.subscription.status == 'inactive') && router.currentRoute.value.path !== '/panel/upgrade') {
+               await router.push('/panel/upgrade')
           }
      }
 

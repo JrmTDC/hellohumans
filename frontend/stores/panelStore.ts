@@ -36,10 +36,13 @@ export const usePanelStore = defineStore('panel', () => {
                }
 
                // 2) Vérifier si client et projet sont présents
-               const [clientRes, projectRes] = await Promise.all([
+               const [clientsRes, clientRes, projectRes] = await Promise.all([
+                    apiFetch('/clients'),
                     apiFetch('/client'),
                     apiFetch('/project'),
                ])
+
+               clients.value = clientsRes.success.clients || null
 
                if(!clientRes.success || clientRes.success.client.length === 0) {
                     client.value = null
@@ -49,7 +52,6 @@ export const usePanelStore = defineStore('panel', () => {
                     project.value = null
                     return true
                }
-
                client.value = clientRes.success.client || null
                project.value = projectRes.success.project || null
 
@@ -61,13 +63,12 @@ export const usePanelStore = defineStore('panel', () => {
                project_subscription.value = projectRes.success.project.subscription || []
 
                // 4) Puisque le client et le projet sont valides, on récupère d’autres informations
-               const [clientsRes, projectsRes, usagesRes] = await Promise.all([
+               const [projectsRes, usagesRes] = await Promise.all([
                     apiFetch('/clients'),
                     apiFetch('/projects'),
                     apiFetch('/usages'),
                ])
                clients.value = clientsRes.success.clients || []
-               projects.value = projectsRes.success.projects || []
                project_usages.value = usagesRes.success.usages || []
                modules.value = usagesRes.modules || []
 
