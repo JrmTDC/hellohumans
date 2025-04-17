@@ -7,13 +7,15 @@
 
           <div class="flex items-center">
                <div class="mx-[5px] sm:w-[200px]">
-                    <button v-if="store.currentStep > 1" @click="store.goPrevious()" class="inline-flex items-center justify-center px-[20px] rounded-[8px] text-[18px] h-[46px] leading-[23px] border-transparent bg-transparent text-[#0566ff] font-normal hover:bg-transparent hover:text-[#0566ff] hover:underline">Retour</button>
+                    <button v-if="store.currentStep > 1" @click="store.goPrevious()" class="inline-flex items-center justify-center px-[20px] rounded-[8px] text-[18px] h-[46px] leading-[23px] border-transparent bg-transparent text-[#0566ff] font-normal hover:bg-transparent hover:text-[#0566ff] hover:underline"> {{ t('panel.components.onboarding.nav.back') }}</button>
                </div>
                <div class="flex-[0_0_auto] w-auto mx-[5px] ml-auto mr-[20px]">
 
                     <button class="rounded-[8px] text-[18px] h-[46px] leading-[23px] min-w-auto max-w-full w-full px-[20px] inline-flex items-center justify-center transition-all duration-200" :class="[(!store.isCurrentStepComplete || store.submitting) ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed': 'bg-[#0566ff] border-[#0566ff] text-white hover:bg-[#0049bd] hover:border-[#0049bd]']" :disabled="!store.isCurrentStepComplete || store.submitting" @click="handleNext">
-                         <template v-if="store.submitting">Chargement...</template>
-                         <template v-else>{{ isLastStep ? "C'est parti !" : "Suivant" }}</template>
+                         <template v-if="store.submitting">{{ t('panel.components.onboarding.nav.loading') }}
+                         </template>
+                         <template v-else>{{ isLastStep ? t('panel.components.onboarding.nav.submit') : t('panel.components.onboarding.nav.next') }}
+                         </template>
                     </button>
                </div>
           </div>
@@ -23,7 +25,7 @@
 <script setup lang="ts">
 const store = useOnboardingStore()
 const isLastStep = computed(() => store.currentStep === store.totalSteps)
-
+const { t } = useI18n()
 async function handleNext() {
      if (!store.isCurrentStepComplete || store.submitting) return
      if (isLastStep.value) {
