@@ -193,13 +193,14 @@ export const usePanelStore = defineStore('panel', () => {
      }
 
      async function logout() {
-          await supabase.auth.signOut()
           user.value = null
           project_usages.value = []
           project_subscription.value = []
           modules.value = []
+          const isAccountBlocked = useState('isAccountBlocked', () => false)
+          isAccountBlocked.value = false
+          await supabase.auth.signOut()
      }
-
 
      return {
           // state

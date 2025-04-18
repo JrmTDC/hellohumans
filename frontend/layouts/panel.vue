@@ -26,7 +26,7 @@ const panelStore = usePanelStore()
 const router = useRouter()
 
 const isChecking = ref(true)
-const isAccountBlocked = ref(false)
+const isAccountBlocked = useState('isAccountBlocked', () => false)
 const progress = ref(0)
 const { locale, setLocale } = useI18n()
 
@@ -53,8 +53,6 @@ onMounted(async () => {
      }, 500)
 
      const ok = await panelStore.initPanelData()
-
-     isAccountBlocked.value = panelStore.user?.blocked || false
 
      clearInterval(interval)
      progress.value = 100
