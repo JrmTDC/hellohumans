@@ -25,7 +25,7 @@ export const usePanelStore = defineStore('panel', () => {
 
      const panelReturn = ref<string | null>(null)
 
-     async function initPanelSession(): Promise<boolean> {
+     async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           panelReturn.value = null
           try {
@@ -66,20 +66,33 @@ export const usePanelStore = defineStore('panel', () => {
 
                project_subscription.value = projectRes.success.project.subscription || []
 
-               // 4) Puisque le client et le projet sont valides, on récupère d’autres informations
+               return true
+          } catch (err: any) {
+               await logout()
+               return false
+          }
+     }
+
+     async function initPanelData(): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          panelReturn.value = null
+          try {
+               // 1) Vérifier la session / récupérer l’utilisateur
+               if (!user.value) {
+                    await logout()
+                    return false
+               }
+
+               // 2) On récupère d’autres informations
                const [projectsRes, usagesRes] = await Promise.all([
-                    apiFetch('/clients'),
                     apiFetch('/projects'),
                     apiFetch('/usages'),
                ])
-               clients.value = clientsRes.success.clients || []
                project_usages.value = usagesRes.success.usages || []
+               projects.value = projectsRes.success.projects || []
                modules.value = usagesRes.modules || []
-
-
                return true
           } catch (err: any) {
-               setApiError(panelReturn, err, 'panel.pages.layout')
                await logout()
                return false
           }
@@ -201,7 +214,8 @@ export const usePanelStore = defineStore('panel', () => {
           activities,
 
           // actions
-          initPanelSession,
+          initPanelAccessSession,
+          initPanelData,
           fetchUser,
           fetchUsage,
           updateUserLang,

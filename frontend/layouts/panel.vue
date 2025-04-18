@@ -1,13 +1,6 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
      <LayoutAccountBlocked v-else-if="isAccountBlocked" />
-     <div id="hellohumans-panel" v-else class="flex flex-col h-screen">
-          <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
-               <div class="app-content">
-                    <slot />
-               </div>
-          </div>
-     </div>
      <div v-else class="flex flex-col h-screen">
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />
@@ -41,6 +34,15 @@ const { locale, setLocale } = useI18n()
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel } = usePanelPageMeta()
 
 onMounted(async () => {
+     if (panelStore.user?.lang && panelStore.user.lang !== locale.value) {
+          try {
+               const setClientLocale = useSetClientLocale()
+               await setClientLocale(panelStore.user?.lang)
+          } catch (e) {
+               console.warn('[LayoutPanel] Failed to set locale:', e)
+          }
+     }
+
      const steps = [10, 30, 60, 100]
      let index = 0
 
@@ -50,16 +52,7 @@ onMounted(async () => {
           }
      }, 500)
 
-     const ok = await panelStore.initPanelSession()
-
-     if (panelStore.user?.lang && panelStore.user.lang !== locale.value) {
-          try {
-               const setClientLocale = useSetClientLocale()
-               await setClientLocale(panelStore.user?.lang)
-          } catch (e) {
-               console.warn('[LayoutPanel] Failed to set locale:', e)
-          }
-     }
+     const ok = await panelStore.initPanelData()
 
      isAccountBlocked.value = panelStore.user?.blocked || false
 

@@ -4,7 +4,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
           // Init session si nécessaire
           if (!panelStore.user || !panelStore.client || !panelStore.project) {
-               await panelStore.initPanelSession()
+               await panelStore.initPanelAccessSession()
           }
 
           // Redirection si utilisateur bloqué
