@@ -27,6 +27,7 @@ const router = useRouter()
 
 const isChecking = ref(true)
 const isAccountBlocked = useState('isAccountBlocked', () => false)
+const isStopped = useState('isStopped', () => false)
 const progress = ref(0)
 const { locale, setLocale } = useI18n()
 
@@ -51,8 +52,9 @@ onMounted(async () => {
                progress.value = steps[index++] ?? 95
           }
      }, 500)
-
-     const ok = await panelStore.initPanelData()
+     if(!isAccountBlocked && !isStopped){
+          const ok = await panelStore.initPanelData()
+     }
 
      clearInterval(interval)
      progress.value = 100
