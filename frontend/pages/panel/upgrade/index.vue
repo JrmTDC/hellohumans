@@ -9,9 +9,9 @@
                          <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>
                          <div class="flex flex-col justify-start items-[normal] w-min max-[1366px]:w-[672px] max-[737px]:w-min">
                               <div class="flex flex-col justify-start items-[normal] self-start">
-                                   <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">{{ t('panel.pages.upgrade.Index.trialRemainingZero') }}</span>
-                                   <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">{{ t('panel.pages.upgrade.Index.selectPlan') }}</h2>
-                                   <p class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]"> {{ t('panel.pages.upgrade.Index.choosePlanDescription') }}</p>
+                                   <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">{{ t('panel.pages.upgrade.index.trialRemainingZero') }}</span>
+                                   <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">{{ t('panel.pages.upgrade.index.selectPlan') }}</h2>
+                                   <p class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]"> {{ t('panel.pages.upgrade.index.choosePlanDescription') }}</p>
                               </div>
 
                               <div class="flex flex-col justify-start items-[normal] mt-[32px]">
@@ -29,7 +29,7 @@
                                         />
                                    </div>
 
-                                   <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.Index.viewAllFeatures') }}</span></button>
+                                   <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.index.viewAllFeatures') }}</span></button>
                               </div>
 
                               <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]"></div>
@@ -42,7 +42,7 @@
                          :billingCycle="store.billingCycle"
                          :totalPrice="computedTotalPrice"
                          :selectedModules="store.selectedAddOns"
-                         :nextButtonLabel="t('panel.pages.upgrade.Index.nextStep')"
+                         :nextButtonLabel="t('panel.pages.upgrade.index.nextStep')"
                          @updateBillingCycle="store.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
@@ -107,6 +107,7 @@ setMeta({
 pageMenuPanel.value = false
 
 definePageMeta({
-     layout: 'panel'
+     layout: 'panel',
+     middleware: ['panel-access']
 })
 </script>
