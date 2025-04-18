@@ -4,5 +4,18 @@
 </template>
 <script setup lang="ts">
 const { t } = useI18n()
-usePanelPageMeta( t('panel.pages.gettingStarted.index.metaTitle'), t('panel.pages.gettingStarted.index.metaDescription'))
+
+const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.gettingStarted.index.metaTitle'),
+     description: t('panel.pages.gettingStarted.index.metaDescription')
+})
+pageHeaderTitle.value = ''
+pageHeaderBilled.value = false
+pageHeaderPaid.value = false
+pageMenuPanel.value = true
+
+definePageMeta({
+     layout: 'panel'
+})
 </script>

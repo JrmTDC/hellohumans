@@ -6,6 +6,7 @@ import AuthController from '#controllers/Panel/AuthController'
 import UpgradeController from '#controllers/Panel/UpgradeController'
 import UsageController from '#controllers/Panel/UsageController'
 import ClientController from '#controllers/Panel/ClientController'
+import ProjectController from '#controllers/Panel/ProjectController'
 import UserController from '#controllers/Panel/UserController'
 import OnboardingController from '#controllers/Panel/OnboardingController'
 //import SubscriptionController from '#controllers/Panel/SubscriptionController'
@@ -37,15 +38,15 @@ router.group(() => {
      router.get('/upgrade/plans', (ctx) => UpgradeController.getPlans(ctx))
      router.get('/upgrade/modules', (ctx) => UpgradeController.getModules(ctx))
      router.get('/user', (ctx) => UserController.getUser(ctx))
+     router.get('/usages', (ctx) => UsageController.index(ctx))
      router.get('/client', (ctx) => ClientController.getClient(ctx))
      router.get('/clients', (ctx) => ClientController.getClients(ctx))
-     router.get('/project', (ctx) => ClientController.getProject(ctx))
-     router.get('/projects', (ctx) => ClientController.getProjects(ctx))
-     router.get('/usages', (ctx) => UsageController.index(ctx))
-     router.post('/switch-project/:uuid', (ctx) => ClientController.switchProject(ctx))
+     router.get('/project', (ctx) => ProjectController.getProject(ctx))
+     router.get('/projects', (ctx) => ProjectController.getProjects(ctx))
+     router.post('/switch-project/:uuid', (ctx) => ProjectController.switchProject(ctx))
      router.post('/lang', (ctx) => UserController.updateLang(ctx))
      router.get('/onboarding/activities', (ctx) => OnboardingController.getActivities(ctx))
-     router.post('/onboarding', (ctx) => OnboardingController.index(ctx))
+     router.post('/onboarding', (ctx) => OnboardingController.create(ctx))
 })
      .prefix('/panel')
      .use(middleware.panel_ensure_user())

@@ -68,23 +68,19 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-const panelStore = usePanelStore()
 
-const allUsages = useUsageDefinitions()
-const usages = computed(() => allUsages.value.filter((u) => u.showInDashboard))
-
-const pageTitle = useState('pageTitle', () => '')
-const pageIsBilled = useState('pageIsBilled', () => false)
-const pageIsPaid = useState('pageIsPaid', () => false)
-
-onMounted(async () => {
-     pageTitle.value = t('panel.pages.dashboard.pageTitle')
-     pageIsBilled.value = false
-     pageIsPaid.value = false
+const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.dashboard.metaTitle'),
+     description: t('panel.pages.dashboard.metaDescription')
 })
+pageHeaderTitle.value = t('panel.pages.dashboard.pageTitle')
+pageHeaderBilled.value = false
+pageHeaderPaid.value = false
+pageMenuPanel.value = true
+
 definePageMeta({
-     layout: 'panel-menu'
+     layout: 'panel'
 })
-usePanelPageMeta(t('panel.pages.dashboard.metaTitle'), t('panel.pages.dashboard.metaDescription'))
 </script>
 

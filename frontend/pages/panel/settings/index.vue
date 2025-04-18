@@ -5,5 +5,15 @@ import { useRouter } from 'vue-router'
 const { t } = useI18n()
 const router = useRouter()
 router.push("/panel/settings/chat/appearance")
-usePanelPageMeta( t('panel.pages.settings.index.metaTitle'), t('panel.pages.settings.index.metaDescription'))
+
+const { pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.settings.index.metaTitle'),
+     description: t('panel.pages.settings.index.metaDescription')
+})
+pageMenuPanel.value = false
+
+definePageMeta({
+     layout: 'panel'
+})
 </script>

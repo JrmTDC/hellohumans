@@ -7,7 +7,7 @@
                     <!-- Liste d'offres -->
                     <div class="flex flex-col justify-start items-center flex-grow">
                          <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>
-                         <div class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center">
+                         <div class="flex flex-col justify-start items-[normal] w-min max-[1366px]:w-[672px] max-[737px]:w-min">
                               <div class="flex flex-col justify-start items-[normal] self-start">
                                    <span v-if="trialActive" class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start">{{ t('panel.pages.upgrade.Index.trialRemainingZero') }}</span>
                                    <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">{{ t('panel.pages.upgrade.Index.selectPlan') }}</h2>
@@ -15,25 +15,21 @@
                               </div>
 
                               <div class="flex flex-col justify-start items-[normal] mt-[32px]">
-                                   <div
-                                        class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
+                                   <div class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
                                    >
                                         <!-- Boucle sur store.plans -->
                                         <PanelUpgradePlanCard
-                                             v-for="plan in store.plans"
+                                             v-for="(plan, index) in store.plans"
                                              :key="plan.id"
                                              :plan="plan"
                                              :selected="store.selectedPlanId === plan.id"
                                              :billingCycle="store.billingCycle"
+                                             :index="index"
                                              @selectPlan="store.setPlan"
                                         />
                                    </div>
 
-                                   <button
-                                        class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0"
-                                   >
-                                        <span>{{ t('panel.pages.upgrade.Index.viewAllFeatures') }}</span>
-                                   </button>
+                                   <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.Index.viewAllFeatures') }}</span></button>
                               </div>
 
                               <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]"></div>
@@ -102,8 +98,15 @@ function goStep(step: number) {
 function closePanel() {
      router.push('/panel/dashboard')
 }
-definePageMeta({
-     layout: 'panel-empty'
+
+const { pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.upgrade.index.metaTitle'),
+     description: t('panel.pages.upgrade.index.metaDescription')
 })
-usePanelPageMeta( t('panel.pages.upgrade.Index.metaTitle'), t('panel.pages.upgrade.Index.metaDescription'))
+pageMenuPanel.value = false
+
+definePageMeta({
+     layout: 'panel'
+})
 </script>

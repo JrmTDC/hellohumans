@@ -141,5 +141,10 @@ const handleForgot = async () => {
 
      loading.value = false
 }
-usePanelPageMeta( t('panel.pages.forgotPassword.metaTitle'), t('panel.pages.forgotPassword.metaDescription'))
+
+const { setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.forgotPassword.metaTitle'),
+     description: t('panel.pages.forgotPassword.metaDescription')
+})
 </script>

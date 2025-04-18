@@ -43,18 +43,18 @@
 <script setup lang="ts">
 const { t } = useI18n()
 
-const pageTitle = useState('pageTitle', () => '')
-const pageIsBilled = useState('pageIsBilled', () => false)
-const pageIsPaid = useState('pageIsPaid', () => false)
+const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.analytics.index.metaTitle'),
+     description: t('panel.pages.analytics.index.metaDescription')
+})
+pageHeaderTitle.value = 'Analytique'
+pageHeaderBilled.value = false
+pageHeaderPaid.value = false
+pageMenuPanel.value = true
 
-onMounted(async () => {
-     pageTitle.value = 'Analytique'
-     pageIsBilled.value = true
-     pageIsPaid.value = true
-})
 definePageMeta({
-     layout: 'panel-menu'
+     layout: 'panel'
 })
-usePanelPageMeta( t('panel.pages.analytics.index.metaTitle'), t('panel.pages.analytics.index.metaDescription'))
 </script>
 

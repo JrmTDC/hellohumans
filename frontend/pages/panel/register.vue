@@ -239,5 +239,9 @@ const handleRegister = async () => {
 
      loading.value = false
 }
-usePanelPageMeta( t('panel.pages.register.metaTitle'), t('panel.pages.register.metaDescription'))
+const { setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.register.metaTitle'),
+     description: t('panel.pages.register.metaDescription')
+})
 </script>
