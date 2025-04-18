@@ -1,7 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref, reactive, computed, watch } from 'vue'
-import { useRouter } from '#imports'
-import { usePanelStore } from '~/stores/panelStore'
 
 interface SectionInfo {
      total: number
@@ -268,6 +265,8 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           goPrevious,
           submitOnboarding,
           resetStore,
+          autoSelectClient,
+          prepareNewFromDashboard,
           initialize,
      }
 })
