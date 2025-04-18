@@ -61,10 +61,12 @@ const refVisitors = ref<HTMLElement | null>(null)
 // Auto-scroll vers la prochaine section visible
 watch(() => onboardingStore.stepSections[2].completed, (val) => {
      nextTick(() => {
-          requestAnimationFrame(() => {
-               if (val === 1) refConversations.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-               else if (val === 2) refVisitors.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-          })
+          setTimeout(() => {
+               requestAnimationFrame(() => {
+                    if (val === 1) refConversations.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    else if (val === 2) refVisitors.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+               })
+          },100)
      })
 })
 </script>

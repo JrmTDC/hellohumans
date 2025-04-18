@@ -42,9 +42,11 @@ const refConversations = ref<HTMLElement | null>(null)
 watch(() => onboardingStore.stepSections[1
      ].completed, (val) => {
      nextTick(() => {
-          requestAnimationFrame(() => {
-               if (val === 1) refConversations.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-          })
+          setTimeout(() => {
+               requestAnimationFrame(() => {
+                    if (val === 1) refConversations.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+               })
+          },100)
      })
 })
 </script>
