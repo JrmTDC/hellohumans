@@ -176,6 +176,12 @@
                          "metaDescription": "Configurez rapidement votre espace pour profiter pleinement des fonctionnalités d’HelloHumans dès aujourd’hui."
                     }
                },
+               "onboarding": {
+                    "index": {
+                         "metaTitle": "Bienvenue sur HelloHumans – Démarrez votre configuration",
+                         "metaDescription": "Complétez quelques étapes simples pour configurer HelloHumans selon les besoins de votre entreprise. Personnalisez votre projet, sélectionnez votre secteur et commencez à automatiser."
+                    }
+               },
                "upgrade":{
                     "index": {
                          "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
