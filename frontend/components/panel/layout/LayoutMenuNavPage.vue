@@ -82,14 +82,15 @@ import iconMenuModule from '~/assets/icons/panel/iconMenuModule.svg'
 import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
 import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
 
+const { t } = useI18n()
 const menuItems = ref([
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: 'panel.components.layout.menuNavPage.dashboard' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: 'panel.components.layout.menuNavPage.siteAnalysis' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: 'panel.components.layout.menuNavPage.analytics' },
-     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: 'panel.components.layout.menuNavPage.gettingStarted' },
-     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: 'panel.components.layout.menuNavPage.integrations' },
-     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: 'panel.components.layout.menuNavPage.settings' },
-     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), route: null, tooltip: 'panel.components.layout.menuNavPage.account' }
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard') },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis') },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: t('panel.components.layout.menuNavPage.analytics') },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuBulb), route: '/panel/getting-started', tooltip: t('panel.components.layout.menuNavPage.gettingStarted') },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: t('panel.components.layout.menuNavPage.integrations') },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: t('panel.components.layout.menuNavPage.settings') },
+     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), route: null, tooltip: t('panel.components.layout.menuNavPage.account') }
 ])
 
 

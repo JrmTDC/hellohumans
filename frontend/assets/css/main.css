@@ -7,10 +7,10 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      appearance: none !important;
 }
 #hellohumans-siteweb {
-     font-family: euclidcircularb;
+     font-family: euclidcircularb, serif;
 }
 #hellohumans-panel {
-     font-family: euclidcircularb;
+     font-family: euclidcircularb, serif;
      letter-spacing: -0.24px;
      ._inputError::before {
           background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+Cjxzdmcgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDE2IDE2IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZDtzdHJva2UtbGluZWpvaW46cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6MS40MTQyMTsiPgogICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwtMTI2NCwtNzgyMCkiPgogICAgICAgIDxwYXRoIGlkPSJLc3p0YcWCdC0zLWtvcGlhIiBkPSJNMTI3Miw3ODIwQzEyNjcuNiw3ODIwIDEyNjQsNzgyMy42IDEyNjQsNzgyOEMxMjY0LDc4MzIuNCAxMjY3LjYsNzgzNiAxMjcyLDc4MzZDMTI3Ni40LDc4MzYgMTI4MCw3ODMyLjQgMTI4MCw3ODI4QzEyODAsNzgyMy42IDEyNzYuNCw3ODIwIDEyNzIsNzgyMFpNMTI3Mi45Miw3ODMyTDEyNzEuMDgsNzgzMkwxMjcxLjA4LDc4MzAuNDZMMTI3Mi45Miw3ODMwLjQ2TDEyNzIuOTIsNzgzMlpNMTI3Mi45Miw3ODI4LjYxTDEyNzEuMDgsNzgyOC42MUwxMjcxLjA4LDc4MjMuNjlMMTI3Mi45Miw3ODIzLjY5TDEyNzIuOTIsNzgyOC42MVoiIHN0eWxlPSJmaWxsOnJnYigyNDUsNDcsNTcpO2ZpbGwtcnVsZTpub256ZXJvOyIvPgogICAgPC9nPgo8L3N2Zz4K) no-repeat;
@@ -22,7 +22,7 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      }
 }
 #hellohumans-panel-iframe{
-     font-family: euclidcircularb;
+     font-family: euclidcircularb, serif;
      letter-spacing: -0.24px;
      #hellohumans-chat-iframe{
           right: 26px;
@@ -30,7 +30,7 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      }
 }
 #hellohumans-panel-modal {
-     font-family: euclidcircularb;
+     font-family: euclidcircularb, serif;
      letter-spacing: -0.24px;
 }
 #hellohumans-chat-iframe{
@@ -38,7 +38,7 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      letter-spacing: -0.24px;
 }
 #hellohumans-error-iframe{
-     font-family: euclidcircularb;
+     font-family: euclidcircularb, serif;
      display: flex;
      flex: 1 1 0%;
      flex-direction: column;
@@ -46,9 +46,12 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      height: 100vh;
 }
 #app-content{
-     font-family: euclidcircularb;
+     font-family: euclidcircularb, serif;
+     letter-spacing: -0.24px;
 }
 #hellohumans-loading{
+     font-family: euclidcircularb, serif;
+     letter-spacing: -0.24px;
      .animate-fade-in {
           animation: fade-in 0.6s ease-out;
      }
@@ -61,6 +64,10 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      .fade-leave-to {
           opacity: 0;
      }
+}
+#hellohumans-blocked{
+     font-family: Mulish;
+     letter-spacing: -0.24px;
 }
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;

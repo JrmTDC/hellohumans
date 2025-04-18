@@ -27,6 +27,10 @@ const refreshPage = () => {
      clearError()
      location.reload()
 }
-usePanelPageMeta( t('panel.pages.error.serverError.metaTitle'), t('panel.pages.error.serverError.metaDescription'))
+const { setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.error.serverError.metaTitle'),
+     description: t('panel.pages.error.serverError.metaDescription')
+})
 </script>
 

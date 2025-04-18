@@ -31,10 +31,10 @@ const props = defineProps<{
 }>()
 
 const messages = [
-     t('panel.components.loadingOverlay.messages.int_1'),
-     t('panel.components.loadingOverlay.messages.int_2'),
-     t('panel.components.loadingOverlay.messages.int_3'),
-     t('panel.components.loadingOverlay.messages.int_4')
+     t('panel.components.common.loadingOverlay.messages.int_1'),
+     t('panel.components.common.loadingOverlay.messages.int_2'),
+     t('panel.components.common.loadingOverlay.messages.int_3'),
+     t('panel.components.common.loadingOverlay.messages.int_4')
 ]
 
 const displayedMessages = ref<string[]>([])

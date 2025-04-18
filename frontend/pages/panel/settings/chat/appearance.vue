@@ -3,20 +3,19 @@
      </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue'
-
 const { t } = useI18n()
-const pageTitle = useState('pageTitle', () => '')
-const pageIsBilled = useState('pageIsBilled', () => false)
-const pageIsPaid = useState('pageIsPaid', () => false)
 
-onMounted(async () => {
-     pageTitle.value = 'Paramètres'
-     pageIsBilled.value = false
-     pageIsPaid.value = false
+const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.settings.chat.appearance.metaTitle'),
+     description: t('panel.pages.settings.chat.appearance.metaDescription')
 })
+pageHeaderTitle.value = 'Paramètres'
+pageHeaderBilled.value = false
+pageHeaderPaid.value = false
+pageMenuPanel.value = true
+
 definePageMeta({
-     layout: 'panel-menu'
+     layout: 'panel'
 })
-usePanelPageMeta( t('panel.pages.settings.chat.appearance.megaTitle'), t('panel.pages.settings.chat.appearance.megaDescription'))
 </script>

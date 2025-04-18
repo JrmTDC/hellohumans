@@ -11,5 +11,15 @@ const router = useRouter()
 onMounted(async () => {
      await router.replace('/panel/dashboard')
 })
-usePanelPageMeta( t('panel.pages.index.metaTitle'), t('panel.pages.index.metaDescription'))
+
+const { pageMenuPanel, setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.index.megaTitle'),
+     description: t('panel.pages.index.megaDescription')
+})
+pageMenuPanel.value = false
+
+definePageMeta({
+     layout: 'panel'
+})
 </script>

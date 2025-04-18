@@ -232,12 +232,16 @@ const handleRegister = async () => {
 
      const success = await publicStore.register(inputEmail.value, password.value, displayName.value, agreed.value, lang)
      if (success) {
-          await router.push('/panel')
+          await router.push('/onboarding')
      } else {
          apiError.value = true
      }
 
      loading.value = false
 }
-usePanelPageMeta( t('panel.pages.register.metaTitle'), t('panel.pages.register.metaDescription'))
+const { setMeta } = usePanelPageMeta()
+setMeta({
+     title: t('panel.pages.register.metaTitle'),
+     description: t('panel.pages.register.metaDescription')
+})
 </script>

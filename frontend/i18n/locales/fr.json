@@ -5,6 +5,14 @@
           }
      },
      "panel": {
+          "layout": {
+               "empty": {
+                    "metaTitle": "Panel"
+               },
+               "menu": {
+                    "metaTitle": "Panel"
+               }
+          },
           "pages": {
                "index": {
                     "loading": "Connexion ...",
@@ -276,6 +284,11 @@
                     }
                },
                "layout": {
+                    "accountBlacked": {
+                         "bannedTitle": "Votre compte a été suspendu.",
+                         "bannedDescription": "Pour des raisons de sécurité ou de conformité, votre accès a été restreint. Veuillez contacter le support pour en savoir plus.",
+                         "contactSupport": "Contacter le support"
+                    },
                     "herderPage": {
                          "paid": "Payé",
                          "billing": "Payant",
@@ -335,18 +348,168 @@
                          "errorGeneric": "Une erreur est survenue"
                     }
                },
+               "onboarding": {
+                    "step": {
+                         "part1": {
+                              "selectClient": {
+                                   "title": "Sélectionnez ou créez un compte client",
+                                   "description": "Votre projet sera rattaché à ce compte client",
+                                   "placeholder": "Sélectionnez un compte client",
+                                   "placeholderCreate": "Création d’un nouveau compte client"
+                              },
+                              "siteUrl": {
+                                   "title": "Quelle est l'adresse URL de votre site web",
+                                   "description": "Vos réponses nous aideront à personnaliser votre expérience",
+                                   "placeholder": "https://votre-site.com"
+                              }
+                         },
+                         "part2": {
+                              "industry": {
+                                   "title": "Quel est le secteur d'activité de votre entreprise ?",
+                                   "description": "",
+                                   "options": {
+                                        "services": "Développement de sites",
+                                        "sale": "Vente",
+                                        "marketing": "Marketing"
+                                   }
+                              },
+                              "communication": {
+                                   "title": "Actuellement comment vous communiquer avec vos clients ?",
+                                   "description": "Sélectionnez tout ce qui s'applique",
+                                   "options": {
+                                        "mail": "Par e-mail",
+                                        "phone": "Par téléphone",
+                                        "place": "Sur place",
+                                        "website": "Siteweb / Blog",
+                                        "none": "Aucun"
+                                   }
+                              },
+                              "businessModel": {
+                                   "title": "Quel est votre principal modèle économique ?",
+                                   "description": "",
+                                   "options": {
+                                        "services": "Je fournis des services",
+                                        "ecommerce": "E-commerce",
+                                        "other": "Autre"
+                                   }
+                              }
+                         },
+                         "part3": {
+                              "activitySector": {
+                                   "title": "Quel est le secteur d'activité de votre entreprise ?",
+                                   "description": "",
+                                   "placeholder": "Sélectionnez votre secteur d'activité"
+                              },
+                              "conversations": {
+                                   "title": "Combien de conversations avec les clients votre entreprise traite-t-elle par mois ?",
+                                   "description": "",
+                                   "options": {
+                                        "under": "Jusqu'à {nbr}",
+                                        "over": " {nbr} ou plus",
+                                        "unknown": "Je ne sais pas"
+                                   }
+                              },
+                              "visitors": {
+                                   "title": "Combien de visiteurs votre site Web attire-t-il chaque mois ?",
+                                   "description": "",
+                                   "options": {
+                                        "under": "Jusqu'à {nbr}",
+                                        "over": " {nbr} ou plus",
+                                        "unknown": "Je ne sais pas"
+                                   }
+                              },
+                              "platform": {
+                                   "title": "Quelle plateforme héberge votre site Web ?",
+                                   "description": "",
+                                   "options": {
+                                        "custom": "Site personnalisé",
+                                        "wordpress": "WordPress",
+                                        "prestashop": "PrestaShop",
+                                        "woocommerce": "WooCommerce",
+                                        "shopify": "Shopify",
+                                        "other": "Autre"
+                                   }
+                              }
+                         },
+                         "part4": {
+                              "title": "J'utilise Hellohumans avant tout pour…",
+                              "description": "",
+                              "options": {
+                                   "support_ai": {
+                                        "label": "Automatiser mon système d’assistance grâce à AI Agent",
+                                        "description": "Répondez aux questions des clients et automatisez les tâches répétitives grâce à HelloHumans AI Agent"
+                                   },
+                                   "marketing_growth": {
+                                        "label": "Optimiser mes conversions grâce à l’IA",
+                                        "description": "Accompagnez vos visiteurs et déclenchez des actions marketing grâce à des réponses intelligentes"
+                                   },
+                                   "lead_generation": {
+                                        "label": "Générer des leads automatiquement",
+                                        "description": "Identifiez et engagez les visiteurs intéressés avant même qu’ils ne vous contactent, et convertissez-les en clients potentiels"
+                                   },
+                                   "ecommerce_assistant": {
+                                        "label": "Accompagner mes visiteurs e-commerce",
+                                        "description": "Proposez une expérience d’achat personnalisée, recommandez des produits et guidez vos clients tout au long de leur parcours"
+                                   }
+                              }
+                         }
+                    },
+                    "nav": {
+                         "back": "Retour",
+                         "next": "Suivant",
+                         "submit": "C'est parti !",
+                         "loading": "Chargement..."
+                    },
+                    "selectClient": {
+                         "createNew": "Créer un nouveau compte client",
+                         "newClientName": "Nom du compte client"
+                    }
+               },
                "upgrade": {
                     "ModuleCard": {
-
+                         "comingSoon": "Bientôt disponible",
+                         "included": "Inclus dans votre abonnement",
+                         "startingAt": "À partir de",
+                         "selectLabel": "Choisissez une option :",
+                         "perMonth": "/mois",
+                         "perYear": "/an"
                     },
                     "planCard": {
-
+                         "inCart": "Dans votre panier",
+                         "popular": "Le plus populaire",
+                         "selected": "Sélectionné",
+                         "selectPlan": "Sélectionner cette offre",
+                         "perMonth": "/mois",
+                         "perYear": "/an"
                     },
                     "stepperHeader": {
-
+                         "title": "Mettre à niveau",
+                         "step1": "Offre",
+                         "step2": "Modules",
+                         "step3": "Paiement",
+                         "tooltip": {
+                              "step1": "Revenir à l'étape 1",
+                              "step2": "Aller à l'étape 2",
+                              "step3": "Aller à l'étape 3"
+                         }
                     },
                     "subscriptionSummary": {
-
+                         "title": "Résumé de l'abonnement",
+                         "highlight": "Bénéficiez gratuitement de l'intégration simplifiée du support client",
+                         "highlightFull": "avec tous les abonnements au-dessus de 250€ par mois",
+                         "billingLabel": "FACTURÉ",
+                         "billingMonthly": "Mensuel",
+                         "billingAnnual": "Une fois par an",
+                         "billingDiscountBadge": "2 MOIS GRATUITS",
+                         "planLabel": "OFFRE",
+                         "planNoneSelected": "Aucune offre sélectionnée.",
+                         "modulesLabel": "MODULES COMPLÉMENTAIRES",
+                         "included": "Inclus",
+                         "totalLabel": "Total",
+                         "perMonth": "/mois",
+                         "perYear": "/an",
+                         "defaultButtonLabel": "Prochaine étape",
+                         "changeOrCancelInfo": "Modifier ou annuler votre offre à tout moment"
                     }
                }
           },
