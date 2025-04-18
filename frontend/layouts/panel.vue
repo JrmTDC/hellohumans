@@ -25,7 +25,7 @@ const { t } = useI18n()
 const panelStore = usePanelStore()
 const router = useRouter()
 
-const isChecking = ref(true)
+const isChecking = useState('isChecking', () => true)
 const isAccountBlocked = useState('isAccountBlocked', () => false)
 const isStopped = useState('isStopped', () => false)
 const progress = ref(0)
@@ -52,16 +52,22 @@ onMounted(async () => {
                progress.value = steps[index++] ?? 95
           }
      }, 500)
-     if(!isAccountBlocked && !isStopped){
-          const ok = await panelStore.initPanelData()
-     }
 
      clearInterval(interval)
      progress.value = 100
-     setTimeout(() => {
-          isChecking.value = false
-          if (!ok) router.push('/panel/login')
-     }, 400)
+
+     if(!isAccountBlocked.value && !isStopped.value){
+          const ok = await panelStore.initPanelData()
+          setTimeout(() => {
+               isChecking.value = false
+               if (!ok) router.push('/panel/login')
+          }, 400)
+     }else{
+          setTimeout(() => {
+               isChecking.value = false
+          }, 400)
+     }
+
 })
 usePanelPageMeta().setMeta({
      title: t('panel.layout.menu.metaTitle'),

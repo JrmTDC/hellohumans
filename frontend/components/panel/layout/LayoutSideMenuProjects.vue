@@ -1,11 +1,11 @@
 <template>
      <div ref="projectMenuRef" class="absolute z-[110] bg-white shadow-[0px_8px_20px_rgba(0,20,51,0.24)] rounded-[8px] p-[8px] w-[256px] max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#d3dbe5] scrollbar-track-transparent" :style="menuStyle">
-          <div v-for="project in projects" :key="project.uuid">
-               <div role="menuitemradio" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group" @click="selectProject(project.uuid)">
+          <div v-for="project in projects" :key="project.id">
+               <div role="menuitemradio" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group" @click="selectProject(project.id)">
                     <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                     {{ project.website || t('panel.components.layout.sideMenuProjects.noName') }}
                     </span>
-                    <span v-if="project.uuid === selectedProject" class="flex items-center ml-[12px]">
+                    <span v-if="project.id === selectedProject" class="flex items-center ml-[12px]">
                          <svgo-panel-icon-checked class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" />
                     </span>
                </div>
@@ -32,13 +32,13 @@ const emit = defineEmits(['open-create-project','close'])
 const projectMenuRef = ref()
 
 const projects = computed(() => panelStore.projects)
-const selectedProject = computed(() => panelStore.project?.uuid)
+const selectedProject = computed(() => panelStore.project?.id)
 
-console.log(selectedProject)
 const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)' })
-
+const isChecking = useState('isChecking', () => true)
 const selectProject = async (uuid: string) => {
      if (uuid !== selectedProject.value) {
+          isChecking.value = true
           await panelStore.switchProject(uuid)
           location.reload()
      }
