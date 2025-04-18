@@ -5,10 +5,8 @@
               :description="t('panel.components.onboarding.step.part4.description')">
                <PanelOnboardingBoxSelect
                     v-model="onboardingStore.answers.primaryUse"
-                    :options="goals"
-               />
+                    :options="goals"/>
           </PanelOnboardingSection>
-
      </div>
 </template>
 
