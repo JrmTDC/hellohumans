@@ -35,6 +35,7 @@ const router = useRouter()
 const isChecking = ref(true)
 const isAccountBlocked = ref(false)
 const progress = ref(0)
+const { locale, setLocale } = useI18n()
 
 // États de page récupérés depuis le composable global
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel } = usePanelPageMeta()
@@ -50,21 +51,18 @@ onMounted(async () => {
      }, 500)
 
      const ok = await panelStore.initPanelSession()
-     isAccountBlocked.value = panelStore.user?.blocked || false
 
-     console.log(router.currentRoute.value.path)
-     if(panelStore.user?.blocked === false) {
-          if (!panelStore.client || !panelStore.project || !panelStore.project?.subscription || panelStore.project?.subscription.status == 'inactive') {
-
-               if(router.currentRoute.value.path !== '/panel/onboarding'){
-                    await router.push('/panel/onboarding')
-               }
-
-               if(panelStore.client && panelStore.project && router.currentRoute.value.path !== '/panel/upgrade'){
-                    await router.push('/panel/upgrade')
-               }
+     if (panelStore.user?.lang && panelStore.user.lang !== locale.value) {
+          try {
+               const setClientLocale = useSetClientLocale()
+               await setClientLocale(panelStore.user?.lang)
+          } catch (e) {
+               console.warn('[LayoutPanel] Failed to set locale:', e)
           }
      }
+
+     isAccountBlocked.value = panelStore.user?.blocked || false
+
      clearInterval(interval)
      progress.value = 100
      setTimeout(() => {
