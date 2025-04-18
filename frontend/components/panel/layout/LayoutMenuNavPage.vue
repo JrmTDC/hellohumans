@@ -83,6 +83,8 @@ import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
 import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
 
 const { t } = useI18n()
+const router = useRouter()
+
 const menuItems = ref([
      { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard') },
      { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis') },
@@ -111,17 +113,11 @@ const toggleSideMenuUser = () => {
      showSideUserMenu.value = !showSideUserMenu.value
 }
 
-const panelStore = usePanelStore()
+const onboardingStore = useOnboardingStore()
 
 const handleCreateProject = async (website: string) => {
-     const success = await panelStore.createProject(website)
-     if (success) {
-          showCreateProjectModal.value = false
-          await panelStore.fetchUser()
-          const project = panelStore.projects.at(-1) // le dernier projet
-          if (project?.uuid) {
-               await router.push(`/panel/project/${project.uuid}/config`)
-          }
-     }
+     onboardingStore.prepareNewFromDashboard(website)
+     await router.push('/panel/onboarding')
+     showCreateProjectModal.value = false
 }
 </script>

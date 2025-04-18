@@ -182,14 +182,46 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                section.completed--
           }
      }
+     function prepareNewFromDashboard(siteUrl: string) {
+          resetStore()
+          answers.value.webSite = siteUrl
+
+          const panel = usePanelStore()
+          if (panel.client?.id && !answers.value.selectedClientId && !answers.value.newClientName) {
+               const found = panel.clients.find(c => c.id === panel.client?.id)
+               if (found) {
+                    answers.value.selectedClientId = found.id
+               }
+          }
+
+          validateSections(1)
+          saveToStorage()
+     }
+
+     function autoSelectClient() {
+          const panel = usePanelStore()
+
+          const noClientSelected = !answers.value.selectedClientId && !answers.value.newClientName
+          const validClient = panel.client?.id && panel.clients.some(c => c.id === panel.client?.id)
+
+          if (noClientSelected && validClient) {
+               answers.value.selectedClientId = panel.client?.id ?? null
+          }
+     }
+
      function initialize() {
           try {
                const raw = localStorage.getItem('onboardingStore')
-               if (!raw) return
+               if (!raw) {
+                    autoSelectClient()
+                    return
+               }
                const parsed = JSON.parse(raw)
 
                if (parsed.currentStep) currentStep.value = parsed.currentStep
                if (parsed.answers) Object.assign(answers.value, parsed.answers)
+
+               autoSelectClient()
 
                for (const [step, _] of Object.entries(stepSections)) {
                     validateSections(Number(step))
