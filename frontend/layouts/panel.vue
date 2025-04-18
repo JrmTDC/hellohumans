@@ -1,13 +1,6 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
      <LayoutAccountBlocked v-else-if="isAccountBlocked" />
-     <div id="hellohumans-panel" v-else class="flex flex-col h-screen">
-          <div class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
-               <div class="app-content">
-                    <slot />
-               </div>
-          </div>
-     </div>
      <div v-else class="flex flex-col h-screen">
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />
@@ -33,7 +26,7 @@ const panelStore = usePanelStore()
 const router = useRouter()
 
 const isChecking = ref(true)
-const isAccountBlocked = ref(false)
+const isAccountBlocked = useState('isAccountBlocked', () => false)
 const progress = ref(0)
 const { locale, setLocale } = useI18n()
 
@@ -41,17 +34,6 @@ const { locale, setLocale } = useI18n()
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel } = usePanelPageMeta()
 
 onMounted(async () => {
-     const steps = [10, 30, 60, 100]
-     let index = 0
-
-     const interval = setInterval(() => {
-          if (progress.value < 95) {
-               progress.value = steps[index++] ?? 95
-          }
-     }, 500)
-
-     const ok = await panelStore.initPanelSession()
-
      if (panelStore.user?.lang && panelStore.user.lang !== locale.value) {
           try {
                const setClientLocale = useSetClientLocale()
@@ -61,7 +43,16 @@ onMounted(async () => {
           }
      }
 
-     isAccountBlocked.value = panelStore.user?.blocked || false
+     const steps = [10, 30, 60, 100]
+     let index = 0
+
+     const interval = setInterval(() => {
+          if (progress.value < 95) {
+               progress.value = steps[index++] ?? 95
+          }
+     }, 500)
+
+     const ok = await panelStore.initPanelData()
 
      clearInterval(interval)
      progress.value = 100

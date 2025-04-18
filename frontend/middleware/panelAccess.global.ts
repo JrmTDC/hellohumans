@@ -1,15 +1,17 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
+     const isAccountBlocked = useState('isAccountBlocked', () => false)
      if (to.meta.layout === 'panel') {
           const panelStore = usePanelStore()
 
           // Init session si nécessaire
           if (!panelStore.user || !panelStore.client || !panelStore.project) {
-               await panelStore.initPanelSession()
+               await panelStore.initPanelAccessSession()
           }
 
-          // Redirection si utilisateur bloqué
+          // Si utilisateur bloqué
           if (panelStore.user?.blocked) {
-               return navigateTo('/panel/login')
+               isAccountBlocked.value = true
+               return
           }
 
           // Redirection si onboarding nécessaire
