@@ -52,16 +52,19 @@ onMounted(async () => {
      const ok = await panelStore.initPanelSession()
      isAccountBlocked.value = panelStore.user?.blocked || false
 
+     console.log(router.currentRoute.value.path)
      if(panelStore.user?.blocked === false) {
-          if ((!panelStore.client || !panelStore.project) && router.currentRoute.value.path !== '/panel/onboarding') {
-               await router.push('/panel/onboarding')
-          }
+          if (!panelStore.client || !panelStore.project || !panelStore.project?.subscription || panelStore.project?.subscription.status == 'inactive') {
 
-          if ((!panelStore.project?.subscription || panelStore.project?.subscription.status == 'inactive') && router.currentRoute.value.path !== '/panel/upgrade') {
-               await router.push('/panel/upgrade')
+               if(router.currentRoute.value.path !== '/panel/onboarding'){
+                    await router.push('/panel/onboarding')
+               }
+
+               if(panelStore.client && panelStore.project && router.currentRoute.value.path !== '/panel/upgrade'){
+                    await router.push('/panel/upgrade')
+               }
           }
      }
-
      clearInterval(interval)
      progress.value = 100
      setTimeout(() => {

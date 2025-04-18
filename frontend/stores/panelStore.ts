@@ -48,11 +48,12 @@ export const usePanelStore = defineStore('panel', () => {
                     client.value = null
                     return true
                }
+               client.value = clientRes.success.client || null
+
                if(!projectRes.success || projectRes.success.project.length === 0) {
                     project.value = null
                     return true
                }
-               client.value = clientRes.success.client || null
                project.value = projectRes.success.project || null
 
                // 3) Vérifier si le projet a une souscription valide
