@@ -54,7 +54,6 @@ pageHeaderPaid.value = false
 pageMenuPanel.value = true
 
 definePageMeta({
-     layout: 'panel',
-     middleware: ['panel-access']
+     layout: 'panel'
 })
 </script>

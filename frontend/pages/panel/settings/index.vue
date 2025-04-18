@@ -14,7 +14,6 @@ setMeta({
 pageMenuPanel.value = false
 
 definePageMeta({
-     layout: 'panel',
-     middleware: ['panel-access']
+     layout: 'panel'
 })
 </script>
