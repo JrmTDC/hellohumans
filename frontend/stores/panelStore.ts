@@ -3,8 +3,8 @@ import { defineStore } from 'pinia'
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
-     const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
-     const client = ref<{} | null>(null)
+     const user = ref<{ id: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
+     const client = ref<{ id: string } | null>(null)
      const project = ref<{ subscription:object } | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
@@ -104,19 +104,6 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
-     async function createProject(website: string) {
-          const { apiFetch } = usePanelApi()
-          try {
-               await apiFetch('/projects', {
-                    method: 'POST',
-                    body: JSON.stringify({ website }),
-               })
-               return true
-          } catch (err: any) {
-               return false
-          }
-     }
-
      async function updateUserLang(lang: string): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
@@ -165,20 +152,6 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
-     async function createClient(name: string): Promise<{ id: string; name: string } | null> {
-          const { apiFetch } = usePanelApi()
-          try {
-               const res = await apiFetch('/clients', {
-                    method: 'POST',
-                    body: JSON.stringify({ name }),
-               })
-               return res.success.client
-          } catch (err) {
-               console.error('Erreur création compte client:', err)
-               return null
-          }
-     }
-
      async function fetchListActivity() {
           const { apiFetch } = usePanelApi()
           try {
@@ -188,6 +161,7 @@ export const usePanelStore = defineStore('panel', () => {
                console.error('Erreur activités :', error)
           }
      }
+
      async function createOnboarding(data: Record<string, any>): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
@@ -227,8 +201,6 @@ export const usePanelStore = defineStore('panel', () => {
           initPanelSession,
           fetchUser,
           fetchUsage,
-          createProject,
-          createClient,
           updateUserLang,
           switchProject,
           updatePassword,
