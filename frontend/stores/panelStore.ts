@@ -1,11 +1,21 @@
 import { defineStore } from 'pinia'
 
+interface ProjectSubscription {
+     status: 'active' | 'inactive' | 'canceled' | string
+}
+
+interface Project {
+     id: string
+     name: string
+     subscription?: ProjectSubscription | null
+}
+
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
      const user = ref<{ id: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
      const client = ref<{ id: string } | null>(null)
-     const project = ref<{ subscription:object } | null>(null)
+     const project = ref<Project | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const project_subscription = ref<{ id: string; name: string; status: string }[]>([])
@@ -17,10 +27,8 @@ export const usePanelStore = defineStore('panel', () => {
 
      async function initPanelSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-          const { setLocale } = useI18n()
           panelReturn.value = null
           try {
-
                // 1) Vérifier la session / récupérer l’utilisateur
                const userRes = await apiFetch('/user')
                user.value = userRes.success.user || null
@@ -28,11 +36,6 @@ export const usePanelStore = defineStore('panel', () => {
                if (!user.value) {
                     await logout()
                     return false
-               }
-
-               // Mettre à jour la langue locale si disponible
-               if (userRes.success.user?.lang) {
-                    await setLocale(userRes.success.user.lang)
                }
 
                // 2) Vérifier si client et projet sont présents
