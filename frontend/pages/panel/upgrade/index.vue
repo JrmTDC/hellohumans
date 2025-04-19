@@ -15,9 +15,13 @@
                               </div>
 
                               <div class="flex flex-col justify-start items-[normal] mt-[32px]">
-                                   <div class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
+                                   <div
+                                        class="w-max max-w-none grid gap-x-[12px] grid-cols-[repeat(4,_238px)] auto-rows-fr items-stretch
+                                        max-[1366px]:grid-cols-[repeat(2,_326px)]
+                                        max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
                                    >
-                                        <!-- Boucle sur store.plans -->
+
+                                   <!-- Boucle sur store.plans -->
                                         <PanelUpgradePlanCard
                                              v-for="(plan, index) in store.plans"
                                              :key="plan.id"
