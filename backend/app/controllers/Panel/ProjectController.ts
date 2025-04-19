@@ -61,7 +61,7 @@ class ProjectController{
                          .eq('id', user_id)
                }
 
-               const client_user_id = clientUser.id
+               const client_user_id = clientUser.client_id
                let selected_project_id = clientUser.selected_project_id
 
                // 3. Vérifie si le projet sélectionné est bien lié au client

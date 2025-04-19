@@ -176,8 +176,14 @@
                          "metaDescription": "Configurez rapidement votre espace pour profiter pleinement des fonctionnalités d’HelloHumans dès aujourd’hui."
                     }
                },
+               "onboarding": {
+                    "index": {
+                         "metaTitle": "Bienvenue sur HelloHumans – Démarrez votre configuration",
+                         "metaDescription": "Complétez quelques étapes simples pour configurer HelloHumans selon les besoins de votre entreprise. Personnalisez votre projet, sélectionnez votre secteur et commencez à automatiser."
+                    }
+               },
                "upgrade":{
-                    "Index": {
+                    "index": {
                          "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
                          "selectPlan": "Sélectionner votre offre",
                          "choosePlanDescription": "Choisissez une offre et choisissez des modules à l'étape suivante.",
@@ -187,7 +193,7 @@
                          "metaDescription": "Comparez les formules disponibles et sélectionnez celle qui correspond le mieux à vos besoins avant de passer à l'étape suivante."
 
                     },
-                    "Modules": {
+                    "modules": {
                          "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
                          "title": "Sélectionner votre offre",
                          "description": "Choisissez une offre et choisissez des modules à l'étape suivante.",

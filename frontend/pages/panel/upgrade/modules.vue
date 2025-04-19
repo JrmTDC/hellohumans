@@ -13,22 +13,22 @@
                    v-if="trialActive"
                    class="uppercase text-[11px] leading-[14px] tracking-[-0.01em] bg-[#dce9ff] text-[#303f9f] px-[6px] py-[3px] rounded-[4px] font-medium self-start"
               >
-                 {{ t('panel.pages.upgrade.Modules.trialRemainingZero') }}
+                 {{ t('panel.pages.upgrade.modules.trialRemainingZero') }}
               </span>
                                    <h2 class="mt-[8px] mb-0 font-medium text-[28px] leading-[33px] tracking-[-0.01em] text-left">
-                                        {{ t('panel.pages.upgrade.Modules.title') }}
+                                        {{ t('panel.pages.upgrade.modules.title') }}
                                    </h2>
                                    <p
                                         class="mb-0 mt-[8px] font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-left text-[#647491]"
                                    >
-                                        {{ t('panel.pages.upgrade.Modules.description') }}
+                                        {{ t('panel.pages.upgrade.modules.description') }}
                                    </p>
                               </div>
 
                               <span class="block w-[32px] h-[32px]"></span>
                               <div class="flex flex-row items-center h-[34px]">
                                    <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">
-                                        {{ t('panel.pages.upgrade.Modules.chooseModules') }}
+                                        {{ t('panel.pages.upgrade.modules.chooseModules') }}
                                    </h2>
                               </div>
                               <span class="block w-[16px] h-[16px]"></span>
@@ -57,7 +57,7 @@
                          :totalPrice="computedTotalPrice"
                          @updateBillingCycle="store.setBillingCycle"
                          @goNext="handlePaymentClick"
-                         :nextButtonLabel="t('panel.pages.upgrade.Modules.nextButtonLabel')"
+                         :nextButtonLabel="t('panel.pages.upgrade.modules.nextButtonLabel')"
                          :disableIfZero="true"
                     />
 

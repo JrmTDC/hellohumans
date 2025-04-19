@@ -9,7 +9,7 @@ import ClientController from '#controllers/Panel/ClientController'
 import ProjectController from '#controllers/Panel/ProjectController'
 import UserController from '#controllers/Panel/UserController'
 import OnboardingController from '#controllers/Panel/OnboardingController'
-//import SubscriptionController from '#controllers/Panel/SubscriptionController'
+import SubscriptionController from '#controllers/Panel/SubscriptionController'
 //import StripeWebhookController from "#controllers/Panel/StripeWebhookController";
 
 import { middleware } from '#start/kernel'
@@ -53,7 +53,7 @@ router.group(() => {
 
 // Routes Stripe protégées par l'authentification
 router.group(() => {
-     //router.post('/create-subscription', (ctx) => SubscriptionController.create(ctx))
+     router.post('/create-subscription', (ctx) => SubscriptionController.create(ctx))
      // router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
      //router.post('/cancel-subscription', (ctx) => SubscriptionController.cancel(ctx))
      //router.post('/subscription/:project_uuid', (ctx) => SubscriptionController.create(ctx))

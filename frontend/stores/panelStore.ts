@@ -1,11 +1,21 @@
 import { defineStore } from 'pinia'
 
+interface ProjectSubscription {
+     status: 'active' | 'inactive' | 'canceled' | string
+}
+
+interface Project {
+     id: string
+     name: string
+     subscription?: ProjectSubscription | null
+}
+
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
-     const user = ref<{ uuid: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
-     const client = ref<{} | null>(null)
-     const project = ref<{ subscription:object } | null>(null)
+     const user = ref<{ id: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
+     const client = ref<{ id: string } | null>(null)
+     const project = ref<Project | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const project_subscription = ref<{ id: string; name: string; status: string }[]>([])
@@ -15,12 +25,10 @@ export const usePanelStore = defineStore('panel', () => {
 
      const panelReturn = ref<string | null>(null)
 
-     async function initPanelSession(): Promise<boolean> {
+     async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-          const { setLocale } = useI18n()
           panelReturn.value = null
           try {
-
                // 1) Vérifier la session / récupérer l’utilisateur
                const userRes = await apiFetch('/user')
                user.value = userRes.success.user || null
@@ -28,11 +36,6 @@ export const usePanelStore = defineStore('panel', () => {
                if (!user.value) {
                     await logout()
                     return false
-               }
-
-               // Mettre à jour la langue locale si disponible
-               if (userRes.success.user?.lang) {
-                    await setLocale(userRes.success.user.lang)
                }
 
                // 2) Vérifier si client et projet sont présents
@@ -48,11 +51,12 @@ export const usePanelStore = defineStore('panel', () => {
                     client.value = null
                     return true
                }
+               client.value = clientRes.success.client || null
+
                if(!projectRes.success || projectRes.success.project.length === 0) {
                     project.value = null
                     return true
                }
-               client.value = clientRes.success.client || null
                project.value = projectRes.success.project || null
 
                // 3) Vérifier si le projet a une souscription valide
@@ -62,20 +66,33 @@ export const usePanelStore = defineStore('panel', () => {
 
                project_subscription.value = projectRes.success.project.subscription || []
 
-               // 4) Puisque le client et le projet sont valides, on récupère d’autres informations
+               return true
+          } catch (err: any) {
+               await logout()
+               return false
+          }
+     }
+
+     async function initPanelData(): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          panelReturn.value = null
+          try {
+               // 1) Vérifier la session / récupérer l’utilisateur
+               if (!user.value) {
+                    await logout()
+                    return false
+               }
+
+               // 2) On récupère d’autres informations
                const [projectsRes, usagesRes] = await Promise.all([
-                    apiFetch('/clients'),
                     apiFetch('/projects'),
                     apiFetch('/usages'),
                ])
-               clients.value = clientsRes.success.clients || []
                project_usages.value = usagesRes.success.usages || []
+               projects.value = projectsRes.success.projects || []
                modules.value = usagesRes.modules || []
-
-
                return true
           } catch (err: any) {
-               setApiError(panelReturn, err, 'panel.pages.layout')
                await logout()
                return false
           }
@@ -100,19 +117,6 @@ export const usePanelStore = defineStore('panel', () => {
                modules.value = data.modules || []
           } catch (error) {
                console.error('Erreur récupération des usages :', error)
-          }
-     }
-
-     async function createProject(website: string) {
-          const { apiFetch } = usePanelApi()
-          try {
-               await apiFetch('/projects', {
-                    method: 'POST',
-                    body: JSON.stringify({ website }),
-               })
-               return true
-          } catch (err: any) {
-               return false
           }
      }
 
@@ -164,20 +168,6 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
-     async function createClient(name: string): Promise<{ id: string; name: string } | null> {
-          const { apiFetch } = usePanelApi()
-          try {
-               const res = await apiFetch('/clients', {
-                    method: 'POST',
-                    body: JSON.stringify({ name }),
-               })
-               return res.success.client
-          } catch (err) {
-               console.error('Erreur création compte client:', err)
-               return null
-          }
-     }
-
      async function fetchListActivity() {
           const { apiFetch } = usePanelApi()
           try {
@@ -187,6 +177,7 @@ export const usePanelStore = defineStore('panel', () => {
                console.error('Erreur activités :', error)
           }
      }
+
      async function createOnboarding(data: Record<string, any>): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
@@ -202,13 +193,14 @@ export const usePanelStore = defineStore('panel', () => {
      }
 
      async function logout() {
-          await supabase.auth.signOut()
           user.value = null
           project_usages.value = []
           project_subscription.value = []
           modules.value = []
+          const isAccountBlocked = useState('isAccountBlocked', () => false)
+          isAccountBlocked.value = false
+          await supabase.auth.signOut()
      }
-
 
      return {
           // state
@@ -223,11 +215,10 @@ export const usePanelStore = defineStore('panel', () => {
           activities,
 
           // actions
-          initPanelSession,
+          initPanelAccessSession,
+          initPanelData,
           fetchUser,
           fetchUsage,
-          createProject,
-          createClient,
           updateUserLang,
           switchProject,
           updatePassword,
