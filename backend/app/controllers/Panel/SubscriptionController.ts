@@ -19,14 +19,14 @@ class SubscriptionController {
                     })
                }
 
-               // 1. Récupération de l'utilisateur interne
-               const { data: userData, error: userError } = await supabaseService
+               // 1. Utilisateur
+               const { data: userData } = await supabaseService
                     .from('users')
                     .select('id, selected_client_id')
                     .eq('auth_id', auth_id)
                     .single()
 
-               if (userError || !userData) {
+               if (!userData) {
                     return response.notFound({
                          error: { name: 'userNotFound', description: 'Utilisateur introuvable.' },
                     })
@@ -35,36 +35,35 @@ class SubscriptionController {
                const user_id = userData.id
                const selected_client_id = userData.selected_client_id
 
-               // 2. Récupération du lien utilisateur ↔ client
-               const { data: clientUser, error: clientUserError } = await supabaseService
+               // 2. Client_user
+               const { data: clientUser } = await supabaseService
                     .from('client_users')
                     .select('id, selected_project_id')
                     .eq('user_id', user_id)
                     .eq('client_id', selected_client_id)
                     .maybeSingle()
 
-               if (!clientUser || clientUserError) {
+               if (!clientUser) {
                     return response.forbidden({
                          error: { name: 'noClientAccess', description: 'Aucun lien avec ce client.' },
                     })
                }
 
                const selected_project_id = clientUser.selected_project_id
-
                if (!selected_project_id) {
                     return response.badRequest({
                          error: { name: 'noProjectSelected', description: 'Aucun projet sélectionné.' },
                     })
                }
 
-               // 3. Récupération du plan pour voir s’il est gratuit
-               const { data: plan, error: planError } = await supabaseService
+               // 3. Vérification du plan
+               const { data: plan } = await supabaseService
                     .from('subscription_plans')
                     .select('id, monthly_price')
                     .eq('id', body.plan_id)
                     .single()
 
-               if (planError || !plan) {
+               if (!plan) {
                     return response.notFound({
                          error: { name: 'planNotFound', description: 'Plan introuvable.' },
                     })
@@ -72,7 +71,36 @@ class SubscriptionController {
 
                const isFree = plan.monthly_price === 0 && (!body.modules || body.modules.length === 0)
 
-               // 4. Si plan gratuit → on crée directement l’abonnement sans Stripe
+               // 4. Vérifie s’il existe une subscription pour le projet
+               const { data: existingSubscription } = await supabaseService
+                    .from('client_project_subscriptions')
+                    .select('id')
+                    .eq('project_id', selected_project_id)
+                    .maybeSingle()
+
+               if (!existingSubscription) {
+                    // On en crée une vide avec le statut "pending"
+                    const { error: createError } = await supabaseService
+                         .from('client_project_subscriptions')
+                         .insert({
+                              project_id: selected_project_id,
+                              status: 'pending',
+                              current_modules: [],
+                              billing_cycle: body.billing_cycle,
+                              is_trial: false,
+                              payment_failed: false,
+                         })
+
+                    if (createError) {
+                         return response.internalServerError({
+                              error: {
+                                   name: 'subscriptionCreationFailed',
+                                   description: 'Impossible de créer l’abonnement initial pour ce projet.',
+                              },
+                         })
+                    }
+               }
+
                if (isFree) {
                     const { error: updateError } = await supabaseService
                          .from('client_project_subscriptions')
@@ -84,6 +112,9 @@ class SubscriptionController {
                               payment_failed: false,
                               billing_cycle: body.billing_cycle,
                               canceled_at: null,
+                              trial_end_at: null,
+                              current_period_end: null,
+                              is_trial: false,
                          })
                          .eq('project_id', selected_project_id)
 
@@ -99,17 +130,20 @@ class SubscriptionController {
                     }
                }
 
-               // 5. Si abonnement payant → réponse à gérer côté frontend
+               // Stripe requis
                return {
                     success: false,
                     requiresPayment: true,
-                    message: 'Abonnement payant, veuillez procéder au paiement via Stripe.',
+                    message: 'Abonnement payant, veuillez procéder au paiement.',
                }
 
-          } catch (e) {
-               console.error('Erreur createSubscription:', e)
+          } catch (error) {
+               console.error('Erreur SubscriptionController.create:', error)
                return response.internalServerError({
-                    error: { name: 'internalError', description: 'Erreur interne lors de la création de l’abonnement.' },
+                    error: {
+                         name: 'internalError',
+                         description: 'Erreur interne lors de la création de l’abonnement.',
+                    },
                })
           }
      }
