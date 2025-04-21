@@ -15,9 +15,13 @@
                               </div>
 
                               <div class="flex flex-col justify-start items-[normal] mt-[32px]">
-                                   <div class="w-max max-w-none grid gap-x-[12px] gap-y-0 grid-auto-rows-auto grid-cols-[repeat(4,_238px)] p-0 max-[1366px]:grid-cols-[repeat(2,_326px)] max-[1366px]:gap-x-[20px] max-[1366px]:p-0 max-[1366px]:grid-auto-flow-row max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
+                                   <div
+                                        class="w-max max-w-none grid gap-x-[12px] grid-cols-[repeat(4,_238px)] auto-rows-fr items-stretch
+                                        max-[1366px]:grid-cols-[repeat(2,_326px)]
+                                        max-[737px]:flex max-[737px]:flex-col max-[737px]:w-full max-[737px]:min-w-0 max-[737px]:px-[20px] max-[737px]:justify-center"
                                    >
-                                        <!-- Boucle sur store.plans -->
+
+                                   <!-- Boucle sur store.plans -->
                                         <PanelUpgradePlanCard
                                              v-for="(plan, index) in store.plans"
                                              :key="plan.id"
@@ -26,13 +30,26 @@
                                              :billingCycle="store.billingCycle"
                                              :index="index"
                                              @selectPlan="store.setPlan"
+
                                         />
                                    </div>
 
                                    <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.index.viewAllFeatures') }}</span></button>
                               </div>
 
-                              <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]"></div>
+                              <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]">
+                                   <div class="bg-[#ffdda7] rounded-[10px] w-[40px] h-[40px] flex justify-center items-center">
+                                        <svgo-panel-upgrade-icon-bulb class="w-[24px] h-[24px] fill-[#d48200]" />
+                                   </div>
+                                   <span class="block w-[12px] min-w-[12px] h-[12px] min-h-[12px]"></span>
+                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.upgrade.index.helpTitle') }}</h2>
+                                   <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
+                                   <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.upgrade.index.helpDescription') }}</p>
+                                   <span class="block w-[16px] min-w-[16px] h-[16px] min-h-[16px]"></span>
+                                   <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] inline-flex items-center justify-center bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] cursor-pointer font-normal text-center touch-manipulation select-none align-middle whitespace-nowrap hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
+                                        <span>{{ t('panel.pages.upgrade.index.helpCta') }}</span>
+                                   </button>
+                              </div>
                          </div>
                     </div>
 
@@ -63,10 +80,25 @@ onMounted(async () => {
 
      store.restore()
 
-     // Si aucune offre sélectionnée, on prend la première
-     if (!store.selectedPlanId && store.plans.length) {
-          store.setPlan(store.plans[0].id)
-     }
+     // 1️⃣ les blocs statiques
+     const staticSections = ['header', 'description', 'spacer', 'price', 'button', 'footer', 'features-title']
+
+     // 2️⃣ les lignes de features (on part du principe qu'on a au plus N features)
+     const maxFeatures = Math.max(
+          ...store.plans.map(p => p.includedFeatures.length)
+     )
+     const featureSections = Array.from({ length: maxFeatures }, (_, i) => `feature-${i}`)
+
+     const allSections = [...staticSections, ...featureSections]
+
+     allSections.forEach(sectionName => {
+          const els = Array.from(
+               document.querySelectorAll<HTMLElement>(`[data-section="${sectionName}"]`)
+          )
+          if (!els.length) return
+          const maxH = Math.max(...els.map(el => el.getBoundingClientRect().height))
+          els.forEach(el => (el.style.minHeight = `${maxH}px`))
+     })
 })
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)

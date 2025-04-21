@@ -28,46 +28,66 @@ export const usePanelStore = defineStore('panel', () => {
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           panelReturn.value = null
+
           try {
-               // 1) Vérifier la session / récupérer l’utilisateur
+               // 1) Vérifier la session utilisateur
                const userRes = await apiFetch('/user')
-               user.value = userRes.success.user || null
+               user.value = userRes?.success?.user ?? null
 
                if (!user.value) {
                     await logout()
                     return false
                }
 
-               // 2) Vérifier si client et projet sont présents
-               const [clientsRes, clientRes, projectRes] = await Promise.all([
+               // 2) Récupérer les infos client, projet, etc.
+               const [clientsRes, clientRes, projectRes] = await Promise.allSettled([
                     apiFetch('/clients'),
                     apiFetch('/client'),
                     apiFetch('/project'),
                ])
 
-               clients.value = clientsRes.success.clients || null
+               // 3) Clients
+               if (clientsRes.status === 'fulfilled' && clientsRes.value.success) {
+                    clients.value = clientsRes.value.success.clients ?? []
+               } else {
+                    clients.value = []
+               }
 
-               if(!clientRes.success || clientRes.success.client.length === 0) {
+               // 4) Client courant
+               if (
+                    clientRes.status !== 'fulfilled' ||
+                    !clientRes.value.success ||
+                    !clientRes.value.success.client
+               ) {
                     client.value = null
-                    return true
+               } else {
+                    client.value = clientRes.value.success.client
                }
-               client.value = clientRes.success.client || null
 
-               if(!projectRes.success || projectRes.success.project.length === 0) {
+               // 5) Projet courant
+               if (
+                    projectRes.status !== 'fulfilled' ||
+                    !projectRes.value.success ||
+                    !projectRes.value.success.project
+               ) {
                     project.value = null
-                    return true
-               }
-               project.value = projectRes.success.project || null
-
-               // 3) Vérifier si le projet a une souscription valide
-               if(!projectRes.success.project.subscription || projectRes.success.project.subscription.length === 0) {
+                    project_subscription.value = []
                     return true
                }
 
-               project_subscription.value = projectRes.success.project.subscription || []
+               const currentProject = projectRes.value.success.project
+               project.value = currentProject
+
+               // 6) Abonnement (peut être null volontairement)
+               if (currentProject.subscription) {
+                    project_subscription.value = [currentProject.subscription]
+               } else {
+                    project_subscription.value = []
+               }
 
                return true
           } catch (err: any) {
+               console.error('[initPanelAccessSession] Erreur :', err)
                await logout()
                return false
           }
@@ -98,28 +118,6 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
-     async function fetchUser() {
-          const { apiFetch } = usePanelApi()
-          try {
-               const data = await apiFetch('/me')
-               user.value = data.user
-          } catch (error) {
-               console.error('Erreur utilisateur :', error)
-          }
-     }
-
-     async function fetchUsage() {
-          const { apiFetch } = usePanelApi()
-          try {
-               const data = await apiFetch('/usage')
-               project_usages.value = data.usage || []
-               project_subscription.value = data.subscription || []
-               modules.value = data.modules || []
-          } catch (error) {
-               console.error('Erreur récupération des usages :', error)
-          }
-     }
-
      async function updateUserLang(lang: string): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
@@ -140,8 +138,6 @@ export const usePanelStore = defineStore('panel', () => {
                await apiFetch(`/switch-project/${uuid}`, {
                     method: 'POST'
                })
-
-               await fetchUser()
                return true
           } catch (error) {
                console.error('Erreur switch project:', error)
@@ -185,11 +181,57 @@ export const usePanelStore = defineStore('panel', () => {
                     method: 'POST',
                     body: JSON.stringify(data)
                })
+               if(res.success) {
+                    client.value = res.success.client
+                    project.value = res.success.project
+               }
                return !!res.success
           } catch (err) {
                console.error('Erreur lors de la soumission de l’onboarding :', err)
                return false
           }
+     }
+
+     async function confirmUpgrade(): Promise<'free' | 'stripe'> {
+          const { selectedPlanId, selectedAddOns, billingCycle } = useUpgradeStore()
+
+          const payload = {
+               project_id: project.value?.id,
+               plan_id: selectedPlanId!,
+               modules: selectedAddOns.value || [],
+               billing_cycle: billingCycle.value || 'monthly'
+          }
+
+          const res = await usePanelApi().apiFetch('/stripe/create-subscription', {
+               method: 'POST',
+               body: JSON.stringify(payload)
+          })
+
+          if (!res.success) throw new Error('Erreur lors de la création de l’abonnement.')
+
+          if (res.success.subscription.status === 'free') {
+               project_subscription.value = res.success.subscription
+               return 'free'
+          }
+
+          if (res.success.subscription.status === 'active' && res.success.stripe.client_secret) {
+               // Paiement via Stripe
+               const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!)
+
+               const result = await stripe?.confirmCardPayment(res.stripe.client_secret, {
+                    payment_method: {
+                         card: elements.getElement(CardElement)!
+                    }
+               })
+
+               if (result?.error) {
+                    throw new Error(result.error.message)
+               }
+
+               return 'stripe'
+          }
+
+          throw new Error('Type d’abonnement non géré.')
      }
 
      async function logout() {
@@ -217,13 +259,12 @@ export const usePanelStore = defineStore('panel', () => {
           // actions
           initPanelAccessSession,
           initPanelData,
-          fetchUser,
-          fetchUsage,
           updateUserLang,
           switchProject,
           updatePassword,
           fetchListActivity,
           createOnboarding,
+          confirmUpgrade,
           logout
      }
 })

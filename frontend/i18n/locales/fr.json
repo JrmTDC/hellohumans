@@ -184,6 +184,9 @@
                },
                "upgrade":{
                     "index": {
+                         "helpTitle": " Vous ne savez pas quelle offre choisir ?",
+                         "helpDescription": "Répondez à quelques questions pour que nous puissions vous proposer un abonnement sur mesure.",
+                         "helpCta": "Obtenez des recommandations",
                          "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
                          "selectPlan": "Sélectionner votre offre",
                          "choosePlanDescription": "Choisissez une offre et choisissez des modules à l'étape suivante.",

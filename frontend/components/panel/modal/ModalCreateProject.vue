@@ -1,10 +1,10 @@
 <template>
-     <PanelModalBase title="t('panel.components.modal.createProject.title')" @close="emit('close')">
+     <PanelModalBase :title="t('panel.components.modal.createProject.title')" @close="emit('close')">
           <form @submit.prevent="submit">
                <PanelCommonFloatingInput
                     v-model="url"
-                    label="t('panel.components.modal.createProject.label')"
-                    hint="t('panel.components.modal.createProject.hint')"
+                    :label="t('panel.components.modal.createProject.label')"
+                    :hint="t('panel.components.modal.createProject.hint')"
                     :error-text="t('panel.components.modal.createProject.error')"
                     :validator="isValidUrl"
                />

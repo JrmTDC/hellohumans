@@ -121,31 +121,14 @@ class ProjectController{
                     .from('client_project_subscriptions')
                     .select('*')
                     .eq('project_id', selected_project_id)
-                    .single()
+                    .maybeSingle()
 
-               if (projectSubscriptionError || !projectSubscription) {
-                    return response.notFound({
-                         error: { name: 'projectSubscriptionNotFound', description: 'Abonnement du projet introuvable.' }
-                    })
-               }
 
                return {
                     project: {
                          id: selectedProject.id,
                          website: selectedProject.website,
-                         subscription:{
-                              id: projectSubscription.id,
-                              stripe_subscription_id: projectSubscription.stripe_subscription_id,
-                              status: projectSubscription.status,
-                              current_plan_id: selectedProject.current_plan_id,
-                              current_modules: selectedProject.current_modules,
-                              current_period_end: selectedProject.current_period_end,
-                              canceled_at: selectedProject.canceled_at,
-                              billing_cycle: selectedProject.billing_cycle,
-                              trial_end_at: projectSubscription.trial_end_at,
-                              is_trial: projectSubscription.is_trial,
-                              payment_failed: projectSubscription.payment_failed
-                         }
+                         subscription: projectSubscription || null
                     }
                }
 

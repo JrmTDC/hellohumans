@@ -21,16 +21,15 @@
                </div>
 
                <!-- Message d'erreur -->
-               <div v-if="errorMessage" class="text-red-600 text-sm text-center mb-[12px]">
-                    {{ errorMessage }}
-               </div>
+               <div v-if="errorMessage" class="text-red-600 text-sm text-center mb-[12px]">{{ errorMessage }}</div>
 
                <!-- Actions -->
                <div class="flex flex-col items-center justify-center">
+
                     <button
                          type="submit"
-                         :disabled="!!cardError || loading"
-                         :class="['w-full rounded-[8px] text-[18px] h-[46px] px-[20px] flex items-center justify-center',loading ? 'bg-[#d3dbe5] text-[#647491] cursor-not-allowed' : 'bg-[#0566ff] text-white hover:bg-[#0049bd]']">
+                         :disabled="!props.canSubmit || !!cardError || loading"
+                         :class="['w-full rounded-[8px] text-[18px] h-[46px] px-[20px] flex items-center justify-center', (!props.canSubmit || loading) ? 'bg-[#d3dbe5] text-[#647491] cursor-not-allowed' : 'bg-[#0566ff] text-white hover:bg-[#0049bd]']">
                          <span v-if="!loading">{{ t('panel.components.modal.upgradePayment.submitLabel') }}</span>
                          <span v-else>{{ t('panel.components.modal.upgradePayment.processing') }}</span>
                     </button>
@@ -49,14 +48,15 @@
 </template>
 
 <script setup lang="ts">
+const panelStore = usePanelStore()
 const emit = defineEmits(['close', 'submit'])
 const props = defineProps<{
      billingCycle: 'monthly' | 'annual'
+     total: number
+     canSubmit: boolean
 }>()
 
 const { t } = useI18n()
-const panelStore = usePanelStore()
-const upgradeStore = useUpgradeStore()
 
 const cardDetails = ref<any>(null)
 const cardError = ref<string | null>(null)
@@ -66,61 +66,34 @@ const todayAmount = ref(0)
 const monthlyAmount = ref(0)
 
 onMounted(() => {
-     preview()
+
 })
-
-async function preview() {
-
-     const projectId = panelStore.project?.id
-     const planId = upgradeStore.selectedPlanId
-     const modules = upgradeStore.billableAddOns.map((m) => m.id)
-
-     if (!projectId || !planId) return
-
-     try {
-          const preview = await panelStore.previewSubscription(projectId, planId, modules, props.billingCycle)
-          todayAmount.value = preview.todayAmount
-          monthlyAmount.value = preview.monthlyAmount
-     } catch (err) {
-          errorMessage.value = t('panel.components.modal.upgradePayment.errorPreview')
-     }
-}
-
-const submit = async () => {
-     if (!cardDetails.value || cardError.value) return
-
-     loading.value = true
-     errorMessage.value = ''
-
-     const projectId = panelStore.project?.id
-     const planId = upgradeStore.selectedPlanId
-     const modules = upgradeStore.billableAddOns.map((m) => m.id)
-
-     if (!projectId || !planId) {
-          errorMessage.value = t('panel.components.modal.upgradePayment.errorMissingInfo')
-          loading.value = false
-          return
-     }
-
-     const result = await panelStore.createSubscriptionWithCard({
-          projectId,
-          planId,
-          modules,
-          billingCycle: props.billingCycle,
-          paymentMethod: cardDetails.value,
-     })
-
-     if (result.success) {
-          emit('submit', result.subscription)
-          emit('close')
-     } else {
-          errorMessage.value = result.error || t('panel.components.modal.upgradePayment.errorGeneric')
-     }
-
-     loading.value = false
-}
 
 const handleClose = () => {
      if (!loading.value) emit('close')
 }
+
+async function submit() {
+     if (!props.canSubmit) return
+
+     loading.value = true
+     errorMessage.value = ''
+
+     try {
+          const result = await panelStore.confirmUpgrade()
+          if (result === 'free') {
+               emit('submit')
+
+          }
+
+          if (result === 'stripe') {
+               emit('submit')
+          }
+     } catch (err: any) {
+          errorMessage.value = err.message || 'Une erreur est survenue.'
+     } finally {
+          loading.value = false
+     }
+}
+
 </script>

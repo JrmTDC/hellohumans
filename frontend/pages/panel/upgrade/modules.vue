@@ -58,15 +58,16 @@
                          @updateBillingCycle="store.setBillingCycle"
                          @goNext="handlePaymentClick"
                          :nextButtonLabel="t('panel.pages.upgrade.modules.nextButtonLabel')"
-                         :disableIfZero="true"
+                         :disableIfZero="!store.canValidateUpgrade"
                     />
 
                     <PanelModalUpgradePayment
                          v-if="showPaymentModal"
                          :total="computedTotalPrice"
+                         :canSubmit="store.canValidateUpgrade"
                          :billingCycle="store.billingCycle"
                          @close="showPaymentModal = false"
-                         @submit="submitPayment"
+                         @submit="handlePaymentSuccess"
                          @updateBillingCycle="store.setBillingCycle"
                     />
                </div>
@@ -147,33 +148,14 @@ function goNext() {
 }
 
 function handlePaymentClick() {
-     if (computedTotalPrice.value <= 0) return
+     if (!store.canValidateUpgrade) return
      showPaymentModal.value = true
 }
 
-function submitPayment(cardDetails: any) {
-     const result = panelStore.createStripeSubscription({
-          plan_id: store.selectedPlanId!,
-          modules: store.billableAddOns.map((mod) => mod.id),
-          billing_cycle: store.billingCycle,
-          payment_method: cardDetails.paymentMethodId, // par exemple obtenu via Stripe Elements
-     })
-
-     // Gestion succès / erreur
-     if (result.subscription) {
-          showPaymentModal.value = false
-          router.push('/panel/upgrade/success')
-     }
+function handlePaymentSuccess() {
+     showPaymentModal.value = false
+     router.push('/panel/dashboard')
 }
-
-const hasActiveSubscription = computed(() => {
-     return (
-          panelStore.subscription &&
-          Array.isArray(panelStore.subscription) &&
-          panelStore.subscription.length > 0 &&
-          panelStore.subscription[0].status !== 'canceled'
-     )
-})
 
 function goStep(step: number) {
      if (step === 1) router.push('/panel/upgrade')
