@@ -198,8 +198,8 @@ export const usePanelStore = defineStore('panel', () => {
           const payload = {
                project_id: project.value?.id,
                plan_id: selectedPlanId!,
-               modules: selectedAddOns.value || [],
-               billing_cycle: billingCycle.value || 'monthly'
+               modules: selectedAddOns || [],
+               billing_cycle: billingCycle || 'monthly'
           }
 
           const res = await usePanelApi().apiFetch('/stripe/create-subscription', {
@@ -209,13 +209,15 @@ export const usePanelStore = defineStore('panel', () => {
 
           if (!res.success) throw new Error('Erreur lors de la création de l’abonnement.')
 
-          if (res.success.subscription.status === 'free') {
-               project_subscription.value = res.success.subscription
+          if (res.success.project.subscription.status === 'free') {
+               project.value = res.success.project
+               project_subscription.value = res.success.project.subscription
                return 'free'
           }
 
           if (res.success.subscription.status === 'active' && res.success.stripe.client_secret) {
                // Paiement via Stripe
+               /*
                const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!)
 
                const result = await stripe?.confirmCardPayment(res.stripe.client_secret, {
@@ -227,7 +229,7 @@ export const usePanelStore = defineStore('panel', () => {
                if (result?.error) {
                     throw new Error(result.error.message)
                }
-
+               */
                return 'stripe'
           }
 
