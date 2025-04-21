@@ -117,7 +117,7 @@ class ProjectController{
                }
 
                // 6. On retourne uniquement le projet sélectionné
-               const { data: projectSubscription, error: projectSubscriptionError } = await supabaseService
+               const { data: projectSubscription } = await supabaseService
                     .from('client_project_subscriptions')
                     .select('*')
                     .eq('project_id', selected_project_id)

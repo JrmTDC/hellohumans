@@ -154,7 +154,7 @@ class SubscriptionController {
                     stripe: {
                          subscription_id: stripeSubscription.id,
                          customer_id: customer.id,
-                         client_secret: stripeSubscription.latest_invoice?.payment_intent?.client_secret ?? null
+                         //client_secret: stripeSubscription.latest_invoice?.payment_intent?.client_secret ?? null
                     }
                })
 
