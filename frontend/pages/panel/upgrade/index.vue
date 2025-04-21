@@ -80,10 +80,25 @@ onMounted(async () => {
 
      store.restore()
 
-     // Si aucune offre sélectionnée, on prend la première
-     if (!store.selectedPlanId && store.plans.length) {
-          store.setPlan(store.plans[0].id)
-     }
+     // 1️⃣ les blocs statiques
+     const staticSections = ['header', 'description', 'spacer', 'price', 'button', 'footer', 'features-title']
+
+     // 2️⃣ les lignes de features (on part du principe qu'on a au plus N features)
+     const maxFeatures = Math.max(
+          ...store.plans.map(p => p.includedFeatures.length)
+     )
+     const featureSections = Array.from({ length: maxFeatures }, (_, i) => `feature-${i}`)
+
+     const allSections = [...staticSections, ...featureSections]
+
+     allSections.forEach(sectionName => {
+          const els = Array.from(
+               document.querySelectorAll<HTMLElement>(`[data-section="${sectionName}"]`)
+          )
+          if (!els.length) return
+          const maxH = Math.max(...els.map(el => el.getBoundingClientRect().height))
+          els.forEach(el => (el.style.minHeight = `${maxH}px`))
+     })
 })
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)

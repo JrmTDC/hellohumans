@@ -1,7 +1,7 @@
 <template>
-     <div class="flex flex-col h-full w-full border border-red-500" @click="handleSelectPlan">
+     <div class="flex flex-col h-full w-full" @click="handleSelectPlan">
           <!-- Haut : Titre, badges -->
-          <div class="bg-white px-[20px] pt-[30px] pb-[2px] text-center relative [border-radius:12px_12px_0px_0px] flex flex-col justify-center items-start" :class="[orderClass(1), borderTopClasses]">
+          <div data-section="header" class="bg-white px-[20px] pt-[30px] pb-[2px] text-center relative [border-radius:12px_12px_0px_0px] flex flex-col justify-center items-start" :class="[orderClass(1), borderTopClasses]">
                <!-- Badge 'Dans votre panier' -->
                <div class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
                     v-if="selected">
@@ -28,14 +28,14 @@
           </div>
 
           <!-- Description -->
-          <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(2) ]">
+          <div data-section="description" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(2) ]">
                <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">{{ plan.description }}</p>
           </div>
 
-          <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
+          <div data-section="spacer" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
 
           <!-- Prix -->
-          <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(4) ]">
+          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(4) ]">
                <span>
                     <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">€</span>
                     </span>
@@ -44,7 +44,7 @@
           </div>
 
           <!-- Bouton (ou étiquette) Sélectionné -->
-          <div :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(5) ]">
+          <div data-section="button" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(5) ]">
                <button v-if="selected" class="block bg-[#eff2f6] border border-transparent text-[#acb8cb] max-w-full w-full rounded-[8px] text-[16px] h-[38px] leading-[20px] px-[16px] py-0" disabled>
                     <span class="flex flex-row justify-center items-center">
                          <div class="flex flex-row justify-start items-center">
@@ -57,10 +57,10 @@
           </div>
 
           <!-- Features -->
-          <div :class="['bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(6)]">
+          <div data-section="subtitle" :class="['bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(6)]">
                <p class="mt-0 mb-0 font-medium text-[12px] leading-[16px] tracking-[-0.01em] text-left">{{ plan.baseSubtitle }}</p>
           </div>
-          <div v-for="(feature, idx) in plan.includedFeatures" :key="idx" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, `order-[${7000 + props.index + 1 + idx}]` ]">
+          <div v-for="(feature, idx) in plan.includedFeatures" :key="idx" :data-section="`feature-${1+idx}`" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, `order-[${7000 + props.index + 1 + idx}]` ]">
                <div class="flex flex-row justify-start items-center">
                     <svgo-panel-icon-option-included class="w-[14px] h-[14px] fill-[#080f1a]" />
                     <span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span>
@@ -69,7 +69,7 @@
           </div>
 
           <!-- Bas arrondi -->
-          <div class="bg-white px-[20px] pb-[18px] text-center flex flex-col justify-center items-start mb-[20px] [border-radius:0px_0px_12px_12px]" :class="[orderClass(8),borderBottomClasses]">
+          <div data-section="footer" class="bg-white px-[20px] pb-[18px] text-center flex flex-col justify-center items-start mb-[20px] [border-radius:0px_0px_12px_12px]" :class="[orderClass(8),borderBottomClasses]">
           </div>
      </div>
 </template>
