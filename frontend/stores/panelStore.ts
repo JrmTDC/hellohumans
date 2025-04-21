@@ -192,6 +192,47 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function confirmUpgrade(): Promise<'free' | 'stripe'> {
+          const { selectedPlanId, selectedAddOns, billingCycle } = useUpgradeStore()
+
+          const payload = {
+               project_id: project.value?.id,
+               plan_id: selectedPlanId!,
+               modules: selectedAddOns.value || [],
+               billing_cycle: billingCycle.value || 'monthly'
+          }
+
+          const res = await usePanelApi().apiFetch('/stripe/create-subscription', {
+               method: 'POST',
+               body: JSON.stringify(payload)
+          })
+
+          if (!res.success) throw new Error('Erreur lors de la création de l’abonnement.')
+
+          if (res.mode === 'free') {
+               return 'free'
+          }
+
+          if (res.mode === 'paid' && res.stripe.client_secret) {
+               // Paiement via Stripe
+               const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!)
+
+               const result = await stripe?.confirmCardPayment(res.stripe.client_secret, {
+                    payment_method: {
+                         card: elements.getElement(CardElement)!
+                    }
+               })
+
+               if (result?.error) {
+                    throw new Error(result.error.message)
+               }
+
+               return 'stripe'
+          }
+
+          throw new Error('Type d’abonnement non géré.')
+     }
+
      async function logout() {
           user.value = null
           project_usages.value = []
@@ -224,6 +265,7 @@ export const usePanelStore = defineStore('panel', () => {
           updatePassword,
           fetchListActivity,
           createOnboarding,
+          confirmUpgrade,
           logout
      }
 })
