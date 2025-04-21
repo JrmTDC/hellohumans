@@ -182,19 +182,6 @@ class OnboardingController {
                     console.warn('⚠️ Impossible de mettre à jour le selected_project_id')
                }
 
-               // Création de l’abonnement placeholder
-               await supabaseService
-                    .from('client_project_subscriptions')
-                    .insert({
-                         project_id: projectData.id,
-                         current_plan_id: null,
-                         status: 'inactive',
-                         billing_cycle: 'monthly',
-                         current_modules: [],
-                         is_trial: false,
-                         payment_failed: false
-                    })
-
                return {
                     client: {
                          id: clientId
