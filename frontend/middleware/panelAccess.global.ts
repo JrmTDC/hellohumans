@@ -5,8 +5,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           const panelStore = usePanelStore()
 
           // Init session si nécessaire
-          if (!panelStore.user || !panelStore.client || !panelStore.project) {
+          if (!panelStore.user) {
                await panelStore.initPanelAccessSession()
+          }
+
+          // Vérification de l'authentification
+          if (!panelStore.user) {
+               isStopped.value = true
+               return navigateTo('/panel/login')
           }
 
           // Si utilisateur bloqué
@@ -25,7 +31,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
           // Redirection si upgrade requis
           const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules'].includes(to.path)
-          if (panelStore.project?.subscription?.status === 'inactive'){
+          if (panelStore.project?.subscription?.status != 'inactive' && panelStore.project?.subscription?.status != 'trialing' && panelStore.project?.subscription?.status != 'free') {
                isStopped.value = true
              if(!isUpgradePage) {
                     return navigateTo('/panel/upgrade')
