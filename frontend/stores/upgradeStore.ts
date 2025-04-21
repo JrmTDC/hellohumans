@@ -1,7 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { usePanelApi } from '~/composables/usePanelApi'
-import { usePanelStore } from '~/stores/panelStore'
 
 export interface UpgradePlan {
      id: string

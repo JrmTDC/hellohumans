@@ -56,17 +56,23 @@ onMounted(async () => {
      clearInterval(interval)
      progress.value = 100
 
-     if(!isAccountBlocked.value && !isStopped.value){
-          const ok = await panelStore.initPanelData()
-          setTimeout(() => {
-               isChecking.value = false
-               if (!ok) router.push('/panel/login')
-          }, 400)
-     }else{
-          setTimeout(() => {
-               isChecking.value = false
-          }, 400)
+     try {
+          if(!isAccountBlocked.value && !isStopped.value){
+               const ok = await panelStore.initPanelData()
+               setTimeout(() => {
+                    isChecking.value = false
+                    if (!ok) router.push('/panel/login')
+               }, 400)
+          }else{
+               setTimeout(() => {
+                    isChecking.value = false
+               }, 400)
+          }
+     } catch (e) {
+          console.error('Erreur layout panel initPanelData:', e)
+          await router.push('/panel/login')
      }
+
 
 })
 usePanelPageMeta().setMeta({
