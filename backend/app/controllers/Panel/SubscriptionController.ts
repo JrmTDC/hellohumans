@@ -104,9 +104,14 @@ class SubscriptionController {
                          .eq('project_id', selected_project_id)
 
                     return response.ok({
-                         success: true,
-                         mode: 'free',
-                         subscription_id: subscription.id
+                         subscription: {
+                              id: subscription.id,
+                              plan_id,
+                              modules: [],
+                              billing_cycle,
+                              status: 'free',
+                              stripe_subscription_id: null
+                         }
                     })
                }
 
@@ -144,7 +149,6 @@ class SubscriptionController {
                     .eq('project_id', selected_project_id)
 
                return response.ok({
-                    success: true,
                     mode: 'paid',
                     subscription_id: subscription.id,
                     stripe: {

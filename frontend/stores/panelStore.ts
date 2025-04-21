@@ -138,8 +138,6 @@ export const usePanelStore = defineStore('panel', () => {
                await apiFetch(`/switch-project/${uuid}`, {
                     method: 'POST'
                })
-
-               await fetchUser()
                return true
           } catch (error) {
                console.error('Erreur switch project:', error)
@@ -183,6 +181,10 @@ export const usePanelStore = defineStore('panel', () => {
                     method: 'POST',
                     body: JSON.stringify(data)
                })
+               if(res.success) {
+                    client.value = res.success.client
+                    project.value = res.success.project
+               }
                return !!res.success
           } catch (err) {
                console.error('Erreur lors de la soumission de l’onboarding :', err)
@@ -207,11 +209,12 @@ export const usePanelStore = defineStore('panel', () => {
 
           if (!res.success) throw new Error('Erreur lors de la création de l’abonnement.')
 
-          if (res.mode === 'free') {
+          if (res.success.subscription.status === 'free') {
+               project_subscription.value = res.success.subscription
                return 'free'
           }
 
-          if (res.mode === 'paid' && res.stripe.client_secret) {
+          if (res.success.subscription.status === 'active' && res.success.stripe.client_secret) {
                // Paiement via Stripe
                const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!)
 

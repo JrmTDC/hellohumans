@@ -113,7 +113,7 @@ class OnboardingController {
                               name: newClientName,
                               owner_user_id: userData.id
                          })
-                         .select()
+                         .select('*')
                          .single()
 
                     if (clientError || !clientData) {
@@ -126,6 +126,19 @@ class OnboardingController {
                     createdNewClient = true
                } else {
                     clientId = selectedClientId!
+               }
+
+               // On récupère les infos du client
+               const { data: clientData, error: clientError } = await supabaseService
+                    .from('clients')
+                    .select('*')
+                    .eq('id', clientId)
+                    .single()
+
+               if (clientError || !clientData) {
+                    return response.notFound({
+                         error: { name: 'clientNotFound', description: 'Client introuvable.' }
+                    })
                }
 
                //  Mise à jour du selected_project_id (si lien existant)
@@ -183,11 +196,11 @@ class OnboardingController {
                }
 
                return {
-                    client: {
-                         id: clientId
-                    },
+                    client: clientData,
                     project: {
-                         id: projectData.id
+                         id: projectData.id,
+                         website: projectData.website,
+                         subscription: null
                     }
                }
           } catch (error) {

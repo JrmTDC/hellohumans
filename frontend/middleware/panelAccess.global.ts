@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                const subStatus = panelStore.project.subscription?.status || 'inactive'
                const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules'].includes(to.path)
 
-               if (['inactive', 'trialing', 'free'].includes(subStatus)) {
+               if (['inactive'].includes(subStatus)) {
                     isStopped.value = true
                     if (!isUpgradePage) {
                          return navigateTo('/panel/upgrade')

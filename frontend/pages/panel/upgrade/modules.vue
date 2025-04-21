@@ -67,7 +67,7 @@
                          :canSubmit="store.canValidateUpgrade"
                          :billingCycle="store.billingCycle"
                          @close="showPaymentModal = false"
-                         @submit="submitPayment"
+                         @submit="handlePaymentSuccess"
                          @updateBillingCycle="store.setBillingCycle"
                     />
                </div>
@@ -152,17 +152,9 @@ function handlePaymentClick() {
      showPaymentModal.value = true
 }
 
-function submitPayment() {
-     try {
-          const result = panelStore.confirmUpgrade()
-          if (result === 'free' || result === 'stripe') {
-               showPaymentModal.value = false
-               router.push('/panel/upgrade/success')
-          }
-     } catch (err: any) {
-          console.error('[UpgradeModules] Erreur upgrade :', err)
-
-     }
+function handlePaymentSuccess() {
+     showPaymentModal.value = false
+     router.push('/panel/dashboard')
 }
 
 function goStep(step: number) {

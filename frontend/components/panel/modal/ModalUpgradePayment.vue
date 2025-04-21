@@ -21,9 +21,7 @@
                </div>
 
                <!-- Message d'erreur -->
-               <div v-if="errorMessage" class="text-red-600 text-sm text-center mb-[12px]">
-                    {{ errorMessage }}
-               </div>
+               <div v-if="errorMessage" class="text-red-600 text-sm text-center mb-[12px]">{{ errorMessage }}</div>
 
                <!-- Actions -->
                <div class="flex flex-col items-center justify-center">
@@ -31,8 +29,7 @@
                     <button
                          type="submit"
                          :disabled="!props.canSubmit || !!cardError || loading"
-                         :class="['w-full rounded-[8px] text-[18px] h-[46px] px-[20px] flex items-center justify-center',
-    (!props.canSubmit || loading) ? 'bg-[#d3dbe5] text-[#647491] cursor-not-allowed' : 'bg-[#0566ff] text-white hover:bg-[#0049bd]']">
+                         :class="['w-full rounded-[8px] text-[18px] h-[46px] px-[20px] flex items-center justify-center', (!props.canSubmit || loading) ? 'bg-[#d3dbe5] text-[#647491] cursor-not-allowed' : 'bg-[#0566ff] text-white hover:bg-[#0049bd]']">
                          <span v-if="!loading">{{ t('panel.components.modal.upgradePayment.submitLabel') }}</span>
                          <span v-else>{{ t('panel.components.modal.upgradePayment.processing') }}</span>
                     </button>
@@ -52,8 +49,6 @@
 
 <script setup lang="ts">
 const panelStore = usePanelStore()
-const store = useUpgradeStore()
-const router = useRouter()
 const emit = defineEmits(['close', 'submit'])
 const props = defineProps<{
      billingCycle: 'monthly' | 'annual'
@@ -86,15 +81,13 @@ async function submit() {
 
      try {
           const result = await panelStore.confirmUpgrade()
-
           if (result === 'free') {
-               emit('submit') // pour fermer la modal
-               router.push('/panel/upgrade/success')
+               emit('submit')
+
           }
 
           if (result === 'stripe') {
-               emit('submit') // idem
-               router.push('/panel/upgrade/success')
+               emit('submit')
           }
      } catch (err: any) {
           errorMessage.value = err.message || 'Une erreur est survenue.'
