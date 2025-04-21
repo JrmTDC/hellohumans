@@ -126,8 +126,7 @@ class ProjectController{
 
                return {
                     project: {
-                         id: selectedProject.id,
-                         website: selectedProject.website,
+                         ...selectedProject,
                          subscription: projectSubscription || null
                     }
                }

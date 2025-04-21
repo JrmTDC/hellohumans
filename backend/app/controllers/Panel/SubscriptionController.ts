@@ -45,6 +45,19 @@ class SubscriptionController {
                     })
                }
 
+               // On retourne uniquement le projet sélectionné
+               const { data: selectedProject, error: selectedProjectError } = await supabaseService
+                    .from('client_projects')
+                    .select('*')
+                    .eq('id', selected_project_id)
+                    .single()
+
+               if (selectedProjectError || !selectedProject) {
+                    return response.notFound({
+                         error: { name: 'projectNotFound', description: 'Projet introuvable.' }
+                    })
+               }
+
                // 3. Vérifier ou créer l'entrée dans client_project_subscriptions
                let { data: subscription, error: subscriptionError } = await supabaseService
                     .from('client_project_subscriptions')
@@ -104,13 +117,16 @@ class SubscriptionController {
                          .eq('project_id', selected_project_id)
 
                     return response.ok({
-                         subscription: {
-                              id: subscription.id,
-                              plan_id,
-                              modules: [],
-                              billing_cycle,
-                              status: 'free',
-                              stripe_subscription_id: null
+                         project: {
+                              ...selectedProject,
+                              subscription: {
+                                   id: subscription.id,
+                                   plan_id,
+                                   modules: [],
+                                   billing_cycle,
+                                   status: 'free',
+                                   stripe_subscription_id: null
+                              }
                          }
                     })
                }
