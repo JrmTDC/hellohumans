@@ -145,10 +145,17 @@ const props = defineProps<{
 
 const emit = defineEmits(['updateBillingCycle', 'goNext'])
 
-const billingCycleLocal = ref(props.billingCycle)
-watch(billingCycleLocal, (newVal) => {
-     emit('updateBillingCycle', newVal)
+const billingCycleLocal = computed<'monthly'|'annual'>({
+     get() {
+          return props.billingCycle
+     },
+     set(val) {
+          if (val !== props.billingCycle) {
+               emit('updateBillingCycle', val)
+          }
+     }
 })
+
 
 const showModules = computed(() => props.showModules)
 const totalPriceLocal = computed(() => props.totalPrice)
