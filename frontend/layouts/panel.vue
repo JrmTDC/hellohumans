@@ -1,6 +1,6 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
-     <LayoutAccountBlocked v-else-if="isAccountBlocked" />
+     <LayoutAccountBlocked v-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />
@@ -67,17 +67,16 @@ onMounted(async () => {
                const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
                if (isUpgradePage) {
                     await panelStore.fetchUpgrade()
+               }else{
+                    setTimeout(() => {
+                         isChecking.value = false
+                    }, 400)
                }
-               setTimeout(() => {
-                    isChecking.value = false
-               }, 400)
           }
      } catch (e) {
           console.error('Erreur layout panel initPanelData:', e)
           await router.push('/panel/login')
      }
-
-
 })
 usePanelPageMeta().setMeta({
      title: t('panel.layout.menu.metaTitle'),

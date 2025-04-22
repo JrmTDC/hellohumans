@@ -74,15 +74,18 @@ const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 const router = useRouter()
 const trialActive = ref(false)
+const isChecking = useState('isChecking')
 
 onMounted(async () => {
      if (!panelStore.plans.length) await panelStore.fetchPlans()
 
      upgradeStore.restore()
-
      await nextTick()
-     await new Promise(resolve => setTimeout(resolve, 50)) // Petit délai pour s'assurer du rendu
+     measureAllSections()
+     isChecking.value = false
+})
 
+function measureAllSections(){
      // les blocs statiques
      const staticSections = ['header', 'description', 'spacer', 'price', 'button', 'footer', 'features-title']
 
@@ -95,7 +98,7 @@ onMounted(async () => {
 
      const allSections = [...staticSections, ...featureSections]
 
-      allSections.forEach(sectionName => {
+     allSections.forEach(sectionName => {
           const els = Array.from(
                document.querySelectorAll<HTMLElement>(`[data-section="${sectionName}"]`)
           )
@@ -103,7 +106,7 @@ onMounted(async () => {
           const maxH = Math.max(...els.map(el => el.getBoundingClientRect().height))
           els.forEach(el => (el.style.minHeight = `${maxH}px`))
      })
-})
+}
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)
 const computedTotalPrice = computed(() => {
