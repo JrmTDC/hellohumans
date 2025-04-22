@@ -23,14 +23,13 @@
 
                                    <!-- Boucle sur store.plans -->
                                         <PanelUpgradePlanCard
-                                             v-for="(plan, index) in store.plans"
+                                             v-for="(plan, index) in panelStore.plans"
                                              :key="plan.id"
                                              :plan="plan"
-                                             :selected="store.selectedPlanId === plan.id"
-                                             :billingCycle="store.billingCycle"
+                                             :selected="upgradeStore.selectedPlanId === plan.id"
+                                             :billingCycle="upgradeStore.billingCycle"
                                              :index="index"
-                                             @selectPlan="store.setPlan"
-
+                                             @selectPlan="upgradeStore.setPlan"
                                         />
                                    </div>
 
@@ -55,12 +54,12 @@
 
                     <!-- Résumé -->
                     <PanelUpgradeSubscriptionSummary
-                         :selectedPlan="store.currentPlan"
-                         :billingCycle="store.billingCycle"
+                         :selectedPlan="upgradeStore.currentPlan"
+                         :billingCycle="upgradeStore.billingCycle"
                          :totalPrice="computedTotalPrice"
-                         :selectedModules="store.selectedAddOns"
+                         :selectedModules="upgradeStore.selectedAddOns"
                          :nextButtonLabel="t('panel.pages.upgrade.index.nextStep')"
-                         @updateBillingCycle="store.setBillingCycle"
+                         @updateBillingCycle="upgradeStore.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
                     />
@@ -71,27 +70,32 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-const store = useUpgradeStore()
+const upgradeStore = useUpgradeStore()
+const panelStore = usePanelStore()
 const router = useRouter()
 const trialActive = ref(false)
 
 onMounted(async () => {
-     if (!store.plans.length) await store.fetchPlans()
+     if (!panelStore.plans.length) await panelStore.fetchPlans()
 
-     store.restore()
+     upgradeStore.restore()
 
-     // 1️⃣ les blocs statiques
+     await nextTick()
+     await new Promise(resolve => setTimeout(resolve, 50)) // Petit délai pour s'assurer du rendu
+
+     // les blocs statiques
      const staticSections = ['header', 'description', 'spacer', 'price', 'button', 'footer', 'features-title']
 
-     // 2️⃣ les lignes de features (on part du principe qu'on a au plus N features)
+     // les lignes de features (on part du principe qu'on a au plus N features)
      const maxFeatures = Math.max(
-          ...store.plans.map(p => p.includedFeatures.length)
+          ...panelStore.plans.map(p => p.includedFeatures.length)
      )
+
      const featureSections = Array.from({ length: maxFeatures }, (_, i) => `feature-${i}`)
 
      const allSections = [...staticSections, ...featureSections]
 
-     allSections.forEach(sectionName => {
+      allSections.forEach(sectionName => {
           const els = Array.from(
                document.querySelectorAll<HTMLElement>(`[data-section="${sectionName}"]`)
           )
@@ -103,9 +107,9 @@ onMounted(async () => {
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)
 const computedTotalPrice = computed(() => {
-     const plan = store.currentPlan
+     const plan = upgradeStore.currentPlan
      if (!plan) return 0
-     if (store.billingCycle === 'monthly') {
+     if (upgradeStore.billingCycle === 'monthly') {
           return plan.monthlyPrice
      }
      return plan.monthlyPrice * (12 - plan.discountMonths)
@@ -117,9 +121,8 @@ function goNext() {
 
 function goStep(step: number) {
      if (step === 1) {
-          // déjà dessus
      } else if (step === 2) {
-          if (store.selectedPlanId) {
+          if (upgradeStore.selectedPlanId) {
                router.push('/panel/upgrade/modules')
           }
      } else if (step === 3) {

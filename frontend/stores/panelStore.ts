@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-
 interface ProjectSubscription {
      status: 'active' | 'inactive' | 'canceled' | string
 }
@@ -10,6 +9,35 @@ interface Project {
      subscription?: ProjectSubscription | null
 }
 
+export interface UpgradePlan {
+     id: string
+     name: string
+     description: string
+     monthlyPrice: number
+     discountMonths: number
+     includedFeatures: string[]
+     baseSubtitle: string
+     popular?: boolean
+     includedModules?: string[]
+}
+
+export interface ModuleAddOn {
+     id: string
+     name: string
+     description: string
+     basePrice: number
+     discountMonths?: number
+     multipleChoice?: boolean
+     choices?: Array<{
+          label: string
+          monthlyPrice: number
+          discountMonths?: number
+     }>
+     selectedChoiceIndex?: number
+     selected: boolean
+     disabled?: boolean
+     comingSoon?: boolean
+}
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
@@ -19,6 +47,8 @@ export const usePanelStore = defineStore('panel', () => {
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const project_subscription = ref<{ id: string; name: string; status: string }[]>([])
+     const plans = ref<UpgradePlan[]>([])
+     const availableModules = ref<ModuleAddOn[]>([])
      const modules = ref<string[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
@@ -116,6 +146,71 @@ export const usePanelStore = defineStore('panel', () => {
                await logout()
                return false
           }
+     }
+
+     async function fetchUpgrade(): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          panelReturn.value = null
+          try {
+               // 1) Vérifier la session / récupérer l’utilisateur
+               if (!user.value) {
+                    await logout()
+                    return false
+               }
+
+               // 2) On récupère d’autres informations
+               const [plansRes, modulesRes] = await Promise.all([
+                    apiFetch('/upgrade/plans'),
+                    apiFetch('/upgrade/modules'),
+               ])
+               plans.value = plansRes.success.plans || []
+               availableModules.value = modulesRes.success.modules || []
+               return true
+          } catch (err: any) {
+               await logout()
+               return false
+          }
+     }
+
+     async function fetchPlans(): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          panelReturn.value = null
+          try {
+               // 1) Vérifier la session / récupérer l’utilisateur
+               if (!user.value) {
+                    await logout()
+                    return false
+               }
+
+               // 2) On récupère d’autres informations
+               const plansRes = await apiFetch('/upgrade/plans')
+               plans.value = plansRes.success.plans || []
+               return true
+          } catch (err: any) {
+               await logout()
+               return false
+          }
+     }
+
+     async function fetchModules() {
+          const { apiFetch } = usePanelApi()
+          panelReturn.value = null
+          try {
+               // 1) Vérifier la session / récupérer l’utilisateur
+               if (!user.value) {
+                    await logout()
+                    return false
+               }
+
+               // 2) On récupère d’autres informations
+               const modulesRes = await apiFetch('/upgrade/modules')
+               availableModules.value = modulesRes.success.modules || []
+               return true
+          } catch (err: any) {
+               await logout()
+               return false
+          }
+
      }
 
      async function updateUserLang(lang: string): Promise<boolean> {
@@ -253,6 +348,8 @@ export const usePanelStore = defineStore('panel', () => {
           clients,
           project_usages,
           project_subscription,
+          plans,
+          availableModules,
           modules,
           project,
           projects,
@@ -267,6 +364,9 @@ export const usePanelStore = defineStore('panel', () => {
           fetchListActivity,
           createOnboarding,
           confirmUpgrade,
+          fetchUpgrade,
+          fetchPlans,
+          fetchModules,
           logout
      }
 })

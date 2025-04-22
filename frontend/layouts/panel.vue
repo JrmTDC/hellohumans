@@ -64,6 +64,10 @@ onMounted(async () => {
                     if (!ok) router.push('/panel/login')
                }, 400)
           }else{
+               const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
+               if (isUpgradePage) {
+                    await panelStore.fetchUpgrade()
+               }
                setTimeout(() => {
                     isChecking.value = false
                }, 400)
