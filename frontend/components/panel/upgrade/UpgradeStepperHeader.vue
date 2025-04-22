@@ -51,7 +51,7 @@
           <div class="flex flex-grow ml-0"></div>
 
           <!-- Bouton de fermeture -->
-          <button class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[30px] h-[30px] hover:bg-[#dce9ff] group" @click="$emit('close')">
+          <button v-if="buttonClose" class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[30px] h-[30px] hover:bg-[#dce9ff] group" @click="$emit('close')">
                <svgo-panel-icon-cross class="w-[22px] h-[22px] fill-[#647491] group-hover:fill-[#0566ff]"/>
           </button>
      </div>
@@ -59,6 +59,12 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const panelStore = usePanelStore()
+const subStatus = panelStore.project?.subscription?.status || 'inactive'
+const buttonClose = ref(false)
+if (!['inactive'].includes(subStatus)) {
+     buttonClose.value = true
+}
 const props = defineProps({
      step: {
           type: Number,
