@@ -28,14 +28,14 @@
           </div>
 
           <!-- Description -->
-          <div data-section="description" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(2) ]">
+          <div data-section="description" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start', borderClasses, orderClass(2) ]">
                <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">{{ plan.description }}</p>
           </div>
 
           <div data-section="spacer" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
 
           <!-- Prix -->
-          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(4) ]">
+          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start', borderClasses, orderClass(4) ]">
                <span>
                     <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">€</span>
                     </span>
@@ -53,23 +53,24 @@
                          </div>
                     </span>
                </button>
-               <button v-else class="block bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] max-w-full w-full rounded-[8px] text-[16px] h-[38px] leading-[20px] px-[16px] py-0 hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd] whitespace-nowrap inline-flex justify-center items-center">{{ t('panel.components.upgrade.planCard.selectPlan') }}</button>
+               <button v-else class="block bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] max-w-full w-full rounded-[8px] text-[16px] h-[38px] leading-[20px] px-[16px] py-0 hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd] whitespace-nowrap inline-flex justify-center items-center outline-none">{{ t('panel.components.upgrade.planCard.selectPlan') }}</button>
           </div>
 
           <!-- Features -->
-          <div data-section="subtitle" :class="['bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(6)]">
+          <div data-section="subtitle" :class="['bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start', borderClasses, orderClass(6)]">
                <p class="mt-0 mb-0 font-medium text-[12px] leading-[16px] tracking-[-0.01em] text-left">{{ plan.baseSubtitle }}</p>
           </div>
-          <div v-for="(feature, idx) in plan.includedFeatures" :key="idx" :data-section="`feature-${1+idx}`" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, `order-[${7000 + props.index + 1 + idx}]` ]">
+          <div v-for="(feature, idx) in plan.includedFeatures" :key="idx" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start', borderClasses, `order-[${7000 + props.index + 1 + idx}]` ]">
                <div class="flex flex-row justify-start items-center">
-                    <svgo-panel-icon-option-included class="w-[14px] h-[14px] fill-[#080f1a]" />
+                    <svgo-panel-icon-option-included class="w-[14px] h-[14px] min-w-[14px] min-h-[14px] fill-[#080f1a]" />
                     <span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span>
                     <p class="mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">{{ feature }}</p>
                </div>
           </div>
 
+          <div class="h-[inherit]" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
           <!-- Bas arrondi -->
-          <div data-section="footer" class="bg-white px-[20px] pb-[18px] text-center flex flex-col justify-center items-start mb-[20px] [border-radius:0px_0px_12px_12px]" :class="[orderClass(8),borderBottomClasses]">
+          <div data-section="footer" class="mt-auto bg-white px-[20px] pb-[18px] text-center flex flex-col justify-center items-start mb-[20px] [border-radius:0px_0px_12px_12px]" :class="[orderClass(8),borderBottomClasses]">
           </div>
      </div>
 </template>
