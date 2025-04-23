@@ -341,20 +341,21 @@
                          "error": "Cette URL est invalide.",
                          "submit": "Ajouter un projet"
                     },
-                    "upgradePayment": {
-                         "title": "Payer à l’aide d’une carte",
-                         "cardLabel": "Carte de crédit",
-                         "totalLabel": "Total :",
-                         "monthly": "/mois",
-                         "annual": "/an",
-                         "todayLabel": "Frais d’aujourd’hui :",
-                         "monthlyLabel": "Frais mensuels :",
-                         "submitLabel": "Soumettre la commande",
-                         "processing": "Traitement en cours…",
-                         "back": "Retour",
-                         "errorPreview": "Impossible d’obtenir le montant. Veuillez réessayer.",
-                         "errorMissingInfo": "Informations d’abonnement incomplètes",
-                         "errorGeneric": "Une erreur est survenue"
+                    "upgradeAddCard" : {
+                         "title": "Ajouter un nouveau mode de paiement",
+                         "terms": "En fournissant vos informations de carte bancaire, vous autorisez Hellohumans à débiter votre carte pour les paiements futurs conformément à ses conditions.",
+                         "cancel": "Annuler",
+                         "confirm": "Ajouter un mode de paiement",
+                         "processing": "Traitement de votre carte...",
+                    },
+                    "upgradeFeaturesSummary" : {
+
+                    },
+                    "upgradePaid" : {
+
+                    },
+                    "upgradePayment" : {
+
                     }
                },
                "onboarding": {
