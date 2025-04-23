@@ -57,32 +57,13 @@ class AuthController {
                     })
                }
 
-               // Étape 3 : Récupération des infos client_user
-               const { data: clientUserData, error: clientUserError } = await supabaseService
-                    .from('client_users')
-                    .select('id, selected_project_id')
-                    .eq('user_id', userData.id)
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .maybeSingle()
-
-               if (clientUserError || !clientUserData) {
-                    return response.badRequest({
-                         error: {
-                              name: 'clientUserNotFound',
-                              description: 'Impossible de récupérer les informations du client associé à cet utilisateur.'
-                         }
-                    })
-               }
-
                return response.ok({
                     token: sessionData.session?.access_token,
                     refresh_token: sessionData.session?.refresh_token,
                     user: {
                          id: userData.id,
                          email,
-                         lang: userData.lang,
-                         selected_project_id: clientUserData.selected_project_id
+                         lang: userData.lang
                     }
                })
           } catch (error) {
