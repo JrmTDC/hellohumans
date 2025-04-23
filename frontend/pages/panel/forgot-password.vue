@@ -95,19 +95,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
 const { t } = useI18n()
-
 const inputEmail = ref('')
 const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
 const publicStore = usePublicStore()
 const apiError = ref(false)
-
 const errorMessageEmailKey = ref('');
 const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
-
 
 // Fonction de validation
 const validateForm = () => {

@@ -118,17 +118,12 @@
      </div>
 </template>
 <script setup lang="ts">
-
 const { appName } = useAppInfo()
 const { t } = useI18n()
 const { locale } = useI18n()
-
 const publicStore = usePublicStore()
-
 const backgroundImage = useSvgBase64Loader('panel/register/backgroundRegister')
 const checkSvg = useSvgBase64Loader('panel/register/check')
-
-// Champs du formulaire
 const inputEmail = ref('')
 const password = ref('')
 const displayName = ref('')
@@ -141,12 +136,10 @@ const errorMessagePassword = ref('');
 const errorMessageDisplayName = ref('');
 const errorsMessageAgreed = ref('');
 const lang = locale.value
-
 const passwordStrength = ref('')
 const passwordFocused = ref(false)
 const progressWidth = ref('0%')
 const progressColor = ref('rgb(226,232,239)')
-
 const router = useRouter()
 
 // Fonction pour valider le formulaire

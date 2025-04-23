@@ -24,6 +24,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      })
 
      const isSameAsCurrent = computed(() => {
+
           const sub = panelStore.project?.subscription
           if (!sub) return false // Pas encore d'abonnement
 
@@ -37,6 +38,8 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                JSON.stringify([...selectedModuleIds].sort())
 
           return samePlan && sameModules
+
+
      })
 
      const canValidateUpgrade = computed(() => {

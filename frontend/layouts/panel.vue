@@ -1,6 +1,6 @@
 <template>
      <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
-     <LayoutAccountBlocked v-if="isAccountBlocked" />
+     <PanelLayoutAccountBlocked v-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />
@@ -19,8 +19,6 @@
      </div>
 </template>
 <script setup lang="ts">
-import LayoutAccountBlocked from '~/components/panel/layout/LayoutAccountBlocked.vue'
-
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const router = useRouter()
