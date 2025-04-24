@@ -23,11 +23,21 @@
                     </div>
                </div>
 
-               <div v-if="createMode" class="mt-[12px]">
-                    <input type="text"
-                           v-model="newClientName"
-                           :placeholder="t('panel.components.onboarding.selectClient.newClientName')"
-                           class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
+               <div v-if="createMode">
+                    <div class="mt-[12px]">
+                         <input type="text"
+                                v-model="newOrganization"
+                                :placeholder="t('panel.components.onboarding.selectClient.newOrganization')"
+                                class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
+                    </div>
+                    <div class="mt-[12px]">
+                         <PanelOnboardingSelectSimple
+                              v-model="newOrganizationType"
+                              :options="organisationType"
+                              :placeholder="t('panel.components.onboarding.step.part1.selectType.placeholder')"/>
+                    </div>
+
+
                </div>
           </div>
      </div>
@@ -38,6 +48,25 @@ interface ClientAccount {
      id: string
      name: string
 }
+
+const organisationType = [
+     {
+          id: 'individual',
+          name: t('panel.components.onboarding.selectClient.individual')
+     },
+     {
+          id: 'company',
+          name: t('panel.components.onboarding.selectClient.company')
+     },
+     {
+          id: 'association',
+          name: t('panel.components.onboarding.selectClient.association')
+     },
+     {
+          id: 'other',
+          name: t('panel.components.onboarding.selectClient.other')
+     }
+]
 
 const props = defineProps<{
      modelValue: string | null
@@ -54,11 +83,15 @@ const emit = defineEmits<{
 const isOpen = ref(false)
 const createMode = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
-const store = useOnboardingStore()
+const onboardingStore = useOnboardingStore()
 let skipNextClick = true
-const newClientName = computed({
-     get: () => store.answers.newClientName,
-     set: (val) => (store.answers.newClientName = val),
+const newOrganization = computed({
+     get: () => onboardingStore.answers.newOrganization,
+     set: (val) => (onboardingStore.answers.newOrganization = val),
+})
+const newOrganizationType = computed({
+     get: () => onboardingStore.answers.organizationType,
+     set: (val) => (onboardingStore.answers.organizationType = val),
 })
 const toggleOpen = () => {
      isOpen.value = !isOpen.value
@@ -68,7 +101,7 @@ const selectClient = (id: string) => {
      emit('update:modelValue', id)
      isOpen.value = false
      createMode.value = false
-     newClientName.value = ''
+     newOrganization.value = ''
 }
 
 const enableCreateMode = () => {
@@ -101,7 +134,7 @@ onMounted(() => {
      })
 
      // Si aucun client + un nom en cours = on force createMode
-     if (props.clients.length === 0 || newClientName.value.trim().length > 0) {
+     if (props.clients.length === 0 || newOrganization.value.trim().length > 0) {
           createMode.value = true
           emit('update:modelValue', null)
      }
@@ -114,7 +147,7 @@ watch(() => props.modelValue, (val) => {
      if (val) {
           // Si on a sélectionné un vrai client, on quitte le mode création
           createMode.value = false
-          newClientName.value = ''
+          newOrganization.value = ''
      }
 })
 </script>

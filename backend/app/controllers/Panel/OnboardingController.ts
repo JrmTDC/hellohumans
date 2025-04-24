@@ -40,7 +40,7 @@ class OnboardingController {
 
                //  Extraction des champs
                const webSite = request.input('webSite')?.trim() || null
-               const newClientName = request.input('newClientName')?.trim() || null
+               const newOrganization = request.input('newOrganization')?.trim() || null
                const selectedClientId = request.input('selectedClientId')?.trim() || null
                const serviceModel = request.input('serviceModel')?.trim() || null
                const businessModel = request.input('businessModel')?.trim() || null
@@ -57,7 +57,7 @@ class OnboardingController {
                     })
                }
 
-               if (!newClientName && !selectedClientId) {
+               if (!newOrganization && !selectedClientId) {
                     return response.badRequest({
                          error: { name: 'clientMissing', description: 'Vous devez créer ou sélectionner un compte client.' }
                     })
@@ -106,11 +106,11 @@ class OnboardingController {
                let clientId: string
                let createdNewClient = false
 
-               if (newClientName) {
+               if (newCliennewOrganizationtName) {
                     const { data: clientData, error: clientError } = await supabaseService
                          .from('clients')
                          .insert({
-                              name: newClientName,
+                              name: newOrganization,
                               owner_user_id: userData.id
                          })
                          .select('*')
