@@ -15,12 +15,26 @@ class StripeController {
 
                let stripeCustomerId = client?.stripe_customer_id
 
-               // 1. Créer le customer Stripe si non existant
+               // Étape 1 : Vérifie que le client Stripe existe encore
+               if (stripeCustomerId) {
+                    try {
+                         await stripeService.customers.retrieve(stripeCustomerId)
+                    } catch (err: any) {
+                         if (err?.statusCode === 404) {
+                              // Le client n'existe plus chez Stripe → on le recrée
+                              stripeCustomerId = null
+                         } else {
+                              throw err // autre erreur à remonter
+                         }
+                    }
+               }
+
+               // Étape 2 : Crée un nouveau client si nécessaire
                if (!stripeCustomerId) {
                     const customer = await stripeService.customers.create({
                          email: undefined,
                          metadata: {
-                              client_id: client?.id
+                              client_id: client?.id,
                          },
                     })
 
@@ -32,11 +46,10 @@ class StripeController {
                          .eq('id', client.id)
                }
 
-               // 2. Créer le SetupIntent
+               // Étape 3 : Crée le SetupIntent
                const setupIntent = await stripeService.setupIntents.create({
                     customer: stripeCustomerId,
-                    usage: 'off_session',
-                    payment_method_types: ['card']
+                    usage: 'off_session'
                })
 
                return {
