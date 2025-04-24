@@ -9,7 +9,6 @@
                     :placeholderCreate="t('panel.components.onboarding.step.part1.selectClient.placeholderCreate')"/>
           </PanelOnboardingSection>
 
-
           <!-- SECTION 1 : URL du site -->
           <div v-if="onboardingStore.stepSections[1].completed >= 1"
                ref="refConversations"

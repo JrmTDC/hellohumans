@@ -8,7 +8,7 @@ interface SectionInfo {
 interface OnboardingAnswers {
      webSite: string
      selectedClientId: string | null
-     newOrganization: string,
+     organizationName: string,
      organizationType: string,
      serviceModel: string
      businessModel: string
@@ -37,7 +37,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      const answers = ref<OnboardingAnswers>({
           webSite: '',
           selectedClientId: null,
-          newOrganization: '',
+          organizationName: '',
           organizationType:'',
           serviceModel: '',
           businessModel: '',
@@ -63,10 +63,10 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      const validators: Record<number, Record<number, () => boolean>> = {
           1: {
                1: () => {
-                    const { selectedClientId, newOrganization, organizationType } = answers.value
+                    const { selectedClientId, organizationName, organizationType } = answers.value
                     const panel = usePanelStore()
                     const isValidClient = !!panel.clients.find((c) => c.id === selectedClientId)
-                    return (isValidClient || newOrganization.trim().length > 0) && organizationType.trim().length > 0
+                    return isValidClient || (organizationName.trim().length > 0 && organizationType.trim().length > 0)
                },
                2: () => {
                     const { webSite } = answers.value
@@ -149,7 +149,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           Object.assign(answers.value, {
                webSite: '',
                selectedClientId: null,
-               newOrganization: '',
+               organizationName: '',
                serviceModel: '',
                businessModel: '',
                communicationMethods: [],
@@ -186,7 +186,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           answers.value.webSite = siteUrl
 
           const panel = usePanelStore()
-          if (panel.client?.id && !answers.value.selectedClientId && !answers.value.newOrganization) {
+          if (panel.client?.id && !answers.value.selectedClientId && !answers.value.organizationName) {
                const found = panel.clients.find(c => c.id === panel.client?.id)
                if (found) {
                     answers.value.selectedClientId = found.id
@@ -200,7 +200,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      function autoSelectClient() {
           const panel = usePanelStore()
 
-          const noClientSelected = !answers.value.selectedClientId && !answers.value.newOrganization
+          const noClientSelected = !answers.value.selectedClientId && !answers.value.organizationName
           const validClient = panel.client?.id && panel.clients.some(c => c.id === panel.client?.id)
 
           if (noClientSelected && validClient) {

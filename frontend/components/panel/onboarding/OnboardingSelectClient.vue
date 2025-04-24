@@ -26,13 +26,13 @@
                <div v-if="createMode">
                     <div class="mt-[12px]">
                          <input type="text"
-                                v-model="newOrganization"
-                                :placeholder="t('panel.components.onboarding.selectClient.newOrganization')"
+                                v-model="organizationName"
+                                :placeholder="t('panel.components.onboarding.selectClient.organizationName')"
                                 class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
                     </div>
                     <div class="mt-[12px]">
                          <PanelOnboardingSelectSimple
-                              v-model="newOrganizationType"
+                              v-model="organizationName"
                               :options="organisationType"
                               :placeholder="t('panel.components.onboarding.step.part1.selectType.placeholder')"/>
                     </div>
@@ -101,11 +101,11 @@ const createMode = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 const onboardingStore = useOnboardingStore()
 let skipNextClick = true
-const newOrganization = computed({
-     get: () => onboardingStore.answers.newOrganization,
-     set: (val) => (onboardingStore.answers.newOrganization = val),
+const organizationName = computed({
+     get: () => onboardingStore.answers.organizationName,
+     set: (val) => (onboardingStore.answers.organizationName = val),
 })
-const newOrganizationType = computed({
+const organizationType = computed({
      get: () => onboardingStore.answers.organizationType,
      set: (val) => (onboardingStore.answers.organizationType = val),
 })
@@ -117,7 +117,7 @@ const selectClient = (id: string) => {
      emit('update:modelValue', id)
      isOpen.value = false
      createMode.value = false
-     newOrganization.value = ''
+     organizationName.value = ''
 }
 
 const enableCreateMode = () => {

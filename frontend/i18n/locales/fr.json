@@ -477,7 +477,7 @@
                     },
                     "selectClient": {
                          "createNew": "Créer une nouvelle organisation",
-                         "newOrganization": "Nom de l'organisation",
+                         "organizationName": "Nom de l'organisation",
                          "type": {
                               "individual": "Personnel",
                               "educational": "Educatif",
