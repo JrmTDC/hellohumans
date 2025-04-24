@@ -346,7 +346,7 @@
                          "terms": "En fournissant vos informations de carte bancaire, vous autorisez Hellohumans à débiter votre carte pour les paiements futurs conformément à ses conditions.",
                          "cancel": "Annuler",
                          "confirm": "Ajouter un mode de paiement",
-                         "processing": "Traitement de votre carte...",
+                         "processing": "Traitement de votre carte..."
                     },
                     "upgradeFeaturesSummary" : {
 
@@ -362,14 +362,19 @@
                     "step": {
                          "part1": {
                               "selectClient": {
-                                   "title": "Sélectionnez ou créez un compte client",
-                                   "description": "Votre projet sera rattaché à ce compte client",
-                                   "placeholder": "Sélectionnez un compte client",
-                                   "placeholderCreate": "Création d’un nouveau compte client"
+                                   "title": "Sélectionnez ou créez le nom de l'organisation",
+                                   "description": "Quel est le nom de votre entreprise ou de votre équipe ?",
+                                   "placeholder": "Sélectionnez une organisation",
+                                   "placeholderCreate": "Création d’une nouveau organisation"
+                              },
+                              "selectType": {
+                                   "title": "Quelle est le type de votre organisation",
+                                   "description": "",
+                                   "placeholder": "Sélectionnez le type d'organisation qui vous correspond le mieux"
                               },
                               "siteUrl": {
-                                   "title": "Quelle est l'adresse URL de votre site web",
-                                   "description": "Vos réponses nous aideront à personnaliser votre expérience",
+                                   "title": "Quelle est l’URL du site web du projet ?",
+                                   "description": "Il s’agit du site sur lequel le chatbot sera intégré.",
                                    "placeholder": "https://votre-site.com"
                               }
                          },
@@ -471,8 +476,18 @@
                          "loading": "Chargement..."
                     },
                     "selectClient": {
-                         "createNew": "Créer un nouveau compte client",
-                         "newClientName": "Nom du compte client"
+                         "createNew": "Créer une nouvelle organisation",
+                         "newOrganization": "Nom de l'organisation",
+                         "type": {
+                              "individual": "Personnel",
+                              "educational": "Educatif",
+                              "startup": "Startup",
+                              "agency": "Agence",
+                              "company": "Entreprise",
+                              "communities": "Collectivités",
+                              "associations": "Associations",
+                              "other": "Autres"
+                         }
                     }
                },
                "upgrade": {
@@ -544,4 +559,3 @@
           }
      }
 }
-

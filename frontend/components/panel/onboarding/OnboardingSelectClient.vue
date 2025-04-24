@@ -52,19 +52,35 @@ interface ClientAccount {
 const organisationType = [
      {
           id: 'individual',
-          name: t('panel.components.onboarding.selectClient.individual')
+          name: t('panel.components.onboarding.selectClient.type.individual')
+     },
+     {
+          id: 'educational',
+          name: t('panel.components.onboarding.selectClient.type.educational')
+     },
+     {
+          id: 'startup',
+          name: t('panel.components.onboarding.selectClient.type.startup')
+     },
+     {
+          id: 'agency',
+          name: t('panel.components.onboarding.selectClient.type.agency')
      },
      {
           id: 'company',
-          name: t('panel.components.onboarding.selectClient.company')
+          name: t('panel.components.onboarding.selectClient.type.company')
      },
      {
-          id: 'association',
-          name: t('panel.components.onboarding.selectClient.association')
+          id: 'Communities',
+          name: t('panel.components.onboarding.selectClient.type.communities')
+     },
+     {
+          id: 'Associations',
+          name: t('panel.components.onboarding.selectClient.type.associations')
      },
      {
           id: 'other',
-          name: t('panel.components.onboarding.selectClient.other')
+          name: t('panel.components.onboarding.selectClient.type.other')
      }
 ]
 
