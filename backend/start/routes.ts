@@ -55,8 +55,8 @@ router.group(() => {
 // Routes Stripe protégées par l'authentification
 router.group(() => {
      router.get('/setup-intent', (ctx) => StripeController.createSetupIntent(ctx))
+     router.get('/payment-methods', (ctx) => StripeController.paymentMethods(ctx))
      router.post('/create-subscription', (ctx) => SubscriptionController.createSubscription(ctx))
-     router.post('/payment-methods', (ctx) => StripeController.paymentMethods(ctx))
      //router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
      //router.post('/cancel-subscription', (ctx) => SubscriptionController.cancel(ctx))
      //router.post('/subscription/:project_uuid', (ctx) => SubscriptionController.create(ctx))

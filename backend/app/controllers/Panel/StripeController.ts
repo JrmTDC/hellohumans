@@ -82,8 +82,66 @@ class StripeController {
           }
      }
 
-     public async paymentMethods(ctx : HttpContext) {
-          return ctx.response.ok({ok: true})
+     public async paymentMethods(ctx: HttpContext) {
+          try {
+               const { client } = ctx
+
+               let stripeCustomerId = client?.stripe_customer_id
+
+               // Étape 1 : Vérifie l’existence du customer Stripe
+               if (stripeCustomerId) {
+                    try {
+                         await stripeService.customers.retrieve(stripeCustomerId)
+                    } catch (err: any) {
+                         if (err?.statusCode === 404) {
+                              // → Customer supprimé chez Stripe : on en crée un nouveau
+                              stripeCustomerId = null
+                         } else {
+                              throw err
+                         }
+                    }
+               }
+
+               // Étape 2 : Création d’un nouveau client si nécessaire
+               if (!stripeCustomerId) {
+                    const customer = await stripeService.customers.create({
+                         email: undefined, // tu peux mettre `ctx.user.email` si dispo
+                         metadata: {
+                              client_id: client?.id,
+                         },
+                    })
+
+                    stripeCustomerId = customer.id
+
+                    // Mise à jour dans la base
+                    await supabaseService
+                         .from('clients')
+                         .update({ stripe_customer_id: stripeCustomerId })
+                         .eq('id', client.id)
+               }
+
+               // Étape 3 : Liste des cartes
+               const paymentMethods = await stripeService.paymentMethods.list({
+                    customer: stripeCustomerId,
+                    type: 'card',
+               })
+
+               return ctx.response.ok({
+                    paymentMethods: paymentMethods.data.map((method) => ({
+                         id: method.id,
+                         brand: method.card?.brand,
+                         last4: method.card?.last4,
+                         exp_month: method.card?.exp_month,
+                         exp_year: method.card?.exp_year,
+                    })),
+               })
+          } catch (error) {
+               console.error('Erreur StripeController.paymentMethods:', error)
+               return ctx.response.internalServerError({
+                    error: { name: 'internalError', description: 'Erreur lors de la récupération des cartes Stripe.' },
+               })
+          }
      }
+
 }
 export default new StripeController()
