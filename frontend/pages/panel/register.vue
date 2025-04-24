@@ -225,7 +225,7 @@ const handleRegister = async () => {
 
      const success = await publicStore.register(inputEmail.value, password.value, displayName.value, agreed.value, lang)
      if (success) {
-          await router.push('/onboarding')
+          await router.push('/panel/onboarding')
      } else {
          apiError.value = true
      }
