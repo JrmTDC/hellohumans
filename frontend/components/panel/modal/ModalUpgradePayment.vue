@@ -101,6 +101,8 @@ onMounted(() => {
 })
 
 async function fetchPaymentMethods() {
+     await panelStore.fetchStripePaymentMethods()
+          const clientSecret = panelStore.stripe?.client_secret
      /*
      const res = await usePanelApi().apiFetch('/stripe/payment-methods')
      paymentMethods.value = res.success?.methods || []

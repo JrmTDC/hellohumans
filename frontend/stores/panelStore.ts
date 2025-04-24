@@ -38,9 +38,11 @@ export interface ModuleAddOn {
      disabled?: boolean
      comingSoon?: boolean
 }
-interface Stripe {
+interface StripeSetupIntent {
      client_secret?: string
      payment_method_types?: string[]
+}
+interface StripeCustomer {
 }
 
 export const usePanelStore = defineStore('panel', () => {
@@ -57,7 +59,8 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<string[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
-     const stripe = ref<Stripe | null>(null)
+     const stripe_setup_intent = ref<StripeSetupIntent | null>(null)
+     const stripe_customer = ref<StripeCustomer | null>(null)
 
      const panelReturn = ref<string | null>(null)
 
@@ -279,7 +282,16 @@ export const usePanelStore = defineStore('panel', () => {
           const { apiFetch } = usePanelApi()
           try {
                const res = await apiFetch('/stripe/setup-intent')
-               stripe.value = res.success.setupIntent
+               stripe_setup_intent.value = res.success.setupIntent
+          } catch (error) {
+               console.error('Erreur activités :', error)
+          }
+     }
+     async function fetchStripePaymentMethods() {
+          const { apiFetch } = usePanelApi()
+          try {
+               const res = await apiFetch('/stripe/payment-methods')
+               stripe_customer.value = res.success.paymentMethods
           } catch (error) {
                console.error('Erreur activités :', error)
           }
@@ -370,7 +382,8 @@ export const usePanelStore = defineStore('panel', () => {
           project,
           projects,
           activities,
-          stripe,
+          stripe_setup_intent,
+          stripe_customer,
 
           // actions
           initPanelAccessSession,
@@ -385,6 +398,7 @@ export const usePanelStore = defineStore('panel', () => {
           fetchPlans,
           fetchModules,
           fetchStripeSetupIntent,
+          fetchStripePaymentMethods,
           logout
      }
 })
