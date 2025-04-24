@@ -32,8 +32,8 @@
                     </div>
                     <div class="mt-[12px]">
                          <PanelOnboardingSelectSimple
-                              v-model="organizationName"
-                              :options="organisationType"
+                              v-model="organizationType"
+                              :options="listOrganizationType"
                               :placeholder="t('panel.components.onboarding.step.part1.selectType.placeholder')"/>
                     </div>
 
@@ -49,7 +49,7 @@ interface ClientAccount {
      name: string
 }
 
-const organisationType = [
+const listOrganizationType = [
      {
           id: 'individual',
           name: t('panel.components.onboarding.selectClient.type.individual')
@@ -150,7 +150,7 @@ onMounted(() => {
      })
 
      // Si aucun client + un nom en cours = on force createMode
-     if (props.clients.length === 0 || newOrganization.value.trim().length > 0) {
+     if (props.clients.length === 0 || organizationName.value.trim().length > 0) {
           createMode.value = true
           emit('update:modelValue', null)
      }
@@ -163,7 +163,7 @@ watch(() => props.modelValue, (val) => {
      if (val) {
           // Si on a sélectionné un vrai client, on quitte le mode création
           createMode.value = false
-          newOrganization.value = ''
+          organizationName.value = ''
      }
 })
 </script>
