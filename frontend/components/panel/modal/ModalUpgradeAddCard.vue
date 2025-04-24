@@ -2,10 +2,9 @@
      <PanelModalBaseAddCard :title="t('panel.components.modal.upgradeAddCard.title')" @close="handleClose">
           <form @submit.prevent="submit">
                <div class="py-4 px-4 md:px-5">
-                    <div class="min-h-[240px]" ref="paymentElementRef" />
+                    <div ref="paymentElementRef" />
                </div>
-
-               <div class="w-full h-px bg-border" />
+               <div class="w-full h-px bg-border-[#2e2e2e]" />
 
                <div class="py-4 px-4 md:px-5 flex items-center space-x-2">
                     <button type="button" @click="handleClose" class="btn-secondary w-full" :disabled="loading">

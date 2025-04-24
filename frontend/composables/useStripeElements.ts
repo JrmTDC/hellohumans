@@ -14,29 +14,37 @@ export async function useStripeElements(clientSecret: string): Promise<{ stripeI
           labels: 'floating',
           variables: {
                //colorPrimary: '#0566ff',
-               colorBackground: '#ffffff',
+               colorBackground: '#f5f7fa',
                colorText: '#080f1a',
-               //fontFamily: 'Inter, sans-serif',
-               //spacingUnit: '4px',
-               //borderRadius: '8px'
-
           },
           rules: {
                '.Input': {
-                    padding: '22px 18px 20px',
+                    padding: '10px',
                     border: '1px solid #e2e8ef',
                     boxShadow: "none"
                },
                '.Label': {
                     //fontWeight: '500'
-               }
+               },
+               '.AccordionItem': {
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    boxShadow: 'none'
+               },
+               '.Block': {
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    boxShadow: 'none'
+               },
           }
      }
 
      const elementsOptions: StripeElementsOptionsClientSecret = {
           clientSecret,
-          appearance
+          appearance,
      }
+
+
 
      const elementsInstance = stripeInstance.elements(elementsOptions)
 
