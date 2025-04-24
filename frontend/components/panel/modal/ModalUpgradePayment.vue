@@ -15,7 +15,7 @@
                     </div>
 
                     <div class="flex justify-between text-sm text-[#647491] mb-4">
-                         <span>Estimation mensuelle</span>
+                         <span>Frais mensuelle</span>
                          <span>{{ monthlyAmount.toFixed(2) }} €</span>
                     </div>
                </div>
@@ -55,13 +55,14 @@
 
                </div>
 
-               <!-- Modal ajout carte -->
-               <PanelModalUpgradeAddCard v-if="showAddCard" @close="showAddCard = false" @added="refreshCards" />
+
           </div>
           <div class="bg-surface-100 p-8 flex flex-col border-l">
                <PanelModalUpgradeFeaturesSummary :features="store.currentPlan?.includedFeatures || []" />
           </div>
      </PanelModalBaseUpgrade>
+     <!-- Modal ajout carte -->
+     <PanelModalUpgradeAddCard v-if="showAddCard" @close="showAddCard = false" @added="refreshCards" />
 </template>
 
 <script setup lang="ts">

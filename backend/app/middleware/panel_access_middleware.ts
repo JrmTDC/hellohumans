@@ -66,7 +66,13 @@ class PanelAccessMiddleware {
                     .eq('id', userData.id)
           }
 
-          ctx.client = { id: selectedClientId }
+          const { data: clientData } = await supabaseService
+               .from('clients')
+               .select('*')
+               .eq('id', selectedClientId)
+               .maybeSingle()
+
+          ctx.client = clientData
 
           // 3. Project (via selected_project_id)
           let selectedProjectId = clientUser.selected_project_id

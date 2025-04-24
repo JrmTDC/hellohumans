@@ -2,8 +2,6 @@ import '@adonisjs/core/http'
 
 declare module '@adonisjs/core/http' {
      interface HttpContext {
-          client?: any
-          userIp?: string
           auth?: {
                user: {
                     id?: string
@@ -14,5 +12,10 @@ declare module '@adonisjs/core/http' {
                project_id?: string
                client_id?: string
           }
+          user?: any
+          client?: any
+          project?: any
+          subscription?: any
+          userIp?: string
      }
 }
