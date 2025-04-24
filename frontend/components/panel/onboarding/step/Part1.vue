@@ -4,7 +4,7 @@
                :title="t('panel.components.onboarding.step.part1.selectClient.title')"
                :description="t('panel.components.onboarding.step.part1.selectClient.description')">
                <PanelOnboardingSelectClient
-                    v-model="onboardingStore.answers.selectedClientId" :clients="panelStore.clients"
+                    v-model="onboardingStore.answers.organizationId" :clients="panelStore.clients"
                     :placeholder="t('panel.components.onboarding.step.part1.selectClient.placeholder')"
                     :placeholderCreate="t('panel.components.onboarding.step.part1.selectClient.placeholderCreate')"/>
           </PanelOnboardingSection>
