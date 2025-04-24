@@ -40,6 +40,7 @@ export interface ModuleAddOn {
 }
 interface Stripe {
      client_secret?: string
+     payment_method_types?: string[]
 }
 
 export const usePanelStore = defineStore('panel', () => {
@@ -56,7 +57,7 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<string[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
-     const stripe = ref<{ client_secret?: string }|null>(null)
+     const stripe = ref<Stripe | null>(null)
 
      const panelReturn = ref<string | null>(null)
 

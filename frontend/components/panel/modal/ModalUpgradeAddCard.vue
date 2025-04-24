@@ -37,12 +37,13 @@ onMounted(async () => {
      try {
           await panelStore.fetchStripeSetupIntent()
           const clientSecret = panelStore.stripe?.client_secret
+
           if (!clientSecret) {
                error.value = 'Impossible de récupérer la clé Stripe.'
                return
           }
 
-          const { stripeInstance: stripe, elementsInstance } = await useStripeElements(clientSecret, 'setup')
+          const { stripeInstance: stripe, elementsInstance } = await useStripeElements(clientSecret)
           if (!stripe || !elementsInstance) {
                error.value = 'Erreur Stripe.'
                return

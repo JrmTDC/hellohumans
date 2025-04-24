@@ -36,6 +36,7 @@ class StripeController {
                const setupIntent = await stripeService.setupIntents.create({
                     customer: stripeCustomerId,
                     usage: 'off_session',
+                    payment_method_types: ['card']
                })
 
                return {
