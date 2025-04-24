@@ -38,6 +38,10 @@ export interface ModuleAddOn {
      disabled?: boolean
      comingSoon?: boolean
 }
+interface Stripe {
+     client_secret?: string
+}
+
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
@@ -52,6 +56,7 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<string[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
+     const stripe = ref<{ client_secret?: string }|null>(null)
 
      const panelReturn = ref<string | null>(null)
 
@@ -269,6 +274,16 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function fetchStripeSetupIntent() {
+          const { apiFetch } = usePanelApi()
+          try {
+               const res = await apiFetch('/stripe/setup-intent')
+               stripe.value = res.success.setupIntent
+          } catch (error) {
+               console.error('Erreur activités :', error)
+          }
+     }
+
      async function createOnboarding(data: Record<string, any>): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
@@ -354,6 +369,7 @@ export const usePanelStore = defineStore('panel', () => {
           project,
           projects,
           activities,
+          stripe,
 
           // actions
           initPanelAccessSession,
@@ -367,6 +383,7 @@ export const usePanelStore = defineStore('panel', () => {
           fetchUpgrade,
           fetchPlans,
           fetchModules,
+          fetchStripeSetupIntent,
           logout
      }
 })

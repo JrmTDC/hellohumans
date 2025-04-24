@@ -1,17 +1,48 @@
 import { loadStripe } from '@stripe/stripe-js'
+import type {
+     Stripe,
+     StripeElements,
+     StripeElementsOptionsClientSecret,
+     Appearance
+} from '@stripe/stripe-js'
 
-let stripeInstance: any = null
-let elementsInstance: any = null
+export async function useStripeElements(
+     clientSecret: string
+): Promise<{ stripeInstance: Stripe | null; elementsInstance: StripeElements | null }> {
+     const config = useRuntimeConfig()
 
-export async function useStripeElements() {
-     if (!stripeInstance) {
-          const stripeKey = useRuntimeConfig().public.stripeKey
-          stripeInstance = await loadStripe(stripeKey)
+     if (!clientSecret) return { stripeInstance: null, elementsInstance: null }
+
+     const stripeInstance = await loadStripe(config.public.stripeKey!)
+     if (!stripeInstance) return { stripeInstance: null, elementsInstance: null }
+
+     const appearance: Appearance = {
+          theme: 'stripe',
+          variables: {
+               colorPrimary: '#0566ff',
+               colorBackground: '#ffffff',
+               colorText: '#080f1a',
+               fontFamily: 'Inter, sans-serif',
+               spacingUnit: '4px',
+               borderRadius: '8px'
+          },
+          rules: {
+               '.Input': {
+                    padding: '12px 14px',
+                    border: '1px solid #d3dbe5'
+               },
+               '.Label': {
+                    fontWeight: '500'
+               }
+          }
      }
 
-     if (!elementsInstance && stripeInstance) {
-          elementsInstance = stripeInstance.elements()
+     const elementsOptions: StripeElementsOptionsClientSecret = {
+          clientSecret,
+          appearance
      }
+
+     const elementsInstance = stripeInstance.elements(elementsOptions)
 
      return {
           stripeInstance,

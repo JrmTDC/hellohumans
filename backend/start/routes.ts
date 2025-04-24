@@ -10,6 +10,7 @@ import ProjectController from '#controllers/Panel/ProjectController'
 import UserController from '#controllers/Panel/UserController'
 import OnboardingController from '#controllers/Panel/OnboardingController'
 import SubscriptionController from '#controllers/Panel/SubscriptionController'
+import StripeController from "#controllers/Panel/StripeController";
 //import StripeWebhookController from "#controllers/Panel/StripeWebhookController";
 
 import { middleware } from '#start/kernel'
@@ -53,15 +54,16 @@ router.group(() => {
 
 // Routes Stripe protégées par l'authentification
 router.group(() => {
+     router.get('/setup-intent', (ctx) => StripeController.createSetupIntent(ctx))
      router.post('/create-subscription', (ctx) => SubscriptionController.createSubscription(ctx))
-     // router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
+     router.post('/payment-methods', (ctx) => StripeController.paymentMethods(ctx))
+     //router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
      //router.post('/cancel-subscription', (ctx) => SubscriptionController.cancel(ctx))
      //router.post('/subscription/:project_uuid', (ctx) => SubscriptionController.create(ctx))
      //router.post('/preview', (ctx) => SubscriptionController.preview(ctx))
-
 })
      .prefix('/panel/stripe')
-     .use(middleware.panel_ensure_project())
+     .use(middleware.panel_access())
 
 // Routes Stripe sans authentification
 router.group(() => {
