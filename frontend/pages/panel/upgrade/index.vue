@@ -74,7 +74,7 @@ const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 const router = useRouter()
 const trialActive = ref(false)
-const isChecking = useState('isChecking')
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 
 onMounted(async () => {
      if (!panelStore.plans.length) await panelStore.fetchPlans()
@@ -82,7 +82,7 @@ onMounted(async () => {
      upgradeStore.restore()
      await nextTick()
      measureAllSections()
-     isChecking.value = false
+     layoutLoadingPanel.value = false
 })
 
 function measureAllSections(){
