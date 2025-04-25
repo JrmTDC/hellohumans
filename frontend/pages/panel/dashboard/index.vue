@@ -68,6 +68,11 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const layoutLoadingPanel = useState('layoutLoadingPanel')
+
+onMounted(async () => {
+     layoutLoadingPanel.value = false
+})
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
 setMeta({
