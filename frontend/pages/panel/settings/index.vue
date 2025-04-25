@@ -5,12 +5,6 @@ import { useRouter } from 'vue-router'
 const { t } = useI18n()
 const router = useRouter()
 router.push("/panel/settings/chat/appearance")
-const layoutLoadingPanel = useState('layoutLoadingPanel')
-
-
-onMounted(async () => {
-     layoutLoadingPanel.value = false
-})
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
 setMeta({
