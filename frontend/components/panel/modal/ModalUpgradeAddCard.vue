@@ -4,13 +4,11 @@
                <div class="py-4 px-4 md:px-5">
                     <div ref="paymentElementRef" />
                </div>
-               <div class="w-full h-px bg-border-[#2e2e2e]" />
-
-               <div class="py-4 px-4 md:px-5 flex items-center space-x-2">
-                    <button type="button" @click="handleClose" class="btn-secondary w-full" :disabled="loading">
+               <div v-if="showBottomButton" class="border-t py-4 px-4 md:px-5 space-x-2 flex flex-row flex-nowrap justify-between">
+                    <button type="button" @click="handleClose" class="text-[#647491] hover:underline" :disabled="loading">
                          {{ t('panel.components.modal.upgradeAddCard.cancel') }}
                     </button>
-                    <button type="submit" :disabled="loading || !!error" class="btn-primary w-full">
+                    <button type="submit" :disabled="loading || !!error" class="bg-[#0566ff] hover:bg-[#0049bd] px-6 py-2 rounded-md" :class="loading ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'text-[#fff]'">
                          <span v-if="!loading">{{ t('panel.components.modal.upgradeAddCard.confirm') }}</span>
                          <span v-else>{{ t('panel.components.modal.upgradeAddCard.processing') }}</span>
                     </button>
@@ -31,11 +29,12 @@ const stripeInstance = ref<any>(null)
 const elements = ref<any>(null)
 const paymentElement = ref<any>(null)
 const paymentElementRef = ref<HTMLElement | null>(null)
+const showBottomButton = ref(false)
 
 onMounted(async () => {
      try {
           await panelStore.fetchStripeSetupIntent()
-          const clientSecret = panelStore.stripe?.client_secret
+          const clientSecret = panelStore.stripe_setup_intent?.client_secret
 
           if (!clientSecret) {
                error.value = 'Impossible de récupérer la clé Stripe.'
@@ -55,6 +54,8 @@ onMounted(async () => {
 
           paymentElement.value = elementsInstance.create('payment')
           paymentElement.value.mount(paymentElementRef.value!)
+          showBottomButton.value = true
+
      } catch (e) {
           error.value = 'Erreur pendant l’initialisation.'
           console.error(e)
@@ -92,8 +93,6 @@ async function submit() {
           handleClose()
      } catch (err: any) {
           error.value = err.message || 'Erreur inconnue'
-     } finally {
-          loading.value = false
      }
 }
 </script>

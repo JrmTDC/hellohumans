@@ -1,3 +1,4 @@
+import type { RefSymbol } from '@vue/reactivity'
 import { defineStore } from 'pinia'
 interface ProjectSubscription {
      status: 'active' | 'inactive' | 'canceled' | string
@@ -43,6 +44,13 @@ interface StripeSetupIntent {
      payment_method_types?: string[]
 }
 interface StripeCustomer {
+     payment_methods?: Array<{
+          id: string
+          brand: string
+          last4: string
+          exp_month: number
+          exp_year: number
+     }>
 }
 
 export const usePanelStore = defineStore('panel', () => {
@@ -291,7 +299,10 @@ export const usePanelStore = defineStore('panel', () => {
           const { apiFetch } = usePanelApi()
           try {
                const res = await apiFetch('/stripe/payment-methods')
-               stripe_customer.value = res.success.paymentMethods
+               stripe_customer.value = {
+                    ...stripe_customer.value,
+                    payment_methods: res.success.paymentMethods
+               }
           } catch (error) {
                console.error('Erreur activités :', error)
           }

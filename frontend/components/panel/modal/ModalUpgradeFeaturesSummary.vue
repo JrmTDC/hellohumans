@@ -1,26 +1,20 @@
 <template>
-     <div class="w-full h-full p-[32px] text-[#080f1a]">
-          <h3 class="text-[18px] font-semibold mb-[16px]">
+     <div class="mb-4">
+          <h3 class="text-sm mb-4">
                {{ t('panel.components.upgradeFeaturesSummary.title') }}
           </h3>
-
-          <ul class="flex flex-col gap-[10px]">
-               <li
-                    v-for="(feature, idx) in features"
-                    :key="idx"
-                    class="flex items-start gap-[8px] text-[14px] text-[#1a1a1a]"
-               >
-                   xxx
-                    <span v-html="feature"></span>
-               </li>
-          </ul>
-
-          <div class="mt-[24px] text-[12px] text-[#7f8a9c] italic">
-               <blockquote>
-                    {{ t('panel.components.upgradeFeaturesSummary.quote') }}<br />
-                    <span class="text-[#000] font-medium">— {{ t('panel.components.upgradeFeaturesSummary.author') }}</span>
-               </blockquote>
+          <div class="space-y-2 mb-4 text-foreground-light">
+               <ul class="flex flex-col gap-[10px]">
+                    <li v-for="(feature, idx) in features" :key="idx" class="flex items-start gap-[8px] text-[14px] text-[#1a1a1a]"><svgo-panel-icon-checked class="fill-[#0566ff] w-[12px] h-[12px]" /><span v-html="feature"></span>
+                    </li>
+               </ul>
           </div>
+     </div>
+     <div class="border-t pt-6 justify-end">
+          <blockquote class="text-sm text-foreground-light text-[12px] text-[#7f8a9c] italic">
+               {{ t('panel.components.modal.upgradeFeaturesSummary.quote') }}<br />
+               <span class="text-[#0566ff]">— @{{ t('panel.components.modal.upgradeFeaturesSummary.author') }}</span>
+          </blockquote>
      </div>
 </template>
 

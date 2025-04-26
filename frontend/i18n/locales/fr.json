@@ -349,13 +349,17 @@
                          "processing": "Traitement de votre carte..."
                     },
                     "upgradeFeaturesSummary" : {
-
+                         "quote":"Même les robots ont besoin d’un bon plan pour être utiles aux humains.",
+                         "author": "Hellohumans"
                     },
                     "upgradePaid" : {
 
                     },
                     "upgradePayment" : {
-
+                         "addNewCard": "Ajouter",
+                         "NoCardRegistered": "Aucune carte enregistrée",
+                         "AddPaymentMethode": "Ajouter une méthode de paiement",
+                         "SelectCreditCard": "Sélectionner une carte de crédit",
                     }
                },
                "onboarding": {
