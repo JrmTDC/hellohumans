@@ -80,7 +80,7 @@
 
           </div>
           <div class="bg-surface-100 p-8 flex flex-col border-l justify-between">
-               <PanelModalUpgradeFeaturesSummary :features="store.currentPlan?.includedFeatures || []" />
+               <PanelModalUpgradeFeaturesSummary :features="upgradeStore.currentPlan?.includedFeatures || []" />
           </div>
      </PanelModalBaseUpgrade>
      <!-- Modal ajout carte -->
@@ -90,7 +90,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const emit = defineEmits(['close', 'submit'])
-const store = useUpgradeStore()
+const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 
 const showAddCard = ref(false)
@@ -99,8 +99,8 @@ const selectedPaymentMethod = ref<string | null>(null)
 const paymentMethodLoading = ref(true)
 let skipNextClick = true
 const dropdownRef = ref<HTMLElement | null>(null)
-const currentPlan = computed(() => store.currentPlan!)
-const selectedAddOns = computed(() => store.selectedAddOns)
+const currentPlan = computed(() => upgradeStore.currentPlan!)
+const selectedAddOns = computed(() => upgradeStore.selectedAddOns)
 const isOpen = ref(false)
 const todayAmount = ref(29.00)
 const monthlyAmount = ref(29.00)
@@ -108,7 +108,7 @@ const loading = ref(false)
 
 const planLabel = computed(() => {
      if (!panelStore.project?.subscription) return 'Nouveau'
-     if (store.isSameAsCurrent) return 'Identique'
+     if (upgradeStore.isSameAsCurrent) return 'Identique'
      return 'Mise à jour'
 })
 
@@ -129,6 +129,7 @@ const toggleOpenSelect = () => {
 }
 onMounted(() => {
      fetchPaymentMethods()
+     await fetchUpgradePreview()
 
      skipNextClick = true
      setTimeout(() => {
@@ -165,6 +166,23 @@ async function fetchPaymentMethods() {
           }
      } finally {
           paymentMethodLoading.value = false
+     }
+}
+
+async function fetchUpgradePreview() {
+     try {
+          const res = await panelStore.fetchUpgradePreview()
+
+          todayAmount.value = res.todayAmount / 100 // Stripe renvoie en centimes
+          monthlyAmount.value = res.monthlyAmount / 100
+
+          if (res.endsAt) {
+               subscriptionEndsAt.value = new Date(res.endsAt * 1000)
+          } else {
+               subscriptionEndsAt.value = null
+          }
+     } catch (error) {
+          console.error('Erreur preview upgrade :', error)
      }
 }
 

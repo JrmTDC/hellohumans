@@ -143,5 +143,81 @@ class StripeController {
           }
      }
 
+     public async previewUpgrade(ctx: HttpContext) {
+          const { request, response, client, project, subscription } = ctx
+
+          try {
+               const { newPlanId, newModules } = request.only(['newPlanId', 'newModules'])
+
+               if (!project || !subscription || !client) {
+                    return response.notFound({
+                         error: { name: 'missingProjectOrSubscription', description: 'Projet ou abonnement manquant.' },
+                    })
+               }
+
+               const stripeCustomerId = client.stripe_customer_id
+               if (!stripeCustomerId) {
+                    return response.badRequest({
+                         error: { name: 'missingStripeCustomer', description: 'Client Stripe manquant.' },
+                    })
+               }
+
+               const subscriptionId = project.subscription?.stripe_subscription_id
+               if (!subscriptionId) {
+                    return response.badRequest({
+                         error: { name: 'missingStripeSubscription', description: 'Abonnement Stripe manquant.' },
+                    })
+               }
+
+               // 1. On récupère les infos du nouveau plan + modules (depuis ta BDD Supabase)
+               const { data: plansData } = await supabaseService.from('subscription_plans').select('*').eq('id', newPlanId).single()
+               if (!plansData) {
+                    return response.badRequest({
+                         error: { name: 'invalidPlan', description: 'Plan sélectionné introuvable.' },
+                    })
+               }
+
+               const { data: modulesData } = await supabaseService.from('subscription_modules').select('*').in('id', newModules)
+               if (!modulesData) {
+                    return response.badRequest({
+                         error: { name: 'invalidModules', description: 'Modules sélectionnés invalides.' },
+                    })
+               }
+
+               // 2. Construire la future liste des items d'abonnement Stripe
+               const subscriptionItems = [
+                    {
+                         price: plansData.stripe_price_id_monthly, // ou _annual selon ton cycle
+                         quantity: 1,
+                    },
+                    ...modulesData.map((mod) => ({
+                         price: mod.stripe_price_id_monthly,
+                         quantity: 1,
+                    }))
+               ]
+
+               // 3. Demander à Stripe une prévisualisation
+               const invoice = await stripeService.invoices.retrieveUpcoming({
+                    customer: stripeCustomerId,
+                    subscription: subscriptionId,
+                    subscription_items: subscriptionItems,
+                    subscription_proration_behavior: 'always_invoice',
+                    subscription_proration_date: Math.floor(Date.now() / 1000),
+               })
+
+               // 4. Renvoyer les frais
+               return {
+                    todayAmount: invoice.total || 0, // total immédiat à payer
+                    monthlyAmount: invoice.subscription?.plan?.amount || 0, // frais futurs par mois
+                    endsAt: invoice.subscription?.current_period_end || null, // fin d'abonnement actuel si downgrade
+               }
+          } catch (error) {
+               console.error('Erreur previewUpgrade:', error)
+               return response.internalServerError({
+                    error: { name: 'internalError', description: 'Erreur lors de la prévisualisation de l’upgrade.' },
+               })
+          }
+     }
+
 }
 export default new StripeController()

@@ -56,11 +56,11 @@ router.group(() => {
 router.group(() => {
      router.get('/setup-intent', (ctx) => StripeController.createSetupIntent(ctx))
      router.get('/payment-methods', (ctx) => StripeController.paymentMethods(ctx))
+     router.post('/preview-upgrade', (ctx) => StripeController.previewUpgrade(ctx))
      router.post('/create-subscription', (ctx) => SubscriptionController.createSubscription(ctx))
      //router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
      //router.post('/cancel-subscription', (ctx) => SubscriptionController.cancel(ctx))
      //router.post('/subscription/:project_uuid', (ctx) => SubscriptionController.create(ctx))
-     //router.post('/preview', (ctx) => SubscriptionController.preview(ctx))
 })
      .prefix('/panel/stripe')
      .use(middleware.panel_access())

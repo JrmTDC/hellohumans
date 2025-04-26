@@ -295,6 +295,7 @@ export const usePanelStore = defineStore('panel', () => {
                console.error('Erreur activités :', error)
           }
      }
+
      async function fetchStripePaymentMethods() {
           const { apiFetch } = usePanelApi()
           try {
@@ -306,6 +307,14 @@ export const usePanelStore = defineStore('panel', () => {
           } catch (error) {
                console.error('Erreur activités :', error)
           }
+     }
+
+     async function fetchUpgradePreview() {
+          const { apiFetch } = usePanelApi()
+          const res = await apiFetch('/panel/stripe/preview-upgrade', {
+               method: 'POST',
+          })
+          return res.success
      }
 
      async function createOnboarding(data: Record<string, any>): Promise<boolean> {
@@ -410,6 +419,7 @@ export const usePanelStore = defineStore('panel', () => {
           fetchModules,
           fetchStripeSetupIntent,
           fetchStripePaymentMethods,
+          fetchUpgradePreview,
           logout
      }
 })
