@@ -82,6 +82,7 @@ const upgradeStore = useUpgradeStore()
 const router = useRouter()
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 
 onMounted(async () => {
 
@@ -94,6 +95,7 @@ onMounted(async () => {
           await router.replace('/panel/upgrade')
           return
      }
+     layoutLoadingPanel.value = false
 })
 
 function toggleModule(moduleId: string, checked: boolean) {

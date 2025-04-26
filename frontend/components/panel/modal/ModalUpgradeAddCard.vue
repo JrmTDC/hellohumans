@@ -8,7 +8,7 @@
                     <button type="button" @click="handleClose" class="text-[#647491] hover:underline" :disabled="loading">
                          {{ t('panel.components.modal.upgradeAddCard.cancel') }}
                     </button>
-                    <button type="submit" :disabled="loading || !!error" class="bg-[#0566ff] hover:bg-[#0049bd] px-6 py-2 rounded-md" :class="loading ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'text-[#fff]'">
+                    <button type="submit" :disabled="loading || !!error" class="px-6 py-2 rounded-md" :class="loading ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd] text-[#fff]'">
                          <span v-if="!loading">{{ t('panel.components.modal.upgradeAddCard.confirm') }}</span>
                          <span v-else>{{ t('panel.components.modal.upgradeAddCard.processing') }}</span>
                     </button>
