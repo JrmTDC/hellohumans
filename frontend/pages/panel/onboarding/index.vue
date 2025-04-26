@@ -31,6 +31,7 @@
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const onboardingStore = useOnboardingStore()
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 
 onMounted(async () => {
      const onboardingStore = useOnboardingStore()
@@ -44,6 +45,7 @@ onMounted(async () => {
           onboardingStore.validateSections(step)
      }
      onboardingStore.redirectIfInvalid()
+     layoutLoadingPanel.value = false
 })
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()

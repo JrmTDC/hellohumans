@@ -24,7 +24,9 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      const router = useRouter()
 
      const currentStep = ref(1)
+     const disabledRedirect = ref(false)
      const totalSteps = 4
+     const isInitialized = ref(false)
      const submitting = ref(false)
 
      const stepSections = reactive<Record<number, SectionInfo>>({
@@ -101,10 +103,12 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      }
 
      function redirectIfInvalid() {
-          for (const [stepStr, section] of Object.entries(stepSections)) {
-               if (section.completed < section.total) {
-                    currentStep.value = Number(stepStr)
-                    return
+          if(!disabledRedirect) {
+               for (const [stepStr, section] of Object.entries(stepSections)) {
+                    if (section.completed < section.total) {
+                         currentStep.value = Number(stepStr)
+                         return
+                    }
                }
           }
      }
@@ -146,6 +150,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      function resetStore() {
           currentStep.value = 1
           submitting.value = false
+          disabledRedirect.value = false
           Object.assign(answers.value, {
                webSite: '',
                organizationId: null,
@@ -184,16 +189,8 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      function prepareNewFromDashboard(siteUrl: string) {
           resetStore()
           answers.value.webSite = siteUrl
-
-          const panel = usePanelStore()
-          if (panel.client?.id && !answers.value.organizationId && !answers.value.organizationName) {
-               const found = panel.clients.find(c => c.id === panel.client?.id)
-               if (found) {
-                    answers.value.organizationId = found.id
-               }
-          }
-
-          validateSections(1)
+          currentStep.value = 1
+          disabledRedirect.value = true
           saveToStorage()
      }
 
@@ -218,6 +215,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                const parsed = JSON.parse(raw)
 
                if (parsed.currentStep) currentStep.value = parsed.currentStep
+               if (parsed.disabledRedirect) disabledRedirect.value = parsed.disabledRedirect
                if (parsed.answers) Object.assign(answers.value, parsed.answers)
 
                autoSelectClient()
@@ -230,11 +228,15 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           } catch (e) {
                console.warn('Erreur onboardingStore.initialize():', e)
           }
+          finally {
+               isInitialized.value = true
+          }
      }
 
      watch(
           () => answers.value,
           () => {
+               if (!isInitialized.value) return
                for (let step = 1; step <= totalSteps; step++) {
                     validateSections(step)
                }

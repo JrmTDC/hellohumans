@@ -35,10 +35,10 @@ const projects = computed(() => panelStore.projects)
 const selectedProject = computed(() => panelStore.project?.id)
 
 const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)' })
-const isChecking = useState('isChecking', () => true)
+const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const selectProject = async (uuid: string) => {
      if (uuid !== selectedProject.value) {
-          isChecking.value = true
+          layoutLoadingPanel.value = true
           await panelStore.switchProject(uuid)
           location.reload()
      }
