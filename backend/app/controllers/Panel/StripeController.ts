@@ -144,76 +144,109 @@ class StripeController {
      }
 
      public async previewUpgrade(ctx: HttpContext) {
-          const { request, response, client, project, subscription } = ctx
+          const { client, project, subscription } = ctx
+
+          const { plan_id, modules, billing_cycle } = ctx.request.only(['plan_id', 'modules', 'billing_cycle'])
 
           try {
-               const { newPlanId, newModules } = request.only(['newPlanId', 'newModules'])
-
-               if (!project || !subscription || !client) {
-                    return response.notFound({
-                         error: { name: 'missingProjectOrSubscription', description: 'Projet ou abonnement manquant.' },
+               // 1. Vérifie que le client existe
+               if (!project || !client) {
+                    return ctx.response.notFound({
+                         error: { name: 'missingProject', description: 'Projet manquant.' },
                     })
                }
 
-               const stripeCustomerId = client.stripe_customer_id
+               let stripeCustomerId = client.stripe_customer_id
+
+               // 2. Vérifie si customer Stripe existe, sinon on le crée
+               if (stripeCustomerId) {
+                    try {
+                         await stripeService.customers.retrieve(stripeCustomerId)
+                    } catch (err: any) {
+                         if (err?.statusCode === 404) {
+                              stripeCustomerId = null
+                         } else {
+                              throw err
+                         }
+                    }
+               }
+
                if (!stripeCustomerId) {
-                    return response.badRequest({
-                         error: { name: 'missingStripeCustomer', description: 'Client Stripe manquant.' },
+                    const customer = await stripeService.customers.create({
+                         metadata: {
+                              client_id: client.id,
+                         },
+                    })
+                    stripeCustomerId = customer.id
+
+                    await supabaseService
+                         .from('clients')
+                         .update({ stripe_customer_id: stripeCustomerId })
+                         .eq('id', client.id)
+               }
+
+               // 3. Vérifie abonnement existant
+               const subscriptionId = subscription?.stripe_subscription_id
+
+               // Récupérer les détails du plan
+               const { data: planData } = await supabaseService
+                    .from('subscription_plans')
+                    .select('*')
+                    .eq('id', plan_id)
+                    .maybeSingle()
+
+               if (!planData) {
+                    return ctx.response.badRequest({
+                         error: { name: 'invalidPlan', description: 'Offre introuvable.' }
                     })
                }
 
-               const subscriptionId = project.subscription?.stripe_subscription_id
+
+               const plan_discount_months = planData.discountMonths || 0
+               const planPrice = billing_cycle === 'years'
+                    ? planData.monthlyPrice *  (12 - plan_discount_months)
+                    : planData.monthlyPrice
+
+               console.log(planData.monthlyPrice)
+
+               // 4. Cas : pas d'abonnement actif
                if (!subscriptionId) {
-                    return response.badRequest({
-                         error: { name: 'missingStripeSubscription', description: 'Abonnement Stripe manquant.' },
-                    })
+                    // Pas de prorata → on paye la totalité
+                    return {
+                         todayAmount: planPrice,  // ou price_annual selon cycle choisi
+                         monthlyAmount: planPrice,
+                         endsAt: null,
+                    }
                }
 
-               // 1. On récupère les infos du nouveau plan + modules (depuis ta BDD Supabase)
-               const { data: plansData } = await supabaseService.from('subscription_plans').select('*').eq('id', newPlanId).single()
-               if (!plansData) {
-                    return response.badRequest({
-                         error: { name: 'invalidPlan', description: 'Plan sélectionné introuvable.' },
-                    })
-               }
-
-               const { data: modulesData } = await supabaseService.from('subscription_modules').select('*').in('id', newModules)
-               if (!modulesData) {
-                    return response.badRequest({
-                         error: { name: 'invalidModules', description: 'Modules sélectionnés invalides.' },
-                    })
-               }
-
-               // 2. Construire la future liste des items d'abonnement Stripe
-               const subscriptionItems = [
-                    {
-                         price: plansData.stripe_price_id_monthly, // ou _annual selon ton cycle
-                         quantity: 1,
-                    },
-                    ...modulesData.map((mod) => ({
-                         price: mod.stripe_price_id_monthly,
-                         quantity: 1,
-                    }))
-               ]
-
-               // 3. Demander à Stripe une prévisualisation
-               const invoice = await stripeService.invoices.retrieveUpcoming({
+               // 5. Cas : abonnement existant → on demande à Stripe le prorata
+               const invoicePreview = await stripeService.invoices.retrieveUpcoming({
                     customer: stripeCustomerId,
                     subscription: subscriptionId,
-                    subscription_items: subscriptionItems,
-                    subscription_proration_behavior: 'always_invoice',
-                    subscription_proration_date: Math.floor(Date.now() / 1000),
+                    // avec subscription_items si tu veux ajouter / modifier des modules
                })
 
-               // 4. Renvoyer les frais
-               return {
-                    todayAmount: invoice.total || 0, // total immédiat à payer
-                    monthlyAmount: invoice.subscription?.plan?.amount || 0, // frais futurs par mois
-                    endsAt: invoice.subscription?.current_period_end || null, // fin d'abonnement actuel si downgrade
+               const totalToday = (invoicePreview.total || 0) / 100
+               const monthlyAfter = (invoicePreview.amount_due || 0) / 100
+               const endsAt = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null
+
+               let infoMessage = null
+
+               if (totalToday === 0 && monthlyAfter < (subscription.amount || 0) / 100) {
+                    // C'est un downgrade ➔ affiche un message rassurant
+                    infoMessage = `Votre plan actuel reste actif jusqu'au ${endsAt.toLocaleDateString()} avant le changement.`
                }
+
+               return {
+                    todayAmount: totalToday,
+                    monthlyAmount: monthlyAfter,
+                    endsAt,
+                    infoMessage,
+               }
+
           } catch (error) {
                console.error('Erreur previewUpgrade:', error)
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur lors de la prévisualisation de l’upgrade.' },
                })
           }

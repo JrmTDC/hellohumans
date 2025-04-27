@@ -1,6 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import supabaseService from '#services/supabaseService'
-import stripe from '#services/stripeService'
+import stripeService from '#services/stripeService'
 
 class SubscriptionController {
      public async createSubscription(ctx : HttpContext) {
@@ -88,7 +88,7 @@ class SubscriptionController {
                }
 
                // Stripe : créer un client et un abonnement
-               const customer = await stripe.customers.create({
+               const customer = await stripeService.customers.create({
                     metadata: { project_id: ctx.project.id },
                     description: `Client HelloHumans - Projet ${ctx.project.id}`
                })
@@ -97,7 +97,7 @@ class SubscriptionController {
                     ? planData.stripe_price_id_monthly
                     : planData.stripe_price_id_annual
 
-               const stripeSubscription = await stripe.subscriptions.create({
+               const stripeSubscription = await stripeService.subscriptions.create({
                     customer: customer.id,
                     items: [{ price: stripePriceId }],
                     payment_behavior: 'default_incomplete',
@@ -137,6 +137,84 @@ class SubscriptionController {
                })
           }
      }
+
+     public async confirmUpgrade(ctx: HttpContext) {
+          const { plan_id, modules, billing_cycle, payment_method_id } = ctx.request.only([
+               'plan_id', 'modules', 'billing_cycle', 'payment_method_id'
+          ])
+          const { client, project, subscription } = ctx
+
+          try {
+               if (!plan_id || !billing_cycle || !payment_method_id) {
+                    return ctx.response.badRequest({
+                         error: { name: 'missingParams', description: 'Certains paramètres requis sont manquants.' }
+                    })
+               }
+
+               // Vérifier si le client stripe existe, sinon le créer
+               let stripeCustomerId = client.stripe_customer_id
+               if (!stripeCustomerId) {
+                    const customer = await stripeService.customers.create({
+                         metadata: { client_id: client.id }
+                    })
+                    stripeCustomerId = customer.id
+                    await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
+               }
+
+               // Mettre à jour la méthode de paiement par défaut
+               await stripeService.customers.update(stripeCustomerId, {
+                    invoice_settings: {
+                         default_payment_method: payment_method_id,
+                    },
+               })
+
+               // Appeler StripeController pour mettre à jour l’abonnement
+               const updateResult = await stripeService.updateSubscription({
+                    customerId: stripeCustomerId,
+                    subscriptionId: subscription?.stripe_subscription_id,
+                    plan_id,
+                    modules,
+                    billing_cycle,
+               })
+
+               // Si upgrade immédiat : mettre à jour directement
+               if (updateResult.status === 'active' || updateResult.status === 'trialing') {
+                    await supabaseService
+                         .from('client_project_subscriptions')
+                         .update({
+                              current_plan_id: plan_id,
+                              current_modules: modules ?? [],
+                              billing_cycle,
+                              status: 'active',
+                              payment_failed: false,
+                              stripe_subscription_id: updateResult.subscriptionId,
+                              current_period_end: Math.floor(updateResult.currentPeriodEnd / 1000),
+                         })
+                         .eq('project_id', project.id)
+
+                    return ctx.response.ok({ message: 'Upgrade effectué avec succès.' })
+               }
+
+               // Sinon si downgrade ➔ pas de changement immédiat, attendre le renouvellement
+               await supabaseService
+                    .from('client_project_subscriptions')
+                    .update({
+                         current_plan_id: plan_id,
+                         current_modules: modules ?? [],
+                         billing_cycle,
+                    })
+                    .eq('project_id', project.id)
+
+               return ctx.response.ok({ message: 'Votre changement sera effectif à la date de renouvellement.' })
+
+          } catch (error) {
+               console.error('Erreur confirmUpgrade:', error)
+               return ctx.response.internalServerError({
+                    error: { name: 'upgradeError', description: 'Erreur lors de la confirmation de l’upgrade.' }
+               })
+          }
+     }
+
 }
 
 export default new SubscriptionController()
