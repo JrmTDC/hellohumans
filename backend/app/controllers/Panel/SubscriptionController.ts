@@ -161,7 +161,10 @@ class SubscriptionController {
           } catch (error) {
                console.error('Erreur confirmUpgrade:', error)
                return ctx.response.internalServerError({
-                    error: { name: 'upgradeError', description: 'Erreur lors de la confirmation de l’upgrade.' },
+                    error: {
+                         name: 'upgradeError',
+                         description: 'Erreur lors de la confirmation de l’upgrade.'
+                    },
                })
           }
      }
