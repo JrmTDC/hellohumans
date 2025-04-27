@@ -5,18 +5,17 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
      apiVersion: '2025-03-31.basil'
 })
 
-export async function updateSubscription({customerId, subscriptionId, plan_id, modules, billing_cycle}: {customerId: string, subscriptionId: string, plan_id: string, modules: string[], billing_cycle: 'month' | 'year' }) {
-     // Récupérer abonnement existant
+export async function updateSubscription({customerId, subscriptionId, plan_id, modules, billing_cycle }: { customerId: string, subscriptionId: string, plan_id: string, modules: string[], billing_cycle: 'month' | 'year' }) {
+     // Vérifier abonnement existant
      const subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
      if (!subscription) {
-          throw new Error('Subscription introuvable')
+          throw new Error('Abonnement introuvable')
      }
 
-     // Construire nouvelle liste d'items
      const items: { price: string }[] = []
 
-     // 1. Ajouter l’offre principale
+     // Ajouter l'offre principale
      const { data: plan } = await supabaseService
           .from('subscription_plans')
           .select('*')
@@ -24,7 +23,7 @@ export async function updateSubscription({customerId, subscriptionId, plan_id, m
           .maybeSingle()
 
      if (!plan) {
-          throw new Error('Plan principal introuvable')
+          throw new Error('Offre principale introuvable')
      }
 
      const planPriceId = billing_cycle === 'year'
@@ -32,33 +31,32 @@ export async function updateSubscription({customerId, subscriptionId, plan_id, m
           : plan.stripe_price_id_monthly
 
      if (!planPriceId) {
-          throw new Error('Plan sans price_id')
+          throw new Error('Plan sans price_id configuré')
      }
 
      items.push({ price: planPriceId })
 
-     // 2. Ajouter les modules si présents
-     if (modules?.length > 0) {
-          const { data: moduleList } = await supabaseService
+     // Ajouter les modules
+     if (modules && modules.length > 0) {
+          const { data: modulesList } = await supabaseService
                .from('subscription_modules')
                .select('*')
                .in('id', modules)
 
-          for (const mod of moduleList || []) {
+          for (const mod of modulesList || []) {
                const modulePriceId = billing_cycle === 'year'
                     ? mod.stripe_price_id_annual
                     : mod.stripe_price_id_monthly
 
-               if (!modulePriceId) continue // ignore les modules mal configurés
+               if (!modulePriceId) continue
 
                items.push({ price: modulePriceId })
           }
      }
 
-     // 3. Mise à jour de l'abonnement
      const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
           items: items.map(item => ({ price: item.price })),
-          proration_behavior: 'create_prorations', // facture aujourd'hui le prorata
+          proration_behavior: 'create_prorations',
      })
 
      return {
