@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import stripeService from '#services/stripeService'
+import stripeService, { createCustomer, createSubscription } from '#services/stripeService'
 import supabaseService from '#services/supabaseService'
 
 class StripeController {
@@ -20,7 +20,7 @@ class StripeController {
 
                if (stripeCustomerId) {
                     try {
-                         await stripeService.stripe.customers.retrieve(stripeCustomerId)
+                         await stripeService.customers.retrieve(stripeCustomerId)
                     } catch (err: any) {
                          if (err?.statusCode === 404) {
                               stripeCustomerId = null
@@ -36,7 +36,7 @@ class StripeController {
                     await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
                }
 
-               const setupIntent = await stripeService.stripe.setupIntents.create({
+               const setupIntent = await stripeService.setupIntents.create({
                     customer: stripeCustomerId,
                     usage: 'off_session',
                     payment_method_types: ['card'],
@@ -74,7 +74,7 @@ class StripeController {
 
                if (stripeCustomerId) {
                     try {
-                         await stripeService.stripe.customers.retrieve(stripeCustomerId)
+                         await stripeService.customers.retrieve(stripeCustomerId)
                     } catch (err: any) {
                          if (err?.statusCode === 404) {
                               stripeCustomerId = null
@@ -90,7 +90,7 @@ class StripeController {
                     await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
                }
 
-               const paymentMethods = await stripeService.stripe.paymentMethods.list({
+               const paymentMethods = await stripeService.paymentMethods.list({
                     customer: stripeCustomerId,
                     type: 'card',
                })
@@ -130,7 +130,7 @@ class StripeController {
 
                if (stripeCustomerId) {
                     try {
-                         await stripeService.stripe.customers.retrieve(stripeCustomerId)
+                         await stripeService.customers.retrieve(stripeCustomerId)
                     } catch (err: any) {
                          if (err?.statusCode === 404) {
                               stripeCustomerId = null
@@ -163,7 +163,7 @@ class StripeController {
                }
 
                const plan_discount_months = planData.discountMonths || 0
-               const planPrice = billing_cycle === 'years'
+               const planPrice = billing_cycle === 'year'
                     ? planData.monthlyPrice * (12 - plan_discount_months)
                     : planData.monthlyPrice
 
@@ -176,7 +176,7 @@ class StripeController {
                     }
                }
 
-               const invoicePreview = await stripeService.stripe.invoices.retrieveUpcoming({
+               const invoicePreview = await stripeService.invoices.retrieveUpcoming({
                     customer: stripeCustomerId,
                     subscription: subscriptionId,
                })
