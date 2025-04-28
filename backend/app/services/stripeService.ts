@@ -88,7 +88,7 @@ export async function updateSubscription({ subscriptionId, plan_id, modules, bil
 
      return await stripe.subscriptions.update(subscriptionId, {
           items: items.map((item) => ({ price: item.price })),
-          proration_behavior: 'create_prorations',
+          proration_behavior: 'create_prorations'
      })
 }
 
