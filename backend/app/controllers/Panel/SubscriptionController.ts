@@ -1,72 +1,78 @@
-// controllers/SubscriptionController.ts
 import { HttpContext } from '@adonisjs/core/http'
-import supabaseService from '#services/supabaseService'
-import * as stripeService from '#services/stripeService'
+import supabase from '#services/supabaseService'
+import stripe, { createSubscription, updateSubscription } from '#services/stripeService'
 
 class SubscriptionController {
-     public async confirmUpgrade(ctx: HttpContext) {
-          const { plan_id, modules, billing_cycle, payment_method_id } = ctx.request.only([
-               'plan_id', 'modules', 'billing_cycle', 'payment_method_id'
-          ])
 
-          const { client, project, subscription } = ctx
+     /* -------------------------------------------------------- */
+     /* POST /panel/stripe/confirm-upgrade                       */
+     /* -------------------------------------------------------- */
+     public async confirmUpgrade ({ request, client, project, subscription, response }: HttpContext) {
+
+          const { plan_id, modules = [], billing_cycle, payment_method_id } =
+               request.only(['plan_id', 'modules', 'billing_cycle', 'payment_method_id'])
+
+          if (!plan_id || !billing_cycle || !payment_method_id) {
+               return response.badRequest({ error: { name: 'missing', description: 'Params required' } })
+          }
 
           try {
-               if (!plan_id || !billing_cycle || !payment_method_id) {
-                    return ctx.response.badRequest({ error: { name: 'missingParams', description: 'Paramètres manquants.' } })
+               /* 1️⃣ assurer le customer Stripe ------------------------ */
+               let customerId = client.stripe_customer_id
+               if (!customerId) {
+                    const c = await stripe.customers.create({ metadata: { client_id: client.id } })
+                    customerId = c.id
+                    await supabase.from('clients').update({ stripe_customer_id: customerId }).eq('id', client.id)
                }
 
-               // Customer Stripe
-               let stripeCustomerId = client.stripe_customer_id
-               if (!stripeCustomerId) {
-                    const customer = await stripeService.createCustomer({ client_id: client.id })
-                    stripeCustomerId = customer.id
-                    await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
-               }
+               /* 2️⃣ créer ou mettre à jour la subscription ------------ */
+               let invoice, sub
 
-               // Set default payment method
-               await stripeService.stripe.customers.update(stripeCustomerId, {
-                    invoice_settings: { default_payment_method: payment_method_id }
-               })
-
-               let stripeSubscription
-
-               if (subscription?.stripe_subscription_id) {
-                    // Mise à jour abonnement existant
-                    stripeSubscription = await stripeService.updateSubscription({
-                         subscriptionId: subscription.stripe_subscription_id,
+               if (!subscription?.stripe_subscription_id) {
+                    /* Nouveau -------------------------------------------------- */
+                    const res = await createSubscription({
+                         customerId,
                          plan_id,
                          modules,
-                         billing_cycle
+                         cycle: billing_cycle,
+                         paymentMethodId: payment_method_id,
                     })
+                    sub     = res.sub
+                    invoice = res.invoice
                } else {
-                    // Création nouvel abonnement
-                    stripeSubscription = await stripeService.createSubscription({
-                         customerId: stripeCustomerId,
+                    /* Mise à jour --------------------------------------------- */
+                    sub = await updateSubscription({
+                         subscriptionId  : subscription.stripe_subscription_id,
                          plan_id,
                          modules,
-                         billing_cycle
+                         cycle           : billing_cycle,
+                         paymentMethodId : payment_method_id,
                     })
+                    invoice = await stripe.invoices.retrieve(
+                         sub.latest_invoice as string,
+                         { expand: ['payment_intent'] }
+                    )
                }
 
-               // Mise à jour BDD
-               await supabaseService
-                    .from('client_project_subscriptions')
-                    .update({
-                         current_plan_id: plan_id,
-                         current_modules: modules ?? [],
-                         billing_cycle,
-                         status: 'active',
-                         stripe_subscription_id: stripeSubscription.id,
-                         current_period_end: stripeSubscription.current_period_end,
-                         payment_failed: false,
-                    })
-                    .eq('project_id', project.id)
+               /* 3️⃣ mise à jour locale --------------------------------- */
+               await supabase.from('client_project_subscriptions').update({
+                    current_plan_id : plan_id,
+                    current_modules : modules,
+                    billing_cycle   : billing_cycle,
+                    stripe_subscription_id: sub.id,
+                    status          : sub.status,
+                    current_period_end   : sub.current_period_end,
+               }).eq('project_id', project.id)
 
-               return ctx.response.ok({ message: 'Abonnement mis à jour avec succès.' })
-          } catch (error) {
-               console.error('Erreur confirmUpgrade:', error)
-               return ctx.response.internalServerError({ error: { name: 'upgradeError', description: 'Erreur upgrade.' } })
+               /* 4️⃣ réponse au front ----------------------------------- */
+               return response.ok({
+                    stripe_subscription_id: sub.id,
+                    status       : sub.status,
+                    client_secret: clientSecret,          // null = rien à confirmer côté front
+               })
+          } catch (e) {
+               console.error('[confirmUpgrade]', e)
+               return response.internalServerError({ error: { name: 'stripe', description: 'Upgrade failed' } })
           }
      }
 }
