@@ -3,18 +3,40 @@ import stripeService from '#services/stripeService'
 import supabaseService from '#services/supabaseService'
 
 class StripeController {
+     /**
+      * Créer un SetupIntent Stripe
+      */
      public async createSetupIntent(ctx: HttpContext) {
           try {
                const { client } = ctx
 
+               if (!client) {
+                    return ctx.response.notFound({
+                         error: { name: 'missingClient', description: 'Client manquant.' },
+                    })
+               }
+
                let stripeCustomerId = client.stripe_customer_id
+
+               if (stripeCustomerId) {
+                    try {
+                         await stripeService.stripe.customers.retrieve(stripeCustomerId)
+                    } catch (err: any) {
+                         if (err?.statusCode === 404) {
+                              stripeCustomerId = null
+                         } else {
+                              throw err
+                         }
+                    }
+               }
+
                if (!stripeCustomerId) {
-                    const customer = await stripeService.customers.create({ metadata: { client_id: client.id } })
+                    const customer = await stripeService.createCustomer({ client_id: client.id })
                     stripeCustomerId = customer.id
                     await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
                }
 
-               const setupIntent = await stripeService.setupIntents.create({
+               const setupIntent = await stripeService.stripe.setupIntents.create({
                     customer: stripeCustomerId,
                     usage: 'off_session',
                     payment_method_types: ['card'],
@@ -24,28 +46,51 @@ class StripeController {
                     setupIntent: {
                          id: setupIntent.id,
                          client_secret: setupIntent.client_secret,
+                         customer: stripeCustomerId,
                     }
                }
           } catch (error) {
                console.error('Erreur createSetupIntent:', error)
                return ctx.response.internalServerError({
-                    error: { name: 'internalError', description: 'Erreur lors de la création du SetupIntent.' },
+                    error: { name: 'internalError', description: 'Erreur interne Stripe (SetupIntent).' },
                })
           }
      }
 
+     /**
+      * Récupérer les méthodes de paiement d'un client Stripe
+      */
      public async paymentMethods(ctx: HttpContext) {
           try {
                const { client } = ctx
 
+               if (!client) {
+                    return ctx.response.notFound({
+                         error: { name: 'missingClient', description: 'Client manquant.' },
+                    })
+               }
+
                let stripeCustomerId = client.stripe_customer_id
+
+               if (stripeCustomerId) {
+                    try {
+                         await stripeService.stripe.customers.retrieve(stripeCustomerId)
+                    } catch (err: any) {
+                         if (err?.statusCode === 404) {
+                              stripeCustomerId = null
+                         } else {
+                              throw err
+                         }
+                    }
+               }
+
                if (!stripeCustomerId) {
-                    const customer = await stripeService.customers.create({ metadata: { client_id: client.id } })
+                    const customer = await stripeService.createCustomer({ client_id: client.id })
                     stripeCustomerId = customer.id
                     await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
                }
 
-               const paymentMethods = await stripeService.paymentMethods.list({
+               const paymentMethods = await stripeService.stripe.paymentMethods.list({
                     customer: stripeCustomerId,
                     type: 'card',
                })
@@ -62,71 +107,88 @@ class StripeController {
           } catch (error) {
                console.error('Erreur paymentMethods:', error)
                return ctx.response.internalServerError({
-                    error: { name: 'internalError', description: 'Erreur lors de la récupération des méthodes de paiement.' },
+                    error: { name: 'internalError', description: 'Erreur récupération cartes Stripe.' },
                })
           }
      }
 
+     /**
+      * Prévisualiser la facture d'upgrade
+      */
      public async previewUpgrade(ctx: HttpContext) {
-          const { client, project, subscription } = ctx
-          const { plan_id, modules, billing_cycle } = ctx.request.only(['plan_id', 'modules', 'billing_cycle'])
-
           try {
+               const { client, project, subscription } = ctx
+               const { plan_id, modules, billing_cycle } = ctx.request.only(['plan_id', 'modules', 'billing_cycle'])
+
                if (!client || !project) {
-                    return ctx.response.badRequest({
-                         error: { name: 'missingContext', description: 'Projet ou client manquant.' },
+                    return ctx.response.notFound({
+                         error: { name: 'missingProject', description: 'Client ou projet manquant.' },
                     })
                }
 
                let stripeCustomerId = client.stripe_customer_id
 
+               if (stripeCustomerId) {
+                    try {
+                         await stripeService.stripe.customers.retrieve(stripeCustomerId)
+                    } catch (err: any) {
+                         if (err?.statusCode === 404) {
+                              stripeCustomerId = null
+                         } else {
+                              throw err
+                         }
+                    }
+               }
+
                if (!stripeCustomerId) {
-                    const customer = await stripeService.customers.create({ metadata: { client_id: client.id } })
+                    const customer = await stripeService.createCustomer({ client_id: client.id })
                     stripeCustomerId = customer.id
                     await supabaseService.from('clients').update({ stripe_customer_id: stripeCustomerId }).eq('id', client.id)
                }
 
-               // Pas d'abonnement actif : frais total immédiat
-               if (!subscription?.stripe_subscription_id) {
-                    const { data: plan } = await supabaseService
-                         .from('subscription_plans')
-                         .select('*')
-                         .eq('id', plan_id)
-                         .maybeSingle()
+               // Vérification abonnement actuel
+               const subscriptionId = subscription?.stripe_subscription_id
 
-                    if (!plan) {
-                         return ctx.response.badRequest({
-                              error: { name: 'invalidPlan', description: 'Plan introuvable.' }
-                         })
-                    }
+               // Récupérer le plan sélectionné
+               const { data: planData } = await supabaseService
+                    .from('subscription_plans')
+                    .select('*')
+                    .eq('id', plan_id)
+                    .maybeSingle()
 
-                    const plan_discount_months = plan.discountMonths || 0
-                    const price = billing_cycle === 'year'
-                         ? plan.monthlyPrice * (12 - plan_discount_months)
-                         : plan.monthlyPrice
+               if (!planData) {
+                    return ctx.response.badRequest({
+                         error: { name: 'invalidPlan', description: 'Plan sélectionné invalide.' }
+                    })
+               }
 
+               const plan_discount_months = planData.discountMonths || 0
+               const planPrice = billing_cycle === 'years'
+                    ? planData.monthlyPrice * (12 - plan_discount_months)
+                    : planData.monthlyPrice
+
+               if (!subscriptionId) {
                     return {
-                         todayAmount: price,
-                         monthlyAmount: price,
+                         todayAmount: planPrice,
+                         monthlyAmount: planPrice,
                          endsAt: null,
-                         infoMessage: null,
+                         infoMessage: null
                     }
                }
 
-               // Si abonnement actif ➔ preview via Stripe
-               const upcomingInvoice = await stripeService.invoices.retrieveUpcoming({
+               const invoicePreview = await stripeService.stripe.invoices.retrieveUpcoming({
                     customer: stripeCustomerId,
-                    subscription: subscription.stripe_subscription_id,
+                    subscription: subscriptionId,
                })
 
-               const totalToday = (upcomingInvoice.total ?? 0) / 100
-               const monthlyAfter = (upcomingInvoice.amount_due ?? 0) / 100
+               const totalToday = (invoicePreview.total || 0) / 100
+               const monthlyAfter = (invoicePreview.amount_due || 0) / 100
                const endsAt = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null
 
-               let infoMessage: string | null = null
+               let infoMessage = null
 
                if (totalToday === 0 && monthlyAfter < (subscription.amount || 0) / 100) {
-                    infoMessage = `Votre offre actuelle restera active jusqu'au ${endsAt?.toLocaleDateString()}.`
+                    infoMessage = `Votre plan actuel restera actif jusqu'au ${endsAt?.toLocaleDateString()} avant de changer.`
                }
 
                return {
@@ -142,8 +204,6 @@ class StripeController {
                })
           }
      }
-
-
 }
 
 export default new StripeController()
