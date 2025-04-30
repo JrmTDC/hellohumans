@@ -58,6 +58,7 @@ router.group(() => {
      router.get('/payment-methods', (ctx) => StripeController.paymentMethods(ctx))
      router.post('/preview-upgrade', (ctx) => StripeController.previewUpgrade(ctx))
      router.post('/confirm-upgrade', (ctx) => SubscriptionController.confirmUpgrade(ctx))
+     //router.get('/cancel-subscription', (ctx) => StripeController.cancel(ctx))
      //router.post('/update-subscription', (ctx) => SubscriptionController.update(ctx))
      //router.post('/cancel-subscription', (ctx) => SubscriptionController.cancel(ctx))
      //router.post('/subscription/:project_uuid', (ctx) => SubscriptionController.create(ctx))

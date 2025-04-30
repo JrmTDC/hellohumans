@@ -1,147 +1,134 @@
-// app/services/stripeService.ts
-
 import Stripe from 'stripe'
 import supabaseService from '#services/supabaseService'
 
-/** Initialisation du SDK Stripe */
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-     apiVersion: "2025-03-31.basil",
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+     apiVersion: '2025-03-31.basil',
 })
 
-/** Garantit qu’on a un customer Stripe et synchronise Supabase. */
-export async function ensureCustomer(client: {
-     id: string
-     email: string
-     stripe_customer_id?: string
-}): Promise<string> {
-     if (client.stripe_customer_id) {
+type BillingCycle = 'month' | 'year'
+
+export async function ensureCustomer(clientRow: any): Promise<string> {
+     let cid: string | null = clientRow?.stripe_customer_id ?? null
+
+     if (cid) {
           try {
-               await stripe.customers.retrieve(client.stripe_customer_id)
-               return client.stripe_customer_id
-          } catch {
-               // supprimé côté Stripe : on recrée
+               await stripe.customers.retrieve(cid)
+               return cid
+          } catch (e: any) {
+               if (e?.statusCode !== 404) throw e
+               cid = null
           }
      }
+
      const customer = await stripe.customers.create({
-          email: client.email,
-          metadata: { supabase_id: client.id },
+          metadata: { client_id: clientRow.id },
      })
+
      await supabaseService
           .from('clients')
           .update({ stripe_customer_id: customer.id })
-          .eq('id', client.id)
+          .eq('id', clientRow.id)
+
      return customer.id
 }
 
-/** Créé un SetupIntent pour enregistrer une carte (off_session). */
-export function createSetupIntent(customerId: string) {
-     return stripe.setupIntents.create({
-          customer: customerId,
-          usage: 'off_session',
-          payment_method_types: ['card'],
-     })
-}
-
-/** Liste les cartes enregistrées pour un client. */
-export function listPaymentMethods(customerId: string) {
-     return stripe.paymentMethods.list({
-          customer: customerId,
-          type: 'card',
-     })
-}
-
-/** Structure d’entrée pour (création ou mise à jour) d’abonnement. */
-export interface SubscriptionInput {
-     customerId: string
-     subscriptionId?: string
-     planId: string
-     modules: string[]
-     cycle: 'month' | 'year'
-     paymentMethodId?: string
-}
-
-/** Récupère les price_id du plan + modules depuis Supabase. */
-async function getPriceIds(
-     planId: string,
-     modules: string[],
-     cycle: 'month' | 'year'
-): Promise<string[]> {
-     const field = cycle === 'year' ? 'stripe_price_id_year' : 'stripe_price_id_month'
+async function priceForPlan(plan_id: string, billing: BillingCycle) {
      const { data: plan } = await supabaseService
           .from('subscription_plans')
-          .select(field)
-          .eq('id', planId)
-          .single()
+          .select('*')
+          .eq('id', plan_id)
+          .maybeSingle()
+
      if (!plan) throw new Error('Plan introuvable')
-     const modulePrices = modules.length
-          ? (await supabaseService
-                    .from('subscription_modules')
-                    .select(field)
-                    .in('id', modules)
-          ).data!.map((m: any) => m[field])
-          : []
-     return [plan[field], ...modulePrices]
+
+     return billing === 'year' ? plan.stripe_price_id_annual : plan.stripe_price_id_monthly
 }
 
-/** Transforme les price_id en items Stripe. */
-async function buildLineItems(
-     planId: string,
-     modules: string[],
-     cycle: 'month' | 'year'
-): Promise<Stripe.SubscriptionCreateParams.Item[]> {
-     return (await getPriceIds(planId, modules, cycle)).map((price) => ({ price }))
+async function pricesForModules(ids: string[], billing: BillingCycle) {
+     if (!ids.length) return []
+
+     const { data } = await supabaseService
+          .from('subscription_modules')
+          .select('*')
+          .in('id', ids)
+
+     const out: string[] = []
+     for (const m of data || []) {
+          const price = billing === 'year' ? m.stripe_price_id_annual : m.stripe_price_id_monthly
+          if (price) out.push(price)
+     }
+
+     return out
 }
 
-/** Crée un abonnement (status : incomplete). */
-export async function createSubscription(input: SubscriptionInput) {
+export async function createSubscription(opts: {
+     customerId: string
+     plan_id: string
+     modules: string[]
+     billing: BillingCycle,
+     paymentMethodId?: string
+}) {
+     const desired = [
+          await priceForPlan(opts.plan_id, opts.billing),
+          ...(await pricesForModules(opts.modules, opts.billing)),
+     ]
+
      return stripe.subscriptions.create({
-          customer: input.customerId,
-          items: await buildLineItems(input.planId, input.modules, input.cycle),
+          customer: opts.customerId,
+          items: desired.map((p) => ({ price: p })),
           payment_behavior: 'default_incomplete',
-          ...(input.paymentMethodId && {
-               default_payment_method: input.paymentMethodId,
-          }),
-          expand: ['latest_invoice.payment_intent'],
      })
 }
 
-/** Met à jour un abonnement existant (prorata). */
-export async function updateSubscription(input: SubscriptionInput) {
-     return stripe.subscriptions.update(input.subscriptionId!, {
-          items: await buildLineItems(input.planId, input.modules, input.cycle),
+export async function updateSubscription(opts: {
+     subscriptionId: string
+     plan_id: string
+     modules: string[]
+     billing: BillingCycle
+     paymentMethodId?: string
+}) {
+     const sub = await stripe.subscriptions.retrieve(opts.subscriptionId, {
+          expand: ['items.data'],
+     })
+
+     const desired = [
+          await priceForPlan(opts.plan_id, opts.billing),
+          ...(await pricesForModules(opts.modules, opts.billing)),
+     ]
+
+     const payload: Stripe.SubscriptionUpdateParams.Item[] = []
+     for (const it of sub.items.data) {
+          if (desired.includes(it.price.id)) {
+               payload.push({ id: it.id })
+          } else {
+               payload.push({ id: it.id, deleted: true })
+          }
+     }
+
+     for (const price of desired) {
+          if (!sub.items.data.find((i) => i.price.id === price)) {
+               payload.push({ price })
+          }
+     }
+
+     return stripe.subscriptions.update(opts.subscriptionId, {
+          items: payload,
           proration_behavior: 'create_prorations',
-          ...(input.paymentMethodId && {
-               default_payment_method: input.paymentMethodId,
-          }),
-          expand: ['latest_invoice.payment_intent'],
+          ...(opts.paymentMethodId && { default_payment_method: opts.paymentMethodId }),
      })
 }
 
-/** Annule l’abonnement (fin de période ou immédiat). */
-export async function cancelSubscription(
-     subscriptionId: string,
-     atPeriodEnd = true
-) {
-     return stripe.subscriptions.update(subscriptionId, {
-          cancel_at_period_end: atPeriodEnd,
-     })
+export async function upcomingInvoice(customerId: string, subscriptionId: string) {
+     return stripe.invoices.retrieveUpcoming({ customer: customerId, subscription: subscriptionId })
 }
 
-/** Aperçu de la prochaine facture (prorata, upgrade, etc.). */
-export async function previewUpcomingInvoice(
-     customerId: string,
-     subscriptionId: string,
-     planId: string,
-     modules: string[],
-     cycle: 'month' | 'year'
-) {
-     const items = await buildLineItems(planId, modules, cycle)
-     return stripe.invoices.retrieveUpcoming({
-          customer: customerId,
-          subscription: subscriptionId,
-          subscription_items: items,
-          expand: ['latest_invoice.payment_intent', 'subscription_items'],
-     })
+export async function getInvoiceClientSecret(invoiceId: string): Promise<string | null> {
+     const invoice = await stripe.invoices.retrieve(invoiceId)
+     if (invoice.payment_intent && typeof invoice.payment_intent === 'string') {
+          const pi = await stripe.paymentIntents.retrieve(invoice.payment_intent)
+          return pi.client_secret ?? null
+     }
+     return null
 }
 
 export default stripe
