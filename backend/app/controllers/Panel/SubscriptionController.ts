@@ -1,29 +1,31 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { ensureCustomer, createSubscription, updateSubscription } from '#services/stripeService'
 import supabaseService from '#services/supabaseService'
-import stripe from '#services/stripeService'
+import vine from '@vinejs/vine'
 
 class SubscriptionController {
      public async confirmUpgrade({ client, project, subscription, request, response }: HttpContext) {
           try {
+               /* -------- Validation -------- */
+               const schema = vine.object({
+                    plan_id: vine.string(),
+                    modules: vine.array(vine.string()).optional(),
+                    billing_cycle: vine.enum(['month', 'year']),
+                    payment_method_id: vine.string(),
+               })
                const {
                     plan_id,
                     modules = [],
                     billing_cycle,
                     payment_method_id,
-               } = request.all()
+               } = await vine.compile(schema).validate(request.all())
 
-               if (!plan_id || !billing_cycle || !payment_method_id) {
-                    return response.badRequest({ error: { name: 'missingParams' } })
-               }
-
-               const cid = await ensureCustomer(client)
-               await stripe.paymentMethods.attach(payment_method_id, { customer: cid })
-
+               /* -------- Création / mise à jour Stripe -------- */
                let subStripe
                if (!subscription?.stripe_subscription_id) {
+                    const customerId = await ensureCustomer(client)
                     subStripe = await createSubscription({
-                         customerId: cid,
+                         customerId,
                          plan_id,
                          modules,
                          billing: billing_cycle,
@@ -39,38 +41,80 @@ class SubscriptionController {
                     })
                }
 
+               /* -------- Paiement possiblement “requires_action” -------- */
+               let requiresAction = false
                let clientSecret: string | null = null
 
-               if (typeof subStripe.latest_invoice === 'string') {
-                    const invoice = await stripe.invoices.retrieve(subStripe.latest_invoice)
-
-                    // ⚠️ Stripe 2025-03 ne renvoie plus payment_intent par défaut
-                    if (typeof invoice.payment_intent === 'string') {
-                         const pi = await stripe.paymentIntents.retrieve(invoice.payment_intent)
-                         clientSecret = pi.client_secret ?? null
+               if (subStripe.status === 'incomplete') {
+                    const confirmation = (subStripe.latest_invoice as any)?.confirmation_secret
+                    if (confirmation?.client_secret) {
+                         requiresAction = true
+                         clientSecret = confirmation.client_secret
                     }
                }
 
+               /* -------- Prochaine date de renouvellement -------- */
+               const nextPeriodEnd = (subStripe.items?.data || []).reduce(
+                    (max: number, it: any) =>
+                         it.current_period_end && it.current_period_end > max ? it.current_period_end : max,
+                    0,
+               )
+
+               /* -------- Persistance -------- */
                await supabaseService
                     .from('client_project_subscriptions')
-                    .upsert({
-                         project_id: project.id,
-                         current_plan_id: plan_id,
-                         current_modules: modules,
-                         billing_cycle,
-                         stripe_subscription_id: subStripe.id,
-                         current_period_end: subStripe.current_period_end,
-                         status: subStripe.status,
-                         payment_failed: false,
-                    }, { onConflict: 'project_id' })
+                    .upsert(
+                         {
+                              project_id: project.id,
+                              current_plan_id: plan_id,
+                              current_modules: modules,
+                              billing_cycle,
+                              stripe_subscription_id: subStripe.id,
+                              current_period_end: nextPeriodEnd || null,
+                              status: subStripe.status,
+                              payment_failed: subStripe.status === 'incomplete',
+                         },
+                         { onConflict: 'project_id' },
+                    )
 
                return response.ok({
-                    subscription_status: subStripe.status,
-                    invoice_client_secret: clientSecret,
+                    status: subStripe.status,
+                    requiresAction,
+                    clientSecret,
+                    subscriptionId: subStripe.id,
                })
-          } catch (e) {
+          } catch (e: any) {
+               /* — gestion des erreurs Stripe / serveur — */
                console.error('[confirmUpgrade]', e)
-               return response.internalServerError({ error: { name: 'stripe' } })
+
+               if (e.type === 'StripeCardError') {
+                    return response.status(402).json({
+                         error: {
+                              name: 'payment_error',
+                              type: e.type,
+                              code: e.code,
+                              message: e.message || 'Paiement refusé',
+                              decline_code: e.decline_code,
+                         },
+                    })
+               }
+
+               if (e.type?.startsWith('Stripe')) {
+                    return response.status(400).json({
+                         error: {
+                              name: 'stripe_error',
+                              type: e.type,
+                              message: e.message || 'Erreur lors du traitement du paiement',
+                         },
+                    })
+               }
+
+               return response.internalServerError({
+                    error: {
+                         name: 'server_error',
+                         message: e.message || 'Erreur interne',
+                    },
+               })
           }
      }
 }
