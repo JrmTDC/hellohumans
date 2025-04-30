@@ -128,7 +128,7 @@ class StripeController {
                const customerId = await ensureCustomer(client)
                const { invoice, recurringAmount } = await getUpcomingInvoicePreview(
                     customerId,
-                    subscription.stripe_subscription_id
+                    subscription.stripe_subscription_id,
                )
 
                return response.ok({

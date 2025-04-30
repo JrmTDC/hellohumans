@@ -71,8 +71,7 @@ class SubscriptionController {
                               billing_cycle,
                               stripe_subscription_id: subStripe.id,
                               current_period_end: nextPeriodEnd || null,
-                              status: subStripe.status,
-                              payment_failed: subStripe.status === 'incomplete',
+                              status: subStripe.status
                          },
                          { onConflict: 'project_id' },
                     )

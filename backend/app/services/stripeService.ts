@@ -169,24 +169,26 @@ export async function getUpcomingInvoicePreview(
      customerId: string,
      subscriptionId: string,
 ) {
-     const invoice = await stripe.invoices.createPreview({
+
+     //1️⃣  – Facture « immédiate » (prorata, frais ponctuels éventuels)
+
+     const immediate = await stripe.invoices.createPreview({
           customer: customerId,
           subscription: subscriptionId,
      })
 
-     // Types des lignes dans la nouvelle API
-     const lines = invoice.lines.data as Array<
-          Stripe.InvoiceLineItem & { price?: Stripe.Price }
-     >
 
-     const recurringAmount = lines
-          .filter((l) => l.price?.recurring)
-          .reduce((sum, l) => sum + (l.amount ?? 0), 0)
+     // 2️⃣ Facture « récurrente » (prochain cycle après la MAJ)
+     const recurring = await stripe.invoices.createPreview({
+          customer: customerId,
+          subscription: subscriptionId,
+          preview_mode: 'recurring',
+     })
 
      return {
-          invoice,
-          recurringAmount,
-          totalAmount: invoice.total,
+          invoice: immediate,
+          recurringAmount: recurring.total ?? 0,
+          totalAmount: immediate.total ?? 0,
      }
 }
 
