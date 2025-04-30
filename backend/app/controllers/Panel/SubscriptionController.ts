@@ -1,10 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import {
-     ensureCustomer,
-     createSubscription,
-     updateSubscription,
-     getInvoiceClientSecret,
-} from '#services/stripeService'
+import { ensureCustomer, createSubscription, updateSubscription } from '#services/stripeService'
 import supabaseService from '#services/supabaseService'
 import stripe from '#services/stripeService'
 
@@ -23,7 +18,6 @@ class SubscriptionController {
                }
 
                const cid = await ensureCustomer(client)
-
                await stripe.paymentMethods.attach(payment_method_id, { customer: cid })
 
                let subStripe
@@ -46,21 +40,29 @@ class SubscriptionController {
                }
 
                let clientSecret: string | null = null
+
                if (typeof subStripe.latest_invoice === 'string') {
-                    clientSecret = await getInvoiceClientSecret(subStripe.latest_invoice)
+                    const invoice = await stripe.invoices.retrieve(subStripe.latest_invoice)
+
+                    // ⚠️ Stripe 2025-03 ne renvoie plus payment_intent par défaut
+                    if (typeof invoice.payment_intent === 'string') {
+                         const pi = await stripe.paymentIntents.retrieve(invoice.payment_intent)
+                         clientSecret = pi.client_secret ?? null
+                    }
                }
 
                await supabaseService
                     .from('client_project_subscriptions')
-                    .update({
+                    .upsert({
+                         project_id: project.id,
                          current_plan_id: plan_id,
                          current_modules: modules,
                          billing_cycle,
                          stripe_subscription_id: subStripe.id,
                          current_period_end: subStripe.current_period_end,
                          status: subStripe.status,
-                    })
-                    .eq('project_id', project.id)
+                         payment_failed: false,
+                    }, { onConflict: 'project_id' })
 
                return response.ok({
                     subscription_status: subStripe.status,
