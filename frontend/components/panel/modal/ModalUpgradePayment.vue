@@ -129,7 +129,7 @@ const toggleOpenSelect = () => {
 }
 onMounted(() => {
      fetchPaymentMethods()
-     await fetchUpgradePreview()
+     fetchUpgradePreview()
 
      skipNextClick = true
      setTimeout(() => {
