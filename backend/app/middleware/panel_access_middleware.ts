@@ -27,13 +27,23 @@ class PanelAccessMiddleware {
           // 1. User interne
           const { data: userData } = await supabaseService
                .from('users')
-               .select('id, selected_client_id')
+               .select('id, selected_client_id, blocked')
                .eq('auth_id', auth_id)
                .maybeSingle()
 
           if (!userData) return ctx.response.unauthorized()
 
           ctx.user = userData
+
+          if(userData.blocked) {
+               return ctx.response.unauthorized({
+                    error: {
+                         name: 'blockedUser', description: 'Utilisateur bloqué'
+                    },
+               })
+          }
+
+
           let selectedClientId = userData.selected_client_id
 
           // 2. Client User (lien utilisateur ↔ client)
