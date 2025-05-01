@@ -27,7 +27,7 @@ export async function ensureCustomer(clientRow: {
                await stripe.customers.retrieve(clientRow.stripe_customer_id)
                return clientRow.stripe_customer_id
           } catch {
-               /* s’il a été supprimé côté Stripe, on en crée un nouveau */
+               /* le customer a peut-être été supprimé côté Stripe : on le recrée */
           }
      }
 
@@ -49,31 +49,34 @@ export async function ensureCustomer(clientRow: {
 /*  RÉCUPÉRATION DES PRICES (plan principal + modules)                        */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Renvoie le `price_id` Stripe correspondant à un plan et à une périodicité.
- */
+/** Price ID pour un plan donné et une périodicité. */
 async function priceForPlan(
      planId: string,
      billing: BillingCycle,
 ): Promise<string> {
      const { data, error } = await supabaseService
-          .from('subscription_plans')
-          .select('stripe_price_id_annual, stripe_price_id_monthly')
+          .from('plans')
+          .select('stripe_price_id_monthly, stripe_price_id_annual')
           .eq('id', planId)
           .single()
 
-     if (error || !data?.stripe_price_id_annual || !data?.stripe_price_id_monthly) {
-          throw new Error(
-               `Aucun prix Stripe trouvé pour le plan ${planId} (${billing})`,
-          )
-     }
+     if (error || !data)
+          throw new Error(`Plan introuvable : ${planId}`)
 
-     return billing === 'year' ? data.stripe_price_id_annual : data.stripe_price_id_monthly as string
+     const priceId =
+          billing === 'month'
+               ? data.stripe_price_id_monthly
+               : data.stripe_price_id_annual
+
+     if (!priceId)
+          throw new Error(
+               `Aucun price Stripe trouvé pour le plan ${planId} (${billing})`,
+          )
+
+     return priceId as string
 }
 
-/**
- * Renvoie la liste des `price_id` Stripe à activer pour les modules choisis.
- */
+/** Liste des price_id pour les modules optionnels. */
 async function pricesForModules(
      moduleIds: string[],
      billing: BillingCycle,
@@ -81,18 +84,29 @@ async function pricesForModules(
      if (moduleIds.length === 0) return []
 
      const { data, error } = await supabaseService
-          .from('subscription_modules')
-          .select('stripe_price_id_annual, stripe_price_id_monthly')
-          .eq('id', moduleIds)
-          .single()
+          .from('modules')
+          .select('stripe_price_id_monthly, stripe_price_id_annual, id')
+          .in('id', moduleIds)
 
-     if (error || !data?.stripe_price_id_annual || !data?.stripe_price_id_monthly) {
-          throw new Error(
-               `Aucun prix Stripe trouvé pour le module ${moduleIds} (${billing})`,
-          )
-     }
+     if (error) throw error
 
-     return billing === 'year' ? data.stripe_price_id_annual : data.stripe_price_id_monthly
+     return (data ?? []).map((m) =>
+          billing === 'month'
+               ? m.stripe_price_id_monthly
+               : m.stripe_price_id_annual,
+     ) as string[]
+}
+
+/** Prix complet (plan + modules) pour une sélection donnée. */
+export async function priceIdsForSelection(
+     planId: string,
+     moduleIds: string[],
+     billing: BillingCycle,
+): Promise<string[]> {
+     return [
+          await priceForPlan(planId, billing),
+          ...(await pricesForModules(moduleIds, billing)),
+     ]
 }
 
 /* -------------------------------------------------------------------------- */
@@ -106,10 +120,11 @@ export async function createSubscription(opts: {
      billing: BillingCycle
      paymentMethodId: string
 }) {
-     const priceIds = [
-          await priceForPlan(opts.plan_id, opts.billing),
-          ...(await pricesForModules(opts.modules, opts.billing)),
-     ]
+     const priceIds = await priceIdsForSelection(
+          opts.plan_id,
+          opts.modules,
+          opts.billing,
+     )
 
      const items: Stripe.SubscriptionCreateParams.Item[] = priceIds.map((price) => ({
           price,
@@ -135,10 +150,11 @@ export async function updateSubscription(opts: {
           expand: ['items.data'],
      })
 
-     const desiredPriceIds = [
-          await priceForPlan(opts.plan_id, opts.billing),
-          ...(await pricesForModules(opts.modules, opts.billing)),
-     ]
+     const desiredPriceIds = await priceIdsForSelection(
+          opts.plan_id,
+          opts.modules,
+          opts.billing,
+     )
 
      const itemsPayload: Stripe.SubscriptionUpdateParams.Item[] = []
 
@@ -162,33 +178,47 @@ export async function updateSubscription(opts: {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  PREVIEW DE FACTURE (remplace /invoices/upcoming)                          */
+/*  PREVIEW DE FACTURE (nouvelle API)                                         */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Pré-visualise le montant à payer immédiatement (prorata) et le nouveau
+ * montant récurrent après changement d’abonnement.
+ *
+ * @param customerId       ID client Stripe
+ * @param subscriptionId   ID abonnement Stripe
+ * @param priceIds         Tous les price_id désirés (plan + modules)
+ */
 export async function getUpcomingInvoicePreview(
      customerId: string,
      subscriptionId: string,
+     priceIds: string[],
 ) {
+     const subscriptionDetails: Stripe.InvoiceCreatePreviewParams.SubscriptionDetails =
+          {
+               items: priceIds.map((p) => ({ price: p })),
+               proration_behavior: 'create_prorations',
+          }
 
-     //1️⃣  – Facture « immédiate » (prorata, frais ponctuels éventuels)
-
+     /* 1️⃣ – Facture aujourd’hui (prorata, frais uniques éventuels) --------- */
      const immediate = await stripe.invoices.createPreview({
           customer: customerId,
           subscription: subscriptionId,
+          subscription_details: subscriptionDetails,
      })
 
-
-     // 2️⃣ Facture « récurrente » (prochain cycle après la MAJ)
+     /* 2️⃣ – Facture récurrente du prochain cycle --------------------------- */
      const recurring = await stripe.invoices.createPreview({
           customer: customerId,
           subscription: subscriptionId,
+          subscription_details: subscriptionDetails,
           preview_mode: 'recurring',
      })
 
      return {
-          invoice: immediate,
-          recurringAmount: recurring.total ?? 0,
-          totalAmount: immediate.total ?? 0,
+          invoice: immediate,                    // objet Stripe.Invoice
+          recurringAmount: recurring.total ?? 0, // cents / cycle
+          totalAmount: immediate.total ?? 0,     // cents à payer maintenant
      }
 }
 

@@ -1,200 +1,171 @@
+// controllers/Panel/SubscriptionController.ts
 import { HttpContext } from '@adonisjs/core/http'
-import { ensureCustomer, getUpcomingInvoicePreview } from '#services/stripeService'
+import stripe, {
+     ensureCustomer,
+     priceIdsForSelection,
+     getUpcomingInvoicePreview,
+     createSubscription,
+     updateSubscription,
+     BillingCycle,
+} from '#services/stripeService'
 import supabaseService from '#services/supabaseService'
 import vine from '@vinejs/vine'
-import stripe from '#services/stripeService'
 
-class StripeController {
-     /**
-      * Crée un SetupIntent pour ajouter une nouvelle carte
-      */
-     public async createSetupIntent({ client, response }: HttpContext) {
+class SubscriptionController {
+
+     public async confirmUpgrade({
+                                      client,
+                                      project,
+                                      subscription,
+                                      request,
+                                      response,
+                                 }: HttpContext) {
           try {
-               const customerId = await ensureCustomer(client)
-               const setupIntent = await stripe.setupIntents.create({
-                    customer: customerId,
-                    payment_method_types: ['card'],
-                    usage: 'off_session'
-               })
-
-               return response.ok({
-                    client_secret: setupIntent.client_secret,
-                    setup_intent_id: setupIntent.id
-               })
-          } catch (error: any) {
-               console.error('[StripeController.createSetupIntent]', error)
-               return response.status(500).json({
-                    error: {
-                         code: 'STRIPE_SETUP_INTENT_ERROR',
-                         message: error.message || 'Failed to create setup intent'
-                    }
-               })
-          }
-     }
-
-     /**
-      * Liste les méthodes de paiement du client
-      */
-     public async paymentMethods({ client, response }: HttpContext) {
-          try {
-               const customerId = await ensureCustomer(client)
-               const paymentMethods = await stripe.paymentMethods.list({
-                    customer: customerId,
-                    type: 'card'
-               })
-
-               return response.ok({
-                    payment_methods: paymentMethods.data.map(method => ({
-                         id: method.id,
-                         card: {
-                              brand: method.card?.brand,
-                              last4: method.card?.last4,
-                              exp_month: method.card?.exp_month,
-                              exp_year: method.card?.exp_year
-                         }
-                    }))
-               })
-          } catch (error: any) {
-               console.error('[StripeController.paymentMethods]', error)
-               return response.status(500).json({
-                    error: {
-                         code: 'STRIPE_LIST_PAYMENT_METHODS_ERROR',
-                         message: error.message || 'Failed to list payment methods'
-                    }
-               })
-          }
-     }
-
-     /**
-      * Prévisualise le coût d'une mise à jour d'abonnement
-      */
-     public async previewUpgrade({ client, subscription, request, response }: HttpContext) {
-          try {
+               /* -------- Validation -------- */
                const schema = vine.object({
                     plan_id: vine.string(),
                     modules: vine.array(vine.string()).optional(),
-                    billing_cycle: vine.enum(['month', 'year'])
+                    billing_cycle: vine.enum(['month', 'year']),
+                    payment_method_id: vine.string().optional(), // pas obligatoire pour preview
+                    preview_only: vine.boolean().optional().default(false),
                })
 
-               const validator = vine.compile(schema)
-               const { plan_id, modules = [], billing_cycle } = await validator.validate(request.all())
+               const {
+                    plan_id,
+                    modules = [],
+                    billing_cycle,
+                    payment_method_id,
+                    preview_only,
+               } = await vine.compile(schema).validate(request.all())
 
-               // Cas d'un nouvel abonnement
-               if (!subscription?.stripe_subscription_id) {
-                    const { data: plan } = await supabaseService
-                         .from('subscription_plans')
-                         .select('*')
-                         .eq('id', plan_id)
-                         .maybeSingle()
+               const customerId = await ensureCustomer(client)
+               const priceIds = await priceIdsForSelection(
+                    plan_id,
+                    modules,
+                    billing_cycle as BillingCycle,
+               )
 
-                    if (!plan) {
-                         return response.badRequest({
-                              error: {
-                                   code: 'INVALID_PLAN',
-                                   message: 'The selected plan does not exist'
-                              }
-                         })
-                    }
-
-                    // Calcul du montant de base
-                    let total = billing_cycle === 'year'
-                         ? plan.monthly_price * (12 - (plan.discount_months || 0))
-                         : plan.monthly_price
-
-                    // Ajout des modules optionnels
-                    if (modules.length > 0) {
-                         const { data: selectedModules } = await supabaseService
-                              .from('subscription_modules')
-                              .select('*')
-                              .in('id', modules)
-
-                         for (const module of selectedModules || []) {
-                              const modulePrice = billing_cycle === 'year'
-                                   ? module.base_price * (12 - (module.discount_months || 0))
-                                   : module.base_price
-                              total += modulePrice
-                         }
-                    }
+               /* ------------------------------------------------------------------ */
+               /*  PREVIEW UNIQUEMENT (pas de création / mise à jour Stripe)         */
+               /* ------------------------------------------------------------------ */
+               if (preview_only) {
+                    const { invoice, recurringAmount } = await getUpcomingInvoicePreview(
+                         customerId,
+                         subscription.stripe_subscription_id,
+                         priceIds,
+                    )
 
                     return response.ok({
-                         today_amount: Number(total.toFixed(2)),
-                         monthly_amount: Number(total.toFixed(2)),
-                         ends_at: null,
-                         is_new_subscription: true
+                         today_amount: Number((invoice.total / 100).toFixed(2)),
+                         monthly_amount: Number((recurringAmount / 100).toFixed(2)),
+                         ends_at: subscription.current_period_end
+                              ? new Date(subscription.current_period_end * 1000)
+                              : null,
+                         is_new_subscription: false,
+                         invoice_preview_id: invoice.id,
                     })
                }
 
-               // Cas d'une mise à jour d'abonnement existant
-               const customerId = await ensureCustomer(client)
-               const { invoice, recurringAmount } = await getUpcomingInvoicePreview(
-                    customerId,
-                    subscription.stripe_subscription_id,
-               )
-
-               return response.ok({
-                    today_amount: Number((invoice.total / 100).toFixed(2)),
-                    monthly_amount: Number((recurringAmount / 100).toFixed(2)),
-                    ends_at: subscription.current_period_end
-                         ? new Date(subscription.current_period_end * 1000)
-                         : null,
-                    is_new_subscription: false,
-                    invoice_preview_id: invoice.id
-               })
-          } catch (error: any) {
-               console.error('[StripeController.previewUpgrade]', error)
-               return response.status(500).json({
-                    error: {
-                         code: 'UPGRADE_PREVIEW_ERROR',
-                         message: error.message || 'Failed to generate upgrade preview',
-                         stripe_error: error.type || undefined
-                    }
-               })
-          }
-     }
-
-     /**
-      * Annule un abonnement
-      */
-     public async cancelSubscription({ subscription, response }: HttpContext) {
-          try {
+               /* ------------------------------------------------------------------ */
+               /*  CRÉATION OU MISE À JOUR EFFECTIVE DE L’ABONNEMENT                 */
+               /* ------------------------------------------------------------------ */
+               let subStripe
                if (!subscription?.stripe_subscription_id) {
-                    return response.badRequest({
-                         error: {
-                              code: 'NO_SUBSCRIPTION',
-                              message: 'No active subscription to cancel'
-                         }
+                    subStripe = await createSubscription({
+                         customerId,
+                         plan_id,
+                         modules,
+                         billing: billing_cycle as BillingCycle,
+                         paymentMethodId: payment_method_id!,
+                    })
+               } else {
+                    subStripe = await updateSubscription({
+                         subscriptionId: subscription.stripe_subscription_id,
+                         plan_id,
+                         modules,
+                         billing: billing_cycle as BillingCycle,
+                         paymentMethodId: payment_method_id!,
                     })
                }
 
-               const canceledSubscription = await stripe.subscriptions.cancel(
-                    subscription.stripe_subscription_id
+               /* -------- Paiement possiblement “requires_action” -------- */
+               let requiresAction = false
+               let clientSecret: string | null = null
+
+               if (subStripe.status === 'incomplete') {
+                    const confirmation = (subStripe.latest_invoice as any)?.confirmation_secret
+                    if (confirmation?.client_secret) {
+                         requiresAction = true
+                         clientSecret = confirmation.client_secret
+                    }
+               }
+
+               /* -------- Nouvelle date de fin -------- */
+               const nextPeriodEnd = (subStripe.items?.data || []).reduce(
+                    (max: number, it: any) =>
+                         it.current_period_end && it.current_period_end > max
+                              ? it.current_period_end
+                              : max,
+                    0,
                )
 
-               // Mettre à jour la base de données
+               /* -------- Persistance -------- */
                await supabaseService
                     .from('client_project_subscriptions')
-                    .update({
-                         status: 'canceled',
-                         canceled_at: new Date().toISOString()
-                    })
-                    .eq('stripe_subscription_id', subscription.stripe_subscription_id)
+                    .upsert(
+                         {
+                              project_id: project.id,
+                              current_plan_id: plan_id,
+                              current_modules: modules,
+                              billing_cycle,
+                              stripe_subscription_id: subStripe.id,
+                              current_period_end: nextPeriodEnd || null,
+                              status: subStripe.status,
+                              payment_failed: subStripe.status === 'incomplete',
+                         },
+                         { onConflict: 'project_id' },
+                    )
 
                return response.ok({
-                    status: canceledSubscription.status,
-                    canceled_at: canceledSubscription.canceled_at
-                         ? new Date(canceledSubscription.canceled_at * 1000)
-                         : null
+                    status: subStripe.status,
+                    requiresAction,
+                    clientSecret,
+                    subscriptionId: subStripe.id,
                })
-          } catch (error: any) {
-               console.error('[StripeController.cancelSubscription]', error)
-               return response.status(500).json({
+          } catch (e: any) {
+               /* ---------------- Gestion des erreurs Stripe / serveur ---------------- */
+               console.error('[confirmUpgrade]', e)
+
+               if (e.type === 'StripeCardError') {
+                    return response.status(402).json({
+                         error: {
+                              name: 'payment_error',
+                              type: e.type,
+                              code: e.code,
+                              message: e.message || 'Paiement refusé',
+                              decline_code: e.decline_code,
+                         },
+                    })
+               }
+
+               if (e.type?.startsWith('Stripe')) {
+                    return response.status(400).json({
+                         error: {
+                              name: 'stripe_error',
+                              type: e.type,
+                              message: e.message || 'Erreur Stripe',
+                         },
+                    })
+               }
+
+               return response.internalServerError({
                     error: {
-                         code: 'CANCEL_SUBSCRIPTION_ERROR',
-                         message: error.message || 'Failed to cancel subscription'
-                    }
+                         name: 'server_error',
+                         message: e.message || 'Erreur interne',
+                    },
                })
           }
      }
 }
 
-export default new StripeController()
+export default new SubscriptionController()
