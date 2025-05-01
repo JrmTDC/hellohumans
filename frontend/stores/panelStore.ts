@@ -9,7 +9,11 @@ interface Project {
      name: string
      subscription?: ProjectSubscription | null
 }
-
+interface UpgradePreviewResponse {
+     today_amount: number
+     cycle_amount: number
+     ends_at: number | null
+}
 export interface UpgradePlan {
      id: string
      name: string
@@ -302,17 +306,18 @@ export const usePanelStore = defineStore('panel', () => {
                const res = await apiFetch('/stripe/payment-methods')
                stripe_customer.value = {
                     ...stripe_customer.value,
-                    payment_methods: res.success.paymentMethods
+                    payment_methods: res.success.payment_methods
                }
           } catch (error) {
                console.error('Erreur activités :', error)
           }
      }
 
-     async function fetchUpgradePreview() {
+     async function fetchUpgradePreview(data: Record<string, any>): Promise<UpgradePreviewResponse> {
           const { apiFetch } = usePanelApi()
-          const res = await apiFetch('/panel/stripe/preview-upgrade', {
+          const res = await apiFetch('/stripe/preview-upgrade', {
                method: 'POST',
+               body: JSON.stringify(data)
           })
           return res.success
      }

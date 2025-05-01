@@ -8,12 +8,19 @@
                     <!-- Prix -->
                     <div class="flex justify-between mt-4 text-sm">
                          <span class="pt-[8px] pb-[8px] flex items-center">Frais aujourd’hui   <span v-if="planLabel" class="ml-2 text-sm px-2 py-1 rounded inline-flex items-center rounded-full bg-opacity-70 border px-2.5 py-0.5 text-xs ml-1" :class="labelColor.identical">{{ planLabel }}</span></span>
-                         <span class="pt-[8px] pb-[8px] flex items-center">{{ todayAmount.toFixed(2) }} €</span>
+                         <span class="pt-[8px] pb-[8px] flex items-center">
+                              <span v-if="loadingAmount" class="h-[20px] w-[60px] bg-gray-200 animate-pulse rounded-md"></span>
+                              <span v-else>{{ todayAmount.toFixed(2) }} €</span>
+                         </span>
                     </div>
 
                     <div class="flex justify-between text-sm text-[#647491] mb-4">
                          <span class="pt-[8px] pb-[8px] flex items-center">Frais mensuelle</span>
-                         <span class="pt-[8px] pb-[8px] flex items-center">{{ monthlyAmount.toFixed(2) }} €</span>
+                         <span class="pt-[8px] pb-[8px] flex items-center">
+                              <span v-if="loadingAmount" class="h-[20px] w-[60px] bg-gray-200 animate-pulse rounded-md"></span>
+                              <span v-else>{{ cycleAmount.toFixed(2) }} €</span>
+                         </span>
+
                     </div>
                </div>
                <div class="mt-4 pt-4">
@@ -31,9 +38,9 @@
                                    <div class="relative inline-block w-full">
                                         <div class="flex items-center justify-between border-2 rounded-[8px] px-3 py-2 cursor-pointer" :class="isOpen ? 'border-[#3886ff]' : 'border-[#d3dbe5]'" @click="toggleOpenSelect">
                                              <span v-if="selectedMethod" class="flex items-center">
-                                                  <PanelCommonCreditCardIcon :brand="selectedMethod.brand" class="mr-[8px] h-[18px] w-auto" />
+                                                  <PanelCommonCreditCardIcon :brand="selectedMethod.card.brand" class="mr-[8px] h-[18px] w-auto" />
 
-                                                  <span>•••• •••• •••• {{ selectedMethod.last4 }}</span>
+                                                  <span>•••• •••• •••• {{ selectedMethod.card.last4 }}</span>
                                              </span>
                                              <span v-else>{{ t('panel.components.modal.upgradePayment.SelectCreditCard') }}</span>
                                              <svgo-panel-icon-triangle-caret-down class="w-[24px] h-[24px] fill-[#080f1a]" :class="{ 'rotate-180': isOpen }" />
@@ -45,8 +52,8 @@
                                                        <ul class="max-h-[200px] list-none outline-none p-0 m-0">
                                                             <li v-for="method in paymentMethods" :key="method.id" class="px-[8px] py-[9px] rounded-[4px] text-[#080f1a] cursor-pointer bg-white overflow-hidden text-ellipsis whitespace-nowrap flex gap-[8px] items-center text-[14px] leading-[18px] tracking-[-0.01em] hover:bg-[#dce9ff] flex flex-row flex-nowrap justify-between" @click="selectPaymentMethod(method.id)">
                                                                  <span class="flex items-center justify-start">
-                                                                      <PanelCommonCreditCardIcon :brand="method.brand" class="mr-[8px] h-[18px] w-auto" />
-                                                                      <span>•••• •••• •••• {{ method.last4 }}</span>
+                                                                      <PanelCommonCreditCardIcon :brand="method.card.brand" class="mr-[8px] h-[18px] w-auto" />
+                                                                      <span>•••• •••• •••• {{ method.card.last4 }}</span>
                                                                  </span>
                                                                  <span v-if="method.id === selectedMethod.id" class="flex justify-end">
                                                                       <svgo-panel-icon-checked class="h-[20px] w-[20px] fill-[#0566ff]" />
@@ -56,7 +63,7 @@
                                                        <div class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></div>
                                                   </div>
                                              </div>
-                                             <div class="flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] m-[8px] group" @click="showAddCard = true, isOpen = false">
+                                             <div class="flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] m-[8px] group" @click="() => { showAddCard = true; isOpen = false }">
                                                   <span class="flex items-center"><svgo-panel-icon-add class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" /></span>
                                                   <span class="ml-[12px] text-[14px]">{{ t('panel.components.modal.upgradePayment.AddPaymentMethode') }}</span>
                                              </div>
@@ -70,9 +77,7 @@
                     <!-- Actions -->
                     <div class="mt-6 flex justify-between">
                          <button @click="emit('close')" class="text-[#647491] hover:underline">Annuler</button>
-                         <button @click="submitUpgrade" class="bg-[#0566ff] hover:bg-[#0049bd] text-white px-6 py-2 rounded-md" :disabled="loading">
-                              Confirmer
-                         </button>
+                         <button @click="submitUpgrade" class="bg-[#0566ff] hover:bg-[#0049bd] text-white px-6 py-2 rounded-md" :disabled="loading || loadingAmount || paymentMethodLoading" > Confirmer </button>
                     </div>
 
                </div>
@@ -102,9 +107,11 @@ const dropdownRef = ref<HTMLElement | null>(null)
 const currentPlan = computed(() => upgradeStore.currentPlan!)
 const selectedAddOns = computed(() => upgradeStore.selectedAddOns)
 const isOpen = ref(false)
-const todayAmount = ref(29.00)
-const monthlyAmount = ref(29.00)
+const todayAmount = ref(0)
+const cycleAmount = ref(0)
 const loading = ref(false)
+const loadingAmount = ref(true)
+const subscriptionEndsAt = ref<Date | null>(null)
 
 const planLabel = computed(() => {
      if (!panelStore.project?.subscription) return 'Nouveau'
@@ -170,19 +177,27 @@ async function fetchPaymentMethods() {
 }
 
 async function fetchUpgradePreview() {
+     loadingAmount.value = true
      try {
-          const res = await panelStore.fetchUpgradePreview()
+          const res = await panelStore.fetchUpgradePreview({
+               plan_id: currentPlan.value.id,
+               modules: selectedAddOns.value.map((m) =>
+                    typeof m === 'string' ? m : m.id
+               ),
+               billing_cycle: 'month',
+          })
 
-          todayAmount.value = res.todayAmount / 100 // Stripe renvoie en centimes
-          monthlyAmount.value = res.monthlyAmount / 100
+          todayAmount.value = res.today_amount ?? 0
+          cycleAmount.value = res.cycle_amount ?? 0
 
-          if (res.endsAt) {
-               subscriptionEndsAt.value = new Date(res.endsAt * 1000)
-          } else {
-               subscriptionEndsAt.value = null
-          }
+          subscriptionEndsAt.value = res.ends_at
+               ? new Date(res.ends_at * 1000)
+               : null
      } catch (error) {
           console.error('Erreur preview upgrade :', error)
+          emit('close')
+     } finally {
+          loadingAmount.value = false
      }
 }
 
