@@ -77,7 +77,7 @@
                     <!-- Actions -->
                     <div class="mt-6 flex justify-between">
                          <button @click="emit('close')" class="text-[#647491] hover:underline">Annuler</button>
-                         <button @click="submitUpgrade" class="bg-[#0566ff] hover:bg-[#0049bd] text-white px-6 py-2 rounded-md" :disabled="loading || loadingAmount || paymentMethodLoading" > Confirmer </button>
+                         <button @click="submitUpgrade" class="px-6 py-2 rounded-md" :class="loading || loadingAmount || paymentMethodLoading ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd] text-[#fff]'" :disabled="loading || loadingAmount || paymentMethodLoading" > Confirmer </button>
                     </div>
 
                </div>
