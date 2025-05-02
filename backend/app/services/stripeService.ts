@@ -243,8 +243,8 @@ export async function getUpcomingInvoicePreview(
 
      return {
           invoice: immediate,                    // Stripe.Invoice
-          recurringAmount: recurring.total ?? 0, // cents / cycle
-          totalAmount: prorataTotal ?? 0,     // cents maintenant
+          recurringAmount: Math.max(0, recurring.total), // cents / cycle
+          totalAmount: Math.max(0, prorataTotal),     // cents maintenant
      }
 }
 
