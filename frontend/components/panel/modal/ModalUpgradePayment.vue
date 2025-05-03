@@ -3,7 +3,7 @@
 
           <div class="p-8 pb-8 flex flex-col none">
                <div class="flex-1">
-                    <h2 class="text-xl font-semibold mb-2">Upgrade vers le plan {{ currentPlan.name }}</h2>
+                    <h2 class="text-xl font-semibold mb-2">Frais de votre abonnement</h2>
 
                     <!-- Prix -->
                     <div class="flex justify-between mt-4 text-sm">

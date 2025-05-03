@@ -349,6 +349,7 @@
                          "processing": "Traitement de votre carte..."
                     },
                     "upgradeFeaturesSummary" : {
+                         "title": "Résumé de l'abonnement",
                          "quote":"Même les robots ont besoin d’un bon plan pour être utiles aux humains.",
                          "author": "Hellohumans"
                     },
