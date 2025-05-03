@@ -1,7 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http'
 import {
      ensureCustomer,
-     priceIdsForSelection,
+     priceForPlan,
+     pricesForModules,
      getUpcomingInvoicePreview,
      BillingCycle,
      stripe
@@ -72,7 +73,7 @@ class StripeController {
      /**
       * Prévisualise la mise à niveau d'un abonnement
       */
-     public async previewUpgrade({client, subscription, request, response,}: HttpContext) {
+     public async previewUpgrade({ client, subscription, request, response }: HttpContext) {
           try {
                /* ---- Validation ---- */
                const schema = vine.object({
@@ -80,32 +81,54 @@ class StripeController {
                     modules: vine.array(vine.string()).optional(),
                     billing_cycle: vine.enum(['month', 'year']),
                })
-               const { plan_id, modules = [], billing_cycle } = await vine
-                    .compile(schema)
-                    .validate(request.all())
+               const { plan_id, modules = [], billing_cycle } = await vine.compile(schema).validate(request.all())
 
-               /* ---- Prix visés ---- */
+               /* ---- Prix ---- */
                const customerId = await ensureCustomer(client)
-               const priceIds = await priceIdsForSelection(
-                    plan_id,
-                    modules,
-                    billing_cycle as BillingCycle,
-               )
+               const planPriceId   = await priceForPlan(plan_id, billing_cycle as BillingCycle)
+               const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
+               const desiredPriceIds = [planPriceId, ...modulePriceIds]
 
-               /* ---- Preview Stripe ---- */
-               const { invoice, recurringAmount, totalAmount} = await getUpcomingInvoicePreview(
+               /* ---- Pré-visualisation ---- */
+               const {
+                    invoice,
+                    totalAmount,
+                    recurringAmount,
+                    prorationsByPrice,
+                    recurringByPrice,
+               } = await getUpcomingInvoicePreview(
                     customerId,
                     subscription.stripe_subscription_id,
-                    priceIds,
+                    desiredPriceIds,
                )
 
+               /* ---- Détails des changements ---- */
+               const nowIso = new Date().toISOString()
+
+               const planChange = {
+                    id: plan_id,
+                    effective: nowIso,                               // ❗️ou garde current_period_end
+                    price_now: +( (prorationsByPrice[planPriceId]   ?? 0) / 100 ).toFixed(2),
+                    price_cycle: +( (recurringByPrice[planPriceId]  ?? 0) / 100 ).toFixed(2),
+               }
+
+               const modulesAdded = modulePriceIds.map((priceId, idx) => ({
+                    id: modules[idx],
+                    effective: nowIso,
+                    price_now: +( (prorationsByPrice[priceId] ?? 0) / 100 ).toFixed(2),
+                    price_cycle: +( (recurringByPrice[priceId] ?? 0) / 100 ).toFixed(2),
+               }))
+
+               /* ---- Réponse ---- */
                return response.ok({
                     today_amount: +(totalAmount / 100).toFixed(2),
-                    cycle_amount: +(recurringAmount / 100).toFixed(2), // ← nouveau nom
-                    ends_at: subscription.current_period_end
-                         ? new Date(subscription.current_period_end * 1000)
-                         : null,
+                    cycle_amount: +(recurringAmount / 100).toFixed(2),
+                    ends_at: subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null,
                     is_new_subscription: false,
+                    changes: {
+                         plan: planChange,
+                         modules: { added: modulesAdded },
+                    },
                     invoice_preview_id: invoice.id,
                })
           } catch (e: any) {

@@ -61,7 +61,7 @@
     "@vinejs/vine": "^3.0.0",
     "edge": "^7.10.1",
     "reflect-metadata": "^0.2.2",
-    "stripe": "^18.0.0"
+    "stripe": "^18.1.0"
   },
   "hotHook": {
     "boundaries": [

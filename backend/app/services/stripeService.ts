@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/*  stripeService.ts – compatible API 2025-03-31.basil                        */
+/* -------------------------------------------------------------------------- */
 import Stripe from 'stripe'
 import supabaseService from '#services/supabaseService'
 
@@ -6,7 +9,7 @@ import supabaseService from '#services/supabaseService'
 /* -------------------------------------------------------------------------- */
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-     apiVersion: '2025-03-31.basil',
+     apiVersion: '2025-04-30.basil',
 })
 
 export type BillingCycle = 'month' | 'year'
@@ -15,31 +18,31 @@ export type BillingCycle = 'month' | 'year'
 /*  CLIENT : CRÉATION / RÉCUPÉRATION                                         */
 /* -------------------------------------------------------------------------- */
 
-export async function ensureCustomer(clientRow: {
+export async function ensureCustomer(client: {
      id: string
      email: string | null
      name: string | null
      stripe_customer_id?: string | null
-}): Promise<string> {
-     if (clientRow.stripe_customer_id) {
+}) {
+     if (client.stripe_customer_id) {
           try {
-               await stripe.customers.retrieve(clientRow.stripe_customer_id)
-               return clientRow.stripe_customer_id
+               await stripe.customers.retrieve(client.stripe_customer_id)
+               return client.stripe_customer_id
           } catch {
-               /* supprimé côté Stripe → on recrée */
+               /* le client a été supprimé côté Stripe → on le recrée */
           }
      }
 
      const customer = await stripe.customers.create({
-          email: clientRow.email ?? undefined,
-          name: clientRow.name ?? undefined,
-          metadata: { client_id: clientRow.id },
+          email: client.email ?? undefined,
+          name: client.name ?? undefined,
+          metadata: { client_id: client.id },
      })
 
      await supabaseService
           .from('clients')
           .update({ stripe_customer_id: customer.id })
-          .eq('id', clientRow.id)
+          .eq('id', client.id)
 
      return customer.id
 }
@@ -48,7 +51,7 @@ export async function ensureCustomer(clientRow: {
 /*  HELPERS : PLANS & MODULES ➜ price_id                                      */
 /* -------------------------------------------------------------------------- */
 
-async function priceForPlan(planId: string, billing: BillingCycle) {
+export async function priceForPlan(planId: string, billing: BillingCycle) {
      const { data } = await supabaseService
           .from('subscription_plans')
           .select('stripe_price_id_monthly, stripe_price_id_annual')
@@ -56,32 +59,21 @@ async function priceForPlan(planId: string, billing: BillingCycle) {
           .single()
 
      const priceId =
-          billing === 'month'
-               ? data?.stripe_price_id_monthly
-               : data?.stripe_price_id_annual
-
-     /* ➜ SI le plan n’a pas de price pour ce cycle, on lève aussitôt */
-     if (!priceId) {
-          throw new Error(
-               `Aucun price Stripe trouvé pour le plan « ${planId} » (${billing})`,
-          )
-     }
-
+          billing === 'month' ? data?.stripe_price_id_monthly : data?.stripe_price_id_annual
+     if (!priceId) throw new Error(`Plan ${planId} sans price pour ${billing}`)
      return priceId
 }
 
-async function pricesForModules(moduleIds: string[], billing: BillingCycle) {
+export async function pricesForModules(moduleIds: string[], billing: BillingCycle) {
      if (!moduleIds.length) return []
 
      const { data } = await supabaseService
           .from('subscription_modules')
-          .select('stripe_price_id_monthly, stripe_price_id_annual, id')
+          .select('id, stripe_price_id_monthly, stripe_price_id_annual')
           .in('id', moduleIds)
 
      return (data ?? []).map((m) =>
-          billing === 'month'
-               ? m.stripe_price_id_monthly
-               : m.stripe_price_id_annual,
+          billing === 'month' ? m.stripe_price_id_monthly : m.stripe_price_id_annual,
      )
 }
 
@@ -108,15 +100,9 @@ export async function createSubscription(opts: {
      billing: BillingCycle
      paymentMethodId: string
 }) {
-     const priceIds = await priceIdsForSelection(
-          opts.plan_id,
-          opts.modules,
-          opts.billing,
-     )
+     const priceIds = await priceIdsForSelection(opts.plan_id, opts.modules, opts.billing)
 
-     const items: Stripe.SubscriptionCreateParams.Item[] = priceIds.map((p) => ({
-          price: p,
-     }))
+     const items: Stripe.SubscriptionCreateParams.Item[] = priceIds.map((p) => ({ price: p }))
 
      return stripe.subscriptions.create({
           customer: opts.customerId,
@@ -127,7 +113,7 @@ export async function createSubscription(opts: {
      })
 }
 
-/* -------- Helper : construire payload items pour update ------------------ */
+/* -- Helper pour updateSubscription : construit un payload items propre ---- */
 function buildUpdateItems(
      current: Stripe.Subscription,
      desiredPriceIds: string[],
@@ -136,13 +122,13 @@ function buildUpdateItems(
 
      for (const it of current.items.data) {
           if (desiredPriceIds.includes(it.price.id)) {
-               items.push({ id: it.id })                     // garder
+               items.push({ id: it.id }) // on garde
                desiredPriceIds.splice(desiredPriceIds.indexOf(it.price.id), 1)
           } else {
-               items.push({ id: it.id, deleted: true })      // supprimer
+               items.push({ id: it.id, deleted: true }) // on supprime
           }
      }
-     for (const price of desiredPriceIds) items.push({ price }) // ajouter
+     for (const price of desiredPriceIds) items.push({ price }) // on ajoute
 
      return items
 }
@@ -178,74 +164,98 @@ export async function updateSubscription(opts: {
 /*  PREVIEW : PRORATA & MONTANT RÉCURRENT                                     */
 /* -------------------------------------------------------------------------- */
 
+/** Construit `subscription_details.items` pour createPreview. */
 function buildPreviewItems(
-     current: Stripe.Subscription,
+     sub: Stripe.Subscription,
      desiredPriceIds: string[],
 ): Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[] {
      const items: Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[] = []
 
-     for (const it of current.items.data) {
+     for (const it of sub.items.data) {
           if (desiredPriceIds.includes(it.price.id)) {
-               items.push({ id: it.id })
+               items.push({ id: it.id }) // on garde
                desiredPriceIds.splice(desiredPriceIds.indexOf(it.price.id), 1)
           } else {
-               items.push({ id: it.id, quantity: 0 })
+               items.push({ id: it.id, quantity: 0 }) // quantité 0 → suppression
           }
      }
-
-     for (const price of desiredPriceIds) items.push({ price }) // nouveau débit
-
+     desiredPriceIds.forEach((p) => items.push({ price: p })) // nouveaux items
      return items
 }
 
+/* -- alias local reflétant la forme 2025-03-31 des lignes de facture ------- */
+type Line = Stripe.InvoiceLineItem & {
+     parent?: {
+          subscription_item_details?: { proration?: boolean }
+          invoice_item_details?: { proration?: boolean }
+     }
+     pricing?: { price_details?: { price: string } }
+}
+
 /**
- * prorata immédiat & montant récurrent (mensuel ou annuel)
+ * Prévisualise :
+ *  • le prorata immédiat (total et ventilé par price_id)
+ *  • le montant récurrent du prochain cycle (total et ventilé par price_id)
  */
 export async function getUpcomingInvoicePreview(
      customerId: string,
-     subscriptionId: string,
+     subId: string,
      desiredPriceIds: string[],
 ) {
-     /* Récupérer l’abonnement existant (+ items)  */
-     const sub = await stripe.subscriptions.retrieve(subscriptionId, {
-          expand: ['items.data'],
-     })
+     const sub = await stripe.subscriptions.retrieve(subId, { expand: ['items.data'] })
+     const items = buildPreviewItems(sub, [...desiredPriceIds])
 
-     const subscriptionItems = buildPreviewItems(sub, [...desiredPriceIds])
-
-     /* Facture d’aujourd’hui (prorata) */
+     /* ---------- 1) preview PRORATA IMMÉDIAT ---------- */
      const immediate = await stripe.invoices.createPreview({
           customer: customerId,
-          subscription: subscriptionId,
-          subscription_details: {
-               items: subscriptionItems,
-               proration_behavior: 'create_prorations',
-          },
+          subscription: subId,
+          subscription_details: { items, proration_behavior: 'create_prorations' },
+          expand: ['lines.data.pricing'], // assure price_details présent
      })
 
-     type LineWithProration =
-          Stripe.InvoiceLineItem & {
-          parent?: { subscription_item_details?: { proration?: boolean } }
+     const prorationsByPrice: Record<string, number> = {}
+     let totalProrata = 0
+
+     for (const l of immediate.lines.data as Line[]) {
+          const priceId = l.pricing?.price_details?.price
+          const isProration =
+               l.parent?.subscription_item_details?.proration ??
+               l.parent?.invoice_item_details?.proration ??
+               false
+
+          if (isProration && priceId) {
+               prorationsByPrice[priceId] = (prorationsByPrice[priceId] ?? 0) + (l.amount ?? 0)
+               totalProrata += l.amount ?? 0
+          }
      }
 
-     const prorataTotal = (immediate.lines.data as LineWithProration[])
-          .filter((l) => l.parent?.subscription_item_details?.proration)
-          .reduce((sum, l) => sum + (l.amount ?? 0), 0)
-
-
-     /* Facture récurrente (cycle suivant) */
+     /* ---------- 2) preview RÉCURRENT (prochain cycle) ---------- */
      const recurring = await stripe.invoices.createPreview({
           customer: customerId,
-          subscription: subscriptionId,
-          subscription_details: { items: subscriptionItems }, // pas de proration ici
+          subscription: subId,
+          subscription_details: { items },
           preview_mode: 'recurring',
+          expand: ['lines.data.pricing'],
      })
 
+     const recurringByPrice: Record<string, number> = {}
+     for (const l of recurring.lines.data as Line[]) {
+          const priceId = l.pricing?.price_details?.price
+          if (priceId) {
+               recurringByPrice[priceId] = (recurringByPrice[priceId] ?? 0) + (l.amount ?? 0)
+          }
+     }
+
      return {
-          invoice: immediate,                    // Stripe.Invoice
-          recurringAmount: Math.max(0, recurring.total), // cents / cycle
-          totalAmount: Math.max(0, prorataTotal),     // cents maintenant
+          invoice: immediate,
+          totalAmount: Math.max(0, totalProrata),
+          recurringAmount: Math.max(0, recurring.total ?? 0),
+          prorationsByPrice,
+          recurringByPrice,
      }
 }
 
-//export default stripe
+/* -------------------------------------------------------------------------- */
+/*  (Optionnel)  – export par défaut si utile ailleurs                        */
+/* -------------------------------------------------------------------------- */
+// export default stripe
