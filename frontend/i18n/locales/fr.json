@@ -210,6 +210,29 @@
                     "index": {
                          "metaTitle": "Paramètres",
                          "metaDescription": "Accédez à l’ensemble des paramètres de votre compte."
+                    },
+                    "chat": {
+                         "appearance": {
+                              "title": "Apparence",
+                              "description": "Personnalisez l’apparence de votre chatbot pour qu’il corresponde à l’identité de votre marque.",
+                              "metaTitle": "Apparence",
+                              "metaDescription": "Personnalisez l’apparence de votre chatbot pour qu’il corresponde à l’identité de votre marque.",
+                              "menuLabel": "Apparence"
+                         },
+                         "setup": {
+                              "title": "Installation",
+                              "description": "Il semble que vous n’avez pas encore installé le code du chat. Sélectionnez l’un des guides d’installation ci-dessous :",
+                              "metaTitle": "Installation",
+                              "metaDescription": "Intégrez le code d’installation de votre chatbot sur votre site web.",
+                              "menuLabel": "Installation"
+                         },
+                         "translations": {
+                              "title": "Traductions",
+                              "description": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
+                              "metaTitle": "Traductions",
+                              "metaDescription": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
+                              "menuLabel": "Traductions"
+                         },
                     }
                },
                "error": {

@@ -17,45 +17,45 @@
                               <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] max-w-[750px]">Personnalisez votre widget de chat HelloHuman pour attirer l'attention des visiteurs de votre site Web ou pour adapter l'apparence du widget à votre marque.</p>
                          </div>
 
-                         <!-- SECTION GÉNÉRAL -->
-                         <ExpandableSection title="Général" :isBilled="false">
-                              <div class="flex flex-col justify-start items-start gap-3">
-                                   <label class="block">Couleur d'arrière-plan :</label>
-                                   <ColorPicker type="backgroundColors" v-model="chatStore.config.backgroundColor" @update:textColor="chatStore.config.textColor = $event" />
-                              </div>
-                              <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                   <label class="block">Couleur du texte :</label>
-                                   <ColorPicker type="textColors" v-model="chatStore.config.textColor" />
-                              </div>
-                              <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                   <label class="block">Couleur de l'action :</label>
-                                   <ColorPicker type="actionColors" v-model="chatStore.config.actionColor" />
-                              </div>
-                         </ExpandableSection>
+                              <!-- SECTION GÉNÉRAL -->
+                              <ExpandableSection title="Général" :isBilled="false">
+                                   <div class="flex flex-col justify-start items-start gap-3">
+                                        <label class="block">Couleur d'arrière-plan :</label>
+                                        <ColorPicker type="backgroundColors" v-model="chatStore.config.backgroundColor" @update:textColor="chatStore.config.textColor = $event" />
+                                   </div>
+                                   <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                        <label class="block">Couleur du texte :</label>
+                                        <ColorPicker type="textColors" v-model="chatStore.config.textColor" />
+                                   </div>
+                                   <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                        <label class="block">Couleur de l'action :</label>
+                                        <ColorPicker type="actionColors" v-model="chatStore.config.actionColor" />
+                                   </div>
+                              </ExpandableSection>
 
-                         <!-- SECTION CONTENU -->
-                         <ExpandableSection title="Contenu" :isBilled="false">
-                              <label class="block mb-2">Questions suggérées :</label>
-                         </ExpandableSection>
+                              <!-- SECTION CONTENU -->
+                              <ExpandableSection title="Contenu" :isBilled="false">
+                                   <label class="block mb-2">Questions suggérées :</label>
+                              </ExpandableSection>
 
-                         <!-- SECTION VISIBILITÉ & POSITION -->
-                         <ExpandableSection title="Visibilité et position" :isBilled="false">
-                              <label class="block mb-2">Afficher le chat ?</label>
-                              <input type="checkbox" v-model="chatStore.showChat" />
-                              <textarea v-model="chatStore.suggestedQuestionsString" class="border px-3 py-2 rounded w-full"></textarea>
-                         </ExpandableSection>
+                              <!-- SECTION VISIBILITÉ & POSITION -->
+                              <ExpandableSection title="Visibilité et position" :isBilled="false">
+                                   <label class="block mb-2">Afficher le chat ?</label>
+                                   <input type="checkbox" v-model="chatStore.showChat" />
+                                   <textarea v-model="chatStore.suggestedQuestionsString" class="border px-3 py-2 rounded w-full"></textarea>
+                              </ExpandableSection>
 
-                         <!-- SECTION PACK NATURE -->
-                         <ExpandableSection title="Pack Nature" :isBilled="true" :isPaid="true">
-                              <label class="block mb-2">Activer le Pack Nature ? </label>
-                              <input type="checkbox" v-model="chatStore.config.has_nature_pack" />
-                         </ExpandableSection>
+                              <!-- SECTION PACK NATURE -->
+                              <ExpandableSection title="Pack Nature" :isBilled="true" :isPaid="true">
+                                   <label class="block mb-2">Activer le Pack Nature ? </label>
+                                   <input type="checkbox" v-model="chatStore.config.has_nature_pack" />
+                              </ExpandableSection>
 
-                         <!-- SECTION AVANCÉ -->
-                         <ExpandableSection title="Avancé" :isBilled="false">
-                              <label class="block mb-2">Clé API Client :</label>
-                              <input v-model="chatStore.config.apiKey" type="text" class="border px-3 py-2 rounded w-full" />
-                         </ExpandableSection>
+                              <!-- SECTION AVANCÉ -->
+                              <ExpandableSection title="Avancé" :isBilled="false">
+                                   <label class="block mb-2">Clé API Client :</label>
+                                   <input v-model="chatStore.config.apiKey" type="text" class="border px-3 py-2 rounded w-full" />
+                              </ExpandableSection>
 
                     </div>
                     <div class="self-stretch w-[430px] min-w-[430px]">

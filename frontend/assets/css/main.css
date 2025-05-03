@@ -45,9 +45,10 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      align-items: center;
      height: 100vh;
 }
-#app-content{
+.app-content{
      font-family: euclidcircularb, serif;
      letter-spacing: -0.24px;
+     overflow: auto;
 }
 #hellohumans-loading{
      font-family: euclidcircularb, serif;
