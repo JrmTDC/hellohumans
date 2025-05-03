@@ -37,52 +37,88 @@
           </div>
 
           <!-- Graphique -->
-          <EChart :option="chartOption" autoresize class="h-[400px] mt-6" />
+          <VChart :option="chartOption" autoresize class="h-[324px] mt-6" />
      </div>
 </template>
 
 <script setup lang="ts">
-
+/* --------------------------------------------------------------- */
+/* Types auto-générés :  ECOption                                  */
+/* --------------------------------------------------------------- */
 const activeTab = ref<'audience' | 'interactions'>('audience')
 const chartType = ref<'bar' | 'line'>('bar')
 
 const tabs = [
-     { key: 'audience', label: 'Audience' },
-     { key: 'interactions', label: 'Interactions' }
+     { key: 'audience',     label: 'Audience' },
+     { key: 'interactions', label: 'Interactions' },
 ]
 
-const currentLegends = computed(() => {
-     if (activeTab.value === 'audience') {
-          return [
-               { label: 'Visiteurs atteints', color: '#4caf50', tooltip: 'Nombre total de visiteurs ayant accédé au chatbot.' },
-               { label: 'Visiteurs uniques', color: '#ff9800', tooltip: 'Utilisateurs distincts ayant interagi avec le bot.' }
+const currentLegends = computed(() =>
+     activeTab.value === 'audience'
+          ? [
+               {
+                    label: 'Visiteurs atteints',
+                    color: '#4caf50',
+                    tooltip: 'Nombre total de visiteurs ayant accédé au chatbot.',
+               },
+               {
+                    label: 'Visiteurs uniques',
+                    color: '#ff9800',
+                    tooltip: 'Utilisateurs distincts ayant interagi avec le bot.',
+               },
           ]
-     } else {
-          return [
-               { label: 'Conversations traitées', color: '#2196f3', tooltip: 'Conversations complètes avec au moins une réponse.' },
-               { label: 'Visiteurs uniques', color: '#ff9800', tooltip: 'Utilisateurs distincts ayant échangé avec le bot.' }
-          ]
+          : [
+               {
+                    label: 'Conversations traitées',
+                    color: '#2196f3',
+                    tooltip: 'Conversations complètes avec au moins une réponse.',
+               },
+               {
+                    label: 'Visiteurs uniques',
+                    color: '#ff9800',
+                    tooltip: 'Utilisateurs distincts ayant échangé avec le bot.',
+               },
+          ],
+)
+
+/* ------------------------------------------------------------------ */
+/*  Données factices → remplace par ton fetch API                      */
+/* ------------------------------------------------------------------ */
+const rawData = {
+     audience:     { reached: [120, 200, 150,  80], uniques: [ 90, 160, 110, 60] },
+     interactions: { handled: [240, 180, 220, 160], uniques: [150, 120, 180, 100] },
+}
+
+/* ------------------------------------------------------------------ */
+/*  Option ECharts (typée !)                                           */
+/* ------------------------------------------------------------------ */
+const chartOption = computed<ECOption>(() => {
+     const legends = currentLegends.value
+     const [serieA, serieB] =
+          activeTab.value === 'audience' ? ['reached', 'uniques'] : ['handled', 'uniques']
+
+     return {
+          tooltip:   { trigger: 'axis' },
+          //legend:    { data: legends.map((l) => l.label) },
+          grid:      { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+          xAxis:     { type: 'category', data: ['S1', 'S2', 'S3', 'S4'] },
+          yAxis:     { type: 'value' },
+          series: [
+               {
+                    name: legends[0].label,
+                    type: chartType.value,
+                    data: rawData[activeTab.value][serieA],
+                    itemStyle: { color: legends[0].color },
+                    smooth: chartType.value === 'line',
+               },
+               {
+                    name: legends[1].label,
+                    type: chartType.value,
+                    data: rawData[activeTab.value][serieB],
+                    itemStyle: { color: legends[1].color },
+                    smooth: chartType.value === 'line',
+               },
+          ],
      }
 })
-
-// Graphique dynamique
-const chartOption = computed(() => ({
-     tooltip: { trigger: 'axis' },
-     legend: {
-          data: currentLegends.value.map(l => l.label)
-     },
-     xAxis: {
-          type: 'category',
-          data: ['S1', 'S2', 'S3', 'S4']
-     },
-     yAxis: {
-          type: 'value'
-     },
-     series: currentLegends.value.map((legend, index) => ({
-          name: legend.label,
-          type: chartType.value,
-          data: [120, 200, 150, 80].map(val => val - index * 30), // Exemple dynamique
-          itemStyle: { color: legend.color }
-     }))
-}))
 </script>

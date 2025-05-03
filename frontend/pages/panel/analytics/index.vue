@@ -28,7 +28,7 @@
                                         <div class="relative flex items-center mt-[20px] mb-0">
                                              <PanelCommonDatePicker />
                                         </div>
-                                        <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0">
+                                        <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0 w-full">
                                              <PanelAnalyticsChart></PanelAnalyticsChart>
                                         </div>
                                    </div>
