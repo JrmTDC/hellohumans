@@ -60,7 +60,7 @@
                               <div class="flex flex-row justify-start items-center">
                                    <span>
                                         <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ displayedPrice }}<span class="text-[24px] leading-[31px] tracking-[-0.01em] font-medium">€</span></span>
-                                        <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'monthly' ? t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
+                                        <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'month' ? t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
                                    </span>
                               </div>
                          </div>
@@ -154,7 +154,7 @@
                               <span>
                                    <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[24px] leading-[31px] font-medium">€</span>
                                    </span>
-                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ billingCycle === 'monthly' ?  t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
+                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ billingCycle === 'month' ?  t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
                               </span>
                          </div>
                     </div>
@@ -193,7 +193,7 @@ import type { upgradeModule } from '~/stores/upgradeStore'
 const { t } = useI18n()
 const props = defineProps<{
      module: upgradeModule
-     billingCycle: 'monthly' | 'annual'
+     billingCycle: 'month' | 'year'
      onToggle: (moduleId: string, checked: boolean) => void
      onChangeChoice: (moduleId: string, choiceIndex: number) => void
      index: number
@@ -233,7 +233,7 @@ const displayedPrice = computed(() => {
                     curr.monthlyPrice < prev.monthlyPrice ? curr : prev
                )
                const disc = minChoice.discountMonths ?? 0
-               if (props.billingCycle === 'monthly') {
+               if (props.billingCycle === 'month') {
                     return minChoice.monthlyPrice
                } else {
                     return minChoice.monthlyPrice * (12 - disc)
@@ -241,7 +241,7 @@ const displayedPrice = computed(() => {
           }
           // single
           const disc = props.module.discountMonths ?? 0
-          if (props.billingCycle === 'monthly') {
+          if (props.billingCycle === 'month') {
                return props.module.basePrice
           } else {
                return props.module.basePrice * (12 - disc)

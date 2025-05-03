@@ -112,7 +112,7 @@ function measureAllSections(){
 const computedTotalPrice = computed(() => {
      const plan = upgradeStore.currentPlan
      if (!plan) return 0
-     if (upgradeStore.billingCycle === 'monthly') {
+     if (upgradeStore.billingCycle === 'month') {
           return plan.monthlyPrice
      }
      return plan.monthlyPrice * (12 - plan.discountMonths)

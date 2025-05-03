@@ -7,7 +7,7 @@
 
                     <!-- Prix -->
                     <div class="flex justify-between mt-4 text-sm">
-                         <span class="pt-[8px] pb-[8px] flex items-center">Frais aujourd’hui   <span v-if="planLabel" class="ml-2 text-sm px-2 py-1 rounded inline-flex items-center rounded-full bg-opacity-70 border px-2.5 py-0.5 text-xs ml-1" :class="labelColor.identical">{{ planLabel }}</span></span>
+                         <span class="pt-[8px] pb-[8px] flex items-center">Frais aujourd’hui</span>
                          <span class="pt-[8px] pb-[8px] flex items-center">
                               <span v-if="loadingAmount" class="h-[20px] w-[60px] bg-gray-200 animate-pulse rounded-md"></span>
                               <span v-else>{{ todayAmount.toFixed(2) }} €</span>
@@ -15,7 +15,7 @@
                     </div>
 
                     <div class="flex justify-between text-sm text-[#647491] mb-4">
-                         <span class="pt-[8px] pb-[8px] flex items-center">Frais mensuelle</span>
+                         <span  class="pt-[8px] pb-[8px] flex items-center">{{ upgradeStore.billingCycle === 'year' ?  t('panel.components.modal.upgradePayment.ChargeCycleYear') : t('panel.components.modal.upgradePayment.ChargeCycleMonth') }}</span>
                          <span class="pt-[8px] pb-[8px] flex items-center">
                               <span v-if="loadingAmount" class="h-[20px] w-[60px] bg-gray-200 animate-pulse rounded-md"></span>
                               <span v-else>{{ cycleAmount.toFixed(2) }} €</span>
@@ -85,19 +85,18 @@
 
           </div>
           <div class="bg-surface-100 p-8 flex flex-col border-l justify-between">
-               <PanelModalUpgradeFeaturesSummary :features="upgradeStore.currentPlan?.includedFeatures || []" />
+               <PanelModalUpgradeRecap v-if="upgradePreview" :changes="upgradePreview.changes" :total-now="todayAmount" :total-cycle="cycleAmount" />
           </div>
      </PanelModalBaseUpgrade>
      <!-- Modal ajout carte -->
      <PanelModalUpgradeAddCard v-if="showAddCard" @close="showAddCard = false" @added="refreshCard" />
 </template>
-
 <script setup lang="ts">
 const { t } = useI18n()
 const emit = defineEmits(['close', 'submit'])
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
-
+const upgradePreview = ref<any | null>(null)
 const showAddCard = ref(false)
 const paymentMethods = ref<any[]>([])
 const selectedPaymentMethod = ref<string | null>(null)
@@ -113,20 +112,6 @@ const loading = ref(false)
 const loadingAmount = ref(true)
 const subscriptionEndsAt = ref<Date | null>(null)
 
-const planLabel = computed(() => {
-     if (!panelStore.project?.subscription) return 'Nouveau'
-     if (upgradeStore.isSameAsCurrent) return 'Identique'
-     return 'Mise à jour'
-})
-
-const labelColor = {
-     'new': 'bg-[#e5ffd8] text-[#6ce14b] border-[#d3ffc1]',
-     'update': 'bg-[#ffecdc] text-[#d9955d] border-[#f7d4b7]',
-     'delete': 'bg-[#ffd8d8] text-[#e14b4b] border-[#ffc1c1]',
-     'identical': 'bg-[#d8e5ff] text-[#4b6de1] border-[#c1d2ff]',
-
-
-}
 
 const handleClose = () => {
      if (!loading.value) emit('close')
@@ -184,11 +169,11 @@ async function fetchUpgradePreview() {
                modules: selectedAddOns.value.map((m) =>
                     typeof m === 'string' ? m : m.id
                ),
-               billing_cycle: 'month',
+               billing_cycle: upgradeStore.billingCycle,
           })
-
-          todayAmount.value = res.today_amount ?? 0
-          cycleAmount.value = res.cycle_amount ?? 0
+          upgradePreview.value  = res
+          todayAmount.value     = res.today_amount ?? 0
+          cycleAmount.value     = res.cycle_amount ?? 0
 
           subscriptionEndsAt.value = res.ends_at
                ? new Date(res.ends_at * 1000)

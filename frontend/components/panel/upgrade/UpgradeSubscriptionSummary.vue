@@ -17,15 +17,15 @@ max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]
                <p class="text-[12px] text-[#647491] mt-[20px] mb-0 font-medium">{{ t('panel.components.upgrade.subscriptionSummary.billingLabel') }}</p>
                <div class="flex items-center mt-[20px]">
                     <label class="flex items-center cursor-pointer">
-                         <input type="radio" value="monthly" v-model="billingCycleLocal" class="hidden" />
-                         <span v-if="billingCycleLocal === 'monthly'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
+                         <input type="radio" value="month" v-model="billingCycleLocal" class="hidden" />
+                         <span v-if="billingCycleLocal === 'month'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
                          <span v-else class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
                          <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingMonthly') }}</span>
                     </label>
 
                     <label class="flex items-center cursor-pointer ml-[32px]">
-                         <input type="radio" value="annual" v-model="billingCycleLocal" class="hidden" />
-                         <span v-if="billingCycleLocal === 'annual'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
+                         <input type="radio" value="year" v-model="billingCycleLocal" class="hidden" />
+                         <span v-if="billingCycleLocal === 'year'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
                          <span v-else class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
                          <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}</span>
                          <span class="ml-[8px] text-[9px] bg-[#501cd8] text-white px-[4px] py-[2px] rounded">{{ t('panel.components.upgrade.subscriptionSummary.billingDiscountBadge') }}</span>
@@ -42,7 +42,7 @@ max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]
                               <h2 class="text-[16px] font-medium">{{ selectedPlan.name }}</h2>
                               <div>
                                    <span class="text-[14px] font-medium">{{ planPrice }} €</span>
-                                   <span class="text-[14px] text-[#080f1a] font-medium">{{ billingCycleLocal === 'monthly' ? '/mois' : '/an' }}</span>
+                                   <span class="text-[14px] text-[#080f1a] font-medium">{{ billingCycleLocal === 'month' ? '/mois' : '/an' }}</span>
                               </div>
                          </div>
                          <p class="text-[14px] text-[#647491] mt-[4px]">{{ firstFeature }}</p>
@@ -68,7 +68,7 @@ max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]
                                    <span v-if="selectedPlan?.includedModules?.includes(mod.id)" class="text-[14px] font-medium text-green-600">{{ t('panel.components.upgrade.subscriptionSummary.included') }}</span>
                                    <span v-else>
                 <span class="text-[14px] font-medium">{{ modulePrice(mod) }} €</span>
-                <span class="text-[14px] font-medium">{{ billingCycleLocal === 'monthly' ? '/mois' : '/an' }}</span>
+                <span class="text-[14px] font-medium">{{ billingCycleLocal === 'month' ? '/mois' : '/an' }}</span>
               </span>
                               </div>
                          </div>
@@ -82,7 +82,7 @@ max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]
                     <h2 class="text-[20px] font-medium">{{ t('panel.components.upgrade.subscriptionSummary.totalLabel') }}</h2>
                     <div>
                          <span class="text-[20px] font-medium">{{ totalPriceLocal }} €</span>
-                         <span class="text-[14px] font-medium">{{ billingCycleLocal === 'monthly' ? t('panel.components.upgrade.subscriptionSummary.perMonth') : t('panel.components.upgrade.subscriptionSummary.perYear') }}</span>
+                         <span class="text-[14px] font-medium">{{ billingCycleLocal === 'month' ? t('panel.components.upgrade.subscriptionSummary.perMonth') : t('panel.components.upgrade.subscriptionSummary.perYear') }}</span>
                     </div>
                </div>
 
@@ -135,7 +135,7 @@ interface ModuleAddOn {
 // Props
 const props = defineProps<{
      selectedPlan: Plan | null
-     billingCycle: 'monthly' | 'annual'
+     billingCycle: 'month' | 'year'
      selectedModules: ModuleAddOn[]
      showModules?: boolean
      totalPrice: number
@@ -145,7 +145,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['updateBillingCycle', 'goNext'])
 
-const billingCycleLocal = computed<'monthly'|'annual'>({
+const billingCycleLocal = computed<'month'|'year'>({
      get() {
           return props.billingCycle
      },
@@ -164,7 +164,7 @@ const nextButtonLabel = computed(() => props.nextButtonLabel || t('panel.compone
 const planPrice = computed(() => {
      if (!props.selectedPlan) return 0
      const { monthlyPrice, discountMonths } = props.selectedPlan
-     return billingCycleLocal.value === 'monthly'
+     return billingCycleLocal.value === 'month'
           ? monthlyPrice
           : monthlyPrice * (12 - discountMonths)
 })
@@ -181,12 +181,12 @@ function modulePrice(mod: ModuleAddOn): number {
      if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
           const choice = mod.choices[mod.selectedChoiceIndex]
           const disc = choice.discountMonths ?? 0
-          return billingCycleLocal.value === 'monthly'
+          return billingCycleLocal.value === 'month'
                ? choice.monthlyPrice
                : choice.monthlyPrice * (12 - disc)
      } else {
           const disc = mod.discountMonths ?? 0
-          return billingCycleLocal.value === 'monthly'
+          return billingCycleLocal.value === 'month'
                ? mod.basePrice
                : mod.basePrice * (12 - disc)
      }

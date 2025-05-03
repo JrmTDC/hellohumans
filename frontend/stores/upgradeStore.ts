@@ -1,9 +1,13 @@
 import { defineStore } from 'pinia'
 
+interface Subscription {
+     current_plan_id: string
+     current_modules: string[]
+}
 export const useUpgradeStore = defineStore('upgrade', () => {
      const panelStore = usePanelStore()
      const selectedPlanId = ref<string | null>(null)
-     const billingCycle = ref<'monthly' | 'annual'>('monthly')
+     const billingCycle = ref<'month' | 'year'>('month')
 
      const currentPlan = computed(() =>
           panelStore.plans.find((p) => p.id === selectedPlanId.value) || null
@@ -25,7 +29,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
 
      const isSameAsCurrent = computed(() => {
 
-          const sub = panelStore.project?.subscription
+          const sub = panelStore.project?.subscription as Subscription | null
           if (!sub) return false // Pas encore d'abonnement
 
           const currentPlanId = sub.current_plan_id
@@ -54,7 +58,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           save()
      }
 
-     function setBillingCycle(cycle: 'monthly' | 'annual') {
+     function setBillingCycle(cycle: 'month' | 'year') {
           billingCycle.value = cycle
           save()
      }
@@ -77,7 +81,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
 
      function resetAll() {
           selectedPlanId.value = null
-          billingCycle.value = 'monthly'
+          billingCycle.value = 'month'
           panelStore.plans = []
           panelStore.availableModules = []
           localStorage.removeItem('upgradeStore')

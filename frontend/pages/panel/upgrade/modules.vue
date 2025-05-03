@@ -111,7 +111,7 @@ const computedTotalPrice = computed(() => {
      // Offre
      const off = upgradeStore.currentPlan
      if (off) {
-          if (upgradeStore.billingCycle === 'monthly') {
+          if (upgradeStore.billingCycle === 'month') {
                total += off.monthlyPrice
           } else {
                total += off.monthlyPrice * (12 - off.discountMonths)
@@ -128,14 +128,14 @@ const computedTotalPrice = computed(() => {
           if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
                const choice = mod.choices[mod.selectedChoiceIndex]
                const disc = choice.discountMonths ?? 0
-               if (upgradeStore.billingCycle === 'monthly') {
+               if (upgradeStore.billingCycle === 'month') {
                     total += choice.monthlyPrice
                } else {
                     total += choice.monthlyPrice * (12 - disc)
                }
           } else {
                const disc = mod.discountMonths ?? 0
-               if (upgradeStore.billingCycle === 'monthly') {
+               if (upgradeStore.billingCycle === 'month') {
                     total += mod.basePrice
                } else {
                     total += mod.basePrice * (12 - disc)

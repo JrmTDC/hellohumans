@@ -347,7 +347,7 @@ export const usePanelStore = defineStore('panel', () => {
                project_id: project.value?.id,
                plan_id: selectedPlanId!,
                modules: selectedAddOns || [],
-               billing_cycle: billingCycle || 'monthly'
+               billing_cycle: billingCycle || 'month'
           }
 
           const res = await usePanelApi().apiFetch('/stripe/create-subscription', {

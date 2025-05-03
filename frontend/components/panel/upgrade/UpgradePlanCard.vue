@@ -89,7 +89,7 @@ const { t } = useI18n()
 const props = defineProps<{
      plan: Plan
      selected: boolean
-     billingCycle: 'monthly' | 'annual'
+     billingCycle: 'month' | 'year'
      index: number
 }>()
 
@@ -101,7 +101,7 @@ function handleSelectPlan() {
 
 // Calcul du prix
 const displayedPrice = computed(() => {
-     if (props.billingCycle === 'monthly') {
+     if (props.billingCycle === 'month') {
           return props.plan.monthlyPrice
      } else {
           // ex. (12 - discountMonths) * monthlyPrice

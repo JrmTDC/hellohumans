@@ -361,6 +361,12 @@
                          "NoCardRegistered": "Aucune carte enregistrée",
                          "AddPaymentMethode": "Ajouter une méthode de paiement",
                          "SelectCreditCard": "Sélectionner une carte de crédit",
+                         "ChargeCycleMonth": "Frais mensuelle",
+                         "ChargeCycleYear": "Frais annuelle"
+                    },
+                    "upgradeRecap" : {
+                         "perMonth": "/mois",
+                         "perYear": "/an"
                     }
                },
                "onboarding": {
