@@ -115,42 +115,42 @@ function formatDate(date: string | Date): string {
 
 const presets = [
      {
-          label: 'panel.components.common.dataPicker.today',
+          label: t('panel.components.common.dataPicker.today'),
           range: {
                start: format(new Date(), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'panel.components.common.dataPicker.yesterday',
+          label: t('panel.components.common.dataPicker.yesterday'),
           range: {
                start: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
                end: format(subDays(new Date(), 1), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'panel.components.common.dataPicker.lastWeek',
+          label: t('panel.components.common.dataPicker.lastWeek'),
           range: {
                start: format(subDays(new Date(), 7), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'panel.components.common.dataPicker.thisMonth',
+          label: t('panel.components.common.dataPicker.thisMonth'),
           range: {
                start: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'panel.components.common.dataPicker.last30Days',
+          label: t('panel.components.common.dataPicker.last30Days'),
           range: {
                start: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
           }
      },
      {
-          label: 'panel.components.common.dataPicker.last90Days',
+          label: t('panel.components.common.dataPicker.last90Days'),
           range: {
                start: format(subDays(new Date(), 90), 'yyyy-MM-dd'),
                end: format(new Date(), 'yyyy-MM-dd')
