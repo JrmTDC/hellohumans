@@ -93,8 +93,11 @@ class StripeController {
                const {
                     invoice,
                     totalAmount,
+                    totalDebit,
+                    totalCredit,
                     recurringAmount,
-                    prorationsByPrice,
+                    debitByPrice,
+                    creditByPrice,
                     recurringByPrice,
                } = await getUpcomingInvoicePreview(
                     customerId,
@@ -102,31 +105,52 @@ class StripeController {
                     desiredPriceIds,
                )
 
-               /* ---- Détails des changements ---- */
-               const nowIso = new Date().toISOString()
+               /* ------- helpers ------- */
+               function euros(c: number | undefined) {
+                    return +((c ?? 0) / 100).toFixed(2)
+               }
+               function buildAction(charge: number, credit: number) {
+                    return charge > 0 || credit > 0 ? 'immediate' : 'end_of_period'
+               }
+               /* ------- plan ------- */
+               const planProrata   = debitByPrice [planPriceId] ?? 0
+               const planCreditRaw = creditByPrice[planPriceId] ?? 0
 
                const planChange = {
-                    id: plan_id,
-                    effective: nowIso,                               // ❗️ou garde current_period_end
-                    price_now: +( (prorationsByPrice[planPriceId]   ?? 0) / 100 ).toFixed(2),
-                    price_cycle: +( (recurringByPrice[planPriceId]  ?? 0) / 100 ).toFixed(2),
+                    id:               plan_id,
+                    effective_date:   new Date().toISOString(),
+                    effective_action: buildAction(planProrata, planCreditRaw),
+                    price_now:        euros(planProrata),
+                    credit_amount:    euros(planCreditRaw),
+                    price_cycle:      euros(recurringByPrice[planPriceId]),
                }
 
-               const modulesAdded = modulePriceIds.map((priceId, idx) => ({
-                    id: modules[idx],
-                    effective: nowIso,
-                    price_now: +( (prorationsByPrice[priceId] ?? 0) / 100 ).toFixed(2),
-                    price_cycle: +( (recurringByPrice[priceId] ?? 0) / 100 ).toFixed(2),
-               }))
+               /* ------- modules ajoutés ------- */
+               const modulesAdded = modulePriceIds.map((priceId, idx) => {
+                    const prorata = debitByPrice [priceId] ?? 0
+                    const credit  = creditByPrice[priceId] ?? 0
+                    return {
+                         id:               modules[idx],
+                         effective_date:   new Date().toISOString(),
+                         effective_action: buildAction(prorata, credit),
+                         price_now:        euros(prorata),
+                         credit_amount:    euros(credit),
+                         price_cycle:      euros(recurringByPrice[priceId]),
+                    }
+               })
 
-               /* ---- Réponse ---- */
+               /* ------- réponse ------- */
                return response.ok({
-                    today_amount: +(totalAmount / 100).toFixed(2),
-                    cycle_amount: +(recurringAmount / 100).toFixed(2),
-                    ends_at: subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null,
+                    today_debit:   euros(totalDebit),
+                    today_credit:  euros(totalCredit),
+                    today_amount:  euros(totalAmount),
+                    cycle_amount:  euros(recurringAmount),
+                    ends_at:       subscription.current_period_end
+                         ? new Date(subscription.current_period_end * 1000)
+                         : null,
                     is_new_subscription: false,
                     changes: {
-                         plan: planChange,
+                         plan:    planChange,
                          modules: { added: modulesAdded },
                     },
                     invoice_preview_id: invoice.id,

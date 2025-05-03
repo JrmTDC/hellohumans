@@ -187,7 +187,7 @@ function buildPreviewItems(
 type Line = Stripe.InvoiceLineItem & {
      parent?: {
           subscription_item_details?: { proration?: boolean }
-          invoice_item_details?: { proration?: boolean }
+          invoice_item_details?:       { proration?: boolean }
      }
      pricing?: { price_details?: { price: string } }
 }
@@ -202,34 +202,40 @@ export async function getUpcomingInvoicePreview(
      subId: string,
      desiredPriceIds: string[],
 ) {
-     const sub = await stripe.subscriptions.retrieve(subId, { expand: ['items.data'] })
+     const sub   = await stripe.subscriptions.retrieve(subId, { expand: ['items.data'] })
      const items = buildPreviewItems(sub, [...desiredPriceIds])
 
-     /* ---------- 1) preview PRORATA IMMÉDIAT ---------- */
+     /* -------- 1) prorata immédiat -------- */
      const immediate = await stripe.invoices.createPreview({
           customer: customerId,
           subscription: subId,
           subscription_details: { items, proration_behavior: 'create_prorations' },
-          expand: ['lines.data.pricing'], // assure price_details présent
+          expand: ['lines.data.pricing'],
      })
 
+     const debitByPrice:  Record<string, number> = {}   // montants > 0
+     const creditByPrice: Record<string, number> = {}   // montants < 0
      const prorationsByPrice: Record<string, number> = {}
      let totalProrata = 0
 
      for (const l of immediate.lines.data as Line[]) {
-          const priceId = l.pricing?.price_details?.price
+          const priceId     = l.pricing?.price_details?.price
           const isProration =
                l.parent?.subscription_item_details?.proration ??
-               l.parent?.invoice_item_details?.proration ??
-               false
+               l.parent?.invoice_item_details?.proration ?? false
 
-          if (isProration && priceId) {
+          if (priceId && isProration) {
                prorationsByPrice[priceId] = (prorationsByPrice[priceId] ?? 0) + (l.amount ?? 0)
                totalProrata += l.amount ?? 0
+               if ((l.amount ?? 0) >= 0) {
+                    debitByPrice [priceId] = (debitByPrice [priceId] ?? 0) + (l.amount ?? 0)
+               } else {
+                    creditByPrice[priceId] = (creditByPrice[priceId] ?? 0) + Math.abs(l.amount ?? 0)
+               }
           }
      }
 
-     /* ---------- 2) preview RÉCURRENT (prochain cycle) ---------- */
+     /* -------- 2) récurrence prochaine période -------- */
      const recurring = await stripe.invoices.createPreview({
           customer: customerId,
           subscription: subId,
@@ -242,20 +248,23 @@ export async function getUpcomingInvoicePreview(
      for (const l of recurring.lines.data as Line[]) {
           const priceId = l.pricing?.price_details?.price
           if (priceId) {
-               recurringByPrice[priceId] = (recurringByPrice[priceId] ?? 0) + (l.amount ?? 0)
+               recurringByPrice[priceId] =
+                    (recurringByPrice[priceId] ?? 0) + (l.amount ?? 0)
           }
      }
 
+     const totalDebit  = Object.values(debitByPrice ).reduce((s, n) => s + n, 0)
+     const totalCredit = Object.values(creditByPrice).reduce((s, n) => s + n, 0)
+
      return {
-          invoice: immediate,
+          invoice:immediate,
           totalAmount: Math.max(0, totalProrata),
+          totalDebit,
+          totalCredit,
+          netAmount: totalDebit - totalCredit,
           recurringAmount: Math.max(0, recurring.total ?? 0),
-          prorationsByPrice,
+          debitByPrice,
+          creditByPrice,
           recurringByPrice,
      }
 }
-
-/* -------------------------------------------------------------------------- */
-/*  (Optionnel)  – export par défaut si utile ailleurs                        */
-/* -------------------------------------------------------------------------- */
-// export default stripe
