@@ -34,8 +34,13 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      letter-spacing: -0.24px;
 }
 #hellohumans-chat-iframe{
-     font-family: Mulish;
+     font-family: Mulish, serif;
      letter-spacing: -0.24px;
+}
+#hellohumans-chat-config{
+     font-family: Mulish, serif;
+     letter-spacing: -0.24px;
+     position: relative;
 }
 #hellohumans-error-iframe{
      font-family: euclidcircularb, serif;

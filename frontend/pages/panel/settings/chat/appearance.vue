@@ -45,14 +45,14 @@
 
                                    <div class="flex flex-row justify-start items-start">
 
-                                        <div class="flex flex-col justify-start items-stretch w-full p-[20px] ">
-                                             <div class="relative p-[13px_20px_13px_44px] mb-0 rounded-[8px] bg-[rgb(255,221,167)] text-[rgb(58,35,0)] mb-[20px]">
+                                        <div class="flex flex-col justify-start items-stretch w-full  mr-[20px]">
+                                             <!-- <div class="relative p-[13px_20px_13px_44px] mb-0 rounded-[8px] bg-[rgb(255,221,167)] text-[rgb(58,35,0)] mb-[20px]">
                                                   <div class="absolute top-[10px] left-[12px] flex items-center justify-center w-[24px] h-[24px]"
                                                   >
                                                        <svgo-chat-icon-warling class="w-[24px] h-[24px] fill-[#d48200]"/>
                                                   </div>
                                                   Le widget de chat n'est pas installé sur le site du client. Les visiteurs ne peuvent pas voir les modifications pour le moment.
-                                             </div>
+                                             </div> -->
 
                                              <div class="flex flex-col justify-start items-stretch mb-[20px]" >
                                                   <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">Apparence</h2>
@@ -72,6 +72,11 @@
                                                   <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
                                                        <label class="block">Couleur de l'action :</label>
                                                        <ColorPicker type="actionColors" v-model="chatStore.config.actionColor" />
+                                                  </div>
+
+                                                  <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                                       <label class="block">Logo de la marque</label>
+                                                       <ColorPicker type="iconColors" v-model="chatStore.config.iconColor" />
                                                   </div>
                                              </PanelSettingsExpandableSection>
 
@@ -99,8 +104,8 @@
                                                   <input v-model="chatStore.config.apiKey" type="text" class="border px-3 py-2 rounded w-full" />
                                              </PanelSettingsExpandableSection>
 
-                                             <div class="sticky bottom-0 py-[20px] bg-white border-t border-t-[#eff2f6] w-full m-0">
-                                                  <div class="bg-[#0566ff] text-white p-[10px] w-fit rounded-[11px] cursor-pointer">Sauvegarder</div>
+                                             <div class="sticky bottom-0 py-[20px] bg-white border-t border-t-[#eff2f6]">
+                                                  <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 bg-[#0566ff] border border-[#0566ff] text-white hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white">Sauvegarder</button>
                                              </div>
                                         </div>
 
