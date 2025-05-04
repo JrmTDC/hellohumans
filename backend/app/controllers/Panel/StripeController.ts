@@ -23,8 +23,10 @@ class StripeController {
                })
 
                return response.ok({
-                    client_secret: setupIntent.client_secret,
-                    setup_intent_id: setupIntent.id
+                    setupIntent: {
+                         client_secret: setupIntent.client_secret,
+                         setup_intent_id: setupIntent.id
+                    }
                })
           } catch (error: any) {
                console.error('[StripeController.createSetupIntent]', error)

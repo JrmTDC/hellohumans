@@ -63,12 +63,8 @@
 
                     <PanelModalUpgradePayment
                          v-if="showPaymentModal"
-                         :total="computedTotalPrice"
-                         :canSubmit="upgradeStore.canValidateUpgrade"
-                         :billingCycle="upgradeStore.billingCycle"
                          @close="showPaymentModal = false"
                          @submit="handlePaymentSuccess"
-                         @updateBillingCycle="upgradeStore.setBillingCycle"
                     />
                </div>
           </div>
