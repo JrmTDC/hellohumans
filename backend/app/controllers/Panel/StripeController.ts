@@ -91,6 +91,52 @@ class StripeController {
                const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
                const desiredPriceIds = [planPriceId, ...modulePriceIds]
 
+
+               if (!subscription.stripe_subscription_id) {
+                    // Pas d’abonnement Stripe existant → on calcule manuellement les prix
+                    const prices = await Promise.all(
+                         desiredPriceIds.map(id => stripe.prices.retrieve(id, {
+                              expand: ['product'],
+                         }))
+                    )
+
+                    const totalNow = prices.data.reduce((sum, price) => sum + price.unit_amount!, 0)
+                    const cycleNow = totalNow
+
+                    return response.ok({
+                         today_debit:   +(totalNow / 100).toFixed(2),
+                         today_credit:  0,
+                         today_amount:  +(totalNow / 100).toFixed(2),
+                         cycle_amount:  +(cycleNow / 100).toFixed(2),
+                         ends_at:       null,
+                         is_new_subscription: true,
+                         changes: {
+                              plan: {
+                                   id:               plan_id,
+                                   effective_date:   new Date().toISOString(),
+                                   effective_action: 'immediate',
+                                   price_now:        +(planPriceId ? (prices.data.find(p => p.id === planPriceId)?.unit_amount ?? 0) / 100 : 0).toFixed(2),
+                                   credit_amount:    0,
+                                   price_cycle:      +(planPriceId ? (prices.data.find(p => p.id === planPriceId)?.unit_amount ?? 0) / 100 : 0).toFixed(2),
+                              },
+                              modules: {
+                                   added: modules.map((id, idx) => {
+                                        const price = prices.data.find(p => p.id === modulePriceIds[idx])
+                                        return {
+                                             id,
+                                             effective_date: new Date().toISOString(),
+                                             effective_action: 'immediate',
+                                             price_now: +(price?.unit_amount ?? 0) / 100,
+                                             credit_amount: 0,
+                                             price_cycle: +(price?.unit_amount ?? 0) / 100,
+                                        }
+                                   })
+                              }
+                         },
+                         invoice_preview_id: null
+                    })
+               }
+
                /* ---- Pré-visualisation ---- */
                const {
                     invoice,
