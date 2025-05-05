@@ -191,6 +191,7 @@
 import type { upgradeModule } from '~/stores/upgradeStore'
 
 const { t } = useI18n()
+
 const props = defineProps<{
      module: upgradeModule
      billingCycle: 'month' | 'year'
@@ -252,7 +253,7 @@ const displayedPrice = computed(() => {
                const idx = props.module.selectedChoiceIndex || 0
                const choice = props.module.choices[idx]
                const disc = choice.discountMonths ?? 0
-               if (props.billingCycle === 'monthly') {
+               if (props.billingCycle === 'month') {
                     return choice.monthlyPrice
                } else {
                     return choice.monthlyPrice * (12 - disc)
@@ -260,7 +261,7 @@ const displayedPrice = computed(() => {
           }
           // single
           const disc = props.module.discountMonths ?? 0
-          if (props.billingCycle === 'monthly') {
+          if (props.billingCycle === 'month') {
                return props.module.basePrice
           } else {
                return props.module.basePrice * (12 - disc)

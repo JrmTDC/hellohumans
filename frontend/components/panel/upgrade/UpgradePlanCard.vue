@@ -39,7 +39,7 @@
                <span>
                     <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">€</span>
                     </span>
-                    <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">{{ billingCycle === 'monthly' ? t('panel.components.upgrade.planCard.perMonth') : t('panel.components.upgrade.planCard.perYear') }}</span>
+                    <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">{{ billingCycle === 'month' ? t('panel.components.upgrade.planCard.perMonth') : t('panel.components.upgrade.planCard.perYear') }}</span>
                </span>
           </div>
 

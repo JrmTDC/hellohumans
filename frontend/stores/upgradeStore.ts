@@ -109,9 +109,10 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                const saved = JSON.parse(raw)
                selectedPlanId.value = saved.selectedPlanId
                billingCycle.value = saved.billingCycle
-
                for (const m of saved.modules || []) {
+
                     const mod = panelStore.availableModules.find((am) => am.id === m.id)
+
                     if (mod) {
                          mod.selected = m.selected
                          mod.selectedChoiceIndex = m.selectedChoiceIndex
