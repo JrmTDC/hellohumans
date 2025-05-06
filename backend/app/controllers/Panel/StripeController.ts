@@ -92,45 +92,60 @@ class StripeController {
                const desiredPriceIds = [planPriceId, ...modulePriceIds]
 
 
-               if (!subscription.stripe_subscription_id) {
-                    // Pas d’abonnement Stripe existant → on calcule manuellement les prix
+               if (!subscription || !subscription.stripe_subscription_id) {
+                    //const customerId = await ensureCustomer(client)
+                    const planPriceId   = await priceForPlan(plan_id, billing_cycle as BillingCycle)
+                    const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
+                    const desiredPriceIds = [planPriceId, ...modulePriceIds]
+
+                    // Récupération manuelle de tous les prix
                     const prices = await Promise.all(
-                         desiredPriceIds.map(id => stripe.prices.retrieve(id, {
-                              expand: ['product'],
-                         }))
+                         desiredPriceIds.map(id =>
+                              stripe.prices.retrieve(id, { expand: ['product'] })
+                         )
                     )
 
-                    const totalNow = prices.data.reduce((sum, price) => sum + price.unit_amount!, 0)
-                    const cycleNow = totalNow
+                    // Conversion cents → euros
+                    const euros = (amount?: number | null) => +((amount ?? 0) / 100).toFixed(2)
+
+                    const getPrice = (id: string) => prices.find(p => p.id === id)
+                    const planPrice = getPrice(planPriceId)
+                    const modulePrices = modulePriceIds.map(id => getPrice(id))
+
+                    const planChange = {
+                         id:               plan_id,
+                         effective_date:   new Date().toISOString(),
+                         effective_action: 'immediate',
+                         price_now:        euros(planPrice?.unit_amount),
+                         credit_amount:    0,
+                         price_cycle:      euros(planPrice?.unit_amount),
+                    }
+
+                    const modulesAdded = modules.map((id, idx) => {
+                         const price = modulePrices[idx]
+                         return {
+                              id,
+                              effective_date:   new Date().toISOString(),
+                              effective_action: 'immediate',
+                              price_now:        euros(price?.unit_amount),
+                              credit_amount:    0,
+                              price_cycle:      euros(price?.unit_amount),
+                         }
+                    })
+
+                    const totalNow = prices.reduce((sum, p) => sum + (p.unit_amount ?? 0), 0)
 
                     return response.ok({
-                         today_debit:   +(totalNow / 100).toFixed(2),
+                         today_debit:   euros(totalNow),
                          today_credit:  0,
-                         today_amount:  +(totalNow / 100).toFixed(2),
-                         cycle_amount:  +(cycleNow / 100).toFixed(2),
+                         today_amount:  euros(totalNow),
+                         cycle_amount:  euros(totalNow),
                          ends_at:       null,
                          is_new_subscription: true,
                          changes: {
-                              plan: {
-                                   id:               plan_id,
-                                   effective_date:   new Date().toISOString(),
-                                   effective_action: 'immediate',
-                                   price_now:        +(planPriceId ? (prices.data.find(p => p.id === planPriceId)?.unit_amount ?? 0) / 100 : 0).toFixed(2),
-                                   credit_amount:    0,
-                                   price_cycle:      +(planPriceId ? (prices.data.find(p => p.id === planPriceId)?.unit_amount ?? 0) / 100 : 0).toFixed(2),
-                              },
+                              plan: planChange,
                               modules: {
-                                   added: modules.map((id, idx) => {
-                                        const price = prices.data.find(p => p.id === modulePriceIds[idx])
-                                        return {
-                                             id,
-                                             effective_date: new Date().toISOString(),
-                                             effective_action: 'immediate',
-                                             price_now: +(price?.unit_amount ?? 0) / 100,
-                                             credit_amount: 0,
-                                             price_cycle: +(price?.unit_amount ?? 0) / 100,
-                                        }
-                                   })
+                                   added: modulesAdded
                               }
                          },
                          invoice_preview_id: null
