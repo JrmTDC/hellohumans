@@ -29,10 +29,22 @@ export const usePublicStore = defineStore('public', () => {
           publicReturn.value = null
           try {
                const { apiFetch } = usePublicApi()
-               await apiFetch('/auth/register', {
+               const res = await apiFetch('/auth/register', {
                     method: 'POST',
                     body: JSON.stringify({ email, password, displayName, accept_cg, lang })
                })
+               const token = res?.success?.token
+               if (!token) setApiError(publicReturn, token, 'panel.pages.register')
+
+               // Connexion manuelle à Supabase avec le token retourné
+               const { error } = await supabase.auth.setSession({
+                    access_token: token,
+                    refresh_token: token
+               })
+               if (error) {
+                    setApiError(publicReturn, error, 'panel.pages.register')
+                    return false
+               }
                return true
           } catch (err: any) {
                setApiError(publicReturn, err, 'panel.pages.register')
