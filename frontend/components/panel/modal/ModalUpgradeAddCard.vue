@@ -93,7 +93,7 @@ async function submit() {
      } catch (err: any) {
           error.value = err.message || 'Erreur inconnue'
      } finally {
-          loading.value = false // <-- IMPORTANT : on débloque même en cas d'erreur
+          loading.value = false
      }
 }
 </script>

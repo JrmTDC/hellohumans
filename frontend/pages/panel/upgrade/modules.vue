@@ -152,7 +152,7 @@ function handlePaymentClick() {
 
 function handlePaymentSuccess() {
      showPaymentModal.value = false
-     router.push('/panel/dashboard')
+     router.push('/panel/')
 }
 
 function goStep(step: number) {

@@ -1,5 +1,6 @@
-import type { RefSymbol } from '@vue/reactivity'
 import { defineStore } from 'pinia'
+import { loadStripe } from '@stripe/stripe-js'
+
 interface ProjectSubscription {
      status: 'active' | 'inactive' | 'canceled' | string
 }
@@ -73,6 +74,7 @@ export const usePanelStore = defineStore('panel', () => {
      const activities = ref<any[]>([])
      const stripe_setup_intent = ref<StripeSetupIntent | null>(null)
      const stripe_customer = ref<StripeCustomer | null>(null)
+     const config = useRuntimeConfig()
 
      const panelReturn = ref<string | null>(null)
 
@@ -341,48 +343,38 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
-     async function confirmUpgrade(): Promise<'free' | 'stripe'> {
-          const { selectedPlanId, selectedAddOns, billingCycle } = useUpgradeStore()
+     async function confirmUpgrade(paymentMethodId: string) {
+         const { selectedPlanId, selectedAddOns, billingCycle } = useUpgradeStore()
+          const stripe = await loadStripe(config.public.stripeKey!)
 
           const payload = {
-               project_id: project.value?.id,
                plan_id: selectedPlanId!,
-               modules: selectedAddOns || [],
-               billing_cycle: billingCycle || 'month'
+               modules: selectedAddOns.map((m) => typeof m === 'string' ? m : m.id),
+               billing_cycle: billingCycle,
+               payment_method_id: paymentMethodId,
           }
 
-          const res = await usePanelApi().apiFetch('/stripe/create-subscription', {
+          const res = await usePanelApi().apiFetch('/stripe/confirm-upgrade', {
                method: 'POST',
-               body: JSON.stringify(payload)
+               body: JSON.stringify(payload),
           })
 
-          if (!res.success) throw new Error('Erreur lors de la création de l’abonnement.')
+          if (!res.success) throw new Error('Erreur lors de la confirmation de l’abonnement.')
 
-          if (res.success.project.subscription.status === 'free') {
-               project.value = res.success.project
-               project_subscription.value = res.success.project.subscription
-               return 'free'
+          const { status, requiresAction, clientSecret } = res.success
+
+          if (!stripe) throw new Error('Stripe non initialisé')
+
+          if (requiresAction && clientSecret) {
+               const result = await stripe.confirmCardPayment(clientSecret)
+               if (result.error) throw new Error(result.error.message)
           }
 
-          if (res.success.subscription.status === 'active' && res.success.stripe.client_secret) {
-               // Paiement via Stripe
-               /*
-               const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!)
-
-               const result = await stripe?.confirmCardPayment(res.stripe.client_secret, {
-                    payment_method: {
-                         card: elements.getElement(CardElement)!
-                    }
-               })
-
-               if (result?.error) {
-                    throw new Error(result.error.message)
-               }
-               */
-               return 'stripe'
+          return {
+               clientSecret,
+               requiresAction,
+               status
           }
-
-          throw new Error('Type d’abonnement non géré.')
      }
 
      async function logout() {

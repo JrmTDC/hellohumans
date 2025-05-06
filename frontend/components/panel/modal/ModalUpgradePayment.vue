@@ -92,6 +92,7 @@
      <PanelModalUpgradeAddCard v-if="showAddCard" @close="showAddCard = false" @added="refreshCard" />
 </template>
 <script setup lang="ts">
+import { loadStripe } from '@stripe/stripe-js'
 const { t } = useI18n()
 const emit = defineEmits(['close', 'submit'])
 const upgradeStore = useUpgradeStore()
@@ -111,7 +112,7 @@ const cycleAmount = ref(0)
 const loading = ref(false)
 const loadingAmount = ref(true)
 const subscriptionEndsAt = ref<Date | null>(null)
-
+const config = useRuntimeConfig()
 
 const handleClose = () => {
      if (!loading.value) emit('close')
@@ -209,21 +210,45 @@ const isDisabled = computed(() => {
 })
 
 async function submitUpgrade() {
-     if (selectedPaymentMethod.value === 'new') {
+     if (!selectedPaymentMethod.value || selectedPaymentMethod.value === 'new') {
           showAddCard.value = true
           return
      }
 
+     loading.value = true
+
      try {
-          /*
-          const result = await panelStore.confirmUpgrade(selectedPaymentMethod.value)
-          if (result === 'stripe' || result === 'free') {
-               emit('submit')
+          // Appel backend
+          const res = await panelStore.confirmUpgrade(selectedPaymentMethod.value)
+
+          if (res.requiresAction && res.clientSecret) {
+               const stripe = await loadStripe(config.public.stripeKey!)
+
+               if (!stripe) {
+                    throw new Error('Impossible de charger Stripe')
+               }
+
+               const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(res.clientSecret)
+
+               if (stripeError) {
+                    console.error('Erreur Stripe:', stripeError)
+                    // Gérer l’erreur, afficher un message, etc.
+                    return
+               }
+
+               if (paymentIntent.status === 'succeeded') {
+                    emit('submit') // succès
+               } else {
+                    console.warn('Le paiement n’a pas pu être validé :', paymentIntent.status)
+               }
+          } else if (res.status === 'active') {
+               emit('submit') // abonnement déjà validé sans action requise
           }
 
-           */
      } catch (e: any) {
           console.error(e)
+     } finally {
+          loading.value = false
      }
 }
 </script>
