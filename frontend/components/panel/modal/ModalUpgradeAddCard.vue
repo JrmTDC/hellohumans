@@ -55,7 +55,6 @@ onMounted(async () => {
           paymentElement.value = elementsInstance.create('payment')
           paymentElement.value.mount(paymentElementRef.value!)
           showBottomButton.value = true
-
      } catch (e) {
           error.value = 'Erreur pendant l’initialisation.'
           console.error(e)
@@ -93,6 +92,8 @@ async function submit() {
           handleClose()
      } catch (err: any) {
           error.value = err.message || 'Erreur inconnue'
+     } finally {
+          loading.value = false // <-- IMPORTANT : on débloque même en cas d'erreur
      }
 }
 </script>
