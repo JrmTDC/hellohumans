@@ -17,7 +17,7 @@
                                    <input
                                         type="checkbox"
                                         role="switch"
-                                        class="absolute w-px h-px m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
+                                        class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
                                         :checked="checked"
                                         :disabled="isIncluded || module.comingSoon"
                                         @change="toggle(true)"
@@ -30,7 +30,7 @@
                                    <input
                                         type="checkbox"
                                         role="switch"
-                                        class="absolute w-px h-px m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
+                                        class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
                                         :checked="checked"
                                         :disabled="isIncluded || module.comingSoon"
                                         @change="toggle(false)"
@@ -108,7 +108,7 @@
                               <input
                                    type="checkbox"
                                    role="switch"
-                                   class="absolute w-px h-px m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
+                                   class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
                                    :checked="checked"
                                    :disabled="false"
                                    @change="toggle(true)"
@@ -122,7 +122,7 @@
                               <input
                                    type="checkbox"
                                    role="switch"
-                                   class="absolute w-px h-px m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
+                                   class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
                                    :checked="checked"
                                    :disabled="false"
                                    @change="toggle(false)"
