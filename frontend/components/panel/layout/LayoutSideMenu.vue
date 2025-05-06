@@ -8,7 +8,7 @@
                     <div class="flex flex-col justify-start items-[normal] min-w-0 ml-[12px]">
                          <div class="font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap mt-0 mb-0">
                               {{ userDisplayName }}</div>
-                         <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.components.layout.sideMenu.planLabel') }}</div>
+                         <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ userEmail }}</div>
                     </div>
                </div>
 
@@ -65,7 +65,11 @@ const currentLangLabel = computed(() => {
 })
 
 const userDisplayName = computed(() => {
-     return panelStore.user?.email || 'Utilisateur inconnu'
+     return panelStore.user?.display_name || 'Utilisateur inconnu'
+})
+
+const userEmail = computed(() => {
+     return panelStore.user?.email || 'Email inconnu'
 })
 
 const currentProjectName = computed(() => {

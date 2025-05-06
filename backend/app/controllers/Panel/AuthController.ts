@@ -111,7 +111,8 @@ class AuthController {
                     .insert({
                          auth_id: auth_id,
                          lang,
-                         email
+                         email,
+                         display_name: displayName
                     })
                     .select()
                     .single()

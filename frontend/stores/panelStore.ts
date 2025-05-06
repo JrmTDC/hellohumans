@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
 import { loadStripe } from '@stripe/stripe-js'
 
+interface User{
+     id: string;
+     email: string;
+     lang:string;
+     selected_project_uuid:string;
+     blocked:boolean;
+     display_name:string;
+}
 interface ProjectSubscription {
      status: 'active' | 'inactive' | 'canceled' | string
 }
@@ -9,6 +17,7 @@ interface Project {
      id: string
      name: string
      subscription?: ProjectSubscription | null
+     website: string
 }
 interface UpgradePreviewResponse {
      today_amount: number
@@ -61,7 +70,7 @@ interface StripeCustomer {
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
-     const user = ref<{ id: string; email: string; lang:string; selected_project_uuid:string; blocked:boolean; } | null>(null)
+     const user = ref<User | null>(null)
      const client = ref<{ id: string } | null>(null)
      const project = ref<Project | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])

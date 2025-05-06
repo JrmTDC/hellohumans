@@ -29,6 +29,7 @@ class UserController {
                          email: auth?.user?.email,
                          lang: user.lang,
                          selected_client_id: user.selected_client_id,
+                         display_name: user.display_name,
                          blocked: user.blocked
                     }
                }
