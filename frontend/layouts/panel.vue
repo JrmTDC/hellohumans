@@ -55,15 +55,11 @@ onMounted(async () => {
 
      try {
           if(!isAccountBlocked.value){
-
                const isStartPage = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
-               if(!isStartPage){
-                    await panelStore.initPanelData()
-               }
-
-               const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
-               if (isUpgradePage) {
+               if(isStartPage){
                     await panelStore.fetchUpgrade()
+               }else{
+                    await panelStore.initPanelData()
                }
           }
           return
