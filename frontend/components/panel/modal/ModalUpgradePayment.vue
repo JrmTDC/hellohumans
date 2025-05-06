@@ -77,7 +77,7 @@
                     <!-- Actions -->
                     <div class="mt-6 flex justify-between">
                          <button @click="emit('close')" class="text-[#647491] hover:underline">Annuler</button>
-                         <button @click="submitUpgrade" class="px-6 py-2 rounded-md" :class="loading || loadingAmount || paymentMethodLoading ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd] text-[#fff]'" :disabled="loading || loadingAmount || paymentMethodLoading" > Confirmer </button>
+                         <button @click="submitUpgrade" class="px-6 py-2 rounded-md" :class="isDisabled ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd] text-[#fff]'" :disabled="isDisabled" > Confirmer </button>
                     </div>
 
                </div>
@@ -190,8 +190,23 @@ async function refreshCard() {
      paymentMethodLoading.value = true
      await fetchPaymentMethods()
      showAddCard.value = false
+
+     // Réactiver par défaut la première carte si ajoutée
+     if (paymentMethods.value.length > 0) {
+          selectedPaymentMethod.value = paymentMethods.value[0].id
+     }
+
      paymentMethodLoading.value = false
 }
+
+const isDisabled = computed(() => {
+     return (
+          loading.value ||
+          loadingAmount.value ||
+          paymentMethodLoading.value ||
+          !selectedPaymentMethod.value
+     )
+})
 
 async function submitUpgrade() {
      if (selectedPaymentMethod.value === 'new') {
