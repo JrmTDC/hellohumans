@@ -164,6 +164,7 @@ export const usePanelStore = defineStore('panel', () => {
                modules.value = usagesRes.modules || []
                return true
           } catch (err: any) {
+               console.error('[initPanelData] Erreur :', err)
                await logout()
                return false
           }
