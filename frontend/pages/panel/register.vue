@@ -232,6 +232,9 @@ const handleRegister = async () => {
 
      loading.value = false
 }
+onMounted(() => {
+     localStorage.removeItem('onboardingStore')
+})
 const { setMeta } = usePanelPageMeta()
 setMeta({
      title: t('panel.pages.register.metaTitle'),

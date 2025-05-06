@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { User, Session } from '@supabase/supabase-js'
 
 export const usePublicStore = defineStore('public', () => {
      const supabase = useSupabaseClient()
+     const panelStore = usePanelStore()
 
      const publicReturn = ref<string | null>(null)
      // Connexion
@@ -25,6 +25,7 @@ export const usePublicStore = defineStore('public', () => {
 
      // Inscription
      const register = async (email: string, password: string, displayName: string, accept_cg: boolean, lang: string) => {
+          await panelStore.logout()
           publicReturn.value = null
           try {
                const { apiFetch } = usePublicApi()
