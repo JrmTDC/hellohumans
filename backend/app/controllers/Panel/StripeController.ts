@@ -140,7 +140,7 @@ class StripeController {
 
                     const totalNow = prices.reduce((sum, p) => sum + (p.unit_amount ?? 0), 0)
 
-                    return response.ok({
+                    return ctx.response.ok({
                          today_debit:   euros(totalNow),
                          today_credit:  0,
                          today_amount:  euros(totalNow),
