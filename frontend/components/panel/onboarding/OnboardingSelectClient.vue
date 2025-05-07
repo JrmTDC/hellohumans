@@ -97,7 +97,16 @@ const emit = defineEmits<{
 }>()
 
 const isOpen = ref(false)
-const createMode = ref(false)
+const store = useOnboardingStore()
+const createMode = computed({
+     get: () => store.createMode,
+     set: (value) => {
+          store.createMode = value
+          if (!value) {
+               emit('update:modelValue', null)
+          }
+     }
+})
 const dropdownRef = ref<HTMLElement | null>(null)
 const onboardingStore = useOnboardingStore()
 let skipNextClick = true
@@ -116,13 +125,14 @@ const toggleOpen = () => {
 const selectClient = (id: string) => {
      emit('update:modelValue', id)
      isOpen.value = false
-     createMode.value = false
+     store.createMode = false
      organizationName.value = ''
+     organizationType.value = ''
 }
 
 const enableCreateMode = () => {
      emit('update:modelValue', null) // Reset valeur
-     createMode.value = true
+     store.createMode = true
      isOpen.value = false
 }
 
@@ -151,7 +161,7 @@ onMounted(() => {
 
      // Si aucun client + un nom en cours = on force createMode
      if (props.clients.length === 0 || organizationName.value.trim().length > 0) {
-          createMode.value = true
+          store.createMode = true
           emit('update:modelValue', null)
      }
 })
@@ -162,8 +172,9 @@ onBeforeUnmount(() => {
 watch(() => props.modelValue, (val) => {
      if (val) {
           // Si on a sélectionné un vrai client, on quitte le mode création
-          createMode.value = false
+          store.createMode = false
           organizationName.value = ''
+          organizationType.value = ''
      }
 })
 </script>
