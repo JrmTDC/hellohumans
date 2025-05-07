@@ -43,8 +43,8 @@ class UpgradeController {
 
                const plans = data.map((plan) => ({
                     id: plan.id,
-                    name: plan.name?.[lang] || plan.name?.['fr'] || 'Sans nom',
-                    description: plan.description?.[lang] || plan.description?.['fr'] || '',
+                    name: plan.name?.[lang] || plan.name?.['en'] || 'No name',
+                    description: plan.description?.[lang] || plan.description?.['en'] || '',
                     monthlyPrice: Number(plan.monthlyPrice),
                     discountMonths: plan.discountMonths || 0,
                     includedFeatures: plan.includedFeatures?.[lang] || [],

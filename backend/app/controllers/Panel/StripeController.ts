@@ -7,9 +7,11 @@ import {
      BillingCycle,
      stripe
 } from '#services/stripeService'
+import supabaseService from '#services/supabaseService'
 import vine from '@vinejs/vine'
 
 class StripeController {
+
      /**
       * Crée un SetupIntent pour ajouter une nouvelle carte
       */
@@ -75,25 +77,28 @@ class StripeController {
      /**
       * Prévisualise la mise à niveau d'un abonnement
       */
-     public async previewUpgrade({ client, subscription, request, response }: HttpContext) {
+     //     public async previewUpgrade({ client, subscription, request, response }: HttpContext) {
+
+     public async previewUpgrade(ctx: HttpContext) {
           try {
+               
                /* ---- Validation ---- */
                const schema = vine.object({
                     plan_id: vine.string(),
                     modules: vine.array(vine.string()).optional(),
                     billing_cycle: vine.enum(['month', 'year']),
                })
-               const { plan_id, modules = [], billing_cycle } = await vine.compile(schema).validate(request.all())
+               const { plan_id, modules = [], billing_cycle } = await vine.compile(schema).validate(ctx.request.all())
 
                /* ---- Prix ---- */
-               const customerId = await ensureCustomer(client)
+               const customerId = await ensureCustomer(ctx.client)
                const planPriceId   = await priceForPlan(plan_id, billing_cycle as BillingCycle)
                const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
                const desiredPriceIds = [planPriceId, ...modulePriceIds]
 
 
-               if (!subscription || !subscription.stripe_subscription_id) {
-                    //const customerId = await ensureCustomer(client)
+               if (!ctx.subscription || !ctx.subscription.stripe_subscription_id) {
+                    //const customerId = await ensureCustomer(ctx.client)
                     const planPriceId   = await priceForPlan(plan_id, billing_cycle as BillingCycle)
                     const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
                     const desiredPriceIds = [planPriceId, ...modulePriceIds]
@@ -164,7 +169,7 @@ class StripeController {
                     recurringByPrice,
                } = await getUpcomingInvoicePreview(
                     customerId,
-                    subscription.stripe_subscription_id,
+                    ctx.subscription.stripe_subscription_id,
                     desiredPriceIds,
                )
 
@@ -179,8 +184,24 @@ class StripeController {
                const planProrata   = debitByPrice [planPriceId] ?? 0
                const planCreditRaw = creditByPrice[planPriceId] ?? 0
 
+               const { data: planData, error: planError } = await supabaseService
+                    .from('subscription_plans')
+                    .select('name')
+                    .eq('id', plan_id)
+                    .single()
+
+               if (planError || !planData?.name) {
+                    console.error('Erreur récupération plan:', planError)
+                    return ctx.response.internalServerError({
+                         error: { name: 'supabaseError', description: 'Erreur lors de la récupération du plan.' },
+                    })
+               }
+
+               const planName = planData.name[ctx.user?.lang] || planData.name['en'] || 'Unknown plan'
+
                const planChange = {
                     id:               plan_id,
+                    name:             planName,
                     effective_date:   new Date().toISOString(),
                     effective_action: buildAction(planProrata, planCreditRaw),
                     price_now:        euros(planProrata),
@@ -189,11 +210,25 @@ class StripeController {
                }
 
                /* ------- modules ajoutés ------- */
+               const { data: modulesData, error: modulesError } = await supabaseService
+                    .from('subscription_modules')
+                    .select('id, name')
+                    .in('id', modules)
+
+               if (modulesError) {
+                    console.error('Erreur récupération modules:', modulesError)
+               }
+
                const modulesAdded = modulePriceIds.map((priceId, idx) => {
                     const prorata = debitByPrice [priceId] ?? 0
                     const credit  = creditByPrice[priceId] ?? 0
+                    const moduleName = modulesData?.find(m => m.id === modules[idx])?.name[ctx.user?.lang] || 
+                                      modulesData?.find(m => m.id === modules[idx])?.name['en'] || 
+                                      `Unknown module`
+
                     return {
                          id:               modules[idx],
+                         name:             moduleName,
                          effective_date:   new Date().toISOString(),
                          effective_action: buildAction(prorata, credit),
                          price_now:        euros(prorata),
@@ -203,13 +238,13 @@ class StripeController {
                })
 
                /* ------- réponse ------- */
-               return response.ok({
+               return ctx.response.ok({
                     today_debit:   euros(totalDebit),
                     today_credit:  euros(totalCredit),
                     today_amount:  euros(totalAmount),
                     cycle_amount:  euros(recurringAmount),
-                    ends_at:       subscription.current_period_end
-                         ? new Date(subscription.current_period_end * 1000)
+                    ends_at:       ctx.subscription.current_period_end
+                         ? new Date(ctx.subscription.current_period_end * 1000)
                          : null,
                     is_new_subscription: false,
                     changes: {
@@ -220,7 +255,7 @@ class StripeController {
                })
           } catch (e: any) {
                console.error('[previewUpgrade]', e)
-               return response.badRequest({
+               return ctx.response.badRequest({
                     error: {
                          name: e.type ?? 'preview_error',
                          message: e.message ?? 'Impossible de pré-visualiser la facture',

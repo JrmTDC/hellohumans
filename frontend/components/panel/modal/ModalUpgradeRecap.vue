@@ -20,11 +20,11 @@
                          <div class="text-[12px] text-[#647491] font-medium uppercase">{{ t('panel.components.modal.upgradeRecap.titleModule') }}</div> 
                     <!-- MODULES AJOUTÉS -->
                     <div v-if="changes.modules.added.length" class="mb-2">
-                         <div v-for="m in changes.modules.added" :key="m.id"
+                         <div v-for="(m, index) in changes.modules.added" :key="m.id" :class="index < changes.modules.added.length - 1 ? 'border-b border-b-[#d3dbe5] border-dashed' : ''"
                               class="flex justify-between items-center py-1 text-sm">
                               <div class="flex items-center gap-2">
                                    <svgo-panel-icon-add class="w-[16px] h-[16px] fill-[#0566ff]" />
-                                   <span>Module <b>{{ m.id }}</b></span>
+                                   <span>{{ m.name }}</span>
                               </div>
                               <div class="text-right">
                                    <span class="block">{{ money(m.price_now) }} €</span>
@@ -35,11 +35,11 @@
 
                     <!-- MODULES RETIRÉS  (crédits) -->
                     <div  class="mb-2">
-                         <div v-for="m in changes.modules.removed" :key="m.id"
-                              class="flex justify-between items-center py-1 text-sm">
+                         <div v-for="(m, index) in changes.modules.removed" :key="m.id"
+                              :class="index < changes.modules.removed.length - 1 ? 'border-b border-b-[#d3dbe5] border-dashed' : ''" class="flex justify-between items-center py-1 text-sm">
                               <div class="flex items-center gap-2">
                                    <!-- <svgo-panel-icon-remove class="w-[14px] h-[14px] fill-[#e14b4b]" /> -->
-                                   <span>Module <b>{{ m.id }}</b></span>
+                                   <span>{{ m.name }}</span>
                               </div>
                               <div class="text-right text-[#e14b4b]">
                                    <span class="block">{{ money(m.price_now) }} €</span>
