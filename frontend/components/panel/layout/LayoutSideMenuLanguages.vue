@@ -22,7 +22,6 @@ const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)'
 const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const selectLanguage = async (code: string) => {
      if (code !== locale.value) {
-          //layoutLoadingPanel.value = true
           await panelStore.updateUserLang(code)
           await router.push('/panel')
      }

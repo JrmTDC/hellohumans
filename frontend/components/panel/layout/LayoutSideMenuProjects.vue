@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const router = useRouter()
 const panelStore = usePanelStore()
 const emit = defineEmits(['open-create-project','close'])
 const projectMenuRef = ref()
@@ -35,9 +36,8 @@ const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)'
 const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const selectProject = async (uuid: string) => {
      if (uuid !== selectedProject.value) {
-          layoutLoadingPanel.value = true
           await panelStore.switchProject(uuid)
-          location.reload()
+          await router.push('/panel')
      }
      emit('close')
 }

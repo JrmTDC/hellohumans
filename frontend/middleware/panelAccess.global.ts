@@ -2,7 +2,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
      const isAccountBlocked = useState('isAccountBlocked', () => false)
      const isStopped = useState('isStopped', () => false)
 
-     if (to.meta.layout === 'panel') {
+     if (to.meta.layout === 'panel' || to.meta.layout === 'base' ) {
           const panelStore = usePanelStore()
 
           try {
