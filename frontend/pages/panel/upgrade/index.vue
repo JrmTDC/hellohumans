@@ -128,8 +128,6 @@ function goStep(step: number) {
           if (upgradeStore.selectedPlanId) {
                router.push('/panel/upgrade/modules')
           }
-     } else if (step === 3) {
-          // ...
      }
 }
 

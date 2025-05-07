@@ -152,7 +152,7 @@ function handlePaymentClick() {
 
 function handlePaymentSuccess() {
      showPaymentModal.value = false
-     router.push('/panel/')
+     router.push('/panel/upgrade/confirmation')
 }
 
 function goStep(step: number) {

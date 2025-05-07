@@ -206,6 +206,14 @@
                          "nextButtonLabel": "Paiement",
                          "metaTitle": "Ajoutez des modules complémentaires",
                          "metaDescription": "Personnalisez votre offre avec des fonctionnalités avancées adaptées à votre entreprise."
+                    },
+                    "confirmation": {
+                         "title": "Paiement réussi !",
+                         "description": "La modification de votre abonnement peut prendre quelques secondes pour s’activer.",
+                         "message": "Merci d’avoir choisi Hellohumans.",
+                         "cta": "Aller au dashboard",
+                         "metaTitle": "Confirmation de votre abonnement",
+                         "metaDescription": "Votre paiement a été validé avec succès."
                     }
                },
                "settings": {
@@ -250,7 +258,7 @@
                          "title": "Oups, un problème est survenu.",
                          "instruction": "Appuyez sur le bouton pour recharger la page :",
                          "reload": "Recharger la page",
-                         "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
+                         "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à ",
                          "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :",
                          "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème.",
                          "metaTitle": "Erreur serveur",

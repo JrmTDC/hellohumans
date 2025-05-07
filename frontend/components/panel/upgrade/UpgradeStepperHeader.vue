@@ -62,9 +62,7 @@ const { t } = useI18n()
 const panelStore = usePanelStore()
 const subStatus = panelStore.project?.subscription?.status || 'inactive'
 const buttonClose = ref(false)
-if (!['inactive'].includes(subStatus)) {
-     buttonClose.value = true
-}
+
 const props = defineProps({
      step: {
           type: Number,
@@ -73,4 +71,15 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['goStep', 'close'])
+
+const hasCloseListener = computed(() => {
+     const instance = getCurrentInstance()
+     return !!(instance?.vnode.props?.onClose)
+})
+
+watchEffect(() => {
+     buttonClose.value = !['inactive'].includes(subStatus) && hasCloseListener.value
+})
+
+
 </script>
