@@ -29,7 +29,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
                // Si l’abonnement est manquant ou inactif → upgrade
                const subStatus = panelStore.project.subscription?.status || 'inactive'
-               const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules'].includes(to.path)
+               const isUpgradePage = ['/panel/upgrade', '/panel/upgrade/modules', '/panel/upgrade/confirmation'].includes(to.path)
 
                if (['inactive'].includes(subStatus)) {
                     isStopped.value = true

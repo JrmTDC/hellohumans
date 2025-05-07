@@ -27,8 +27,12 @@ const panelStore = usePanelStore()
 const upgradeStore = useUpgradeStore()
 const router = useRouter()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
+const subscriptionPaiement = useState('subscriptionPaiement')
 
 onMounted(async () => {
+     if(!subscriptionPaiement.value) {
+          await router.push('/panel/upgrade')
+     }
      layoutLoadingPanel.value = false
 })
 

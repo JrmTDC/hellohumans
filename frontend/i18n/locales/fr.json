@@ -421,7 +421,10 @@
                          "AddPaymentMethode": "Ajouter une méthode de paiement",
                          "SelectCreditCard": "Sélectionner une carte de crédit",
                          "ChargeCycleMonth": "Frais mensuelle",
-                         "ChargeCycleYear": "Frais annuelle"
+                         "ChargeCycleYear": "Frais annuelle",
+                         "btnCancel": "Annuler",
+                         "btnConfirm": "Confirmer",
+                         "processing": "Traitement en cours..."
                     },
                     "upgradeRecap" : {
                          "titleOffer": "Offre",
