@@ -1,5 +1,5 @@
 <template>
-     <PanelModalBaseAddCard :title="t('panel.components.modal.upgradeAddCard.title')" @close="handleClose">
+     <PanelModalBaseMini :title="t('panel.components.modal.upgradeAddCard.title')" @close="handleClose">
           <form @submit.prevent="submit">
                <div class="py-4 px-4 md:px-5">
                     <div ref="paymentElementRef" />
@@ -14,7 +14,7 @@
                     </button>
                </div>
           </form>
-     </PanelModalBaseAddCard>
+     </PanelModalBaseMini>
 </template>
 
 <script setup lang="ts">
