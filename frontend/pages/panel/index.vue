@@ -3,11 +3,6 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-const router = useRouter()
-
-onMounted(async () => {
-     await router.replace('/panel/dashboard')
-})
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
 setMeta({
@@ -17,6 +12,6 @@ setMeta({
 pageMenuPanel.value = false
 
 definePageMeta({
-     layout: 'panel'
+     layout: 'base'
 })
 </script>

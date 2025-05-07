@@ -23,9 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { usePanelStore } from '~/stores/panelStore'
-import {onMounted} from "vue";
-
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const emit = defineEmits(['open-create-project','close'])

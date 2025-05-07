@@ -68,12 +68,20 @@ const router = useRouter()
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), route: '/panel/integrations', tooltip: t('panel.components.layout.menuNavPage.integrations') },
  */
 const menuItems = ref([
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard') },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis') },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: t('panel.components.layout.menuNavPage.analytics') },
-     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: t('panel.components.layout.menuNavPage.settings') },
-     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), route: null, tooltip: t('panel.components.layout.menuNavPage.account') }
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), route: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard'), tooltipKey: 'panel.components.layout.menuNavPage.dashboard' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), route: '/panel/', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis'), tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), route: '/panel/analytics/', tooltip: t('panel.components.layout.menuNavPage.analytics'), tooltipKey: 'panel.components.layout.menuNavPage.analytics' },
+     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), route: '/panel/settings/chat/appearance', tooltip: t('panel.components.layout.menuNavPage.settings'), tooltipKey: 'panel.components.layout.menuNavPage.settings' },
+     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), route: null, tooltip: t('panel.components.layout.menuNavPage.account'), tooltipKey: 'panel.components.layout.menuNavPage.account' }
 ])
+
+// Watch pour mettre à jour les tooltips lors du changement de langue
+watch(() => t('panel.components.layout.menuNavPage.dashboard'), () => {
+     menuItems.value = menuItems.value.map(item => ({
+         ...item,
+         tooltip: t(item.tooltipKey)
+     }))
+})
 
 
 // Séparer les éléments "top" et "bottom"

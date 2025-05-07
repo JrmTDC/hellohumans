@@ -50,10 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { usePanelStore } from '~/stores/panelStore'
-import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const router = useRouter()
