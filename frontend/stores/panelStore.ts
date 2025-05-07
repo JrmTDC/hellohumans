@@ -369,7 +369,7 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
-     async function confirmUpgrade(paymentMethodId: string) {
+     async function confirmUpgrade(paymentMethodId: string | null = null ) {
          const { selectedPlanId, selectedAddOns, billingCycle } = useUpgradeStore()
           const stripe = await loadStripe(config.public.stripeKey!)
 

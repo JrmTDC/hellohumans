@@ -64,7 +64,6 @@
                     <PanelModalUpgradePayment
                          v-if="showPaymentModal"
                          @close="showPaymentModal = false"
-                         @submit="handlePaymentSuccess"
                     />
                </div>
           </div>
@@ -148,11 +147,6 @@ function goNext() {
 function handlePaymentClick() {
      if (!upgradeStore.canValidateUpgrade) return
      showPaymentModal.value = true
-}
-
-function handlePaymentSuccess() {
-     showPaymentModal.value = false
-     router.push('/panel/upgrade/confirmation')
 }
 
 function goStep(step: number) {

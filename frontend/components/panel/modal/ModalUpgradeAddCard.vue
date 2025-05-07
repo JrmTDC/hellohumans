@@ -63,7 +63,6 @@ onMounted(async () => {
           
           // Ajouter un listener pour détecter quand l'élément est prêt
           paymentElement.value.on('ready', () => {
-               console.log('Stripe PaymentElement est prêt')
                showBottomButton.value = true
           })
 
