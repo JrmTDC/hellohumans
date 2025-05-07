@@ -230,4 +230,32 @@ export default class MailService {
                     .html(html)
           })
      }
+
+     static async sendRapportEmail(user:any, rapport_data:any) {
+          const t = i18nManager.locale('fr')
+          const logoHellohumans = await svgToBase64DataUrl('assets/svg/mail/logoRapportEmail.svg')
+
+          const html = await edge.render('support_rapport', {
+               subject: 'Un nouvel incident a été signalé',
+               user_email: user.email,
+               user_name: user.display_name,
+               user_id: user.id,
+               type: rapport_data.type,
+               description: rapport_data.description,
+               screenshot: rapport_data.screenshot,
+               device_name: rapport_data.device_name,
+               page_url: rapport_data.page_url,
+               color_line_header: '#f30000',
+               color_svg_header: '#f30000',
+               image_svg_header: logoHellohumans,
+     })
+
+          await mail.send((message) => {
+               message
+                    .from('no-reply@hellohumans.fr')
+                    .to('support@hellohumans.fr')
+                    .subject('❗ Un nouvel incident a été signalé')
+                    .html(html)
+          })
+     }
 }

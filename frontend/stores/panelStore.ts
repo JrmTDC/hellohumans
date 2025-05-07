@@ -403,6 +403,22 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function reportIssue(data: Record<string, any>) {
+          const { apiFetch } = usePanelApi()
+          const payload = {
+               type: data.type,
+               description: data.description,
+               screenshot: data.screenshot,
+               device_name: navigator.userAgent,
+               page_url: window.location.href
+          }
+          const res = await apiFetch('/report-issue', {
+               method: 'POST',
+               body: JSON.stringify(payload),
+          })
+          return res.success
+     }
+
      async function logout() {
           user.value = null
           project_usages.value = []
@@ -439,6 +455,7 @@ export const usePanelStore = defineStore('panel', () => {
           fetchListActivity,
           createOnboarding,
           confirmUpgrade,
+          reportIssue,
           fetchUpgrade,
           fetchPlans,
           fetchModules,

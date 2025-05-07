@@ -45,12 +45,9 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-import { ref } from 'vue'
-import { usePanelApi } from '~/composables/usePanelApi'
-
+const panelStore = usePanelStore()
 const emit = defineEmits<{
      (e: 'close'): void
-     (e: 'submitted'): void
 }>()
 
 const description = ref('')
@@ -69,18 +66,13 @@ function handleClose() {
 async function onSubmit() {
      if (!description.value || !type.value) return
      submitting.value = true
-     const { apiFetch } = usePanelApi()
-     const form = new FormData()
-     form.append('description', description.value)
-     form.append('type', type.value)
-     if (file.value) form.append('screenshot', file.value)
-
+     const rapportData = {
+          description: description.value,
+          type: type.value,
+          screenshot: file.value ? file.value.name : null
+     }
      try {
-          await apiFetch('/support/report-issue', {
-               method: 'POST',
-               body: form
-          })
-          emit('submitted')
+          await panelStore.reportIssue(rapportData)
           emit('close')
      } catch {
           // gérer erreur si besoin
