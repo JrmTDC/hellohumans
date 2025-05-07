@@ -29,7 +29,7 @@ class SubscriptionController {
                          plan_id,
                          modules,
                          billing: billing_cycle,
-                         paymentMethodId: payment_method_id,
+                         paymentMethodId: payment_method_id || null,
                     })
                } else {
                     subStripe = await updateSubscription({
@@ -37,7 +37,7 @@ class SubscriptionController {
                          plan_id,
                          modules,
                          billing: billing_cycle,
-                         paymentMethodId: payment_method_id,
+                         paymentMethodId: payment_method_id || null,
                     })
                }
 
