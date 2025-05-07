@@ -237,8 +237,14 @@ onMounted(() => {
      localStorage.removeItem('upgradeStore')
 })
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.register.metaTitle'),
-     description: t('panel.pages.register.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.register.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.register.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>

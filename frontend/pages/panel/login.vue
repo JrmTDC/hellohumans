@@ -136,8 +136,14 @@ onMounted(() => {
 })
 
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.login.metaTitle'),
-     description: t('panel.pages.login.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.login.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.login.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>

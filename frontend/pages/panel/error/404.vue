@@ -32,9 +32,14 @@ const goHome = () => {
      router.push(isPanel.value ? '/panel' : '/')
 }
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.error.unauthorized.metaTitle'),
-     description: t('panel.pages.error.unauthorized.metaDescription')
+const pageTitle = computed(() => t('panel.pages.error.unauthorized.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.error.unauthorized.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>
 

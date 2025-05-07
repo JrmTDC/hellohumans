@@ -142,6 +142,7 @@
 
                },
                "analytics": {
+                    "pageTitle": "Analytique",
                     "index" : {
                          "menuLabel": "Vue d’ensemble",
                          "heading": "Vue d’ensemble",
@@ -172,6 +173,7 @@
                },
                "gettingStarted": {
                     "index": {
+                         "pageTitle": "Bien démarrer",
                          "metaTitle": "Commencez avec HelloHumans",
                          "metaDescription": "Configurez rapidement votre espace pour profiter pleinement des fonctionnalités d’HelloHumans dès aujourd’hui."
                     }
@@ -207,6 +209,7 @@
                     }
                },
                "settings": {
+                    "pageTitle": "Paramètres",
                     "index": {
                          "metaTitle": "Paramètres",
                          "metaDescription": "Accédez à l’ensemble des paramètres de votre compte."
@@ -232,7 +235,7 @@
                               "metaTitle": "Traductions",
                               "metaDescription": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
                               "menuLabel": "Traductions"
-                         },
+                         }
                     }
                },
                "error": {

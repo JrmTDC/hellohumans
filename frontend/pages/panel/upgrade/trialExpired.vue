@@ -102,10 +102,17 @@ onMounted(async () => {
 })
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.trialExpired.megaTitle'),
-     description: t('panel.pages.trialExpired.megaDescription')
+
+const pageTitle = computed(() => t('panel.pages.trialExpired.megaTitle'));
+const pageDescription = computed(() => t('panel.pages.trialExpired.megaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
+
 pageMenuPanel.value = false
 
 definePageMeta({

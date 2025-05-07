@@ -91,6 +91,7 @@ watchEffect(() => {
 watch(() => t('panel.pages.dashboard.pageTitle'), (newValue) => {
      pageHeaderTitle.value = newValue
 })
+pageHeaderTitle.value = t('panel.pages.dashboard.pageTitle')
 pageHeaderBilled.value = false
 pageHeaderPaid.value = false
 pageMenuPanel.value = true

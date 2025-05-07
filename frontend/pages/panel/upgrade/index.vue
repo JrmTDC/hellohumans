@@ -138,10 +138,17 @@ function closePanel() {
 }
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.upgrade.index.metaTitle'),
-     description: t('panel.pages.upgrade.index.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.upgrade.index.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.upgrade.index.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
+
 pageMenuPanel.value = false
 
 definePageMeta({

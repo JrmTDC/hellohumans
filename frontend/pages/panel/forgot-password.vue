@@ -139,8 +139,14 @@ const handleForgot = async () => {
 }
 
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.forgotPassword.metaTitle'),
-     description: t('panel.pages.forgotPassword.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.forgotPassword.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.forgotPassword.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>

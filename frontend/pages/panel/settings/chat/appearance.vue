@@ -141,11 +141,21 @@ onMounted(async () => {
 })
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.settings.chat.appearance.metaTitle'),
-     description: t('panel.pages.settings.chat.appearance.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.settings.chat.appearance.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.settings.chat.appearance.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
-pageHeaderTitle.value = 'Paramètres'
+
+watch(() => t('panel.pages.settings.pageTitle'), (newValue) => {
+     pageHeaderTitle.value = newValue
+})
+pageHeaderTitle.value = t('panel.pages.settings.pageTitle')
 pageHeaderBilled.value = false
 pageHeaderPaid.value = false
 pageMenuPanel.value = true
