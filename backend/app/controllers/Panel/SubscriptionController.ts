@@ -19,7 +19,6 @@ class SubscriptionController {
                     billing_cycle,
                     payment_method_id,
                } = await vine.compile(schema).validate(request.all())
-
                /* -------- Création / mise à jour Stripe -------- */
                let subStripe
                if (!subscription?.stripe_subscription_id) {
@@ -29,7 +28,7 @@ class SubscriptionController {
                          plan_id,
                          modules,
                          billing: billing_cycle,
-                         paymentMethodId: payment_method_id || null,
+                         paymentMethodId: payment_method_id,
                     })
                } else {
                     subStripe = await updateSubscription({
@@ -37,7 +36,7 @@ class SubscriptionController {
                          plan_id,
                          modules,
                          billing: billing_cycle,
-                         paymentMethodId: payment_method_id || null,
+                         paymentMethodId: payment_method_id,
                     })
                }
 
@@ -47,7 +46,7 @@ class SubscriptionController {
 
                if (subStripe.status === 'incomplete') {
                     const confirmation = (subStripe.latest_invoice as any)?.confirmation_secret
-                    if (confirmation?.client_secret) {
+                    if (confirmation && typeof confirmation.client_secret === 'string') {
                          requiresAction = true
                          clientSecret = confirmation.client_secret
                     }
