@@ -66,12 +66,16 @@ interface StripeCustomer {
           exp_year: number
      }>
 }
+interface Client {
+     id: string
+     name: string
+}
 
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
 
      const user = ref<User | null>(null)
-     const client = ref<{ id: string } | null>(null)
+     const client = ref<Client | null>(null)
      const project = ref<Project | null>(null)
      const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
@@ -273,6 +277,19 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function switchClient(uuid: string): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          try {
+               await apiFetch(`/switch-client/${uuid}`, {
+                    method: 'POST'
+               })
+               return true
+          } catch (error) {
+               console.error('Erreur switch client:', error)
+               return false
+          }
+     }
+
      async function updatePassword(current: string, newPass: string) {
           try {
                // Pas de vérification du mot de passe actuel côté client
@@ -417,6 +434,7 @@ export const usePanelStore = defineStore('panel', () => {
           initPanelData,
           updateUserLang,
           switchProject,
+          switchClient,
           updatePassword,
           fetchListActivity,
           createOnboarding,

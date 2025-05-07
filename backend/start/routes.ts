@@ -45,6 +45,7 @@ router.group(() => {
      router.get('/project', (ctx) => ProjectController.getProject(ctx))
      router.get('/projects', (ctx) => ProjectController.getProjects(ctx))
      router.post('/switch-project/:uuid', (ctx) => ProjectController.switchProject(ctx))
+     router.post('/switch-client/:uuid', (ctx) => ClientController.switchClient(ctx))
      router.post('/lang', (ctx) => UserController.updateLang(ctx))
      router.get('/onboarding/activities', (ctx) => OnboardingController.getActivities(ctx))
      router.post('/onboarding', (ctx) => OnboardingController.create(ctx))

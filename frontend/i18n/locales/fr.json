@@ -348,6 +348,10 @@
                     "sideMenuProjects": {
                          "noName": "Projet sans nom",
                          "addNew": "Créer un nouveau projet"
+                    },
+                    "sideMenuClients": {
+                         "noName": "Client sans nom",
+                         "addNew": "Créer un nouveau client"
                     }
                },
                "modal": {

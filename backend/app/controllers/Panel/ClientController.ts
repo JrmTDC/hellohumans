@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import supabase from '#services/supabaseService'
+import supabaseService from '#services/supabaseService'
 
 class ClientController {
      public async getClient({ auth, response }: HttpContext) {
@@ -12,7 +12,7 @@ class ClientController {
                }
 
                // 1. Récupération de l'utilisateur interne
-               const { data: userData, error: userError } = await supabase
+               const { data: userData, error: userError } = await supabaseService
                     .from('users')
                     .select('id, selected_client_id')
                     .eq('auth_id', auth_id)
@@ -31,7 +31,7 @@ class ClientController {
                let client_users_data = null
 
                if (selected_client_id) {
-                    const { data } = await supabase
+                    const { data } = await supabaseService
                          .from('client_users')
                          .select('client_id')
                          .eq('user_id', user_id)
@@ -48,7 +48,7 @@ class ClientController {
 
                // 3. Si aucun client sélectionné ou invalide → prendre le plus récent
                if (!selected_client_id) {
-                    const { data: fallbackClientUsers, error: fallbackError } = await supabase
+                    const { data: fallbackClientUsers, error: fallbackError } = await supabaseService
                          .from('client_users')
                          .select('client_id')
                          .eq('user_id', user_id)
@@ -65,14 +65,14 @@ class ClientController {
                     selected_client_id = fallbackClientUsers.client_id
 
                     // Mettre à jour selected_client_id dans la table users
-                    await supabase
+                    await supabaseService
                          .from('users')
                          .update({ selected_client_id: selected_client_id })
                          .eq('id', user_id)
                }
 
                // 4. Récupérer le client final
-               const { data: clientData, error: clientError } = await supabase
+               const { data: clientData, error: clientError } = await supabaseService
                     .from('clients')
                     .select('*')
                     .eq('id', selected_client_id)
@@ -106,7 +106,7 @@ class ClientController {
                }
 
                // 1. On récupère l’utilisateur interne (par auth_id)
-               const { data: userData, error: userError } = await supabase
+               const { data: userData, error: userError } = await supabaseService
                     .from('users')
                     .select('id')
                     .eq('auth_id', auth_id)
@@ -119,7 +119,7 @@ class ClientController {
                }
 
                // 2. On récupère tous les clients associés via client_users
-               const { data: clientUsers, error: clientUsersError } = await supabase
+               const { data: clientUsers, error: clientUsersError } = await supabaseService
                     .from('client_users')
                     .select('client_id')
                     .eq('user_id', userData.id)
@@ -133,7 +133,7 @@ class ClientController {
                const client_id = clientUsers.map((cu) => cu.client_id)
 
                // 3. On récupère les infos des clients
-               const { data: clients, error: clientsError } = await supabase
+               const { data: clients, error: clientsError } = await supabaseService
                     .from('clients')
                     .select('*')
                     .in('id', client_id)
@@ -150,6 +150,72 @@ class ClientController {
 
           } catch (error) {
                console.error('Erreur ClientController.getClients:', error)
+               return response.internalServerError({
+                    error: { name: 'internalError', description: 'Erreur interne.' }
+               })
+          }
+     }
+
+     public async switchClient({ auth, params, response }: HttpContext) {
+          try {
+               const auth_id = auth?.user?.id
+               const client_id = params.uuid
+
+               if (!auth_id || !client_id) {
+                    return response.badRequest({
+                         error: { name: 'invalidRequest', description: 'Paramètre manquant ou utilisateur non connecté.' }
+                    })
+               }
+
+               // 1. Récupération de l'utilisateur interne
+               const { data: userData, error: userError } = await supabaseService
+                    .from('users')
+                    .select('id, selected_client_id')
+                    .eq('auth_id', auth_id)
+                    .single()
+
+               if (!userData || userError) {
+                    return response.notFound({
+                         error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
+                    })
+               }
+
+               const user_id = userData.id
+
+               // 2. Vérifie que le client est bien lié à cet utilisateur
+               const { data: clientUser, error: clientUserError } = await supabaseService
+                    .from('client_users')
+                    .select('id')
+                    .eq('user_id', user_id)
+                    .eq('client_id', client_id)
+                    .maybeSingle()
+
+               if (!clientUser || clientUserError) {
+                    return response.forbidden({
+                         error: { name: 'forbidden', description: 'Aucun lien avec ce client.' }
+                    })
+               }
+
+               // 4. Mise à jour de selected_client_id dans users
+               const { error: updateError } = await supabaseService
+                    .from('users')
+                    .update({ selected_client_id: client_id })
+                    .eq('id', user_id)
+
+               if (updateError) {
+                    return response.internalServerError({
+                         error: { name: 'updateFailed', description: 'Échec de la mise à jour du client.' }
+                    })
+               }
+
+               return {
+                    user: {
+                         selected_client_id: client_id
+                    }
+               }
+
+          } catch (error) {
+               console.error('Erreur ClientController.switchClient:', error)
                return response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' }
                })

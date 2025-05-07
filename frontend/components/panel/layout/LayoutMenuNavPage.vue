@@ -41,6 +41,7 @@
           <PanelLayoutSideMenu
                v-if="showSideUserMenu"
                @closeSideUserMenu="showSideUserMenu = false"
+               @openCreateClient="handleCreateClient"
                @openCreateProjectModal="openCreateProjectModal" />
      </nav>
      <PanelModalCreateProject
@@ -104,8 +105,13 @@ const toggleSideMenuUser = () => {
 const onboardingStore = useOnboardingStore()
 
 const handleCreateProject = async (website: string) => {
-     onboardingStore.prepareNewFromDashboard(website)
-     await router.push('/panel/onboarding')
+     onboardingStore.prepareNewFromDashboard({ webSite: website })
+     router.push('/panel/onboarding')
      showCreateProjectModal.value = false
+}
+
+const handleCreateClient = () => {
+     onboardingStore.prepareNewFromDashboard({ newClient: true })
+     router.push('/panel/onboarding')
 }
 </script>
