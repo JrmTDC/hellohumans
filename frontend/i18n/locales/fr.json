@@ -411,6 +411,8 @@
                          "ChargeCycleYear": "Frais annuelle"
                     },
                     "upgradeRecap" : {
+                         "titleOffer": "Offre",
+                         "titleModule": "Modules complémentaires",
                          "perMonth": "/mois",
                          "perYear": "/an"
                     }
