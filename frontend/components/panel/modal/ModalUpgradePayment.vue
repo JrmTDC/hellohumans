@@ -114,6 +114,23 @@ const loadingAmount = ref(true)
 const subscriptionEndsAt = ref<Date | null>(null)
 const config = useRuntimeConfig()
 
+// Logique de désactivation du bouton
+const isDisabled = computed(() => {
+     // Si les données ne sont pas encore chargées
+     if (paymentMethodLoading.value || loadingAmount.value) {
+          return true
+     }
+
+     // Si il y a un montant à payer (aujourd'hui ou à la prochaine échéance)
+     if (todayAmount.value > 0 || cycleAmount.value > 0) {
+          // Il faut une carte sélectionnée
+          return !selectedPaymentMethod.value
+     }
+
+     // Si tout est à 0, pas besoin de carte, on peut valider
+     return false
+})
+
 const handleClose = () => {
      if (!loading.value) emit('close')
 }
@@ -200,17 +217,12 @@ async function refreshCard() {
      paymentMethodLoading.value = false
 }
 
-const isDisabled = computed(() => {
-     return (
-          loading.value ||
-          loadingAmount.value ||
-          paymentMethodLoading.value ||
-          !selectedPaymentMethod.value
-     )
-})
-
 async function submitUpgrade() {
-     if (!selectedPaymentMethod.value || selectedPaymentMethod.value === 'new') {
+     // Si les montants sont à 0, on passe null comme payment_method_id
+     const paymentMethodId = todayAmount.value === 0 && cycleAmount.value === 0 ? null : selectedPaymentMethod.value
+
+     // Si aucune carte sélectionnée et qu'il y a un montant à payer
+     if (!paymentMethodId) {
           showAddCard.value = true
           return
      }

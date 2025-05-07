@@ -11,7 +11,7 @@ class SubscriptionController {
                     plan_id: vine.string(),
                     modules: vine.array(vine.string()).optional(),
                     billing_cycle: vine.enum(['month', 'year']),
-                    payment_method_id: vine.string(),
+                    payment_method_id: vine.string().optional(),
                })
                const {
                     plan_id,
