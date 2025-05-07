@@ -21,7 +21,7 @@
                                         {{ t('panel.components.layout.herderPage.helpMenu.needHelp') }}
                                    </span>
                               </div>
-                              <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
+                              <div @click="showReportModal = true" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
                                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                                         {{ t('panel.components.layout.herderPage.helpMenu.reportIssue') }}
                                    </span>
@@ -64,11 +64,15 @@
                <NuxtLink to="/panel/upgrade" class="flex-[0_0_auto] bg-[#64ed80] border-[2px] border-[#64ed80] text-[#080f1a] font-normal hover:bg-[#31e756] hover:border-[#31e756] bg-none border border-transparent rounded-[8px] cursor-pointer inline-block text-[14px] leading-[1.28571429] mb-0 min-w-[64px] px-[14px] py-[6px] text-center touch-manipulation select-none align-middle whitespace-nowrap">{{ t('panel.components.layout.herderPage.upgrade') }}</NuxtLink>
           </div>
      </header>
+     <PanelModalReportIssue
+          v-if="showReportModal"
+          @close="showReportModal = false"
+     />
 </template>
 
 <script setup lang="ts">
-
 const { t } = useI18n()
+const showReportModal = ref(false)
 const props = defineProps({
      title: String,
      isBilled: Boolean,

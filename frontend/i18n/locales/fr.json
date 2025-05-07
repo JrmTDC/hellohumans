@@ -387,6 +387,19 @@
                          "error": "Cette URL est invalide.",
                          "submit": "Ajouter un projet"
                     },
+                    "reportIssue": {
+                         "title": "Signaler un problème",
+                         "typeLabel": "Type de problème",
+                         "selectPlaceholder": "Sélectionnez",
+                         "options": {
+                              "bug": "Bug fonctionnel",
+                              "suggestion": "Suggestion",
+                              "other": "Autre"
+                         },
+                         "descriptionLabel": "Description",
+                         "sendButton": "Envoyer au support",
+                         "sending": "Envoi…"
+                    },
                     "upgradeAddCard" : {
                          "title": "Ajouter un nouveau mode de paiement",
                          "terms": "En fournissant vos informations de carte bancaire, vous autorisez Hellohumans à débiter votre carte pour les paiements futurs conformément à ses conditions.",
