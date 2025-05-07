@@ -33,26 +33,26 @@
                                         />
                                    </div>
 
-                                   <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.index.viewAllFeatures') }}</span></button>
+                                   <!-- <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.index.viewAllFeatures') }}</span></button> -->
                               </div>
 
-                              <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]">
-                                   <div class="bg-[#ffdda7] rounded-[10px] w-[40px] h-[40px] flex justify-center items-center">
-                                        <svgo-panel-upgrade-icon-bulb class="w-[24px] h-[24px] fill-[#d48200]" />
-                                   </div>
-                                   <span class="block w-[12px] min-w-[12px] h-[12px] min-h-[12px]"></span>
-                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.upgrade.index.helpTitle') }}</h2>
-                                   <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
-                                   <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.upgrade.index.helpDescription') }}</p>
-                                   <span class="block w-[16px] min-w-[16px] h-[16px] min-h-[16px]"></span>
-                                   <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] inline-flex items-center justify-center bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] cursor-pointer font-normal text-center touch-manipulation select-none align-middle whitespace-nowrap hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
-                                        <span>{{ t('panel.pages.upgrade.index.helpCta') }}</span>
-                                   </button>
-                              </div>
-                         </div>
-                    </div>
+                                   <!--   <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]">
+                                          <div class="bg-[#ffdda7] rounded-[10px] w-[40px] h-[40px] flex justify-center items-center">
+                                               <svgo-panel-upgrade-icon-bulb class="w-[24px] h-[24px] fill-[#d48200]" />
+                                          </div>
+                                          <span class="block w-[12px] min-w-[12px] h-[12px] min-h-[12px]"></span>
+                                          <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.upgrade.index.helpTitle') }}</h2>
+                                          <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
+                                          <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.upgrade.index.helpDescription') }}</p>
+                                          <span class="block w-[16px] min-w-[16px] h-[16px] min-h-[16px]"></span>
+                                          <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] inline-flex items-center justify-center bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] cursor-pointer font-normal text-center touch-manipulation select-none align-middle whitespace-nowrap hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
+                                               <span>{{ t('panel.pages.upgrade.index.helpCta') }}</span>
+                                          </button>
+                                     </div>  -->
+                                </div>
+                           </div>
 
-                    <!-- Résumé -->
+                           <!-- Résumé -->
                     <PanelUpgradeSubscriptionSummary
                          :selectedPlan="upgradeStore.currentPlan"
                          :billingCycle="upgradeStore.billingCycle"
