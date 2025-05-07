@@ -35,7 +35,7 @@
 
                               <!-- Champ Mot de passe -->
                               <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                   <PasswordInput
+                                   <PanelCommonPasswordInput
                                         v-model="password"
                                         :placeholder="t('panel.pages.login.passwordPlaceholder')"
                                         :error="errors.password"
@@ -76,27 +76,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import PasswordInput from '~/components/panel/common/CommonPasswordInput.vue'
-import {usePublicStore} from "~/stores/publicStore";
 const { t } = useI18n()
-
 const router = useRouter()
 const publicStore = usePublicStore()
-
-// Champs du formulaire
 const inputEmail = ref('')
 const password = ref('')
 const errors = ref({ email: false, password: false })
 const apiError = ref(false)
 const loading = ref(false)
-
 const errorMessageEmailKey = ref('');
 const errorMessagePasswordKey = ref('');
 const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
 const errorMessagePassword = computed(() => errorMessagePasswordKey.value ? t(errorMessagePasswordKey.value) : '');
-
 
 // Fonction pour valider le formulaire
 const validateForm = () => {
@@ -141,11 +132,18 @@ const handleLogin = async () => {
 }
 onMounted(() => {
      localStorage.removeItem('onboardingStore')
+     localStorage.removeItem('upgradeStore')
 })
 
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.login.metaTitle'),
-     description: t('panel.pages.login.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.login.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.login.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>

@@ -68,11 +68,28 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const panelStore = usePanelStore()
+const layoutLoadingPanel = useState('layoutLoadingPanel')
+
+onMounted(async () => {
+     setTimeout(() => {
+          layoutLoadingPanel.value = false
+     }, 400)
+})
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.dashboard.metaTitle'),
-     description: t('panel.pages.dashboard.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.dashboard.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.dashboard.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
+})
+watch(() => t('panel.pages.dashboard.pageTitle'), (newValue) => {
+     pageHeaderTitle.value = newValue
 })
 pageHeaderTitle.value = t('panel.pages.dashboard.pageTitle')
 pageHeaderBilled.value = false

@@ -31,6 +31,7 @@
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const onboardingStore = useOnboardingStore()
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 
 onMounted(async () => {
      const onboardingStore = useOnboardingStore()
@@ -44,12 +45,19 @@ onMounted(async () => {
           onboardingStore.validateSections(step)
      }
      onboardingStore.redirectIfInvalid()
+     layoutLoadingPanel.value = false
 })
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.onboarding.index.metaTitle'),
-     description: t('panel.pages.onboarding.index.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.onboarding.index.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.onboarding.index.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 pageMenuPanel.value = false
 definePageMeta({

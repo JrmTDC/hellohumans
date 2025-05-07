@@ -28,7 +28,7 @@
                                         <div class="relative flex items-center mt-[20px] mb-0">
                                              <PanelCommonDatePicker />
                                         </div>
-                                        <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0">
+                                        <div class="rounded-[12px] border border-[rgb(226,232,239)] overflow-hidden mt-[20px] mb-0 w-full">
                                              <PanelAnalyticsChart></PanelAnalyticsChart>
                                         </div>
                                    </div>
@@ -42,13 +42,27 @@
 </template>
 <script setup lang="ts">
 const { t } = useI18n()
+const layoutLoadingPanel = useState('layoutLoadingPanel')
+
+onMounted(async () => {
+     layoutLoadingPanel.value = false
+})
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.analytics.index.metaTitle'),
-     description: t('panel.pages.analytics.index.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.analytics.index.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.analytics.index.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
-pageHeaderTitle.value = 'Analytique'
+watch(() => t('panel.pages.analytics.pageTitle'), (newValue) => {
+     pageHeaderTitle.value = newValue
+})
+pageHeaderTitle.value = t('panel.pages.analytics.pageTitle')
 pageHeaderBilled.value = false
 pageHeaderPaid.value = false
 pageMenuPanel.value = true

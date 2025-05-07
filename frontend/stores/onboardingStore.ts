@@ -4,11 +4,12 @@ interface SectionInfo {
      total: number
      completed: number
 }
-
+//organizationName: string,
 interface OnboardingAnswers {
      webSite: string
-     selectedClientId: string | null
-     newClientName: string
+     organizationId: string | null
+     organizationName: string,
+     organizationType: string,
      serviceModel: string
      businessModel: string
      communicationMethods: string[]
@@ -23,8 +24,11 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      const router = useRouter()
 
      const currentStep = ref(1)
+     const disabledRedirect = ref(false)
      const totalSteps = 4
+     const isInitialized = ref(false)
      const submitting = ref(false)
+     const createMode = ref(false)
 
      const stepSections = reactive<Record<number, SectionInfo>>({
           1: { total: 2, completed: 0 },
@@ -35,8 +39,9 @@ export const useOnboardingStore = defineStore('onboarding', () => {
 
      const answers = ref<OnboardingAnswers>({
           webSite: '',
-          selectedClientId: null,
-          newClientName: '',
+          organizationId: null,
+          organizationName: '',
+          organizationType:'',
           serviceModel: '',
           businessModel: '',
           communicationMethods: [],
@@ -61,10 +66,10 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      const validators: Record<number, Record<number, () => boolean>> = {
           1: {
                1: () => {
-                    const { selectedClientId, newClientName } = answers.value
+                    const { organizationId, organizationName, organizationType } = answers.value
                     const panel = usePanelStore()
-                    const isValidClient = !!panel.clients.find((c) => c.id === selectedClientId)
-                    return isValidClient || newClientName.trim().length > 0
+                    const isValidClient = !!panel.clients.find((c) => c.id === organizationId)
+                    return isValidClient || (organizationName.trim().length > 0 && organizationType.trim().length > 0)
                },
                2: () => {
                     const { webSite } = answers.value
@@ -99,10 +104,12 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      }
 
      function redirectIfInvalid() {
-          for (const [stepStr, section] of Object.entries(stepSections)) {
-               if (section.completed < section.total) {
-                    currentStep.value = Number(stepStr)
-                    return
+          if(!disabledRedirect) {
+               for (const [stepStr, section] of Object.entries(stepSections)) {
+                    if (section.completed < section.total) {
+                         currentStep.value = Number(stepStr)
+                         return
+                    }
                }
           }
      }
@@ -142,12 +149,14 @@ export const useOnboardingStore = defineStore('onboarding', () => {
      }
 
      function resetStore() {
+          const wasCreatingNew = createMode.value
           currentStep.value = 1
           submitting.value = false
+          disabledRedirect.value = false
           Object.assign(answers.value, {
                webSite: '',
-               selectedClientId: null,
-               newClientName: '',
+               organizationId: null,
+               organizationName: '',
                serviceModel: '',
                businessModel: '',
                communicationMethods: [],
@@ -163,6 +172,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           })
 
           localStorage.removeItem('onboardingStore')
+          createMode.value = wasCreatingNew
      }
      function incrementSectionCompleted(step: number) {
           const section = stepSections[step]
@@ -179,30 +189,34 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                section.completed--
           }
      }
-     function prepareNewFromDashboard(siteUrl: string) {
+     function prepareNewFromDashboard(data: { webSite?: string, newClient?: boolean }) {
           resetStore()
-          answers.value.webSite = siteUrl
-
-          const panel = usePanelStore()
-          if (panel.client?.id && !answers.value.selectedClientId && !answers.value.newClientName) {
-               const found = panel.clients.find(c => c.id === panel.client?.id)
-               if (found) {
-                    answers.value.selectedClientId = found.id
-               }
+          currentStep.value = 1
+          disabledRedirect.value = true
+          if(data.webSite){
+               answers.value.webSite = data.webSite
+               createMode.value = false
           }
-
-          validateSections(1)
+          if(data.newClient){
+               answers.value.organizationId = null
+               answers.value.organizationName = ''
+               answers.value.organizationType = ''
+               createMode.value = true
+          }
           saveToStorage()
      }
 
      function autoSelectClient() {
           const panel = usePanelStore()
 
-          const noClientSelected = !answers.value.selectedClientId && !answers.value.newClientName
+          // Si on est en mode création, on ne sélectionne pas automatiquement le client
+          if (createMode.value) return
+
+          const noClientSelected = !answers.value.organizationId && !answers.value.organizationName
           const validClient = panel.client?.id && panel.clients.some(c => c.id === panel.client?.id)
 
           if (noClientSelected && validClient) {
-               answers.value.selectedClientId = panel.client?.id ?? null
+               answers.value.organizationId = panel.client?.id ?? null
           }
      }
 
@@ -216,6 +230,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                const parsed = JSON.parse(raw)
 
                if (parsed.currentStep) currentStep.value = parsed.currentStep
+               if (parsed.disabledRedirect) disabledRedirect.value = parsed.disabledRedirect
                if (parsed.answers) Object.assign(answers.value, parsed.answers)
 
                autoSelectClient()
@@ -228,11 +243,15 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           } catch (e) {
                console.warn('Erreur onboardingStore.initialize():', e)
           }
+          finally {
+               isInitialized.value = true
+          }
      }
 
      watch(
           () => answers.value,
           () => {
+               if (!isInitialized.value) return
                for (let step = 1; step <= totalSteps; step++) {
                     validateSections(step)
                }
@@ -253,6 +272,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           currentStep,
           totalSteps,
           submitting,
+          createMode,
           stepSections,
           answers,
           progressPercent,

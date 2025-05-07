@@ -30,6 +30,11 @@ export default defineNuxtConfig({
           '@/assets/css/fonts/euclidcircularb.css',
           '@/assets/css/main.css'
      ],
+     echarts: {
+          charts: ['BarChart', 'LineChart'],
+          components: ['GridComponent', 'TooltipComponent', 'LegendComponent'],
+          renderer: 'canvas',    // 'svg' ou 'canvas' (defaut)
+     },
      svgo: {
           defaultImport: 'component',
      },

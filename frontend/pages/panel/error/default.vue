@@ -7,10 +7,17 @@
 </template>
 
 <script setup lang="ts">
+import {computed} from "vue";
+
 const { t } = useI18n()
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.error.default.metaTitle'),
-     description: t('panel.pages.error.default.metaDescription')
+const pageTitle = computed(() => t('panel.pages.error.default.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.error.default.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>

@@ -23,11 +23,21 @@
                     </div>
                </div>
 
-               <div v-if="createMode" class="mt-[12px]">
-                    <input type="text"
-                           v-model="newClientName"
-                           :placeholder="t('panel.components.onboarding.selectClient.newClientName')"
-                           class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
+               <div v-if="createMode">
+                    <div class="mt-[12px]">
+                         <input type="text"
+                                v-model="organizationName"
+                                :placeholder="t('panel.components.onboarding.selectClient.organizationName')"
+                                class="w-full h-[51px] px-[14px] py-[16px] border-2 border-[#d3dbe5] rounded-[8px] outline-none focus:border-[#3886ff] text-[#080f1a]"/>
+                    </div>
+                    <div class="mt-[12px]">
+                         <PanelOnboardingSelectSimple
+                              v-model="organizationType"
+                              :options="listOrganizationType"
+                              :placeholder="t('panel.components.onboarding.step.part1.selectType.placeholder')"/>
+                    </div>
+
+
                </div>
           </div>
      </div>
@@ -38,6 +48,41 @@ interface ClientAccount {
      id: string
      name: string
 }
+
+const listOrganizationType = [
+     {
+          id: 'individual',
+          name: t('panel.components.onboarding.selectClient.type.individual')
+     },
+     {
+          id: 'educational',
+          name: t('panel.components.onboarding.selectClient.type.educational')
+     },
+     {
+          id: 'startup',
+          name: t('panel.components.onboarding.selectClient.type.startup')
+     },
+     {
+          id: 'agency',
+          name: t('panel.components.onboarding.selectClient.type.agency')
+     },
+     {
+          id: 'company',
+          name: t('panel.components.onboarding.selectClient.type.company')
+     },
+     {
+          id: 'Communities',
+          name: t('panel.components.onboarding.selectClient.type.communities')
+     },
+     {
+          id: 'Associations',
+          name: t('panel.components.onboarding.selectClient.type.associations')
+     },
+     {
+          id: 'other',
+          name: t('panel.components.onboarding.selectClient.type.other')
+     }
+]
 
 const props = defineProps<{
      modelValue: string | null
@@ -52,13 +97,26 @@ const emit = defineEmits<{
 }>()
 
 const isOpen = ref(false)
-const createMode = ref(false)
-const dropdownRef = ref<HTMLElement | null>(null)
 const store = useOnboardingStore()
+const createMode = computed({
+     get: () => store.createMode,
+     set: (value) => {
+          store.createMode = value
+          if (!value) {
+               emit('update:modelValue', null)
+          }
+     }
+})
+const dropdownRef = ref<HTMLElement | null>(null)
+const onboardingStore = useOnboardingStore()
 let skipNextClick = true
-const newClientName = computed({
-     get: () => store.answers.newClientName,
-     set: (val) => (store.answers.newClientName = val),
+const organizationName = computed({
+     get: () => onboardingStore.answers.organizationName,
+     set: (val) => (onboardingStore.answers.organizationName = val),
+})
+const organizationType = computed({
+     get: () => onboardingStore.answers.organizationType,
+     set: (val) => (onboardingStore.answers.organizationType = val),
 })
 const toggleOpen = () => {
      isOpen.value = !isOpen.value
@@ -67,13 +125,14 @@ const toggleOpen = () => {
 const selectClient = (id: string) => {
      emit('update:modelValue', id)
      isOpen.value = false
-     createMode.value = false
-     newClientName.value = ''
+     store.createMode = false
+     organizationName.value = ''
+     organizationType.value = ''
 }
 
 const enableCreateMode = () => {
      emit('update:modelValue', null) // Reset valeur
-     createMode.value = true
+     store.createMode = true
      isOpen.value = false
 }
 
@@ -101,8 +160,8 @@ onMounted(() => {
      })
 
      // Si aucun client + un nom en cours = on force createMode
-     if (props.clients.length === 0 || newClientName.value.trim().length > 0) {
-          createMode.value = true
+     if (props.clients.length === 0 || organizationName.value.trim().length > 0) {
+          store.createMode = true
           emit('update:modelValue', null)
      }
 })
@@ -113,8 +172,9 @@ onBeforeUnmount(() => {
 watch(() => props.modelValue, (val) => {
      if (val) {
           // Si on a sélectionné un vrai client, on quitte le mode création
-          createMode.value = false
-          newClientName.value = ''
+          store.createMode = false
+          organizationName.value = ''
+          organizationType.value = ''
      }
 })
 </script>

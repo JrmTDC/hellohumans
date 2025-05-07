@@ -36,39 +36,35 @@
                               <div class="flex flex-col">
                                    <!-- Filtrer les modules pour ne pas afficher ceux "disabled" -->
                                    <PanelUpgradeModuleCard
-                                        v-for="(module, idx) in store.availableModules.filter(m => !m.disabled)"
+                                        v-for="(module, idx) in panelStore.availableModules.filter(m => !m.disabled)"
                                         :key="module.id"
                                         :module="module"
                                         :index="idx"
-                                        :billingCycle="store.billingCycle"
+                                        :billingCycle="upgradeStore.billingCycle"
                                         :onToggle="toggleModule"
                                         :onChangeChoice="changeModuleChoice"
-                                        :includedModules="store.currentPlan?.includedModules || []"
+                                        :includedModules="upgradeStore.currentPlan?.includedModules || []"
                                    />
                               </div>
                          </div>
                     </div>
 
                     <PanelUpgradeSubscriptionSummary
-                         :selectedPlan="store.currentPlan"
-                         :billingCycle="store.billingCycle"
-                         :selectedModules="store.selectedAddOns"
+                         :selectedPlan="upgradeStore.currentPlan"
+                         :billingCycle="upgradeStore.billingCycle"
+                         :selectedModules="upgradeStore.selectedAddOns"
                          showModules
                          :totalPrice="computedTotalPrice"
-                         @updateBillingCycle="store.setBillingCycle"
+                         @updateBillingCycle="upgradeStore.setBillingCycle"
                          @goNext="handlePaymentClick"
                          :nextButtonLabel="t('panel.pages.upgrade.modules.nextButtonLabel')"
-                         :disableIfZero="!store.canValidateUpgrade"
+                         :disableIfZero="!upgradeStore.canValidateUpgrade"
                     />
 
                     <PanelModalUpgradePayment
                          v-if="showPaymentModal"
-                         :total="computedTotalPrice"
-                         :canSubmit="store.canValidateUpgrade"
-                         :billingCycle="store.billingCycle"
                          @close="showPaymentModal = false"
                          @submit="handlePaymentSuccess"
-                         @updateBillingCycle="store.setBillingCycle"
                     />
                </div>
           </div>
@@ -78,38 +74,40 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const panelStore = usePanelStore()
-const store = useUpgradeStore()
+const upgradeStore = useUpgradeStore()
 const router = useRouter()
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 
 onMounted(async () => {
 
-     if (!store.plans.length) await store.fetchPlans()
-     if (!store.availableModules.length) await store.fetchModules()
+     if (!panelStore.plans.length) await panelStore.fetchPlans()
+     if (!panelStore.availableModules.length) await panelStore.fetchModules()
 
-     store.restore()
+     upgradeStore.restore()
 
-     if (!store.currentPlan) {
+     if (!upgradeStore.currentPlan) {
           await router.replace('/panel/upgrade')
           return
      }
+     layoutLoadingPanel.value = false
 })
 
 function toggleModule(moduleId: string, checked: boolean) {
-     store.toggleModule(moduleId, checked)
+     upgradeStore.toggleModule(moduleId, checked)
 }
 
 function changeModuleChoice(moduleId: string, choiceIndex: number) {
-     store.setModuleChoice(moduleId, choiceIndex)
+     upgradeStore.setModuleChoice(moduleId, choiceIndex)
 }
 
 const computedTotalPrice = computed(() => {
      let total = 0
      // Offre
-     const off = store.currentPlan
+     const off = upgradeStore.currentPlan
      if (off) {
-          if (store.billingCycle === 'monthly') {
+          if (upgradeStore.billingCycle === 'month') {
                total += off.monthlyPrice
           } else {
                total += off.monthlyPrice * (12 - off.discountMonths)
@@ -117,7 +115,7 @@ const computedTotalPrice = computed(() => {
      }
      // Modules
      const includedIds = off?.includedModules || []
-     for (const mod of store.selectedAddOns) {
+     for (const mod of upgradeStore.selectedAddOns) {
           // Si c’est inclus dans l’offre => on l’affiche, mais pas de prix
           if (includedIds.includes(mod.id)) {
                continue
@@ -126,14 +124,14 @@ const computedTotalPrice = computed(() => {
           if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
                const choice = mod.choices[mod.selectedChoiceIndex]
                const disc = choice.discountMonths ?? 0
-               if (store.billingCycle === 'monthly') {
+               if (upgradeStore.billingCycle === 'month') {
                     total += choice.monthlyPrice
                } else {
                     total += choice.monthlyPrice * (12 - disc)
                }
           } else {
                const disc = mod.discountMonths ?? 0
-               if (store.billingCycle === 'monthly') {
+               if (upgradeStore.billingCycle === 'month') {
                     total += mod.basePrice
                } else {
                     total += mod.basePrice * (12 - disc)
@@ -148,13 +146,13 @@ function goNext() {
 }
 
 function handlePaymentClick() {
-     if (!store.canValidateUpgrade) return
+     if (!upgradeStore.canValidateUpgrade) return
      showPaymentModal.value = true
 }
 
 function handlePaymentSuccess() {
      showPaymentModal.value = false
-     router.push('/panel/dashboard')
+     router.push('/panel/upgrade/confirmation')
 }
 
 function goStep(step: number) {
@@ -168,10 +166,17 @@ function closePanel() {
 }
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.upgrade.modules.metaTitle'),
-     description: t('panel.pages.upgrade.modules.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.upgrade.modules.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.upgrade.modules.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
+
 pageMenuPanel.value = false
 
 definePageMeta({

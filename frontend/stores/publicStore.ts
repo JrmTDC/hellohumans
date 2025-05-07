@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { User, Session } from '@supabase/supabase-js'
 
 export const usePublicStore = defineStore('public', () => {
      const supabase = useSupabaseClient()
+     const panelStore = usePanelStore()
 
      const publicReturn = ref<string | null>(null)
      // Connexion
@@ -25,13 +25,26 @@ export const usePublicStore = defineStore('public', () => {
 
      // Inscription
      const register = async (email: string, password: string, displayName: string, accept_cg: boolean, lang: string) => {
+          await panelStore.logout()
           publicReturn.value = null
           try {
                const { apiFetch } = usePublicApi()
-               await apiFetch('/auth/register', {
+               const res = await apiFetch('/auth/register', {
                     method: 'POST',
                     body: JSON.stringify({ email, password, displayName, accept_cg, lang })
                })
+               const token = res?.success?.token
+               if (!token) setApiError(publicReturn, token, 'panel.pages.register')
+
+               // Connexion manuelle à Supabase avec le token retourné
+               const { error } = await supabase.auth.setSession({
+                    access_token: token,
+                    refresh_token: token
+               })
+               if (error) {
+                    setApiError(publicReturn, error, 'panel.pages.register')
+                    return false
+               }
                return true
           } catch (err: any) {
                setApiError(publicReturn, err, 'panel.pages.register')

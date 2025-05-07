@@ -1,5 +1,5 @@
 <template>
-     <div class="relative rounded-[12px] border border-[rgb(226,232,239)] mb-[20px]">
+     <div class="relative rounded-[12px] border border-[#e2e8ef] mb-[20px]">
           <!-- Bouton d'ouverture/fermeture -->
           <button
                class="bg-transparent border-none m-0 p-0 w-full h-[62px] cursor-pointer flex"

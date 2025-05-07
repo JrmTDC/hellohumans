@@ -23,44 +23,43 @@
 
                                    <!-- Boucle sur store.plans -->
                                         <PanelUpgradePlanCard
-                                             v-for="(plan, index) in store.plans"
+                                             v-for="(plan, index) in panelStore.plans"
                                              :key="plan.id"
                                              :plan="plan"
-                                             :selected="store.selectedPlanId === plan.id"
-                                             :billingCycle="store.billingCycle"
+                                             :selected="upgradeStore.selectedPlanId === plan.id"
+                                             :billingCycle="upgradeStore.billingCycle"
                                              :index="index"
-                                             @selectPlan="store.setPlan"
-
+                                             @selectPlan="upgradeStore.setPlan"
                                         />
                                    </div>
 
-                                   <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.index.viewAllFeatures') }}</span></button>
+                                   <!-- <button class="mt-[16px] rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 "><span>{{ t('panel.pages.upgrade.index.viewAllFeatures') }}</span></button> -->
                               </div>
 
-                              <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]">
-                                   <div class="bg-[#ffdda7] rounded-[10px] w-[40px] h-[40px] flex justify-center items-center">
-                                        <svgo-panel-upgrade-icon-bulb class="w-[24px] h-[24px] fill-[#d48200]" />
-                                   </div>
-                                   <span class="block w-[12px] min-w-[12px] h-[12px] min-h-[12px]"></span>
-                                   <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.upgrade.index.helpTitle') }}</h2>
-                                   <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
-                                   <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.upgrade.index.helpDescription') }}</p>
-                                   <span class="block w-[16px] min-w-[16px] h-[16px] min-h-[16px]"></span>
-                                   <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] inline-flex items-center justify-center bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] cursor-pointer font-normal text-center touch-manipulation select-none align-middle whitespace-nowrap hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
-                                        <span>{{ t('panel.pages.upgrade.index.helpCta') }}</span>
-                                   </button>
-                              </div>
-                         </div>
-                    </div>
+                                   <!--   <div class="mt-[32px] flex flex-col justify-start items-center border border-[#e2e8ef] rounded-[16px] p-[20px] mb-[32px]">
+                                          <div class="bg-[#ffdda7] rounded-[10px] w-[40px] h-[40px] flex justify-center items-center">
+                                               <svgo-panel-upgrade-icon-bulb class="w-[24px] h-[24px] fill-[#d48200]" />
+                                          </div>
+                                          <span class="block w-[12px] min-w-[12px] h-[12px] min-h-[12px]"></span>
+                                          <h2 class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">{{ t('panel.pages.upgrade.index.helpTitle') }}</h2>
+                                          <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>
+                                          <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ t('panel.pages.upgrade.index.helpDescription') }}</p>
+                                          <span class="block w-[16px] min-w-[16px] h-[16px] min-h-[16px]"></span>
+                                          <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] inline-flex items-center justify-center bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] cursor-pointer font-normal text-center touch-manipulation select-none align-middle whitespace-nowrap hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
+                                               <span>{{ t('panel.pages.upgrade.index.helpCta') }}</span>
+                                          </button>
+                                     </div>  -->
+                                </div>
+                           </div>
 
-                    <!-- Résumé -->
+                           <!-- Résumé -->
                     <PanelUpgradeSubscriptionSummary
-                         :selectedPlan="store.currentPlan"
-                         :billingCycle="store.billingCycle"
+                         :selectedPlan="upgradeStore.currentPlan"
+                         :billingCycle="upgradeStore.billingCycle"
                          :totalPrice="computedTotalPrice"
-                         :selectedModules="store.selectedAddOns"
+                         :selectedModules="upgradeStore.selectedAddOns"
                          :nextButtonLabel="t('panel.pages.upgrade.index.nextStep')"
-                         @updateBillingCycle="store.setBillingCycle"
+                         @updateBillingCycle="upgradeStore.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
                     />
@@ -71,22 +70,30 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-const store = useUpgradeStore()
+const upgradeStore = useUpgradeStore()
+const panelStore = usePanelStore()
 const router = useRouter()
 const trialActive = ref(false)
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 
 onMounted(async () => {
-     if (!store.plans.length) await store.fetchPlans()
+     if (!panelStore.plans.length) await panelStore.fetchPlans()
 
-     store.restore()
+     upgradeStore.restore()
+     await nextTick()
+     measureAllSections()
+     layoutLoadingPanel.value = false
+})
 
-     // 1️⃣ les blocs statiques
+function measureAllSections(){
+     // les blocs statiques
      const staticSections = ['header', 'description', 'spacer', 'price', 'button', 'footer', 'features-title']
 
-     // 2️⃣ les lignes de features (on part du principe qu'on a au plus N features)
+     // les lignes de features (on part du principe qu'on a au plus N features)
      const maxFeatures = Math.max(
-          ...store.plans.map(p => p.includedFeatures.length)
+          ...panelStore.plans.map(p => p.includedFeatures.length)
      )
+
      const featureSections = Array.from({ length: maxFeatures }, (_, i) => `feature-${i}`)
 
      const allSections = [...staticSections, ...featureSections]
@@ -99,13 +106,13 @@ onMounted(async () => {
           const maxH = Math.max(...els.map(el => el.getBoundingClientRect().height))
           els.forEach(el => (el.style.minHeight = `${maxH}px`))
      })
-})
+}
 
 // Calculer le total (offre sans modules, car modules seront dans l’étape 2)
 const computedTotalPrice = computed(() => {
-     const plan = store.currentPlan
+     const plan = upgradeStore.currentPlan
      if (!plan) return 0
-     if (store.billingCycle === 'monthly') {
+     if (upgradeStore.billingCycle === 'month') {
           return plan.monthlyPrice
      }
      return plan.monthlyPrice * (12 - plan.discountMonths)
@@ -117,13 +124,10 @@ function goNext() {
 
 function goStep(step: number) {
      if (step === 1) {
-          // déjà dessus
      } else if (step === 2) {
-          if (store.selectedPlanId) {
+          if (upgradeStore.selectedPlanId) {
                router.push('/panel/upgrade/modules')
           }
-     } else if (step === 3) {
-          // ...
      }
 }
 
@@ -132,10 +136,17 @@ function closePanel() {
 }
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.upgrade.index.metaTitle'),
-     description: t('panel.pages.upgrade.index.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.upgrade.index.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.upgrade.index.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
+
 pageMenuPanel.value = false
 
 definePageMeta({

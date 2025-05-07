@@ -16,5 +16,6 @@ export const middleware = router.named({
      chat_security: () => import('#middleware/chat_security_middleware'),
      panel_ensure_user: () => import('#middleware/panel_ensure_user_middleware'),
      panel_ensure_client: () => import('#middleware/panel_ensure_client_middleware'),
-     panel_ensure_project: () => import('#middleware/panel_ensure_project_middleware')
+     panel_ensure_project: () => import('#middleware/panel_ensure_project_middleware'),
+     panel_access: () => import('#middleware/panel_access_middleware')
 })

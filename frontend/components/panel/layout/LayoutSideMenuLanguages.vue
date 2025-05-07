@@ -12,21 +12,18 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
-import {usePanelStore} from "~/stores/panelStore";
-
 const panelStore = usePanelStore()
+const router = useRouter()
 const { locale, locales, setLocale } = useI18n()
 const langMenuRef = ref()
 const emit = defineEmits(['close', 'closeAllMenus'])
 
 const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)' })
-
+const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const selectLanguage = async (code: string) => {
      if (code !== locale.value) {
-          //await setLocale(code as any)
           await panelStore.updateUserLang(code)
-          location.reload()
+          await router.push('/panel')
      }
      emit('close')
      emit('closeAllMenus')

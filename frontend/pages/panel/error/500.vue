@@ -18,6 +18,8 @@
 </template>
 
 <script setup lang="ts">
+import {computed} from "vue";
+
 const { t } = useI18n()
 
 // Fonction pour recharger la page
@@ -28,9 +30,14 @@ const refreshPage = () => {
      location.reload()
 }
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.error.serverError.metaTitle'),
-     description: t('panel.pages.error.serverError.metaDescription')
+const pageTitle = computed(() => t('panel.pages.error.serverError.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.error.serverError.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>
 

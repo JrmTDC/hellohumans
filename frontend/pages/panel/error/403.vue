@@ -9,9 +9,14 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.error.notFound.metaTitle'),
-     description: t('panel.pages.error.notFound.metaDescription')
+const pageTitle = computed(() => t('panel.pages.error.notFound.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.error.notFound.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>
 

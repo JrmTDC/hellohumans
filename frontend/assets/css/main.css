@@ -34,8 +34,13 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      letter-spacing: -0.24px;
 }
 #hellohumans-chat-iframe{
-     font-family: Mulish;
+     font-family: Mulish, serif;
      letter-spacing: -0.24px;
+}
+#hellohumans-chat-config{
+     font-family: Mulish, serif;
+     letter-spacing: -0.24px;
+     position: relative;
 }
 #hellohumans-error-iframe{
      font-family: euclidcircularb, serif;
@@ -45,9 +50,14 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      align-items: center;
      height: 100vh;
 }
-#app-content{
+.app-content-header{
      font-family: euclidcircularb, serif;
      letter-spacing: -0.24px;
+}
+.app-content{
+     font-family: euclidcircularb, serif;
+     letter-spacing: -0.24px;
+     overflow: auto;
 }
 #hellohumans-loading{
      font-family: euclidcircularb, serif;
@@ -69,6 +79,7 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      font-family: Mulish;
      letter-spacing: -0.24px;
 }
+
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
 }

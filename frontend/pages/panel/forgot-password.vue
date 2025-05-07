@@ -95,19 +95,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
 const { t } = useI18n()
-
 const inputEmail = ref('')
 const errors = ref({ email: false })
 const loading = ref(false)
 const emailSent = ref(false)
 const publicStore = usePublicStore()
 const apiError = ref(false)
-
 const errorMessageEmailKey = ref('');
 const errorMessageEmail = computed(() => errorMessageEmailKey.value ? t(errorMessageEmailKey.value) : '');
-
 
 // Fonction de validation
 const validateForm = () => {
@@ -143,8 +139,14 @@ const handleForgot = async () => {
 }
 
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.forgotPassword.metaTitle'),
-     description: t('panel.pages.forgotPassword.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.forgotPassword.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.forgotPassword.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
 </script>

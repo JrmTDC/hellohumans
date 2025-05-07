@@ -142,6 +142,7 @@
 
                },
                "analytics": {
+                    "pageTitle": "Analytique",
                     "index" : {
                          "menuLabel": "Vue d’ensemble",
                          "heading": "Vue d’ensemble",
@@ -172,6 +173,7 @@
                },
                "gettingStarted": {
                     "index": {
+                         "pageTitle": "Bien démarrer",
                          "metaTitle": "Commencez avec HelloHumans",
                          "metaDescription": "Configurez rapidement votre espace pour profiter pleinement des fonctionnalités d’HelloHumans dès aujourd’hui."
                     }
@@ -204,12 +206,44 @@
                          "nextButtonLabel": "Paiement",
                          "metaTitle": "Ajoutez des modules complémentaires",
                          "metaDescription": "Personnalisez votre offre avec des fonctionnalités avancées adaptées à votre entreprise."
+                    },
+                    "confirmation": {
+                         "title": "Paiement réussi !",
+                         "description": "La modification de votre abonnement peut prendre quelques secondes pour s’activer.",
+                         "message": "Merci d’avoir choisi Hellohumans.",
+                         "cta": "Aller au dashboard",
+                         "metaTitle": "Confirmation de votre abonnement",
+                         "metaDescription": "Votre paiement a été validé avec succès."
                     }
                },
                "settings": {
+                    "pageTitle": "Paramètres",
                     "index": {
                          "metaTitle": "Paramètres",
                          "metaDescription": "Accédez à l’ensemble des paramètres de votre compte."
+                    },
+                    "chat": {
+                         "appearance": {
+                              "title": "Apparence",
+                              "description": "Personnalisez l’apparence de votre chatbot pour qu’il corresponde à l’identité de votre marque.",
+                              "metaTitle": "Apparence",
+                              "metaDescription": "Personnalisez l’apparence de votre chatbot pour qu’il corresponde à l’identité de votre marque.",
+                              "menuLabel": "Apparence"
+                         },
+                         "setup": {
+                              "title": "Installation",
+                              "description": "Il semble que vous n’avez pas encore installé le code du chat. Sélectionnez l’un des guides d’installation ci-dessous :",
+                              "metaTitle": "Installation",
+                              "metaDescription": "Intégrez le code d’installation de votre chatbot sur votre site web.",
+                              "menuLabel": "Installation"
+                         },
+                         "translations": {
+                              "title": "Traductions",
+                              "description": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
+                              "metaTitle": "Traductions",
+                              "metaDescription": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
+                              "menuLabel": "Traductions"
+                         }
                     }
                },
                "error": {
@@ -224,7 +258,7 @@
                          "title": "Oups, un problème est survenu.",
                          "instruction": "Appuyez sur le bouton pour recharger la page :",
                          "reload": "Recharger la page",
-                         "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à.",
+                         "help": "Si cela ne vous aide pas, contactez-nous via le chat ou à ",
                          "statusPage": "Vous pouvez suivre l’incident sur notre page de statut :",
                          "note": "... par ailleurs, l’équipe d’ingénierie a été informée de ce problème.",
                          "metaTitle": "Erreur serveur",
@@ -299,10 +333,18 @@
                          "contactSupport": "Contacter le support"
                     },
                     "herderPage": {
-                         "paid": "Payé",
-                         "billing": "Payant",
-                         "usageAndPlan": "Utilisation et offre",
-                         "usageNote": "⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h."
+                         "helpMenu": {
+                              "needHelp": "Besoin d’aide ?",
+                              "reportIssue": "Signaler un problème",
+                              "contactUs": "Nous contacter"
+                         },
+                         "UsageMenu": {
+                              "paid": "Payé",
+                              "billing": "Payant",
+                              "usageAndPlan": "Utilisation et offre",
+                              "usageNote": "⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h."
+                         },
+                         "upgrade": "Mettre à niveau"
                     },
                     "menuNavPage": {
                          "dashboard": "Tableau de bord",
@@ -322,6 +364,10 @@
                     "sideMenuProjects": {
                          "noName": "Projet sans nom",
                          "addNew": "Créer un nouveau projet"
+                    },
+                    "sideMenuClients": {
+                         "noName": "Client sans nom",
+                         "addNew": "Créer un nouveau client"
                     }
                },
                "modal": {
@@ -341,34 +387,53 @@
                          "error": "Cette URL est invalide.",
                          "submit": "Ajouter un projet"
                     },
-                    "upgradePayment": {
-                         "title": "Payer à l’aide d’une carte",
-                         "cardLabel": "Carte de crédit",
-                         "totalLabel": "Total :",
-                         "monthly": "/mois",
-                         "annual": "/an",
-                         "todayLabel": "Frais d’aujourd’hui :",
-                         "monthlyLabel": "Frais mensuels :",
-                         "submitLabel": "Soumettre la commande",
-                         "processing": "Traitement en cours…",
-                         "back": "Retour",
-                         "errorPreview": "Impossible d’obtenir le montant. Veuillez réessayer.",
-                         "errorMissingInfo": "Informations d’abonnement incomplètes",
-                         "errorGeneric": "Une erreur est survenue"
+                    "upgradeAddCard" : {
+                         "title": "Ajouter un nouveau mode de paiement",
+                         "terms": "En fournissant vos informations de carte bancaire, vous autorisez Hellohumans à débiter votre carte pour les paiements futurs conformément à ses conditions.",
+                         "cancel": "Annuler",
+                         "confirm": "Ajouter un mode de paiement",
+                         "processing": "Traitement de votre carte..."
+                    },
+                    "upgradeFeaturesSummary" : {
+                         "title": "Résumé de l'abonnement",
+                         "quote":"Même les robots ont besoin d’un bon plan pour être utiles aux humains.",
+                         "author": "Hellohumans"
+                    },
+                    "upgradePaid" : {
+
+                    },
+                    "upgradePayment" : {
+                         "addNewCard": "Ajouter",
+                         "NoCardRegistered": "Aucune carte enregistrée",
+                         "AddPaymentMethode": "Ajouter une méthode de paiement",
+                         "SelectCreditCard": "Sélectionner une carte de crédit",
+                         "ChargeCycleMonth": "Frais mensuelle",
+                         "ChargeCycleYear": "Frais annuelle"
+                    },
+                    "upgradeRecap" : {
+                         "titleOffer": "Offre",
+                         "titleModule": "Modules complémentaires",
+                         "perMonth": "/mois",
+                         "perYear": "/an"
                     }
                },
                "onboarding": {
                     "step": {
                          "part1": {
                               "selectClient": {
-                                   "title": "Sélectionnez ou créez un compte client",
-                                   "description": "Votre projet sera rattaché à ce compte client",
-                                   "placeholder": "Sélectionnez un compte client",
-                                   "placeholderCreate": "Création d’un nouveau compte client"
+                                   "title": "Sélectionnez ou créez le nom de l'organisation",
+                                   "description": "Quel est le nom de votre entreprise ou de votre équipe ?",
+                                   "placeholder": "Sélectionnez une organisation",
+                                   "placeholderCreate": "Création d’une nouveau organisation"
+                              },
+                              "selectType": {
+                                   "title": "Quelle est le type de votre organisation",
+                                   "description": "",
+                                   "placeholder": "Sélectionnez le type d'organisation qui vous correspond le mieux"
                               },
                               "siteUrl": {
-                                   "title": "Quelle est l'adresse URL de votre site web",
-                                   "description": "Vos réponses nous aideront à personnaliser votre expérience",
+                                   "title": "Quelle est l’URL du site web du projet ?",
+                                   "description": "Il s’agit du site sur lequel le chatbot sera intégré.",
                                    "placeholder": "https://votre-site.com"
                               }
                          },
@@ -470,8 +535,18 @@
                          "loading": "Chargement..."
                     },
                     "selectClient": {
-                         "createNew": "Créer un nouveau compte client",
-                         "newClientName": "Nom du compte client"
+                         "createNew": "Créer une nouvelle organisation",
+                         "organizationName": "Nom de l'organisation",
+                         "type": {
+                              "individual": "Personnel",
+                              "educational": "Educatif",
+                              "startup": "Startup",
+                              "agency": "Agence",
+                              "company": "Entreprise",
+                              "communities": "Collectivités",
+                              "associations": "Associations",
+                              "other": "Autres"
+                         }
                     }
                },
                "upgrade": {
@@ -543,4 +618,3 @@
           }
      }
 }
-

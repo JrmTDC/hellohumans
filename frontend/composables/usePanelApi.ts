@@ -1,5 +1,3 @@
-import { useRuntimeConfig, useRouter } from '#imports'
-
 export function usePanelApi() {
      const config = useRuntimeConfig()
      const apiUrl = `${config.public.apiBaseUrl}/panel`

@@ -1,6 +1,6 @@
 <template>
-     <PanelCommonLoadingOverlay v-if="isChecking" :progress="progress" />
-     <LayoutAccountBlocked v-else-if="isAccountBlocked" />
+     <PanelCommonLoadingOverlay v-if="layoutLoadingPanel" :progress="progress" />
+     <PanelLayoutAccountBlocked v-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />
@@ -19,15 +19,12 @@
      </div>
 </template>
 <script setup lang="ts">
-import LayoutAccountBlocked from '~/components/panel/layout/LayoutAccountBlocked.vue'
-
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const router = useRouter()
 
-const isChecking = useState('isChecking', () => true)
+const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const isAccountBlocked = useState('isAccountBlocked', () => false)
-const isStopped = useState('isStopped', () => false)
 const progress = ref(0)
 const { locale, setLocale } = useI18n()
 
@@ -57,23 +54,19 @@ onMounted(async () => {
      progress.value = 100
 
      try {
-          if(!isAccountBlocked.value && !isStopped.value){
-               const ok = await panelStore.initPanelData()
-               setTimeout(() => {
-                    isChecking.value = false
-                    if (!ok) router.push('/panel/login')
-               }, 400)
-          }else{
-               setTimeout(() => {
-                    isChecking.value = false
-               }, 400)
+          if(!isAccountBlocked.value){
+               const isStartPage = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
+               if(isStartPage){
+                    await panelStore.fetchUpgrade()
+               }else{
+                    await panelStore.initPanelData()
+               }
           }
+          return
      } catch (e) {
           console.error('Erreur layout panel initPanelData:', e)
           await router.push('/panel/login')
      }
-
-
 })
 usePanelPageMeta().setMeta({
      title: t('panel.layout.menu.metaTitle'),

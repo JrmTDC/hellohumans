@@ -40,8 +40,9 @@ class OnboardingController {
 
                //  Extraction des champs
                const webSite = request.input('webSite')?.trim() || null
-               const newClientName = request.input('newClientName')?.trim() || null
-               const selectedClientId = request.input('selectedClientId')?.trim() || null
+               const organizationName = request.input('organizationName')?.trim() || null
+               const organizationId = request.input('organizationId')?.trim() || null
+               const organizationType = request.input('organizationType')?.trim() || null
                const serviceModel = request.input('serviceModel')?.trim() || null
                const businessModel = request.input('businessModel')?.trim() || null
                const communicationMethods = request.input('communicationMethods') || null
@@ -57,18 +58,18 @@ class OnboardingController {
                     })
                }
 
-               if (!newClientName && !selectedClientId) {
+               if (!organizationId && (!organizationName || !organizationType)) {
                     return response.badRequest({
                          error: { name: 'clientMissing', description: 'Vous devez créer ou sélectionner un compte client.' }
                     })
                }
 
                // Si client existant → Vérifier ownership
-               if (selectedClientId) {
+               if (organizationId) {
                     const { data: existingLink, error: linkError } = await supabaseService
                          .from('client_users')
                          .select('id')
-                         .eq('client_id', selectedClientId)
+                         .eq('client_id', organizationId)
                          .eq('user_id', userData.id)
                          .maybeSingle()
 
@@ -106,12 +107,13 @@ class OnboardingController {
                let clientId: string
                let createdNewClient = false
 
-               if (newClientName) {
+               if (organizationName) {
                     const { data: clientData, error: clientError } = await supabaseService
                          .from('clients')
                          .insert({
-                              name: newClientName,
-                              owner_user_id: userData.id
+                              name: organizationName,
+                              owner_user_id: userData.id,
+                              type: organizationType
                          })
                          .select('*')
                          .single()
@@ -125,7 +127,7 @@ class OnboardingController {
                     clientId = clientData.id
                     createdNewClient = true
                } else {
-                    clientId = selectedClientId!
+                    clientId = organizationId!
                }
 
                // On récupère les infos du client

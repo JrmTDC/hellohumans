@@ -23,10 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { usePanelStore } from '~/stores/panelStore'
-import {onMounted} from "vue";
-
 const { t } = useI18n()
+const router = useRouter()
 const panelStore = usePanelStore()
 const emit = defineEmits(['open-create-project','close'])
 const projectMenuRef = ref()
@@ -35,12 +33,11 @@ const projects = computed(() => panelStore.projects)
 const selectedProject = computed(() => panelStore.project?.id)
 
 const menuStyle = ref({ top: '50%', left: '245px', transform: 'translateY(-50%)' })
-const isChecking = useState('isChecking', () => true)
+const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const selectProject = async (uuid: string) => {
      if (uuid !== selectedProject.value) {
-          isChecking.value = true
           await panelStore.switchProject(uuid)
-          location.reload()
+          await router.push('/panel')
      }
      emit('close')
 }

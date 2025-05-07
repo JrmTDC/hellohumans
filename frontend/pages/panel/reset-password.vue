@@ -36,7 +36,7 @@
                               <fieldset class="self-center border-0 flex flex-col items-center p-0 w-[min(370px,-32px+100vw)]">
                                    <fieldset>
                                         <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                             <PasswordInput
+                                             <PanelCommonPasswordInput
                                                   v-model="password"
                                                   :placeholder="t('panel.pages.resetPassword.passwordPlaceholder')"
                                                   :error="errors.password"
@@ -65,7 +65,7 @@
                                    </fieldset>
                                    <!-- Champ Confirmation du mot de passe -->
                                    <fieldset class="border-0 p-0 m-0 mb-[16px] flex flex-col items-center">
-                                        <PasswordInput
+                                        <PanelCommonPasswordInput
                                              v-model="confirmPassword"
                                              :placeholder="t('panel.pages.resetPassword.confirmPasswordPlaceholder')"
                                              :error="!!errors.confirmPassword"
@@ -153,15 +153,10 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
-import PasswordInput from '@/components/panel/common/CommonPasswordInput.vue'
-
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
-
 const getResetAttempt = ref('');
-
 if (typeof route.query.resetAttempt === 'string') {
      getResetAttempt.value = route.query.resetAttempt;
 }
@@ -295,8 +290,15 @@ onMounted(async () => {
      }
 })
 const { setMeta } = usePanelPageMeta()
-setMeta({
-     title: t('panel.pages.resetPassword.metaTitle'),
-     description: t('panel.pages.resetPassword.metaDescription')
+
+const pageTitle = computed(() => t('panel.pages.resetPassword.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.resetPassword.metaDescription'));
+
+watchEffect(() => {
+     setMeta({
+          title: pageTitle.value,
+          description: pageDescription.value
+     });
 })
+
 </script>
