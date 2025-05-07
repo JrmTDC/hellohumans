@@ -23,19 +23,41 @@ export async function useStripeElements(clientSecret: string): Promise<{ stripeI
                     border: '1px solid #e2e8ef',
                     boxShadow: "none"
                },
-               '.Label': {
-                    //fontWeight: '500'
+               '.Input--invalid': {
+                    boxShadow: 'none'
                },
-               '.AccordionItem': {
+               '.Label': {
                     backgroundColor: 'transparent',
                     border: 'none',
                     boxShadow: 'none'
+               },
+               '.Input--focus': {
+                    boxShadow: 'none'
+               },
+               '.PickerItem': {
+                    boxShadow: 'none'
+               },
+               '.Tab': {
+                    boxShadow: 'none'
+               },
+               '.AccordionItem': {
+                    boxShadow: 'none'
+               },
+               '.Input:focus': {
+                    boxShadow: 'none',
+                    border: '2px solid #0566ff',
                },
                '.Block': {
                     backgroundColor: 'transparent',
                     border: 'none',
                     boxShadow: 'none'
                },
+               '.Placeholder': {
+                    boxShadow: 'none'
+               },
+               '.Loading': {
+                    boxShadow: 'none'
+               }
           }
      }
 

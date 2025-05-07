@@ -28,7 +28,10 @@ const error = ref<string | null>(null)
 const stripeInstance = ref<any>(null)
 const elements = ref<any>(null)
 const paymentElement = ref<any>(null)
-const paymentElementRef = ref<HTMLElement | null>(null)
+
+// Configuration du formulaire Stripe
+const paymentMethodTypes = ['card']
+const paymentElementRef = ref<HTMLElement>()
 const showBottomButton = ref(false)
 
 onMounted(async () => {
@@ -52,9 +55,19 @@ onMounted(async () => {
 
           await nextTick()
 
-          paymentElement.value = elementsInstance.create('payment')
+          // Créer l'élément et le monter
+          paymentElement.value = elementsInstance.create('payment', {
+               allowedPaymentMethods: paymentMethodTypes,
+               layout: 'tabs'
+          })
+          
+          // Ajouter un listener pour détecter quand l'élément est prêt
+          paymentElement.value.on('ready', () => {
+               console.log('Stripe PaymentElement est prêt')
+               showBottomButton.value = true
+          })
+
           paymentElement.value.mount(paymentElementRef.value!)
-          showBottomButton.value = true
      } catch (e) {
           error.value = 'Erreur pendant l’initialisation.'
           console.error(e)
