@@ -37,7 +37,7 @@
                          </div>
 
                     </div>
-
+                    <NuxtLink to="/panel/upgrade" class="flex-[0_0_auto] bg-[#64ed80] border-[2px] border-[#64ed80] text-[#080f1a] font-normal hover:bg-[#31e756] hover:border-[#31e756] bg-none border border-transparent rounded-[8px] cursor-pointer inline-block text-[14px] leading-[1.28571429] mb-0 min-w-[64px] px-[14px] py-[6px] text-center touch-manipulation select-none align-middle whitespace-nowrap">Mettre à niveau</NuxtLink>
                </div>
           </div>
      </header>
