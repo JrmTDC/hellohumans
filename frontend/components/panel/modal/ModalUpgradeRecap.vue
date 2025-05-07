@@ -1,7 +1,7 @@
 <template>
      <div class="h-full">
           <h3 class="text-xl font-semibold mb-3">Récapitulatif</h3>
-          <div class="flex flex-col justify-between h-full">
+          <div class="flex flex-col justify-between h-[calc(100%_-_28px)]">
                <div class="mb-4 ">
                     <div class="text-[12px] text-[#647491] font-medium">OFFRE</div>
                     <!-- PLAN -->
@@ -51,7 +51,7 @@
 
                     </div>
                </div>
-               <div class="border-t pt-6 pb-6 justify-end">
+               <div class="border-t pt-6 justify-end">
                     <blockquote class="text-sm text-foreground-light text-[12px] text-[#7f8a9c] italic">
                          {{ t('panel.components.modal.upgradeFeaturesSummary.quote') }}<br />
                          <span class="text-[#0566ff]">— @{{ t('panel.components.modal.upgradeFeaturesSummary.author') }}</span>

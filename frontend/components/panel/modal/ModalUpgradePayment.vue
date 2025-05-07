@@ -1,7 +1,7 @@
 <template>
      <PanelModalBaseUpgrade @close="handleClose">
 
-          <div class="p-8 pb-8 flex flex-col none">
+          <div class="p-8 pb-8 flex flex-col">
                <div class="flex-1">
                     <h2 class="text-xl font-semibold mb-2">Frais de votre abonnement</h2>
 
