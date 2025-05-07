@@ -98,7 +98,7 @@ export async function createSubscription(opts: {
      plan_id: string
      modules: string[]
      billing: BillingCycle
-     paymentMethodId: string
+     paymentMethodId: string | null | undefined
 }) {
      const priceIds = await priceIdsForSelection(opts.plan_id, opts.modules, opts.billing)
 
@@ -108,7 +108,7 @@ export async function createSubscription(opts: {
           customer: opts.customerId,
           items,
           payment_behavior: 'default_incomplete',
-          default_payment_method: opts.paymentMethodId,
+          ...(opts.paymentMethodId ? { default_payment_method: opts.paymentMethodId } : {}),
           expand: ['latest_invoice.confirmation_secret', 'items.data'],
      })
 }
@@ -138,7 +138,7 @@ export async function updateSubscription(opts: {
      plan_id: string
      modules: string[]
      billing: BillingCycle
-     paymentMethodId: string
+     paymentMethodId: string | null | undefined
 }) {
      const sub = await stripe.subscriptions.retrieve(opts.subscriptionId, {
           expand: ['items.data'],
@@ -155,7 +155,7 @@ export async function updateSubscription(opts: {
      return stripe.subscriptions.update(opts.subscriptionId, {
           items: itemsPayload,
           proration_behavior: 'create_prorations',
-          default_payment_method: opts.paymentMethodId,
+          ...(opts.paymentMethodId ? { default_payment_method: opts.paymentMethodId } : {}),
           expand: ['latest_invoice.confirmation_secret', 'items.data'],
      })
 }
