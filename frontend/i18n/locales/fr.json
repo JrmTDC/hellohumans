@@ -333,10 +333,18 @@
                          "contactSupport": "Contacter le support"
                     },
                     "herderPage": {
-                         "paid": "Payé",
-                         "billing": "Payant",
-                         "usageAndPlan": "Utilisation et offre",
-                         "usageNote": "⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h."
+                         "helpMenu": {
+                              "needHelp": "Besoin d’aide ?",
+                              "reportIssue": "Signaler un problème",
+                              "contactUs": "Nous contacter"
+                         },
+                         "UsageMenu": {
+                              "paid": "Payé",
+                              "billing": "Payant",
+                              "usageAndPlan": "Utilisation et offre",
+                              "usageNote": "⚠️ Les valeurs affichées sont approximatives et peuvent être mises à jour avec un délai pouvant aller jusqu’à 24h."
+                         },
+                         "upgrade": "Mettre à niveau"
                     },
                     "menuNavPage": {
                          "dashboard": "Tableau de bord",
