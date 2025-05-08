@@ -232,16 +232,19 @@ export async function getUpcomingInvoicePreview(
      let totalProrata = 0
 
      for (const l of immediate.lines.data as Line[]) {
-          const priceId     = l.pricing?.price_details?.price
+          const priceId = l.pricing?.price_details?.price
           const isProration =
                l.parent?.subscription_item_details?.proration ??
                l.parent?.invoice_item_details?.proration ?? false
 
+          console.log('totalDebit', l.parent)
+
           if (priceId && isProration) {
                prorationsByPrice[priceId] = (prorationsByPrice[priceId] ?? 0) + (l.amount ?? 0)
                totalProrata += l.amount ?? 0
+
                if ((l.amount ?? 0) >= 0) {
-                    debitByPrice [priceId] = (debitByPrice [priceId] ?? 0) + (l.amount ?? 0)
+                    debitByPrice[priceId] = (debitByPrice[priceId] ?? 0) + (l.amount ?? 0)
                } else {
                     creditByPrice[priceId] = (creditByPrice[priceId] ?? 0) + Math.abs(l.amount ?? 0)
                }
@@ -266,7 +269,7 @@ export async function getUpcomingInvoicePreview(
           }
      }
 
-     const totalDebit  = Object.values(debitByPrice ).reduce((s, n) => s + n, 0)
+     const totalDebit  = Object.values(debitByPrice).reduce((s, n) => s + n, 0)
      const totalCredit = Object.values(creditByPrice).reduce((s, n) => s + n, 0)
 
      return {

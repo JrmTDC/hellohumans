@@ -155,14 +155,6 @@ class StripeController {
                }
 
                /* ---- Pré-visualisation ---- */
-               const subscription = await createSubscription({
-                    customerId,
-                    plan_id: plan_id,
-                    modules: modules,
-                    billing: billing_cycle as BillingCycle,
-                    paymentMethodId: ctx.paymentMethodId,
-                    projectId: ctx.project.id
-               })
 
                const {
                     invoice,
@@ -175,10 +167,10 @@ class StripeController {
                     recurringByPrice,
                } = await getUpcomingInvoicePreview(
                     customerId,
-                    subscription.id,
+                    ctx.subscription.stripe_subscription_id,
                     desiredPriceIds,
                )
-
+               
                /* ------- helpers ------- */
                function euros(c: number | undefined) {
                     return +((c ?? 0) / 100).toFixed(2)
@@ -187,7 +179,7 @@ class StripeController {
                     return charge > 0 || credit > 0 ? 'immediate' : 'end_of_period'
                }
                /* ------- plan ------- */
-               const planProrata   = debitByPrice [planPriceId] ?? 0
+               const planProrata   = debitByPrice[planPriceId] ?? 0
                const planCreditRaw = creditByPrice[planPriceId] ?? 0
 
                const { data: planData, error: planError } = await supabaseService
@@ -199,7 +191,7 @@ class StripeController {
                if (planError || !planData?.name) {
                     console.error('Erreur récupération plan:', planError)
                     return ctx.response.internalServerError({
-                         error: { name: 'supabaseError', description: 'Erreur lors de la récupération du plan.' },
+                         error: { name: 'supabprice_nowaseError', description: 'Erreur lors de la récupération du plan.' },
                     })
                }
 
@@ -228,9 +220,7 @@ class StripeController {
                const modulesAdded = modulePriceIds.map((priceId, idx) => {
                     const prorata = debitByPrice [priceId] ?? 0
                     const credit  = creditByPrice[priceId] ?? 0
-                    const moduleName = modulesData?.find(m => m.id === modules[idx])?.name[ctx.user?.lang] ||
-                                      modulesData?.find(m => m.id === modules[idx])?.name['en'] ||
-                                      `Unknown module`
+                    const moduleName = modulesData?.find(m => m.id === modules[idx])?.name[ctx.user?.lang] || modulesData?.find(m => m.id === modules[idx])?.name['en'] || `Unknown module`
 
                     return {
                          id:               modules[idx],
