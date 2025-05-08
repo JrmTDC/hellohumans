@@ -232,7 +232,6 @@ export default class MailService {
      }
 
      static async sendRapportEmail(user:any, rapport_data:any) {
-          const t = i18nManager.locale('fr')
           const logoHellohumans = await svgToBase64DataUrl('assets/svg/mail/logoRapportEmail.svg')
 
           const html = await edge.render('support_rapport', {
