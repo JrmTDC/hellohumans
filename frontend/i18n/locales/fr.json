@@ -139,7 +139,14 @@
                     "usageTitle": "Utilisation actuelle",
                     "metaTitle": "Tableau de bord",
                     "metaDescription": "Consultez la performance et l’utilisation de votre agent AI."
-
+               },
+               "analysis": {
+                    "index": {
+                         "title": "Voir l’état du site"
+                    },
+                    "pageUrls": {
+                         "title": "Pages (Urls)"
+                    }
                },
                "analytics": {
                     "pageTitle": "Analytique",
@@ -292,6 +299,17 @@
                     }
                },
                "common": {
+                    "analysisChildSideMenu": {
+                         "title": "Analyse du site",
+                         "metaTitle": "Analyse du site",
+                         "metaDescription": "",
+                         "menu": {
+                              "page1": "Voir l’état du site",
+                              "page2": "Pages (URLs)",
+                              "page3": "Voir le contenu scrapé",
+                              "page4": "Ajout de questions"
+                         }
+                    },
                     "dataPicker": {
                          "today": "Aujourd'hui",
                          "yesterday": "Hier",
