@@ -16,21 +16,21 @@
                          <div class="absolute right-[8px] top-[42px] z-[2]"><svgo-panel-icon-triangle-up class="w-[17px] h-[7px] fill-[#ffff]" /></div>
                          <div class="absolute top-[49px] right-[0] box-content w-fit bg-white p-[8px] shadow-[0_8px_20px_rgba(0,20,51,0.24)] rounded-[8px] overflow-auto max-h-[calc(-150px+100vh)] z-[1]">
 
-                              <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
+                              <NuxtLink to="/help" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
                                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                                         {{ t('panel.components.layout.herderPage.helpMenu.needHelp') }}
                                    </span>
-                              </div>
+                              </NuxtLink>
                               <div @click="showReportModal = true" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
                                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                                         {{ t('panel.components.layout.herderPage.helpMenu.reportIssue') }}
                                    </span>
                               </div>
-                              <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
+                              <NuxtLink to="/contact" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
                                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                                         {{ t('panel.components.layout.herderPage.helpMenu.contactUs') }}
                                    </span>
-                              </div>
+                              </NuxtLink>
                          </div>
                     </div>
                </div>
