@@ -26,11 +26,11 @@
                                         {{ t('panel.components.layout.herderPage.helpMenu.reportIssue') }}
                                    </span>
                               </div>
-                              <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
+                              <NuxtLink to="/contact" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
                                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                                         {{ t('panel.components.layout.herderPage.helpMenu.contactUs') }}
                                    </span>
-                              </div>
+                              </NuxtLink>
                          </div>
                     </div>
                </div>
