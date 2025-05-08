@@ -76,8 +76,11 @@
 
                     <!-- Actions -->
                     <div class="mt-6 flex justify-between">
-                         <button @click="emit('close')" class="text-[#647491] hover:underline">Annuler</button>
-                         <button @click="submitUpgrade" class="px-6 py-2 rounded-md" :class="isDisabled ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd] text-[#fff]'" :disabled="isDisabled" > Confirmer </button>
+                         <button @click="emit('close')" class="text-[#647491] hover:underline">{{ t('panel.components.modal.upgradePayment.btnCancel') }}</button>
+                         <button @click="submitUpgrade" class="px-6 py-2 rounded-md" :class="(isDisabled || loading) ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd] text-[#fff]'" :disabled="isDisabled || loading" >
+                              <span v-if="!loading">{{ t('panel.components.modal.upgradePayment.btnConfirm') }}</span>
+                              <span v-else>{{ t('panel.components.modal.upgradePayment.processing') }}</span>
+                         </button>
                     </div>
 
                </div>
@@ -94,7 +97,7 @@
 <script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js'
 const { t } = useI18n()
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits(['close'])
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 const upgradePreview = ref<any | null>(null)
@@ -113,6 +116,9 @@ const loading = ref(false)
 const loadingAmount = ref(true)
 const subscriptionEndsAt = ref<Date | null>(null)
 const config = useRuntimeConfig()
+const router = useRouter()
+
+const subscriptionPaiement = useState('subscriptionPaiement', () => false)
 
 // Logique de désactivation du bouton
 const isDisabled = computed(() => {
@@ -138,7 +144,6 @@ const toggleOpenSelect = () => {
      isOpen.value = !isOpen.value
 }
 onMounted(() => {
-     fetchPaymentMethods()
      fetchUpgradePreview()
 
      skipNextClick = true
@@ -170,7 +175,7 @@ async function fetchPaymentMethods() {
      paymentMethodLoading.value = true
      try {
           await panelStore.fetchStripePaymentMethods()
-          paymentMethods.value = panelStore.stripe_customer?.payment_methods || []
+          paymentMethods.value = panelStore.stripe?.customer?.payment_methods || []
           if (paymentMethods.value.length > 0) {
                selectedPaymentMethod.value = paymentMethods.value[0].id
           }
@@ -182,20 +187,21 @@ async function fetchPaymentMethods() {
 async function fetchUpgradePreview() {
      loadingAmount.value = true
      try {
-          const res = await panelStore.fetchUpgradePreview({
+          await panelStore.fetchUpgradePreview({
                plan_id: currentPlan.value.id,
                modules: selectedAddOns.value.map((m) =>
                     typeof m === 'string' ? m : m.id
                ),
                billing_cycle: upgradeStore.billingCycle,
           })
-          upgradePreview.value  = res
-          todayAmount.value     = res.today_amount ?? 0
-          cycleAmount.value     = res.cycle_amount ?? 0
+          upgradePreview.value  = panelStore.stripe?.preview
+          todayAmount.value     = panelStore.stripe?.preview.today_amount ?? 0
+          cycleAmount.value     = panelStore.stripe?.preview.cycle_amount ?? 0
 
-          subscriptionEndsAt.value = res.ends_at
-               ? new Date(res.ends_at * 1000)
+          subscriptionEndsAt.value = panelStore.stripe?.preview.ends_at
+               ? new Date(panelStore.stripe?.preview.ends_at * 1000)
                : null
+          await fetchPaymentMethods()
      } catch (error) {
           console.error('Erreur preview upgrade :', error)
           emit('close')
@@ -219,7 +225,7 @@ async function refreshCard() {
 
 async function submitUpgrade() {
      // Si les montants sont à 0, on passe null comme payment_method_id
-     const paymentMethodId = todayAmount.value === 0 && cycleAmount.value === 0 ? null : selectedPaymentMethod.value
+     const paymentMethodId = todayAmount.value === 0 && cycleAmount.value === 0 ? true : selectedPaymentMethod.value
 
      // Si aucune carte sélectionnée et qu'il y a un montant à payer
      if (!paymentMethodId) {
@@ -244,22 +250,26 @@ async function submitUpgrade() {
 
                if (stripeError) {
                     console.error('Erreur Stripe:', stripeError)
-                    // Gérer l’erreur, afficher un message, etc.
                     return
                }
 
                if (paymentIntent.status === 'succeeded') {
-                    emit('submit') // succès
+                    subscriptionPaiement.value = true
+                    await router.push('/panel/upgrade/confirmation')
+                    return
                } else {
                     console.warn('Le paiement n’a pas pu être validé :', paymentIntent.status)
                }
           } else if (res.status === 'active') {
-               emit('submit') // abonnement déjà validé sans action requise
+               subscriptionPaiement.value = true
+               await router.push('/panel/upgrade/confirmation')
+               return
           }
-
      } catch (e: any) {
           console.error(e)
      } finally {
+          const ok = await panelStore.initPanelAccessSession()
+          if (!ok) return navigateTo('/panel/login')
           loading.value = false
      }
 }

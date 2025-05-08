@@ -25,6 +25,8 @@ const router = useRouter()
 
 const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const isAccountBlocked = useState('isAccountBlocked', () => false)
+const subscriptionPaiement = useState('subscriptionPaiement', () => false)
+
 const progress = ref(0)
 const { locale, setLocale } = useI18n()
 

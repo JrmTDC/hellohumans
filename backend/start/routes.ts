@@ -9,8 +9,10 @@ import ClientController from '#controllers/Panel/ClientController'
 import ProjectController from '#controllers/Panel/ProjectController'
 import UserController from '#controllers/Panel/UserController'
 import OnboardingController from '#controllers/Panel/OnboardingController'
+import SupportController from '#controllers/Panel/SupportController'
 import SubscriptionController from '#controllers/Panel/SubscriptionController'
 import StripeController from "#controllers/Panel/StripeController";
+
 //import StripeWebhookController from "#controllers/Panel/StripeWebhookController";
 
 import { middleware } from '#start/kernel'
@@ -52,6 +54,13 @@ router.group(() => {
 })
      .prefix('/panel')
      .use(middleware.panel_ensure_user())
+
+// Routes global protégées par l'authentification
+router.group(() => {
+     router.post('/report-issue', (ctx) => SupportController.reportIssue(ctx))
+})
+     .prefix('/panel')
+     .use(middleware.panel_access())
 
 // Routes Stripe protégées par l'authentification
 router.group(() => {

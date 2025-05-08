@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>{{ subject }}</title>
+     <style>
+          body, table, td {
+               margin: 0;
+               padding: 0;
+               font-family: 'Roboto', Arial, sans-serif;
+               background-color: #f3f5f8;
+          }
+          img {
+               display: block;
+               border: 0;
+          }
+          .container {
+               max-width: 600px;
+               margin: 0 auto;
+               background: #ffffff;
+               border-radius: 6px;
+          }
+          .header {
+               padding: 20px;
+               text-align: left;
+               border-bottom: 4px solid {{ color_line_header }};
+          }
+          .header img {
+               height: 26px;
+          }
+          .content {
+               padding: 30px 40px;
+               color: #080f1a;
+               font-size: 16px;
+               line-height: 24px;
+          }
+          .btn {
+               display: inline-block;
+               margin: 15px auto;
+               padding: 12px 24px;
+               font-size: 16px;
+               color: {{ color_button_cta_text }};
+               background-color: {{ color_button_cta_bg }};
+               border-radius: 3px;
+               text-decoration: none;
+               text-align: center;
+               width: 280px;
+          }
+          .footer {
+               text-align: center;
+               padding: 20px;
+               font-size: 12px;
+               color: {{ color_text_footer }};
+          }
+          @media (max-width: 600px) {
+               .content {
+                    padding: 20px;
+               }
+               .btn {
+                    width:fit-content;
+               }
+          }
+     </style>
+</head>
+<body>
+<div class="container">
+     <div class="header">
+          <a href="https://www.hellohumans.fr/"><img src="{{ image_svg_header }}" alt="HelloHumans"></a>
+     </div>
+     <div class="content">
+          <p>Bonjour l’équipe HelloHumans,</p>
+          <p>Un nouvel incident a été signalé via l’application :</p>
+
+          <table style="width:100%; border-collapse: collapse; margin-top: 20px;">
+               <!-- Utilisateur -->
+               <tr>
+                    <td style="background:#f0f4fa; padding:10px; border:1px solid #dde4ed; width:30%; font-weight:bold;">
+                         Utilisateur
+                    </td>
+                    <td style="padding:10px; border:1px solid #dde4ed;">
+                         ID : {{ user_id }}
+                         Nom : {{ user_name }}<br>
+                         Email : {{ user_email }}<br>
+                    </td>
+               </tr>
+               <!-- Appareil -->
+               <tr>
+                    <td style="background:#f0f4fa; padding:10px; border:1px solid #dde4ed; font-weight:bold;">
+                         Appareil
+                    </td>
+                    <td style="padding:10px; border:1px solid #dde4ed;">
+                         {{ device_name }}
+                    </td>
+               </tr>
+               <!-- Page -->
+               <tr>
+                    <td style="background:#f0f4fa; padding:10px; border:1px solid #dde4ed; font-weight:bold;">
+                         Page
+                    </td>
+                    <td style="padding:10px; border:1px solid #dde4ed;">
+                         <a href="{{ page_url }}">{{ page_url }}</a>
+                    </td>
+               </tr>
+               <!-- Détails du rapport -->
+               <tr>
+                    <td style="background:#f0f4fa; padding:10px; border:1px solid #dde4ed; font-weight:bold;">
+                         Informations
+                    </td>
+                    <td style="padding:10px; border:1px solid #dde4ed;">
+                         <strong>Type :</strong> {{ type }}<br>
+                         <strong>Description :</strong><br>
+                         {{ description }}
+                    </td>
+               </tr>
+          </table>
+
+          <p style="margin-top:20px;">
+               Si une capture d’écran a été fournie, elle est jointe à cet email.<br>
+               Merci de votre prise en charge rapide.
+          </p>
+          <p style="margin-top:30px; font-style:italic;">L’équipe HelloHumans</p>
+     </div>
+</div>
+</body>
+</html>

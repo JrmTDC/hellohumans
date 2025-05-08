@@ -27,7 +27,7 @@ class PanelAccessMiddleware {
           // 1. User interne
           const { data: userData } = await supabaseService
                .from('users')
-               .select('id, selected_client_id, blocked, lang')
+               .select('id, selected_client_id, blocked, lang, email, display_name')
                .eq('auth_id', auth_id)
                .maybeSingle()
 

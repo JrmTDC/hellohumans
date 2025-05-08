@@ -106,7 +106,7 @@ const onboardingStore = useOnboardingStore()
 
 const handleCreateProject = async (website: string) => {
      onboardingStore.prepareNewFromDashboard({ webSite: website })
-     router.push('/panel/onboarding')
+     await router.push('/panel/onboarding')
      showCreateProjectModal.value = false
 }
 

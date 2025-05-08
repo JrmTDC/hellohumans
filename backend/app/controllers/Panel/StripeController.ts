@@ -15,24 +15,23 @@ class StripeController {
      /**
       * Crée un SetupIntent pour ajouter une nouvelle carte
       */
-     public async createSetupIntent({ client, response }: HttpContext) {
+     public async createSetupIntent(ctx: HttpContext) {
           try {
-               const customerId = await ensureCustomer(client)
+               const customerId = await ensureCustomer(ctx.client)
                const setupIntent = await stripe.setupIntents.create({
                     customer: customerId,
                     payment_method_types: ['card'],
                     usage: 'off_session'
                })
 
-               return response.ok({
+               return ctx.response.ok({
                     setupIntent: {
                          client_secret: setupIntent.client_secret,
                          setup_intent_id: setupIntent.id
                     }
                })
           } catch (error: any) {
-               console.error('[StripeController.createSetupIntent]', error)
-               return response.status(500).json({
+               return ctx.response.status(500).json({
                     error: {
                          code: 'STRIPE_SETUP_INTENT_ERROR',
                          message: error.message || 'Failed to create setup intent'
@@ -44,15 +43,15 @@ class StripeController {
      /**
       * Liste les méthodes de paiement du client
       */
-     public async paymentMethods({ client, response }: HttpContext) {
+     public async paymentMethods(ctx: HttpContext) {
           try {
-               const customerId = await ensureCustomer(client)
+               const customerId = await ensureCustomer(ctx.client)
                const paymentMethods = await stripe.paymentMethods.list({
                     customer: customerId,
                     type: 'card'
                })
 
-               return response.ok({
+               return ctx.response.ok({
                     payment_methods: paymentMethods.data.map(method => ({
                          id: method.id,
                          card: {
@@ -64,8 +63,7 @@ class StripeController {
                     }))
                })
           } catch (error: any) {
-               console.error('[StripeController.paymentMethods]', error)
-               return response.status(500).json({
+               return ctx.response.status(500).json({
                     error: {
                          code: 'STRIPE_LIST_PAYMENT_METHODS_ERROR',
                          message: error.message || 'Failed to list payment methods'
@@ -77,11 +75,9 @@ class StripeController {
      /**
       * Prévisualise la mise à niveau d'un abonnement
       */
-     //     public async previewUpgrade({ client, subscription, request, response }: HttpContext) {
-
      public async previewUpgrade(ctx: HttpContext) {
           try {
-               
+
                /* ---- Validation ---- */
                const schema = vine.object({
                     plan_id: vine.string(),
@@ -98,7 +94,6 @@ class StripeController {
 
 
                if (!ctx.subscription || !ctx.subscription.stripe_subscription_id) {
-                    //const customerId = await ensureCustomer(ctx.client)
                     const planPriceId   = await priceForPlan(plan_id, billing_cycle as BillingCycle)
                     const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
                     const desiredPriceIds = [planPriceId, ...modulePriceIds]
@@ -141,23 +136,34 @@ class StripeController {
                     const totalNow = prices.reduce((sum, p) => sum + (p.unit_amount ?? 0), 0)
 
                     return ctx.response.ok({
-                         today_debit:   euros(totalNow),
-                         today_credit:  0,
-                         today_amount:  euros(totalNow),
-                         cycle_amount:  euros(totalNow),
-                         ends_at:       null,
-                         is_new_subscription: true,
-                         changes: {
-                              plan: planChange,
-                              modules: {
-                                   added: modulesAdded
-                              }
-                         },
-                         invoice_preview_id: null
+                         preview:{
+                              today_debit:   euros(totalNow),
+                              today_credit:  0,
+                              today_amount:  euros(totalNow),
+                              cycle_amount:  euros(totalNow),
+                              ends_at:       null,
+                              is_new_subscription: true,
+                              changes: {
+                                   plan: planChange,
+                                   modules: {
+                                        added: modulesAdded
+                                   }
+                              },
+                              invoice_preview_id: null
+                         }
                     })
                }
 
                /* ---- Pré-visualisation ---- */
+               const subscription = await createSubscription({
+                    customerId,
+                    plan_id: plan_id,
+                    modules: modules,
+                    billing: billing_cycle as BillingCycle,
+                    paymentMethodId: ctx.paymentMethodId,
+                    projectId: ctx.project.id
+               })
+
                const {
                     invoice,
                     totalAmount,
@@ -169,7 +175,7 @@ class StripeController {
                     recurringByPrice,
                } = await getUpcomingInvoicePreview(
                     customerId,
-                    ctx.subscription.stripe_subscription_id,
+                    subscription.id,
                     desiredPriceIds,
                )
 
@@ -222,8 +228,8 @@ class StripeController {
                const modulesAdded = modulePriceIds.map((priceId, idx) => {
                     const prorata = debitByPrice [priceId] ?? 0
                     const credit  = creditByPrice[priceId] ?? 0
-                    const moduleName = modulesData?.find(m => m.id === modules[idx])?.name[ctx.user?.lang] || 
-                                      modulesData?.find(m => m.id === modules[idx])?.name['en'] || 
+                    const moduleName = modulesData?.find(m => m.id === modules[idx])?.name[ctx.user?.lang] ||
+                                      modulesData?.find(m => m.id === modules[idx])?.name['en'] ||
                                       `Unknown module`
 
                     return {
@@ -239,19 +245,21 @@ class StripeController {
 
                /* ------- réponse ------- */
                return ctx.response.ok({
-                    today_debit:   euros(totalDebit),
-                    today_credit:  euros(totalCredit),
-                    today_amount:  euros(totalAmount),
-                    cycle_amount:  euros(recurringAmount),
-                    ends_at:       ctx.subscription.current_period_end
-                         ? new Date(ctx.subscription.current_period_end * 1000)
-                         : null,
-                    is_new_subscription: false,
-                    changes: {
-                         plan:    planChange,
-                         modules: { added: modulesAdded },
-                    },
-                    invoice_preview_id: invoice.id,
+                    preview : {
+                         today_debit:   euros(totalDebit),
+                         today_credit:  euros(totalCredit),
+                         today_amount:  euros(totalAmount),
+                         cycle_amount:  euros(recurringAmount),
+                         ends_at:       ctx.subscription.current_period_end
+                              ? new Date(ctx.subscription.current_period_end * 1000)
+                              : null,
+                         is_new_subscription: false,
+                         changes: {
+                              plan:    planChange,
+                              modules: { added: modulesAdded },
+                         },
+                         invoice_preview_id: invoice.id
+                    }
                })
           } catch (e: any) {
                console.error('[previewUpgrade]', e)

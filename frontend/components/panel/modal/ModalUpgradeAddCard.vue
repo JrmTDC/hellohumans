@@ -37,7 +37,7 @@ const showBottomButton = ref(false)
 onMounted(async () => {
      try {
           await panelStore.fetchStripeSetupIntent()
-          const clientSecret = panelStore.stripe_setup_intent?.client_secret
+          const clientSecret = panelStore.stripe?.setup_intent?.client_secret
 
           if (!clientSecret) {
                error.value = 'Impossible de récupérer la clé Stripe.'
@@ -60,10 +60,9 @@ onMounted(async () => {
                allowedPaymentMethods: paymentMethodTypes,
                layout: 'tabs'
           })
-          
+
           // Ajouter un listener pour détecter quand l'élément est prêt
           paymentElement.value.on('ready', () => {
-               console.log('Stripe PaymentElement est prêt')
                showBottomButton.value = true
           })
 
