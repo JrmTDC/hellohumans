@@ -66,6 +66,16 @@ interface StripeCustomer {
           exp_year: number
      }>
 }
+interface StripeSetupIntent {
+     client_secret?: string
+     payment_method_types?: string[]
+}
+interface Stripe {
+     customer?: StripeCustomer
+     setup_intent?: StripeSetupIntent
+     preview?: any
+}
+
 interface Client {
      id: string
      name: string
@@ -85,8 +95,7 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<string[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
-     const stripe_setup_intent = ref<StripeSetupIntent | null>(null)
-     const stripe_customer = ref<StripeCustomer | null>(null)
+     const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
 
      const panelReturn = ref<string | null>(null)
@@ -323,7 +332,10 @@ export const usePanelStore = defineStore('panel', () => {
           const { apiFetch } = usePanelApi()
           try {
                const res = await apiFetch('/stripe/setup-intent')
-               stripe_setup_intent.value = res.success.setupIntent
+               stripe.value = {
+                    ...stripe.value,
+                    setup_intent: res.success.setupIntent
+               }
           } catch (error) {
                console.error('Erreur activités :', error)
           }
@@ -333,22 +345,45 @@ export const usePanelStore = defineStore('panel', () => {
           const { apiFetch } = usePanelApi()
           try {
                const res = await apiFetch('/stripe/payment-methods')
-               stripe_customer.value = {
-                    ...stripe_customer.value,
-                    payment_methods: res.success.payment_methods
+               stripe.value = {
+                    ...stripe.value,
+                    customer: {
+                         ...stripe.value?.customer,
+                         payment_methods: res.success.payment_methods
+                    }
                }
           } catch (error) {
                console.error('Erreur activités :', error)
           }
      }
 
-     async function fetchUpgradePreview(data: Record<string, any>): Promise<UpgradePreviewResponse> {
+     async function initUpgradePayment(data: Record<string, any>) {
+          const { apiFetch } = usePanelApi()
+
+          const [previewRes, methodsRes] = await Promise.all([
+               apiFetch('/stripe/preview-upgrade'),
+               apiFetch('/stripe/payment-methods'),
+          ])
+          stripe.value = {
+               ...stripe.value,
+               preview: previewRes.success.preview || null,
+               customer: {
+                    ...stripe.value?.customer,
+                    payment_methods: methodsRes.success.payment_methods || []
+               }
+          }
+     }
+
+     async function fetchUpgradePreview(data: Record<string, any>) {
           const { apiFetch } = usePanelApi()
           const res = await apiFetch('/stripe/preview-upgrade', {
                method: 'POST',
                body: JSON.stringify(data)
           })
-          return res.success
+          stripe.value = {
+               ...stripe.value,
+               preview: res.success.preview || null
+          }
      }
 
      async function createOnboarding(data: Record<string, any>): Promise<boolean> {
@@ -442,8 +477,7 @@ export const usePanelStore = defineStore('panel', () => {
           project,
           projects,
           activities,
-          stripe_setup_intent,
-          stripe_customer,
+          stripe,
 
           // actions
           initPanelAccessSession,

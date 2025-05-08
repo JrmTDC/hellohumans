@@ -24,17 +24,31 @@ export async function ensureCustomer(client: {
      name: string | null
      stripe_customer_id?: string | null
 }) {
+     console.log('ensureCustomer')
      if (client.stripe_customer_id) {
           try {
-               await stripe.customers.retrieve(client.stripe_customer_id)
-               return client.stripe_customer_id
-          } catch {
-               /* le client a été supprimé côté Stripe → on le recrée */
+               const customer = await stripe.customers.retrieve(client.stripe_customer_id)
+               if (customer.deleted) {
+                    console.log('customer deleted')
+                    await supabaseService
+                         .from('clients')
+                         .update({ stripe_customer_id: null })
+                         .eq('id', client.id)
+               } else {
+                    console.log('customer retrieved')
+                    return client.stripe_customer_id
+               }
+          } catch (error) {
+               console.error('customer retrieval failed')
+               await supabaseService
+                    .from('clients')
+                    .update({ stripe_customer_id: null })
+                    .eq('id', client.id)
           }
      }
+     console.log('customer not found')
 
      const customer = await stripe.customers.create({
-          email: client.email ?? undefined,
           name: client.name ?? undefined,
           metadata: { client_id: client.id },
      })
@@ -44,6 +58,7 @@ export async function ensureCustomer(client: {
           .update({ stripe_customer_id: customer.id })
           .eq('id', client.id)
 
+     console.log('customer created', customer)
      return customer.id
 }
 

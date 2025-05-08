@@ -144,7 +144,6 @@ const toggleOpenSelect = () => {
      isOpen.value = !isOpen.value
 }
 onMounted(() => {
-     fetchPaymentMethods()
      fetchUpgradePreview()
 
      skipNextClick = true
@@ -176,7 +175,7 @@ async function fetchPaymentMethods() {
      paymentMethodLoading.value = true
      try {
           await panelStore.fetchStripePaymentMethods()
-          paymentMethods.value = panelStore.stripe_customer?.payment_methods || []
+          paymentMethods.value = panelStore.stripe?.customer?.payment_methods || []
           if (paymentMethods.value.length > 0) {
                selectedPaymentMethod.value = paymentMethods.value[0].id
           }
@@ -188,20 +187,21 @@ async function fetchPaymentMethods() {
 async function fetchUpgradePreview() {
      loadingAmount.value = true
      try {
-          const res = await panelStore.fetchUpgradePreview({
+          await panelStore.fetchUpgradePreview({
                plan_id: currentPlan.value.id,
                modules: selectedAddOns.value.map((m) =>
                     typeof m === 'string' ? m : m.id
                ),
                billing_cycle: upgradeStore.billingCycle,
           })
-          upgradePreview.value  = res
-          todayAmount.value     = res.today_amount ?? 0
-          cycleAmount.value     = res.cycle_amount ?? 0
+          upgradePreview.value  = panelStore.stripe?.preview
+          todayAmount.value     = panelStore.stripe?.preview.today_amount ?? 0
+          cycleAmount.value     = panelStore.stripe?.preview.cycle_amount ?? 0
 
-          subscriptionEndsAt.value = res.ends_at
-               ? new Date(res.ends_at * 1000)
+          subscriptionEndsAt.value = panelStore.stripe?.preview.ends_at
+               ? new Date(panelStore.stripe?.preview.ends_at * 1000)
                : null
+          await fetchPaymentMethods()
      } catch (error) {
           console.error('Erreur preview upgrade :', error)
           emit('close')
@@ -253,7 +253,7 @@ async function submitUpgrade() {
                     return
                }
 
-               if (paymentIntent.status === 'succeeded') {  
+               if (paymentIntent.status === 'succeeded') {
                     subscriptionPaiement.value = true
                     await router.push('/panel/upgrade/confirmation')
                     return
