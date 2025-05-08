@@ -24,29 +24,24 @@ export async function ensureCustomer(client: {
      name: string | null
      stripe_customer_id?: string | null
 }) {
-     console.log('ensureCustomer')
      if (client.stripe_customer_id) {
           try {
                const customer = await stripe.customers.retrieve(client.stripe_customer_id)
                if (customer.deleted) {
-                    console.log('customer deleted')
                     await supabaseService
                          .from('clients')
                          .update({ stripe_customer_id: null })
                          .eq('id', client.id)
                } else {
-                    console.log('customer retrieved')
                     return client.stripe_customer_id
                }
           } catch (error) {
-               console.error('customer retrieval failed')
                await supabaseService
                     .from('clients')
                     .update({ stripe_customer_id: null })
                     .eq('id', client.id)
           }
      }
-     console.log('customer not found')
 
      const customer = await stripe.customers.create({
           name: client.name ?? undefined,
@@ -58,7 +53,6 @@ export async function ensureCustomer(client: {
           .update({ stripe_customer_id: customer.id })
           .eq('id', client.id)
 
-     console.log('customer created', customer)
      return customer.id
 }
 
@@ -114,6 +108,7 @@ export async function createSubscription(opts: {
      modules: string[]
      billing: BillingCycle
      paymentMethodId: string | null | undefined
+     projectId: string
 }) {
      const priceIds = await priceIdsForSelection(opts.plan_id, opts.modules, opts.billing)
 
@@ -124,6 +119,7 @@ export async function createSubscription(opts: {
           items,
           payment_behavior: 'default_incomplete',
           ...(opts.paymentMethodId ? { default_payment_method: opts.paymentMethodId } : {}),
+          metadata: { project_id: opts.projectId },
           expand: ['latest_invoice.confirmation_secret', 'items.data'],
      })
 }
@@ -154,6 +150,7 @@ export async function updateSubscription(opts: {
      modules: string[]
      billing: BillingCycle
      paymentMethodId: string | null | undefined
+     projectId: string
 }) {
      const sub = await stripe.subscriptions.retrieve(opts.subscriptionId, {
           expand: ['items.data'],
@@ -171,6 +168,7 @@ export async function updateSubscription(opts: {
           items: itemsPayload,
           proration_behavior: 'create_prorations',
           ...(opts.paymentMethodId ? { default_payment_method: opts.paymentMethodId } : {}),
+          metadata: { project_id: opts.projectId },
           expand: ['latest_invoice.confirmation_secret', 'items.data'],
      })
 }

@@ -155,6 +155,15 @@ class StripeController {
                }
 
                /* ---- Pré-visualisation ---- */
+               const subscription = await createSubscription({
+                    customerId,
+                    plan_id: plan_id,
+                    modules: modules,
+                    billing: billing_cycle as BillingCycle,
+                    paymentMethodId: ctx.paymentMethodId,
+                    projectId: ctx.project.id
+               })
+
                const {
                     invoice,
                     totalAmount,
@@ -166,7 +175,7 @@ class StripeController {
                     recurringByPrice,
                } = await getUpcomingInvoicePreview(
                     customerId,
-                    ctx.subscription.stripe_subscription_id,
+                    subscription.id,
                     desiredPriceIds,
                )
 
