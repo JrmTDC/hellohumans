@@ -13,12 +13,12 @@
 const { t } = useI18n()
 import iconTemp from "assets/icons/panel/iconUsageMenu.svg";
 const menuItems = ref([
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/analytics', name: t('panel.components.common.analyticsChildSideMenu.menu.page1') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/analytic', name: t('panel.components.common.analyticsChildSideMenu.menu.page2') },
+     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/analytics', name: t('panel.components.analyticsChildSideMenu.menu.page1') },
+     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/analytic', name: t('panel.components.analyticsChildSideMenu.menu.page2') },
 ])
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
-const pageTitle = computed(() => t('panel.components.common.analyticsChildSideMenu.metaTitle'));
-const pageDescription = computed(() => t('panel.components.common.analyticsChildSideMenu.metaDescription'));
+const pageTitle = computed(() => t('panel.components.analyticsChildSideMenu.metaTitle'));
+const pageDescription = computed(() => t('panel.components.analyticsChildSideMenu.metaDescription'));
 
 watchEffect(() => {
      setMeta({
@@ -26,10 +26,10 @@ watchEffect(() => {
           description: pageDescription.value
      });
 })
-watch(() =>  t('panel.components.common.analyticsChildSideMenu.title'), (newValue) => {
+watch(() =>  t('panel.components.analyticsChildSideMenu.title'), (newValue) => {
      pageHeaderTitle.value = newValue
 })
-pageHeaderTitle.value = t('panel.components.common.analyticsChildSideMenu.title')
+pageHeaderTitle.value = t('panel.components.analyticsChildSideMenu.title')
 pageHeaderBilled.value = false
 pageHeaderPaid.value = false
 pageMenuPanel.value = true

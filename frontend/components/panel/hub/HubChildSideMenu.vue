@@ -12,14 +12,14 @@
 const { t } = useI18n()
 import iconTemp from "assets/icons/panel/iconUsageMenu.svg";
 const menuItems = ref([
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub', name: t('panel.components.common.hubChildSideMenu.menu.page1') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/pageUrls', name: t('panel.components.common.hubChildSideMenu.menu.page2') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/contenu', name: t('panel.components.common.hubChildSideMenu.menu.page3') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/questions', name: t('panel.components.common.hubChildSideMenu.menu.page4') }
+     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menu.page1') },
+     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/pageUrls', name: t('panel.components.hubChildSideMenu.menu.page2') },
+     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/contenu', name: t('panel.components.hubChildSideMenu.menu.page3') },
+     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/questions', name: t('panel.components.hubChildSideMenu.menu.page4') }
 ])
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
-const pageTitle = computed(() => t('panel.components.common.hubChildSideMenu.metaTitle'));
-const pageDescription = computed(() => t('panel.components.common.hubChildSideMenu.metaDescription'));
+const pageTitle = computed(() => t('panel.components.hubChildSideMenu.metaTitle'));
+const pageDescription = computed(() => t('panel.components.hubChildSideMenu.metaDescription'));
 
 watchEffect(() => {
      setMeta({
@@ -27,10 +27,10 @@ watchEffect(() => {
           description: pageDescription.value
      });
 })
-watch(() =>  t('panel.components.common.hubChildSideMenu.title'), (newValue) => {
+watch(() =>  t('panel.components.hubChildSideMenu.title'), (newValue) => {
      pageHeaderTitle.value = newValue
 })
-pageHeaderTitle.value = t('panel.components.common.hubChildSideMenu.title')
+pageHeaderTitle.value = t('panel.components.hubChildSideMenu.title')
 pageHeaderBilled.value = false
 pageHeaderPaid.value = false
 pageMenuPanel.value = true
