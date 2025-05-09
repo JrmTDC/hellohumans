@@ -149,13 +149,8 @@
                     }
                },
                "analytics": {
-                    "pageTitle": "Analytique",
-                    "index" : {
-                         "menuLabel": "Vue d’ensemble",
-                         "heading": "Vue d’ensemble",
-                         "metaTitle": "Vue d’ensemble",
-                         "metaDescription": "Consultez les performances et les statistiques de votre chatbot sur une période donnée."
-                    }
+                    "title": "Vue d’ensemble"
+
                },
                "trialExpired": {
                     "title": "Continuez à exploiter pleinement",
@@ -308,6 +303,15 @@
                               "page2": "Pages (URLs)",
                               "page3": "Voir le contenu scrapé",
                               "page4": "Ajout de questions"
+                         }
+                    },
+                    "analyticsChildSideMenu": {
+                         "title": "Analytique",
+                         "metaTitle": "Analytique",
+                         "metaDescription": "",
+                         "menu": {
+                              "page1": "Vue d’ensemble",
+                              "page2": "Vue d’ensemble"
                          }
                     },
                     "dataPicker": {
