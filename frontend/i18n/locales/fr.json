@@ -140,7 +140,7 @@
                     "metaTitle": "Tableau de bord",
                     "metaDescription": "Consultez la performance et l’utilisation de votre agent AI."
                },
-               "analysis": {
+               "hub": {
                     "index": {
                          "title": "Voir l’état du site"
                     },
@@ -294,7 +294,7 @@
                     }
                },
                "common": {
-                    "analysisChildSideMenu": {
+                    "hubChildSideMenu": {
                          "title": "Analyse du site",
                          "metaTitle": "Analyse du site",
                          "metaDescription": "",

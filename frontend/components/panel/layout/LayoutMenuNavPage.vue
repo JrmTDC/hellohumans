@@ -66,7 +66,7 @@ const router = useRouter()
  */
 const menuItems = ref([
      { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), routeURL: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard'), tooltipKey: 'panel.components.layout.menuNavPage.dashboard' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), routeURL: '/panel/analysis', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis'), tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), routeURL: '/panel/hub', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis'), tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis' },
      { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), routeURL: '/panel/analytics', tooltip: t('panel.components.layout.menuNavPage.analytics'), tooltipKey: 'panel.components.layout.menuNavPage.analytics' },
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), routeURL: '/panel/settings/chat/appearance', tooltip: t('panel.components.layout.menuNavPage.settings'), tooltipKey: 'panel.components.layout.menuNavPage.settings' },
      { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), routeURL: null, tooltip: t('panel.components.layout.menuNavPage.account'), tooltipKey: 'panel.components.layout.menuNavPage.account' }
