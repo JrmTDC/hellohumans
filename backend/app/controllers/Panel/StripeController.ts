@@ -165,6 +165,7 @@ class StripeController {
                     debitByPrice,
                     creditByPrice,
                     recurringByPrice,
+                    removedModules
                } = await getUpcomingInvoicePreview(
                     customerId,
                     ctx.subscription.stripe_subscription_id,
@@ -217,19 +218,83 @@ class StripeController {
                     console.error('Erreur récupération modules:', modulesError)
                }
 
-               const modulesAdded = modulePriceIds.map((priceId, idx) => {
-                    const prorata = debitByPrice [priceId] ?? 0
-                    const credit  = creditByPrice[priceId] ?? 0
-                    const moduleName = modulesData?.find(m => m.id === modules[idx])?.name[ctx.user?.lang] || modulesData?.find(m => m.id === modules[idx])?.name['en'] || `Unknown module`
+               // Récupérer les prix et leurs IDs correspondants
+               const priceDetails = await supabaseService
+                    .from('subscription_modules')
+                    .select('id, name, stripe_price_id_monthly, stripe_price_id_annual')
+                    .in('id', modules)
+
+               if (priceDetails.error) {
+                    console.error('Erreur récupération détails modules:', priceDetails.error)
+               }
+
+               const modulesAdded = modulePriceIds.map((priceId) => {
+                    const prorata = debitByPrice[priceId] ?? 0
+                    const credit = creditByPrice[priceId] ?? 0
+                    const moduleId = priceDetails.data?.find(m => {
+                        const stripePriceId = ctx.subscription.billing_cycle === 'month' 
+                            ? m.stripe_price_id_monthly 
+                            : m.stripe_price_id_annual
+                        return stripePriceId === priceId
+                    })?.id
+
+                    const moduleName = moduleId 
+                        ? modulesData?.find(m => m.id === moduleId)?.name[ctx.user?.lang] 
+                        || modulesData?.find(m => m.id === moduleId)?.name['en'] 
+                        || `Unknown module`
+                        : `Unknown module`
 
                     return {
-                         id:               modules[idx],
-                         name:             moduleName,
+                         id: moduleId || 'unknown',
+                         name: moduleName,
+                         effective_date: new Date().toISOString(),
+                         effective_action: buildAction(prorata, credit),
+                         price_now: euros(prorata),
+                         credit_amount: euros(credit),
+                         price_cycle: euros(recurringByPrice[priceId]),
+                    }
+               })
+
+               // Identifier les modules actuels
+               const currentModules = ctx.subscription.items?.data ?
+                    ctx.subscription.items.data
+                        .filter((item: any) => item.price?.metadata?.is_module === 'true')
+                        .map((item: any) => ({
+                            id: item.price?.metadata?.module_id,
+                            priceId: item.price?.id,
+                            name: item.price?.metadata?.name
+                        }))
+                        .filter((mod: any): mod is { id: string, priceId: string, name: string } => 
+                            mod.id !== undefined && mod.priceId !== undefined && mod.name !== undefined) :
+                    []
+
+               // Identifier les modules supprimés en utilisant removedModules de Stripe
+               const modulesRemoved = removedModules.map((moduleId: string) => {
+                    const currentModule = currentModules.find(mod => mod.id === moduleId)
+                    if (!currentModule) {
+                        return {
+                            id: moduleId,
+                            name: `Unknown module`,
+                            effective_date: new Date().toISOString(),
+                            effective_action: 'end_of_period',
+                            price_now: euros(0),
+                            credit_amount: euros(0),
+                            price_cycle: euros(0)
+                        }
+                    }
+
+                    const prorata = debitByPrice[currentModule.priceId] ?? 0
+                    const credit = creditByPrice[currentModule.priceId] ?? 0
+                    const recurring = recurringByPrice[currentModule.priceId] ?? 0
+                    
+                    return {
+                         id:               currentModule.id,
+                         name:             currentModule.name,
                          effective_date:   new Date().toISOString(),
                          effective_action: buildAction(prorata, credit),
-                         price_now:        euros(prorata),
+                         price_now:        euros(prorata - credit),
                          credit_amount:    euros(credit),
-                         price_cycle:      euros(recurringByPrice[priceId]),
+                         price_cycle:      euros(recurring),
                     }
                })
 
@@ -246,7 +311,10 @@ class StripeController {
                          is_new_subscription: false,
                          changes: {
                               plan:    planChange,
-                              modules: { added: modulesAdded },
+                              modules: {
+                                   added: modulesAdded,
+                                   removed: modulesRemoved
+                              },
                          },
                          invoice_preview_id: invoice.id
                     }

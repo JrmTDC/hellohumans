@@ -139,21 +139,37 @@ type Line = Stripe.InvoiceLineItem & {
 async function analyzeChanges(currentSub: Stripe.Subscription, desiredPriceIds: string[]) {
      const immediate: string[] = []
      const future: string[] = []
+     const removed: string[] = []
      const existingIds = currentSub.items.data.map(i => i.price.id)
 
+     // Analyser les nouveaux items
      desiredPriceIds.forEach(id => {
           if (!existingIds.includes(id)) immediate.push(id) // new price → immediate
      })
+
+     // Analyser les items existants
      existingIds.forEach(id => {
-          if (!desiredPriceIds.includes(id)) future.push(id) // removed → future (downgrade)
+          if (!desiredPriceIds.includes(id)) {
+               // Item supprimé
+               removed.push(id)
+               // Si c'est un module, facturation future
+               if (!id.startsWith('plan_')) {
+                    future.push(id)
+               }
+          }
      })
-     return { immediateProrations: immediate, futureChanges: future }
+
+     return { 
+          immediateProrations: immediate, 
+          futureChanges: future,
+          removedItems: removed
+     }
 }
 
 export async function getUpcomingInvoicePreview(customerId: string, subId: string, desiredPriceIds: string[]) {
      const sub = await stripe.subscriptions.retrieve(subId, { expand: ['items.data'] })
      const items = buildPreviewItems(sub, [...desiredPriceIds])
-     const { immediateProrations } = await analyzeChanges(sub, desiredPriceIds)
+     const { immediateProrations, removedItems } = await analyzeChanges(sub, desiredPriceIds)
      const now = Math.floor(Date.now() / 1000)
 
      /* preview with prorations (if any) */
@@ -205,5 +221,6 @@ export async function getUpcomingInvoicePreview(customerId: string, subId: strin
           debitByPrice: debit,
           creditByPrice: credit,
           recurringByPrice,
+          removedModules: removedItems.filter(id => !id.startsWith('plan_'))
      }
 }
