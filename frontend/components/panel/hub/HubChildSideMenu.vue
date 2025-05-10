@@ -10,13 +10,24 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-import iconTemp from "assets/icons/panel/iconUsageMenu.svg";
+import iconHub from "assets/icons/panel/hub/iconHub.svg";
+import iconDataSource from "assets/icons/panel/hub/iconDataSource.svg";
+import iconDataSuggestion from "assets/icons/panel/hub/iconDataSuggestion.svg";
+import iconKnowledge from "assets/icons/panel/hub/iconKnowledge.svg";
+import iconPlayground from "assets/icons/panel/hub/iconPlayground.svg";
+import iconSetup from "assets/icons/panel/hub/iconSetup.svg";
+import iconTask from "assets/icons/panel/hub/iconTask.svg";
+
 const menuItems = ref([
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menu.page1') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/pageUrls', name: t('panel.components.hubChildSideMenu.menu.page2') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/contenu', name: t('panel.components.hubChildSideMenu.menu.page3') },
-     { type: 'link', icon: rawIcon(iconTemp), routeURL: '/panel/hub/questions', name: t('panel.components.hubChildSideMenu.menu.page4') }
+     { type: 'link', icon: rawIcon(iconHub), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menuItems.hub') },
+     { type: 'link', icon: rawIcon(iconKnowledge), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
+     { type: 'link', icon: rawIcon(iconDataSource), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSource') },
+     { type: 'link', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSuggestion') },
+     { type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
+     { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.setup') },
+     { type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.task') }
 ])
+
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
 const pageTitle = computed(() => t('panel.components.hubChildSideMenu.metaTitle'));
 const pageDescription = computed(() => t('panel.components.hubChildSideMenu.metaDescription'));

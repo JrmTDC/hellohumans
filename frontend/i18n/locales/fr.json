@@ -142,7 +142,7 @@
                },
                "hub": {
                     "index": {
-                         "title": "Voir l’état du site"
+                         "title": "Hub"
                     },
                     "pageUrls": {
                          "title": "Pages (Urls)"
@@ -258,11 +258,15 @@
                     "title": "Analyse du site",
                     "metaTitle": "Analyse du site",
                     "metaDescription": "",
-                    "menu": {
-                         "page1": "Voir l’état du site",
-                         "page2": "Pages (URLs)",
-                         "page3": "Voir le contenu scrapé",
-                         "page4": "Ajout de questions"
+                    "menuItems": {
+                         "hub": "Hub",
+                         "dataSource": "Sources de données",
+                         "dataSuggestion": "Suggestion de données",
+                         "knowledge": "Connaissances",
+                         "playground": "Playground",
+                         "setup": "Configurer",
+                         "task": "Tâches",
+                         "analytics": "Analytique",
                     }
                },
                "analyticsChildSideMenu": {
