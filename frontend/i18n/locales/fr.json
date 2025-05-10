@@ -139,16 +139,17 @@
                     "usageTitle": "Utilisation actuelle",
                     "metaTitle": "Tableau de bord",
                     "metaDescription": "Consultez la performance et l’utilisation de votre agent AI."
-
+               },
+               "hub": {
+                    "index": {
+                         "title": "Voir l’état du site"
+                    },
+                    "pageUrls": {
+                         "title": "Pages (Urls)"
+                    }
                },
                "analytics": {
-                    "pageTitle": "Analytique",
-                    "index" : {
-                         "menuLabel": "Vue d’ensemble",
-                         "heading": "Vue d’ensemble",
-                         "metaTitle": "Vue d’ensemble",
-                         "metaDescription": "Consultez les performances et les statistiques de votre chatbot sur une période donnée."
-                    }
+                    "title": "Vue d’ensemble"
                },
                "trialExpired": {
                     "title": "Continuez à exploiter pleinement",
@@ -216,36 +217,6 @@
                          "metaDescription": "Votre paiement a été validé avec succès."
                     }
                },
-               "settings": {
-                    "pageTitle": "Paramètres",
-                    "index": {
-                         "metaTitle": "Paramètres",
-                         "metaDescription": "Accédez à l’ensemble des paramètres de votre compte."
-                    },
-                    "chat": {
-                         "appearance": {
-                              "title": "Apparence",
-                              "description": "Personnalisez l’apparence de votre chatbot pour qu’il corresponde à l’identité de votre marque.",
-                              "metaTitle": "Apparence",
-                              "metaDescription": "Personnalisez l’apparence de votre chatbot pour qu’il corresponde à l’identité de votre marque.",
-                              "menuLabel": "Apparence"
-                         },
-                         "setup": {
-                              "title": "Installation",
-                              "description": "Il semble que vous n’avez pas encore installé le code du chat. Sélectionnez l’un des guides d’installation ci-dessous :",
-                              "metaTitle": "Installation",
-                              "metaDescription": "Intégrez le code d’installation de votre chatbot sur votre site web.",
-                              "menuLabel": "Installation"
-                         },
-                         "translations": {
-                              "title": "Traductions",
-                              "description": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
-                              "metaTitle": "Traductions",
-                              "metaDescription": "Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.",
-                              "menuLabel": "Traductions"
-                         }
-                    }
-               },
                "error": {
                     "notFound": {
                          "title": "Erreur 403",
@@ -283,12 +254,41 @@
                }
           },
           "components": {
-               "analytics": {
-                    "chart": {
-
+               "hubChildSideMenu": {
+                    "title": "Analyse du site",
+                    "metaTitle": "Analyse du site",
+                    "metaDescription": "",
+                    "menu": {
+                         "page1": "Voir l’état du site",
+                         "page2": "Pages (URLs)",
+                         "page3": "Voir le contenu scrapé",
+                         "page4": "Ajout de questions"
+                    }
+               },
+               "analyticsChildSideMenu": {
+                    "title": "Analytique",
+                    "metaTitle": "Analytique",
+                    "metaDescription": "",
+                    "menu": {
+                         "page1": "Vue d’ensemble",
+                         "page2": "Vue d’ensemble"
+                    }
+               },
+               "settingsChildSideMenu": {
+                    "title": "Paramètres",
+                    "metaTitle": "Paramètres",
+                    "metaDescription": "Accédez à l’ensemble des paramètres de votre compte.",
+                    "chat": {
+                         "appearance": "Apparence",
+                         "installa": "Installation",
+                         "translations": "Traductions"
                     },
-                    "overview": {
-
+                    "settings": {
+                         "teste": "Tester l’apparence"
+                    },
+                    "menuGroups": {
+                         "chat": "Chat",
+                         "settings": "Paramtère"
                     }
                },
                "common": {

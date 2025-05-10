@@ -1,41 +1,7 @@
 <template>
      <div class="grid grid-cols-[232px_1fr] grid-rows-1 gap-0 h-full max-h-full overflow-hidden">
           <div class="relative overflow-hidden bg-[#f5f7f9] z-[1]">
-               <div class=" overflow-x-hidden w-full h-full">
-                    <div class="min-w-full table min-h-full h-full">
-                         <ul class="list-none p-[8px_12px] bg-[#f5f7f9] m-0 min-h-full h-full flex flex-col w-[232px]">
-
-                              <li class="pt-[24px] px-[12px] pb-[8px] text-[#080f1a] text-[12px] leading-[16px] tracking-[-0.01em] font-medium uppercase flex justify-between items-center">Chat</li>
-
-                              <li class="flex flex-col w-full relative text-[#354869] p-0 text-[14px] leading-[18px] tracking-[-0.01em] font-medium">
-                                   <div class="rounded-[8px] relative">
-                                        <button class="relative outline-none border-none rounded-[8px] flex items-center w-full text-left cursor-pointer bg-[#dce9ff] font-medium text-[#001433] p-[8px_12px] min-h-[36px]">
-                                             <svgo-panel-settings-icon-menu-appearance  class="w-[16px] h-[16px] fill-[#001433] mr-[8px]"/>
-                                             {{ t('panel.pages.settings.chat.appearance.menuLabel') }}
-                                        </button>
-                                   </div>
-                              </li>
-
-                              <li class="flex flex-col w-full relative text-[#354869] p-0 text-[14px] leading-[18px] tracking-[-0.01em] ">
-                                   <div class="rounded-[8px] relative">
-                                        <button class="relative outline-none border-none rounded-[8px] flex items-center w-full text-left cursor-pointer bg-transparent  text-[#354869] p-[8px_12px] min-h-[36px] hover:bg-[#64749114] hover:text-[#001433]">
-                                             <svgo-panel-settings-icon-menu-setup  class="w-[16px] h-[16px] fill-[#001433] mr-[8px]"/>
-                                             {{ t('panel.pages.settings.chat.setup.menuLabel') }}
-                                        </button>
-                                   </div>
-                              </li>
-
-                              <li class="flex flex-col w-full relative text-[#354869] p-0 text-[14px] leading-[18px] tracking-[-0.01em]">
-                                   <div class="rounded-[8px] relative">
-                                        <button class="relative outline-none border-none rounded-[8px] flex items-center w-full text-left cursor-pointer bg-transparent text-[#354869] p-[8px_12px] min-h-[36px]  hover:bg-[#64749114] hover:text-[#001433]">
-                                             <svgo-panel-settings-icon-menu-translation  class="w-[16px] h-[16px] fill-[#001433] mr-[8px]"/>
-                                             {{ t('panel.pages.settings.chat.translations.menuLabel') }}
-                                        </button>
-                                   </div>
-                              </li>
-                         </ul>
-                    </div>
-               </div>
+               <PanelSettingsChildSideMenu />
           </div>
           <div data-radix-scroll-area-viewport class="overflow-hidden">
                <div class="overflow-x-hidden w-full h-full">
@@ -115,15 +81,10 @@
                                              </div>
                                         </div>
                                    </div>
-
-
-
-
                               </div>
                          </div>
                     </div>
                </div>
-
           </div>
      </div>
 </template>
@@ -139,26 +100,6 @@ const clientConfig = computed(() => chatStore.config)
 onMounted(async () => {
      layoutLoadingPanel.value = false
 })
-
-const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
-
-const pageTitle = computed(() => t('panel.pages.settings.chat.appearance.metaTitle'));
-const pageDescription = computed(() => t('panel.pages.settings.chat.appearance.metaDescription'));
-
-watchEffect(() => {
-     setMeta({
-          title: pageTitle.value,
-          description: pageDescription.value
-     });
-})
-
-watch(() => t('panel.pages.settings.pageTitle'), (newValue) => {
-     pageHeaderTitle.value = newValue
-})
-pageHeaderTitle.value = t('panel.pages.settings.pageTitle')
-pageHeaderBilled.value = false
-pageHeaderPaid.value = false
-pageMenuPanel.value = true
 
 definePageMeta({
      layout: 'panel'
