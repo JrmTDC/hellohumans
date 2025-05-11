@@ -266,7 +266,7 @@
                          "playground": "Playground",
                          "setup": "Configurer",
                          "task": "Tâches",
-                         "analytics": "Analytique",
+                         "analytics": "Analytique"
                     }
                },
                "analyticsChildSideMenu": {
@@ -328,6 +328,9 @@
                          "medium": "Moyen",
                          "strong": "Fort",
                          "veryStrong": "Très fort"
+                    },
+                    "childSideMenu": {
+                         "beta": "Bêta",
                     }
                },
                "layout": {

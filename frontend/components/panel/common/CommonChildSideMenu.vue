@@ -8,6 +8,7 @@
                               <NuxtLink :to="item.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition" :class="route.path === item.routeURL ? 'bg-[#dce9ff] text-[#001433] font-medium' : 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal'">
                                    <component :is="item.icon" class="w-[16px] h-[16px] fill-[#001433] mr-[8px]" />
                                    {{ item.name }}
+                                   <div v-if="item.beta" class="flex ml-auto"><span class="uppercase text-[9px] leading-[11px] tracking-[0em] bg-[#acb8cb] text-white px-[4px] py-[3px] rounded-[4px] font-medium">{{ t('panel.components.common.childSideMenu.beta') }}</span></div>
                               </NuxtLink>
                          </li>
                     </template>
@@ -18,18 +19,23 @@
                          <NuxtLink :to="item.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition" :class="route.path === item.routeURL ? 'bg-[#dce9ff] text-[#001433] font-medium' : 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal'">
                               <component :is="item.icon" class="w-[16px] h-[16px] fill-[#001433] mr-[8px]" />
                               {{ item.name }}
+                              <div v-if="item.beta" class="flex ml-auto"><span class="uppercase text-[9px] leading-[11px] tracking-[0em] bg-[#acb8cb] text-white px-[4px] py-[3px] rounded-[4px] font-medium">{{ t('panel.components.common.childSideMenu.beta') }}</span></div>
                          </NuxtLink>
                     </li>
                </template>
           </ul>
 </template>
 <script setup lang="ts">
+// <span class="block w-[2px] min-w-[2px] h-[2px] min-h-[2px] ml-0"></span>
+// SVG iconArrowMenu
 
+const { t } = useI18n()
 interface SidebarItem {
      group?: string
      icon: any
      routeURL: string
      name: string
+     beta: boolean
 }
 
 interface SidebarGroup {
@@ -41,6 +47,7 @@ interface SidebarSub {
      icon: any
      routeURL: string
      name: string
+     beta: boolean
 }
 
 const props = defineProps<{
