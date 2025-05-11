@@ -36,13 +36,20 @@ interface SidebarGroup {
      id: string
      name: string
 }
+interface SidebarSub {
+     sub?: string
+     icon: any
+     routeURL: string
+     name: string
+}
 
 const props = defineProps<{
      items: SidebarItem[]
      groups?: SidebarGroup[] | null
+     subs?: SidebarSub[] | null
 }>()
 
-const { items, groups } = toRefs(props)
+const { items, groups, subs } = toRefs(props)
 const route = useRoute()
 
 const groupedItems = computed<Record<string, SidebarItem[]>>(() => {

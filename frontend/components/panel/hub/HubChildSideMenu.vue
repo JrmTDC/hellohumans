@@ -2,7 +2,7 @@
      <div class="relative overflow-hidden bg-[#f5f7f9] z-[1]">
           <div class=" overflow-x-hidden w-full h-full">
                <div class="min-w-full table min-h-full h-full">
-                    <PanelCommonChildSideMenu :items="menuItems"/>
+                    <PanelCommonChildSideMenu :items="menuItems" :subs="menuSubs"/>
                </div>
           </div>
      </div>
@@ -20,12 +20,15 @@ import iconTask from "assets/icons/panel/hub/iconTask.svg";
 
 const menuItems = ref([
      { type: 'link', icon: rawIcon(iconHub), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menuItems.hub') },
-     { type: 'link', icon: rawIcon(iconKnowledge), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
-     { type: 'link', icon: rawIcon(iconDataSource), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSource') },
-     { type: 'link', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSuggestion') },
+     { id:'knowledge', type: 'link', icon: rawIcon(iconKnowledge), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
      { type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
      { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.setup') },
      { type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.task') }
+])
+
+const menuSubs = ref([
+     { sub:'knowledge', type: 'link', icon: rawIcon(iconDataSource), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSource') },
+     { sub:'knowledge', type: 'link', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSuggestion') },
 ])
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
