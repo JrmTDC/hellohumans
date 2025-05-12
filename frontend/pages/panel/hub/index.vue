@@ -80,7 +80,7 @@
                                                   </div>
                                                   <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">{{ item.count }}</p>
                                                   <div class="flex flex-wrap justify-end items-center gap-y-[8px]">
-                                                       <button class="bg-transparent border border-[#d1d9e0] cursor-pointer font-normal mb-0 text-center touch-manipulation select-none align-middle whitespace-nowrap bg-[rgba(136,148,171,0)] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333]">{{ item.actionText }}</button>
+                                                       <button class="bg-transparent border border-[#d1d9e0] cursor-pointer font-normal mb-0 text-center touch-manipulation select-none align-middle whitespace-nowrap bg-[rgba(136,148,171,0)] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333]" @click="() => navigateTo(item.link)">{{ item.actionText }}</button>
                                                   </div>
                                              </div>
                                              <div class="mt-[20px] flex flex-row justify-start items-center">
@@ -119,7 +119,7 @@ const listKnowledge = ref([
           icon: rawIcon(iconHelp),
           count: '0 question à passer en revue',
           actionText: 'Gérer',
-          link: '/panel/hub/'
+          link: '/panel/hub/data-sources/suggestions'
      },
      {
           title: 'URL du site Web',
@@ -127,7 +127,7 @@ const listKnowledge = ref([
           icon: rawIcon(iconWebSite),
           count: '0 pages',
           actionText: 'Gérer',
-          link: '/panel/hub/'
+          link: '/panel/hub/data-sources/added?origin=website'
      },
      {
           title: 'Questions/réponses',
@@ -135,7 +135,7 @@ const listKnowledge = ref([
           icon: rawIcon(iconLists),
           count: '0 questions et réponses',
           actionText: 'Gérer',
-          link: '/panel/hub/'
+          link: '/panel/hub/data-sources/added?origin=manual'
      }
 ])
 </script>
