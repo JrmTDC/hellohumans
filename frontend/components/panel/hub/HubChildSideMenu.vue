@@ -23,7 +23,7 @@ const menuItems = ref([
      { id:'knowledge', type: 'submenu', icon: rawIcon(iconKnowledge), name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
      { type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/playground', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
      { type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/tasks', name: t('panel.components.hubChildSideMenu.menuItems.task'), beta:true },
-     { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/configure', name: t('panel.components.hubChildSideMenu.menuItems.setup') }
+     { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/settings', name: t('panel.components.hubChildSideMenu.menuItems.setup') }
 ])
 
 const menuSubs = ref([
