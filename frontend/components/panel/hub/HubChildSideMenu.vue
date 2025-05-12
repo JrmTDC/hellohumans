@@ -19,11 +19,11 @@ import iconSetup from "assets/icons/panel/hub/iconSetup.svg";
 import iconTask from "assets/icons/panel/hub/iconTask.svg";
 
 const menuItems = ref([
-     { type: 'link', icon: rawIcon(iconHub), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menuItems.hub') },
+     { id: 'hub', type: 'link', icon: rawIcon(iconHub), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menuItems.hub') },
      { id:'knowledge', type: 'submenu', icon: rawIcon(iconKnowledge), name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
-     { type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
-     { type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.task'), beta:true },
-     { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.setup') }
+     { id: 'playground', type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
+     { id: 'task', type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.task'), beta:true },
+     { id: 'setup', type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.setup') }
 ])
 
 // tes sous-menus, avec la clé `sub` qui référence l’`id` du parent
