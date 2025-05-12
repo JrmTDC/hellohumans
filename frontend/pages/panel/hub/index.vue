@@ -1,4 +1,4 @@
-﻿<template>
+<template>
      <div class="grid grid-cols-[232px_1fr] grid-rows-1 gap-0 h-full max-h-full overflow-hidden">
           <PanelHubChildSideMenu />
 
@@ -51,7 +51,43 @@
                                         <div class="mt-0 mb-0 flex flex-row justify-start items-center w-full">
                                              <p class="mt-0 mb-0 font-medium text-[18px] leading-[23px] tracking-[-0.01em] first:mr-auto">Connaissances</p>
                                         </div>
-
+                                        <div class="mt-[20px] flex flex-row justify-start items-center bg-[#f5f7f9] border border-[#e2e8ef] rounded-[12px] p-[20px] w-full">
+                                             <SvgoPanelHubProgressKnowledge class="w-[142px] h-[70px] flex-[0_0_142px]" />
+                                             <div class="flex flex-col justify-start items-start mr-auto ml-[20px]">
+                                                  <div class="flex flex-row justify-start items-center">
+                                                       <p class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Terminez la configuration pour voir le score de connaissances</p>
+                                                  </div>
+                                                  <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">Le score est calculé après avoir ajouté des connaissances et activé hellohumans.</p>
+                                             </div>
+                                             <div class="ml-[20px] flex flex-row justify-start items-center">
+                                                  <button class="inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
+                                                       <span>Ajouter des connaissances</span>
+                                                  </button>
+                                             </div>
+                                        </div>
+                                        <div class="flex flex-col justify-start items-[normal] mt-[20px] w-full">
+                                             <div v-for="(item, index) in listKnowledge" :key="item.id"
+                                                 :class="[index > 0 ? 'mt-[8px]' : '']"
+                                                 class="border border-[#e2e8ef] rounded-[8px] w-full p-[16px] grid items-center gap-x-[32px] [grid-template-columns:3fr_2fr_2fr]">
+                                                  <div class="flex flex-row justify-start items-center">
+                                                       <div class="flex items-center justify-center p-[8px] rounded-[8px] bg-[#eff2f6]">
+                                                            <SvgoPanelHubIconHelp class="h-[18px] w-[18px] fill-[#8796af]"/>
+                                                       </div>
+                                                       <div class="ml-[8px]">
+                                                            <p class="mt-0 mb-0 font-medium text-[14px] leading-[18px] tracking-[-0.01em]">{{ item.title }}</p>
+                                                            <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ item.description }}</p>
+                                                       </div>
+                                                  </div>
+                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">{{ item.count }}</p>
+                                                  <div class="flex flex-wrap justify-end items-center gap-y-[8px]">
+                                                       <button class="bg-transparent border border-[#d1d9e0] cursor-pointer font-normal mb-0 text-center touch-manipulation select-none align-middle whitespace-nowrap bg-[rgba(136,148,171,0)] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333]">{{ item.actionText }}</button>
+                                                  </div>
+                                             </div>
+                                             <div class="mt-[20px] flex flex-row justify-start items-center">
+                                                  <SvgoPanelHubIconDocs class="w-[24px] h-[24px] fill-[#0566ff]"/>
+                                                  <NuxtLink to="/" class="bg-transparent text-[#0566ff] no-underline text-[14px] leading-[18px] min-w-[64px] py-0 ml-[6px] hover:underline hover:text-[#0047b7]">Comment ajouter efficacement des sources de données</NuxtLink>
+                                             </div>
+                                        </div>
                                    </div>
                               </div>
                          </div>
@@ -61,6 +97,8 @@
      </div>
 </template>
 <script setup lang="ts">
+import iconHub from "assets/icons/panel/hub/iconHub.svg";
+
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 
@@ -71,4 +109,35 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel'
 })
+
+import iconHelp from "assets/icons/panel/hub/iconHelp.svg";
+import iconWebSite from "assets/icons/panel/hub/iconWebSite.svg";
+import iconLists from "assets/icons/panel/hub/iconLists.svg";
+
+const listKnowledge = ref([
+     {
+          title: 'Suggestions',
+          description: 'Connaissances à ajouter à partir des questions sans réponse et des précédentes conversations',
+          icon: rawIcon(iconHelp),
+          count: '0 question à passer en revue',
+          actionText: 'Gérer',
+          link: '/panel/hub/'
+     },
+     {
+          title: 'URL du site Web',
+          description: 'Contenu importé à partir d\'URL, comme des bases de connaissances ou des sites Web',
+          icon: rawIcon(iconWebSite),
+          count: '0 pages',
+          actionText: 'Gérer',
+          link: '/panel/hub/'
+     },
+     {
+          title: 'Questions/réponses',
+          description: 'Contenu des questions/réponses',
+          icon: rawIcon(iconLists),
+          count: '0 questions et réponses',
+          actionText: 'Gérer',
+          link: '/panel/hub/'
+     }
+])
 </script>
