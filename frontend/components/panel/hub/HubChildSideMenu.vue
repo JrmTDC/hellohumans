@@ -20,15 +20,16 @@ import iconTask from "assets/icons/panel/hub/iconTask.svg";
 
 const menuItems = ref([
      { type: 'link', icon: rawIcon(iconHub), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menuItems.hub') },
-     { id:'knowledge', type: 'link', icon: rawIcon(iconKnowledge), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
+     { id:'knowledge', type: 'submenu', icon: rawIcon(iconKnowledge), name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
      { type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
      { type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.task'), beta:true },
      { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.setup') }
 ])
 
+// tes sous-menus, avec la clé `sub` qui référence l’`id` du parent
 const menuSubs = ref([
-     { sub:'knowledge', type: 'link', icon: rawIcon(iconDataSource), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSource') },
-     { sub:'knowledge', type: 'link', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/a', name: t('panel.components.hubChildSideMenu.menuItems.dataSuggestion') },
+     { sub: 'knowledge', icon: rawIcon(iconDataSource),     routeURL: '/panel/hub/test',     name: 'Source de données' },
+     { sub: 'knowledge', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/data-suggestion', name: 'Suggestions de données' },
 ])
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
