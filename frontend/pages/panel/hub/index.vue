@@ -8,7 +8,17 @@
                          <div class="min-h-full h-full pr-[12px]">
                               <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%]">
                                    <div class="flex flex-col justify-start items-stretch">
-                                        <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">{{ t('panel.pages.hub.index.title') }}</h2>
+                                        <div class="flex flex-row justify-start items-center w-full">
+                                             <h2 class="mr-auto mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">{{ t('panel.pages.hub.index.title') }}</h2>
+                                             <div class="flex flex-row justify-start items-center ml-[60px]">
+                                                  <div>
+                                                       <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 select-none align-middle whitespace-nowrap text-center touch-manipulation bg-[#0566ff] border border-[#0566ff] text-white ml-[12px] hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white inline-flex items-center justify-center disabled:border-transparent disabled:shadow-none disabled:text-[#acb8cb] disabled:cursor-not-allowed disabled:bg-[#eff2f6]" disabled>
+                                                            <SvgoPanelHubIconPlay class="h-[20px] w-[20px] fill-current ml-[-2px] mr-[6px]" />
+                                                            <span>Activé</span>
+                                                       </button>
+                                                  </div>
+                                             </div>
+                                        </div>
                                    </div>
                                    <div class="mt-[20px] mb-0 flex flex-col justify-start items-start">
                                         <div class="mt-0 mb-0 flex flex-row justify-start items-center w-full">
