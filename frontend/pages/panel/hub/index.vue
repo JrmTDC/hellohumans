@@ -97,8 +97,6 @@
      </div>
 </template>
 <script setup lang="ts">
-import iconHub from "assets/icons/panel/hub/iconHub.svg";
-
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 
