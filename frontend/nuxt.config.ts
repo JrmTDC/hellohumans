@@ -80,6 +80,7 @@ export default defineNuxtConfig({
                appYear: process.env.APP_YEAR || "",
                supabaseBaseUrlRedirect: process.env.SUPABASE_BASE_URL_REDIRECT || "",
                stripeKey: process.env.PUBLIC_STRIPE_KEY || "",
+               chatBotName: process.env.CHAT_BOT_NAME || "",
           },
      }
 })

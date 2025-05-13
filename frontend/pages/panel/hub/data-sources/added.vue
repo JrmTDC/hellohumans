@@ -9,13 +9,13 @@
                               <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%]">
                                    <div class="flex flex-col justify-start items-stretch">
                                         <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">Sources de données</h2>
-                                        <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] max-w-[750px]">HelloHumans utilisera les connaissances que vous allez ajouter ici pour répondre aux questions des clients.</p>
+                                        <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] max-w-[750px]">{{ config.public.chatBotName }} utilisera les connaissances que vous allez ajouter ici pour répondre aux questions des clients.</p>
                                    </div>
                                    <div class="mt-[20px]">
                                         <div class="flex flex-col justify-start items-center px-[120px] py-[42px] rounded-[4px] border border-[#e2e8ef]"   >
                                              <h2 class="mt-0 mb-0 font-semibold text-[24px] leading-[31px] tracking-[-0.01em] text-center">Vous n'avez pas encore de questions-réponses</h2>
                                              <span class="block w-[12px] min-w-[12px] h-[12px] min-h-[12px]"></span>
-                                             <p class="mt-0 mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] text-center max-w-[600px]">HelloHumans a besoin de connaissances pour répondre aux questions des clients. Pour ce faire, sélectionnez l'une des options ci-dessous. Plus vous lui donnez d'informations, plus il est performant.</p>
+                                             <p class="mt-0 mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] text-center max-w-[600px]">{{ config.public.chatBotName }} a besoin de connaissances pour répondre aux questions des clients. Pour ce faire, sélectionnez l'une des options ci-dessous. Plus vous lui donnez d'informations, plus il est performant.</p>
                                              <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>
                                              <div class="w-full grid [grid-template-columns:repeat(auto-fit,_minmax(220px,_220px))] gap-[20px] justify-center">
 
@@ -56,11 +56,12 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel'
 })
+const config = useRuntimeConfig()
 const listSourceData = ref([
      {
           name: 'URL du site web',
           icon: rawIcon(iconWebSite),
-          description: 'Indiquez l\'URL de votre site pour alimenter hellohumans en connaissances.',
+          description: `Indiquez l\'URL de votre site pour alimenter ${config.public.chatBotName} en connaissances.`,
           link: '/panel/hub/data-sources/web-site'
      },
      {

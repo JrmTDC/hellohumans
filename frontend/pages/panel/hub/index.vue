@@ -67,7 +67,7 @@
                                                   <div class="flex flex-row justify-start items-center">
                                                        <p class="mt-0 mb-0 font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Terminez la configuration pour voir le score de connaissances</p>
                                                   </div>
-                                                  <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">Le score est calculé après avoir ajouté des connaissances et activé hellohumans.</p>
+                                                  <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">Le score est calculé après avoir ajouté des connaissances et activé {{ config.public.chatBotName }}.</p>
                                              </div>
                                              <div class="ml-[20px] flex flex-row justify-start items-center">
                                                   <button class="inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd]">
@@ -121,6 +121,8 @@ definePageMeta({
 import iconHelp from "assets/icons/panel/hub/iconHelp.svg";
 import iconWebSite from "assets/icons/panel/hub/iconWebSite.svg";
 import iconLists from "assets/icons/panel/hub/iconLists.svg";
+
+const config = useRuntimeConfig()
 
 const listKnowledge = ref([
      {
