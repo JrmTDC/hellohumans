@@ -59,14 +59,14 @@ import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-
+const config = useRuntimeConfig()
 /*
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuBulb), routeURL: '/panel/getting-started', tooltip: t('panel.components.layout.menuNavPage.gettingStarted') },
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), routeURL: '/panel/integrations', tooltip: t('panel.components.layout.menuNavPage.integrations') },
  */
 const menuItems = ref([
      { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), routeURL: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard'), tooltipKey: 'panel.components.layout.menuNavPage.dashboard' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuFlow), routeURL: '/panel/hub', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis'), tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis' },
+     { position: 'top', type: 'link', icon: rawIcon(iconMenuRobot), routeURL: '/panel/hub', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis', { botName: config.public.chatBotName }), tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis' },
      { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), routeURL: '/panel/analytics', tooltip: t('panel.components.layout.menuNavPage.analytics'), tooltipKey: 'panel.components.layout.menuNavPage.analytics' },
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), routeURL: '/panel/settings/chat/appearance', tooltip: t('panel.components.layout.menuNavPage.settings'), tooltipKey: 'panel.components.layout.menuNavPage.settings' },
      { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), routeURL: null, tooltip: t('panel.components.layout.menuNavPage.account'), tooltipKey: 'panel.components.layout.menuNavPage.account' }

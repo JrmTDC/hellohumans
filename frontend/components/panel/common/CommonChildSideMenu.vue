@@ -49,7 +49,7 @@
                               {{ item.name }}
                               <SvgoPanelCommonIconArrowMenu class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] ml-auto" :class="{ 'rotate-90': openItems.has(item.id) }"/>
                          </div>
-                         <div v-if="openItems.has(item.id)" class="pl-[24px]">
+                         <div v-if="openItems.has(item.id)" class="pl-[10px]">
                               <ul class="list-none p-0 m-0">
                                    <li v-for="sub in groupedSubs[item.id] || []" :key="sub.routeURL" class="flex items-center">
                                         <NuxtLink :to="sub.routeURL" class="flex items-center w-full p-[6px_12px] rounded-[6px] transition" :class="route.path === sub.routeURL ? 'bg-[#dce9ff] text-[#001433] font-medium' : 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal'">
