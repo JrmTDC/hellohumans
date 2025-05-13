@@ -39,6 +39,7 @@ export interface UpgradePlan {
 export interface ModuleAddOn {
      id: string
      name: string
+     key: string
      description: string
      basePrice: number
      discountMonths?: number
@@ -91,8 +92,7 @@ export const usePanelStore = defineStore('panel', () => {
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const project_subscription = ref<{ id: string; name: string; status: string }[]>([])
      const plans = ref<UpgradePlan[]>([])
-     const availableModules = ref<ModuleAddOn[]>([])
-     const modules = ref<string[]>([])
+     const modules = ref<ModuleAddOn[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
      const stripe = ref<Stripe | null>(null)
@@ -185,7 +185,7 @@ export const usePanelStore = defineStore('panel', () => {
                ])
                project_usages.value = usagesRes.success.usages || []
                projects.value = projectsRes.success.projects || []
-               modules.value = usagesRes.modules || []
+               //modules.value = usagesRes.modules || []
                return true
           } catch (err: any) {
                console.error('[initPanelData] Erreur :', err)
@@ -210,7 +210,7 @@ export const usePanelStore = defineStore('panel', () => {
                     apiFetch('/upgrade/modules'),
                ])
                plans.value = plansRes.success.plans || []
-               availableModules.value = modulesRes.success.modules || []
+               modules.value = modulesRes.success.modules || []
                return true
           } catch (err: any) {
                await logout()
@@ -250,7 +250,7 @@ export const usePanelStore = defineStore('panel', () => {
 
                // 2) On récupère d’autres informations
                const modulesRes = await apiFetch('/upgrade/modules')
-               availableModules.value = modulesRes.success.modules || []
+               modules.value = modulesRes.success.modules || []
                return true
           } catch (err: any) {
                await logout()
@@ -472,7 +472,6 @@ export const usePanelStore = defineStore('panel', () => {
           project_usages,
           project_subscription,
           plans,
-          availableModules,
           modules,
           project,
           projects,

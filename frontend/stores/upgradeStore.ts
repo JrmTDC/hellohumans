@@ -15,15 +15,8 @@ export const useUpgradeStore = defineStore('upgrade', () => {
 
      const selectedAddOns = computed(() => {
           const included = currentPlan.value?.includedModules || []
-          return panelStore.availableModules.filter(
-               (m) => m.selected || included.includes(m.id)
-          )
-     })
-
-     const billableAddOns = computed(() => {
-          const included = currentPlan.value?.includedModules || []
-          return panelStore.availableModules.filter(
-               (m) => m.selected && !included.includes(m.id)
+          return panelStore.modules.filter(
+               (m) => m.selected || included.includes(m.key)
           )
      })
 
@@ -64,7 +57,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      }
 
      function toggleModule(moduleId: string, checked: boolean) {
-          const mod = panelStore.availableModules.find((m) => m.id === moduleId)
+          const mod = panelStore.modules.find((m) => m.id === moduleId)
           if (mod) {
                mod.selected = checked
                save()
@@ -72,7 +65,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      }
 
      function setModuleChoice(moduleId: string, index: number) {
-          const mod = panelStore.availableModules.find((m) => m.id === moduleId)
+          const mod = panelStore.modules.find((m) => m.id === moduleId)
           if (mod?.multipleChoice && mod.choices) {
                mod.selectedChoiceIndex = index
                save()
@@ -83,7 +76,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           selectedPlanId.value = null
           billingCycle.value = 'month'
           panelStore.plans = []
-          panelStore.availableModules = []
+          panelStore.modules = []
           localStorage.removeItem('upgradeStore')
      }
 
@@ -92,7 +85,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           const data = {
                selectedPlanId: selectedPlanId.value,
                billingCycle: billingCycle.value,
-               modules: panelStore.availableModules.map((m) => ({
+               modules: panelStore.modules.map((m) => ({
                     id: m.id,
                     selected: m.selected,
                     selectedChoiceIndex: m.selectedChoiceIndex ?? 0
@@ -111,7 +104,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                billingCycle.value = saved.billingCycle
                for (const m of saved.modules || []) {
 
-                    const mod = panelStore.availableModules.find((am) => am.id === m.id)
+                    const mod = panelStore.modules.find((am) => am.id === m.id)
 
                     if (mod) {
                          mod.selected = m.selected
@@ -131,7 +124,6 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           // getters
           currentPlan,
           selectedAddOns,
-          billableAddOns,
           isSameAsCurrent,
           canValidateUpgrade,
 

@@ -91,6 +91,7 @@ class UpgradeController {
                const modules = data.map((mod) => ({
                     id: mod.id,
                     name: mod.name?.[lang] || mod.name?.['fr'] || 'Sans nom',
+                    key: mod.key,
                     description: mod.description?.[lang] || mod.description?.['fr'] || '',
                     basePrice: Number(mod.basePrice),
                     discountMonths: mod.discountMonths || 0,

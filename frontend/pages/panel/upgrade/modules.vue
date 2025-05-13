@@ -36,7 +36,7 @@
                               <div class="flex flex-col">
                                    <!-- Filtrer les modules pour ne pas afficher ceux "disabled" -->
                                    <PanelUpgradeModuleCard
-                                        v-for="(module, idx) in panelStore.availableModules.filter(m => !m.disabled)"
+                                        v-for="(module, idx) in panelStore.modules.filter(m => !m.disabled)"
                                         :key="module.id"
                                         :module="module"
                                         :index="idx"
@@ -82,7 +82,7 @@ const layoutLoadingPanel = useState('layoutLoadingPanel')
 onMounted(async () => {
 
      if (!panelStore.plans.length) await panelStore.fetchPlans()
-     if (!panelStore.availableModules.length) await panelStore.fetchModules()
+     if (!panelStore.modules.length) await panelStore.fetchModules()
 
      upgradeStore.restore()
 
@@ -116,7 +116,7 @@ const computedTotalPrice = computed(() => {
      const includedIds = off?.includedModules || []
      for (const mod of upgradeStore.selectedAddOns) {
           // Si c’est inclus dans l’offre => on l’affiche, mais pas de prix
-          if (includedIds.includes(mod.id)) {
+          if (includedIds.includes(mod.key)) {
                continue
           }
           // Sinon, on calcule

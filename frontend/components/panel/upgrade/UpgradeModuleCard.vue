@@ -188,12 +188,14 @@
      </div>
 </template>
 <script setup lang="ts">
-import type { upgradeModule } from '~/stores/upgradeStore'
+
+const upgradeStore = useUpgradeStore()
+const panelStore  = usePanelStore()
 
 const { t } = useI18n()
 
 const props = defineProps<{
-     module: upgradeModule
+     module: any
      billingCycle: 'month' | 'year'
      onToggle: (moduleId: string, checked: boolean) => void
      onChangeChoice: (moduleId: string, choiceIndex: number) => void
@@ -201,17 +203,18 @@ const props = defineProps<{
      includedModules: string[]
 }>()
 
+console.log('props', props.includedModules)
 
 // Le module est coché => si selected ou si inclus
 const checked = computed(() => {
-     if (props.includedModules.includes(props.module.id)) {
+     if (props.includedModules.includes(props.module.key)) {
           return true
      }
      return props.module.selected
 })
 
 // Le module est "inclus" => input disabled, pas togglable
-const isIncluded = computed(() => props.includedModules.includes(props.module.id))
+const isIncluded = computed(() => props.includedModules.includes(props.module.key))
 
 function toggle(checkedVal: boolean) {
      // Si c'est inclus ou comingSoon => do nothing

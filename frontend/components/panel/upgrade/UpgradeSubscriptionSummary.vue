@@ -65,7 +65,7 @@ max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]
                          <div class="flex justify-between items-center">
                               <h2 class="text-[16px] font-medium">{{ mod.name }}</h2>
                               <div>
-                                   <span v-if="selectedPlan?.includedModules?.includes(mod.id)" class="text-[14px] font-medium text-green-600">{{ t('panel.components.upgrade.subscriptionSummary.included') }}</span>
+                                   <span v-if="selectedPlan?.includedModules?.includes(mod.key)" class="text-[14px] font-medium text-[#0566ff]">{{ t('panel.components.upgrade.subscriptionSummary.included') }}</span>
                                    <span v-else>
                 <span class="text-[14px] font-medium">{{ modulePrice(mod) }} €</span>
                 <span class="text-[14px] font-medium">{{ billingCycleLocal === 'month' ? '/mois' : '/an' }}</span>
@@ -175,7 +175,7 @@ const firstFeature = computed(() => {
 })
 
 function modulePrice(mod: ModuleAddOn): number {
-     const isIncluded = props.selectedPlan?.includedModules?.includes(mod.id)
+     const isIncluded = props.selectedPlan?.includedModules?.includes(mod.key)
      if (isIncluded) return 0
 
      if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
