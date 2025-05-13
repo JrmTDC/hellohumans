@@ -34,17 +34,17 @@ const menuSubs = ref([
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
 const pageTitle = computed(() => t('panel.components.hubChildSideMenu.metaTitle'));
 const pageDescription = computed(() => t('panel.components.hubChildSideMenu.metaDescription'));
-
+const config = useRuntimeConfig()
 watchEffect(() => {
      setMeta({
           title: pageTitle.value,
           description: pageDescription.value
      });
 })
-watch(() =>  t('panel.components.hubChildSideMenu.title'), (newValue) => {
+watch(() =>  t('panel.components.hubChildSideMenu.title', { botName: config.public.chatBotName }), (newValue) => {
      pageHeaderTitle.value = newValue
 })
-pageHeaderTitle.value = t('panel.components.hubChildSideMenu.title')
+pageHeaderTitle.value = t('panel.components.hubChildSideMenu.title', { botName: config.public.chatBotName })
 pageHeaderBilled.value = false
 pageHeaderPaid.value = false
 pageMenuPanel.value = true

@@ -255,8 +255,8 @@
           },
           "components": {
                "hubChildSideMenu": {
-                    "title": "Analyse du site",
-                    "metaTitle": "Analyse du site",
+                    "title": "Agent IA {botName} ",
+                    "metaTitle": "Agent IA {botName} ",
                     "metaDescription": "",
                     "menuItems": {
                          "hub": "Hub",
@@ -355,7 +355,7 @@
                     },
                     "menuNavPage": {
                          "dashboard": "Tableau de bord",
-                         "siteAnalysis": "Analyse du site",
+                         "siteAnalysis": "Agent IA {botName} ",
                          "analytics": "Analytique",
                          "gettingStarted": "Bien démarrer",
                          "integrations": "Intégrations",

@@ -55,6 +55,9 @@
                               <p class="mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] mt-[16px]">
                                    <span>{{ t('panel.components.layout.herderPage.UsageMenu.usageNote') }}</span>
                               </p>
+                              <div class="flex flex-row justify-end items-center mt-[16px]">
+                                   <NuxtLink to="/panel/upgrade" class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] bg-[#dce9ff] border border-[#dce9ff] text-[#0049bd] hover:bg-[#9ac1ff] hover:border-[#9ac1ff] hover:text-[#0049bd] inline-flex items-center justify-center">Modifier l'abonnement</NuxtLink>
+                              </div>
                          </div>
                     </div>
 
