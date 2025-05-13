@@ -2,17 +2,44 @@
      <div class="flex flex-col h-full w-full" @click="handleSelectPlan">
           <!-- Haut : Titre, badges -->
           <div data-section="header" class="bg-white px-[20px] pt-[30px] pb-[2px] text-center relative [border-radius:12px_12px_0px_0px] flex flex-col justify-center items-start" :class="[orderClass(1), borderTopClasses]">
-               <!-- Badge 'Dans votre panier' -->
-               <div class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
-                    v-if="selected">
-                    <div class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#dce9ff]">
-                         <p class="mt-0 mb-0 font-medium text-[11px] leading-[14px] tracking-[-0.01em] text-[#0049bd]">{{ t('panel.components.upgrade.planCard.inCart') }}</p>
+
+               <!-- Ancienne Offre  si current MAIS pas sélectionné -->
+               <div
+                    class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
+                    v-if="isCurrent && !selected"
+               >
+                    <div class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#f0f0f0]">
+                         <p class="mt-0 mb-0 font-medium text-[11px] leading-[16px] tracking-[-0.01em] text-[#647491]">
+                              Ancienne Offre
+                         </p>
                     </div>
                </div>
 
-               <!-- Badge 'Le plus populaire' -->
-               <div class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
-                    v-else-if="plan.popular">
+               <!-- Offre actuelle  si current ET sélectionné -->
+               <div
+                    class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
+                    v-else-if="isCurrent && selected"
+               >
+                    <div class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#dce9ff]">
+                         <p class="mt-0 mb-0 font-medium text-[11px] leading-[16px] tracking-[-0.01em] text-[#0049bd]">
+                              Offre actuelle
+                         </p>
+                    </div>
+               </div>
+
+               <!-- Badge 'Dans votre panier' (uniquement si ce n’est pas l’offre actuelle) -->
+               <div
+                    class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"
+                    v-else-if="selected">
+                    <div class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#dce9ff]">
+                         <p class="mt-0 mb-0 font-medium text-[11px] leading-[14px] tracking-[-0.01em] text-[#0049bd]">
+                              {{ t('panel.components.upgrade.planCard.inCart') }}
+                         </p>
+                    </div>
+               </div>
+
+               <!-- Badge 'Le plus populaire' (uniquement sans abo actif) -->
+               <div class="absolute -top-[14px] left-[20px] uppercase whitespace-nowrap"  v-else-if="plan.popular && !hasSubscription">
                     <div class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#ccf1d5]">
                          <div class="w-[12px] h-[12px] rounded-[6px] bg-[rgb(52,184,87)] flex justify-center items-center">
                               <svgo-panel-icon-selected class="w-[10px] h-[10px] fill-[#fff]" />
@@ -94,10 +121,20 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['selectPlan'])
+const panelStore = usePanelStore()
+
+const isCurrent = computed(() =>
+     props.plan.id === panelStore.project?.subscription?.current_plan_id
+)
 
 function handleSelectPlan() {
      emit('selectPlan', props.plan.id)
 }
+
+// détecte s’il y a déjà un abonnement actif
+const hasSubscription = computed(() =>
+     Boolean(panelStore.project?.subscription?.current_plan_id)
+)
 
 // Calcul du prix
 const displayedPrice = computed(() => {
@@ -109,25 +146,25 @@ const displayedPrice = computed(() => {
      }
 })
 
-// Gérer la bordure bleue ou grise
+// Gérer la bordure : verte si c’est l’offre actuelle **ET** sélectionnée, bleu si sélectionnée seulement, gris sinon
 const borderClasses = computed(() => {
-     return props.selected
-          ? 'border-l-[2px] border-r-[2px] border-[#0566ff]'
-          : 'border-l-[2px] border-r-[2px] border-[#eff2f6]'
+     if (isCurrent.value && props.selected) return 'border-l-[2px] border-r-[2px] border-[#0566ff]'
+     if (props.selected)                         return 'border-l-[2px] border-r-[2px] border-[#0566ff]'
+     return 'border-l-[2px] border-r-[2px] border-[#eff2f6]'
 })
 
 // Pour le haut arrondi (bordure du haut incluse)
 const borderTopClasses = computed(() => {
-     return props.selected
-          ? 'border-l-[2px] border-r-[2px] border-t-[2px] border-[#0566ff]'
-          : 'border-l-[2px] border-r-[2px] border-t-[2px] border-[#eff2f6]'
+     if (isCurrent.value && props.selected) return 'border-l-[2px] border-r-[2px] border-t-[2px] border-[#0566ff]'
+     if (props.selected)                    return 'border-l-[2px] border-r-[2px] border-t-[2px] border-[#0566ff]'
+     return 'border-l-[2px] border-r-[2px] border-t-[2px] border-[#eff2f6]'
 })
 
 // Pour le bas arrondi (bordure du bas incluse)
 const borderBottomClasses = computed(() => {
-     return props.selected
-          ? 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#0566ff]'
-          : 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#eff2f6]'
+     if (isCurrent.value && props.selected) return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#0d2d16]'
+     if (props.selected)                    return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#0566ff]'
+     return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#eff2f6]'
 })
 
 function orderClass(block: number) {

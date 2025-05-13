@@ -115,6 +115,11 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                console.error('Erreur restauration store upgrade:', e)
           }
      }
+     // Si pas de sélection locale, on prend l’abonnement en cours
+     const sub = panelStore.project?.subscription as Subscription | null
+     if (!selectedPlanId.value && sub?.current_plan_id) {
+          selectedPlanId.value = sub.current_plan_id
+     }
 
      return {
           // state

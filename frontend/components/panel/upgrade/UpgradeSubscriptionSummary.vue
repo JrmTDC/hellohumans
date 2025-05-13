@@ -19,13 +19,30 @@
                          <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingMonthly') }}</span>
                     </label>
 
-                    <label class="flex items-center ml-[32px]" :class="{ 'cursor-not-allowed opacity-50': disableAnnual }">
-                         <input type="radio" value="year" v-model="billingCycleLocal" class="hidden" :disabled="disableAnnual" />
-                         <span v-if="billingCycleLocal === 'year'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
-                         <span v-else class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
-                         <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}</span>
-                         <span v-if="!disableAnnual" class="ml-[8px] text-[9px] bg-[#501cd8] text-white px-[4px] py-[2px] rounded">{{ t('panel.components.upgrade.subscriptionSummary.billingDiscountBadge') }}</span>
-                    </label>
+                    <!-- si désactivé, on affiche le tooltip -->
+                             <PanelCommonTooltip
+                                 v-if="disableAnnual"
+                                 text="L’option annuelle n’est pas disponible sur cette offre."
+                                  placement="top"
+                                  variant="white"
+                                  arrow
+                             >
+                               <label class="flex items-center ml-[32px] cursor-not-allowed opacity-50">
+                                    <input type="radio" value="year" v-model="billingCycleLocal" class="hidden" disabled />
+                                    <span class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
+                                    <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}</span>
+                               </label>
+                             </PanelCommonTooltip>
+                             <!-- sinon fonctionnement normal -->
+                             <label v-else class="flex items-center ml-[32px] cursor-pointer">
+                                  <input type="radio" value="year" v-model="billingCycleLocal" class="hidden" />
+                                  <span v-if="billingCycleLocal === 'year'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
+                                  <span v-else class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
+                                  <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}</span>
+                    <span class="ml-[8px] text-[9px] bg-[#501cd8] text-white px-[4px] py-[2px] rounded">
+                   {{ t('panel.components.upgrade.subscriptionSummary.billingDiscountBadge') }}
+              </span>
+                             </label>
                </div>
 
                <div class="bg-[#e2e8ef] h-px w-full mt-[20px]"></div>
@@ -37,8 +54,15 @@
                          <div class="flex justify-between items-center">
                               <h2 class="text-[16px] font-medium">{{ selectedPlan.name }}</h2>
                               <div>
-                                   <span class="text-[14px] font-medium">{{ planPrice }} €</span>
-                                   <span class="text-[14px] text-[#080f1a] font-medium">{{ billingCycleLocal === 'month' ? '/mois' : '/an' }}</span>
+                                   <template v-if="isCurrentPlan">
+                                        <span class="text-[14px] font-medium">Offre actuelle</span>
+                                   </template>
+                                   <template v-else>
+                                        <span class="text-[14px] font-medium">{{ planPrice }} €</span>
+                                        <span class="text-[14px] text-[#080f1a] font-medium">
+                                             {{ billingCycleLocal === 'month' ? '/mois' : '/an' }}
+                                        </span>
+                                   </template>
                               </div>
                          </div>
                          <p class="text-[14px] text-[#647491] mt-[4px]">{{ firstFeature }}</p>
@@ -177,6 +201,14 @@ function modulePrice(mod: ModuleAddOn): number {
                : mod.basePrice * (12 - disc)
      }
 }
+
+// détecte si le plan sélectionné est l’abonnement en cours
+const panelStore = usePanelStore()
+const isCurrentPlan = computed(() =>
+     props.selectedPlan?.id === panelStore.project?.subscription?.current_plan_id
+)
+
+
 // Désactive l’option annuelle pour les plans “Gratuit” et “Plus”
 const disableAnnual = computed(() =>
           ['Gratuit', 'Plus'].includes(props.selectedPlan?.name || '')
