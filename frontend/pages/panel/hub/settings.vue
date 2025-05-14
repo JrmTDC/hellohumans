@@ -52,12 +52,13 @@
                                                   <div class="flex flex-col justify-start items-[normal] max-w-[750px] pt-0 mt-[20px]">
                                                        <div class="flex flex-row justify-start items-start">
                                                             <label for="" class="flex-[1_0_145px] min-w-[145px] max-w-[min(180px,12vw)] inline-block font-normal text-[14px]">Activer</label>
-                                                            <em aria-label="Activer" class="ml-[20px] flex flex-row justify-start items-start">
-                                                                 <label class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] cursor-not-allowed flex-[0_0_auto] w-[36px] max-w-[36px] h-[22px] opacity-60 font-normal">
-                                                                      <input type="checkbox" role="switch" disabled class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0,0,0,0)] border-0">
-                                                                      <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0_2px_8px_rgba(0,20,51,0.28)]"></div>
-                                                                 </label>
-                                                            </em>
+
+                                                              <div class="flex-[1_1_0%] flex flex-row justify-start items-center">
+                                                                 <div class="relative flex flex-row items-center ml-[24px]">
+                                                                      <PanelCommonToggleSwitch v-model="activeAgentLoopi" :disabled="true"/>
+                                                                 </div>
+                                                            </div>
+
                                                        </div>
                                                   </div>
                                              </div>
@@ -96,28 +97,30 @@
                                                   <div class="flex flex-col justify-start items-[normal] max-w-[750px] pt-0">
 
                                                        <div class="flex flex-row justify-start items-start">
-                                                            <label for="" class="flex-[1_0_145px] min-w-[145px] max-w-[min(180px,12vw)] inline-block font-normal">
-                                                                 <div class="flex flex-col justify-start items-[normal]">
-                                                                      <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Nom de l'Agent IA</p>
-                                                                      <p class="mt-[4px] font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Agent IA utilise ce nom lorsqu'il répond à des questions sur son identité</p>
-                                                                 </div>
-                                                            </label>
-                                                            <div class="flex-[1_1_0%] relative ml-[24px]">
-                                                                 <input :placeholder="config.public.chatBotName" type="text" disabled class="block w-full border-solid border-2 border-[rgb(226,232,239)] text-[rgb(100,116,145)] bg-[rgb(239,242,246)] rounded-[8px] px-[14px] py-[16px] outline-none text-[14px] leading-[18px] tracking-[-0.01em] h-[34px]">
+                                                            <div class="flex-[1_1_0%] w-full">
+                                                                 <PanelCommonInputField
+                                                                   v-model="config.public.chatBotName"
+                                                                   label="Nom de l'Agent IA"
+                                                                   :placeholder="config.public.chatBotName"
+                                                                   helper-text="Agent IA utilise ce nom lorsqu'il répond à des questions sur son identité"
+                                                                   disabled
+                                                                 />
                                                             </div>
                                                        </div>
 
                                                        <hr class="w-full border-t border-t-[rgb(239,242,246)] mt-[20px] mb-0">
 
                                                        <div class="mt-[20px] flex flex-row justify-start items-start">
-                                                            <label for="" class="flex-[1_0_145px] min-w-[145px] max-w-[min(180px,12vw)] inline-block font-normal">
-                                                                 <div class="flex flex-col justify-start items-[normal]">
-                                                                      <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Description de l'entreprise</p>
-                                                                      <p class="mt-[4px] font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Décrivez votre entreprise pour que l'Agent IA puisse adapter les réponses à vos clients</p>
-                                                                 </div>
-                                                            </label>
-                                                            <div class="flex-[1_1_0%] relative ml-[24px]">
-                                                                 <textarea rows="4" placeholder="" class="resize-none w-full min-h-auto text-[rgb(8,15,26)] border-solid border-2 border-[rgb(211,219,229)] rounded-[8px] outline-none overflow-visible text-[14px] leading-[18px] tracking-[-0.01em] px-[12px] py-[8px]"></textarea>
+                                                            <div class="w-full">
+                                                                 <PanelCommonTextareaField
+                                                                   v-model="companyDescription"
+                                                                   label="Description de l'entreprise"
+                                                                   helper-text="Décrivez votre entreprise pour que l'Agent IA puisse adapter les réponses à vos clients"
+                                                                   placeholder="Entrez la description de votre entreprise..."
+                                                                   :rows="4"
+                                                                   :show-character-count="true"
+                                                                   :max-length="500"
+                                                                 />
                                                             </div>
                                                        </div>
 
@@ -139,42 +142,26 @@
                                                                       <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Style de communication</p>
                                                                  </div>
                                                             </label>
-                                                            <div class="flex-[1_1_0%] relative ml-[24px] group cursor-pointer">
-                                                                 <fieldset class="absolute inset-[0_0_0_0] m-0 pl-[5px] overflow-hidden pointer-events-none rounded-[8px] border-2 border-[rgb(211,219,229)] group-hover:border-[rgb(172,184,203)]"></fieldset>
-                                                                 <div class="flex justify-between items-center h-[34px] text-[14px] leading-[18px] tracking-[-0.01em] rounded-[8px] outline-none px-[14px] py-[6px] pr-[7px] min-w-0 bg-white overflow-hidden ">
-                                                                      <div class="overflow-hidden text-ellipsis whitespace-nowrap cursor-default pointer-events-none text-[14px] leading-[18px] tracking-[-0.01em]">Neutre - Style {{ config.public.chatBotName }} équilibré et normal</div>
-                                                                      <div class="flex flex-row justify-start items-center">
-                                                                           <SvgoPanelHubIconArrowSelect class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(8,15,26)]" />
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="min-w-[581px] max-w-[256px] shadow-[0_8px_20px_rgba(0,20,51,0.24)] bg-white rounded-[8px] absolute top-[38px] z-[2] max-h-[280px] flex mt-0 overflow-auto">
-                                                                      <ul class="p-[8px]">
-                                                                           <li class="px-[8px] py-[9px] rounded-[4px] text-[rgb(8,15,26)] cursor-pointer bg-white overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-[8px] text-[14px] leading-[18px] tracking-[-0.01em] hover:bg-[rgb(220,233,255)]">
-                                                                                <div class="flex flex-col justify-start items-[normal] [text-wrap:wrap]">
-                                                                                     <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Neutre - Style {{ config.public.chatBotName }}  équilibré et normal</p>
-                                                                                     <p class="font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[4px]">Exemple de réponse : « Nous appliquons une politique de remboursement de 30 jours. À condition que l'article soit dans son état d'origine, vous pouvez le retourner dans les 30 jours suivant l'achat. Si vous avez besoin de plus de détails, n'hésitez pas à nous demander ou à consulter notre page dédiée ! »</p>
-                                                                                </div>
-                                                                           </li>
-
-                                                                           <li class="px-[8px] py-[9px] rounded-[4px] text-[rgb(8,15,26)] cursor-pointer bg-white overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-[8px] text-[14px] leading-[18px] tracking-[-0.01em] hover:bg-[rgb(220,233,255)]">
-                                                                                <div class="flex flex-col justify-start items-[normal] [text-wrap:wrap]">
-                                                                                     <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Amical - Idéal pour des rapports humains et une attitude positive</p>
-                                                                                     <p class="font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[4px]">Exemple de réponse : « Vous avez changé d'avis ? Pas de problème ! Vous pouvez retourner vos articles dans les 30 jours, à condition qu'ils soient dans leur état d'origine. Consultez nos conditions générales pour plus de détails ou posez-nous vos questions ! »</p>
-                                                                                </div>
-                                                                           </li>
-
-                                                                           <li class="px-[8px] py-[9px] rounded-[4px] text-[rgb(8,15,26)] cursor-pointer bg-white overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-[8px] text-[14px] leading-[18px] tracking-[-0.01em] hover:bg-[rgb(220,233,255)]">
-                                                                                <div class="flex flex-col justify-start items-[normal] [text-wrap:wrap]">
-                                                                                     <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Formel - Idéal pour les contextes officiels et professionnels</p>
-                                                                                     <p class="font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)] mt-[4px]">Exemple de réponse : « Notre politique de remboursement autorise les retours dans les 30 jours suivant l'achat, à condition que l'article soit dans son état d'origine. Pour plus d'informations, veuillez consulter notre documentation officielle sur la politique de remboursement ou contacter notre service client. »</p>
-                                                                                </div>
-                                                                           </li>
-
-
-                                                                      </ul>
-                                                                 </div>
+                                                            <div class="flex-[1_1_0%] relative ml-[24px]">
+                                                                 <PanelCommonCustomSelect
+                                                                   v-model="selectedStyle"
+                                                                   :options="communicationStyles"
+                                                                   option-key="value"
+                                                                   option-label="label"
+                                                                   placeholder="Sélectionnez un style de communication"
+                                                                   dropdown-class="min-w-[581px] max-w-[256px]"
+                                                                   @change="handleStyleChange"
+                                                                 >
+                                                                   <template #option="{ option }">
+                                                                     <div class="flex flex-col">
+                                                                       <span class="text-[14px] leading-[18px]">{{ option.label }}</span>
+                                                                       <span v-if="option.description" class="text-[12px] text-[rgb(100,116,145)] mt-1">
+                                                                         {{ option.description }}
+                                                                       </span>
+                                                                     </div>
+                                                                   </template>
+                                                                 </PanelCommonCustomSelect>
                                                             </div>
-
                                                        </div>
 
                                                        <hr class="w-full border-t border-t-[rgb(239,242,246)] mt-[20px] mb-0">
@@ -186,13 +173,10 @@
                                                                       <p class="mt-[4px] font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">L'Agent IA ajoute des liens « En savoir plus » vers des sources externes dans ses réponses, lorsque ces sources sont disponibles.</p>
                                                                  </div>
                                                             </label>
-                                                            <div class="flex-[1_1_0%] relative ml-[24px]">
-                                                                 <em aria-label="Activer" class="ml-[20px] flex flex-row justify-start items-start">
-                                                                      <label class="relative inline-block align-top rounded-[17px] border border-[rgb(5,102,255)] bg-[rgb(5,102,255)] cursor-pointer flex-[0_0_auto] w-[36px] max-w-[36px] h-[22px] shadow-[inset_0_0_0_11px_rgb(5,102,255)]">
-                                                                           <input type="checkbox" role="switch" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0,0,0,0)] border-0">
-                                                                           <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0"></div>
-                                                                      </label>
-                                                                 </em>
+                                                            <div class="flex-[1_1_0%] flex flex-row justify-start items-center">
+                                                                 <div class="relative flex flex-row items-center ml-[24px]">
+                                                                      <PanelCommonToggleSwitch v-model="showLearnMoreLinks" />
+                                                                 </div>
                                                             </div>
                                                        </div>
 
@@ -212,16 +196,44 @@
 </template>
 <script setup lang="ts">
 const { t } = useI18n()
-const layoutLoadingPanel = useState('layoutLoadingPanel')
+
+const layoutLoadingPanel = ref(true)
+const showLearnMoreLinks = ref(true)
+const activeAgentLoopi = ref(false)
+const companyDescription = ref('')
+const config = useRuntimeConfig()
+
+// Gestion du style de communication
+const selectedStyle = ref('neutral')
+
+const communicationStyles = [
+  {
+    value: 'neutral',
+    label: `Neutre - Style ${config.public.chatBotName} équilibré et normal`,
+    description: 'Exemple de réponse : « Nous appliquons une politique de remboursement de 30 jours. À condition que l\'article soit dans son état d\'origine, vous pouvez le retourner dans les 30 jours suivant l\'achat. Si vous avez besoin de plus de détails, n\'hésitez pas à nous demander ou à consulter notre page dédiée ! »'
+  },
+  {
+    value: 'friendly',
+    label: 'Amical - Idéal pour des rapports humains et une attitude positive',
+    description: 'Exemple de réponse : « Vous avez changé d\'avis ? Pas de problème ! Vous pouvez retourner vos articles dans les 30 jours, à condition qu\'ils soient dans leur état d\'origine. Consultez nos conditions générales pour plus de détails ou posez-nous vos questions ! »'
+  },
+  {
+    value: 'formal',
+    label: 'Formel - Idéal pour les contextes officiels et professionnels',
+    description: 'Exemple de réponse : « Notre politique de remboursement autorise les retours dans les 30 jours suivant l\'achat, à condition que l\'article soit dans son état d\'origine. Pour plus d\'informations, veuillez consulter notre documentation officielle sur la politique de remboursement ou contacter notre service client. »'
+  }
+]
+
+const handleStyleChange = (option) => {
+  console.log('Style sélectionné :', option)
+  // Ici, vous pouvez ajouter la logique pour sauvegarder le style sélectionné
+}
 
 onMounted(async () => {
-     layoutLoadingPanel.value = false
+  layoutLoadingPanel.value = false
 })
 
 definePageMeta({
-     layout: 'panel'
+  layout: 'panel'
 })
-
-const config = useRuntimeConfig()
-
 </script>
