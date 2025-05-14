@@ -62,12 +62,13 @@
           <div data-section="spacer" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
 
           <!-- Prix -->
-          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start', borderClasses, orderClass(4) ]">
+          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start px-[20px] pb-[16px] pt-0', borderClasses, orderClass(4) ]">
                <span>
                     <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">€</span>
                     </span>
-                    <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">{{ billingCycle === 'month' ? t('panel.components.upgrade.planCard.perMonth') : t('panel.components.upgrade.planCard.perYear') }}</span>
+                    <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">{{ t('panel.components.upgrade.planCard.perMonth') }}</span>
                </span>
+               <p v-if="billingCycle === 'year'" class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Prix facturé : <span class="ml-[2px]">0<span>€</span> <span>{{ t('panel.components.upgrade.planCard.perYear') }}</span></span></p>
           </div>
 
           <!-- Bouton (ou étiquette) Sélectionné -->
