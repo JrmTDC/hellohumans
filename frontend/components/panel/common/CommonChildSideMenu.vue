@@ -27,7 +27,7 @@
                          </template>
                          <!-- lien normal -->
                          <template v-else>
-                              <NuxtLink :to="item.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition" :class="route.path === item.routeURL ? 'bg-[#dce9ff] text-[#001433] font-medium' : 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal'">
+                              <NuxtLink :to="item.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition" :class="{'bg-[#dce9ff] text-[#001433] font-medium': item.isActive ? item.isActive(route) : route.path === item.routeURL, 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal': item.isActive ? !item.isActive(route) : route.path !== item.routeURL}">
                                    <component :is="item.icon" class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] mr-[8px]" />
                                    {{ item.name }}
                                    <div v-if="item.beta" class="flex ml-auto">
@@ -62,7 +62,7 @@
                     </template>
                     <!-- lien simple -->
                     <template v-else>
-                         <NuxtLink :to="item.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition" :class="route.path === item.routeURL ? 'bg-[#dce9ff] text-[#001433] font-medium' : 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal'">
+                         <NuxtLink :to="item.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition" :class="{'bg-[#dce9ff] text-[#001433] font-medium': item.isActive ? item.isActive(route) : route.path === item.routeURL, 'bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal': item.isActive ? !item.isActive(route) : route.path !== item.routeURL}">
                               <component :is="item.icon" class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] mr-[8px]" />
                               {{ item.name }}
                               <div v-if="item.beta" class="flex ml-auto">
@@ -87,6 +87,7 @@ interface SidebarItem {
      routeURL?: string
      name: string
      beta?: boolean
+     isActive?: (route: any) => boolean
 }
 
 interface SidebarGroup {

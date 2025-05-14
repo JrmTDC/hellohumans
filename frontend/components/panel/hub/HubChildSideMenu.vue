@@ -19,16 +19,53 @@ import iconSetup from "assets/icons/panel/hub/iconSetup.svg";
 import iconTask from "assets/icons/panel/hub/iconTask.svg";
 
 const menuItems = ref([
-     { id: 'hub', type: 'link', icon: rawIcon(iconHub), routeURL: '/panel/hub', name: t('panel.components.hubChildSideMenu.menuItems.hub') },
-     { id:'knowledge', type: 'submenu', icon: rawIcon(iconKnowledge), name: t('panel.components.hubChildSideMenu.menuItems.knowledge') },
-     { type: 'link', icon: rawIcon(iconPlayground), routeURL: '/panel/hub/playground', name: t('panel.components.hubChildSideMenu.menuItems.playground') },
-     { type: 'link', icon: rawIcon(iconTask), routeURL: '/panel/hub/tasks', name: t('panel.components.hubChildSideMenu.menuItems.task'), beta:true },
-     { type: 'link', icon: rawIcon(iconSetup), routeURL: '/panel/hub/settings/general', name: t('panel.components.hubChildSideMenu.menuItems.setup') }
+     {
+          id: 'hub',
+          type: 'link',
+          icon: rawIcon(iconHub),
+          routeURL: '/panel/hub',
+          name: t('panel.components.hubChildSideMenu.menuItems.hub')
+     },
+     {
+          id:'knowledge',
+          type: 'submenu',
+          icon: rawIcon(iconKnowledge),
+          name: t('panel.components.hubChildSideMenu.menuItems.knowledge')
+     },
+     {
+          type: 'link',
+          icon: rawIcon(iconPlayground),
+          routeURL: '/panel/hub/playground',
+          name: t('panel.components.hubChildSideMenu.menuItems.playground')
+     },
+     {
+          type: 'link',
+          icon: rawIcon(iconTask),
+          routeURL: '/panel/hub/tasks',
+          name: t('panel.components.hubChildSideMenu.menuItems.task'),
+          beta:true
+     },
+     {
+          type: 'link',
+          icon: rawIcon(iconSetup),
+          routeURL: '/panel/hub/settings/general',
+          name: t('panel.components.hubChildSideMenu.menuItems.setup'),
+          isActive: (route) => route.path.startsWith('/panel/hub/settings')
+     }
 ])
 
 const menuSubs = ref([
-     { sub: 'knowledge', icon: rawIcon(iconDataSource), routeURL: '/panel/hub/data-sources/added',     name: 'Source de données' },
-     { sub: 'knowledge', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/data-sources/suggestions', name: 'Suggestions de données' },
+     {
+          sub: 'knowledge',
+          icon: rawIcon(iconDataSource),
+          routeURL: '/panel/hub/data-sources/added',
+          name: 'Source de données' },
+     {
+          sub: 'knowledge',
+          icon: rawIcon(iconDataSuggestion),
+          routeURL: '/panel/hub/data-sources/suggestions',
+          name: 'Suggestions de données'
+     },
 ])
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
