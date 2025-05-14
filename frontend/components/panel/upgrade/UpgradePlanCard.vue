@@ -22,7 +22,7 @@
                >
                     <div class="flex flex-row justify-start items-center px-[8px] py-[4px] rounded-[4px] gap-[4px] bg-[#dce9ff]">
                          <p class="mt-0 mb-0 font-medium text-[11px] leading-[16px] tracking-[-0.01em] text-[#0049bd]">
-                              Offre actuelle
+                              Offre Actuelle
                          </p>
                     </div>
                </div>
