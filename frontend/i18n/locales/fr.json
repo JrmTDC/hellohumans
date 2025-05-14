@@ -330,7 +330,7 @@
                          "veryStrong": "Très fort"
                     },
                     "childSideMenu": {
-                         "beta": "Bêta",
+                         "beta": "Bêta"
                     }
                },
                "layout": {
@@ -579,7 +579,9 @@
                          "startingAt": "À partir de",
                          "selectLabel": "Choisissez une option :",
                          "perMonth": "/mois",
-                         "perYear": "/an"
+                         "perYear": "/an",
+                         "currentOffer": "Offre actuelle",
+                         "inCart": "Dans votre panier"
                     },
                     "planCard": {
                          "inCart": "Dans votre panier",

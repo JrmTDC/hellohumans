@@ -9,12 +9,6 @@
           >
                <div class="relative flex flex-col justify-start items-[normal] rounded-[12px]" :class="[ borderClasses, index >= 1 ? 'mt-[20px]' : '' ]">
 
-                    <span
-                         v-if="checked"
-                         class="absolute top-[-8px] right-[30px] bg-[#0566ff] text-white text-[11px] px-[6px] py-[2px] rounded-full shadow-md z-10">
-                         Dans votre panier
-                    </span>
-
                     <!-- Bloc du haut -->
                     <div class="flex flex-col justify-start items-[normal] p-[20px]">
                          <div class="flex flex-row justify-start items-center">
@@ -107,12 +101,17 @@
 
      <!-- Si aucun tooltip n'est nécessaire (pas comingSoon, pas included) -->
      <div v-else class="relative flex-col justify-start items-[normal] rounded-[12px]" :class="[ borderClasses, index >= 1 ? 'mt-[20px]' : '' ]">
+
+
           <span
                v-if="checked"
-               class="uppercase whitespace-nowrap absolute top-[-8px] right-[30px] bg-[#dce9ff] text-[#0049bd] font-medium leading-[16px] tracking-[-0.01em] text-[11px] px-[8px] py-[4px] font-medium rounded-[4px]"
+               class="uppercase whitespace-nowrap absolute top-[-8px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px]"
+               :class="isCurrentModule ? 'bg-[#dce9ff] text-[#0049bd]' : 'bg-[#dce9ff] text-[#0049bd]'"
           >
-               Dans Votre Panier
-          </span>
+                    {{ isCurrentModule ? t('panel.components.upgrade.ModuleCard.currentOffer') : t('panel.components.upgrade.ModuleCard.inCart') }}
+                    </span>
+
+
           <!-- Même contenu que ci-dessus, sans l’enveloppe Tooltip -->
           <div class="flex flex-col justify-start items-[normal] p-[20px]">
                <div class="flex flex-row justify-start items-center">
