@@ -36,14 +36,16 @@ const menuItems = ref([
           type: 'link',
           icon: rawIcon(iconPlayground),
           routeURL: '/panel/hub/playground',
-          name: t('panel.components.hubChildSideMenu.menuItems.playground')
+          name: t('panel.components.hubChildSideMenu.menuItems.playground'),
+          isActive: (route) => route.path.startsWith('/panel/hub/playground/live-chat')
      },
      {
           type: 'link',
           icon: rawIcon(iconTask),
           routeURL: '/panel/hub/tasks',
           name: t('panel.components.hubChildSideMenu.menuItems.task'),
-          beta:true
+          beta:true,
+          disabled: true,
      },
      {
           type: 'link',

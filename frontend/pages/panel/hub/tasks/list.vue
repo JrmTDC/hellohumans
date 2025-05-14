@@ -1,12 +1,16 @@
-<template></template>
+<template>
+     <PanelTaskLayout title="Tâches">
+
+     </PanelTaskLayout>
+</template>
 <script setup lang="ts">
+const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-const router = useRouter()
+
 onMounted(async () => {
      layoutLoadingPanel.value = false
-     await router.replace('/panel/hub/settings/general')
 })
 definePageMeta({
-     layout: 'panel',
+     layout: 'panel'
 })
 </script>

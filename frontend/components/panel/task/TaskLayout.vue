@@ -22,6 +22,7 @@
                                                   </div>
                                              </div>
                                         </div>
+                                        <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] max-w-[750px]">Vous permettent de personnaliser votre message pour des cas d'utilisation précis en créant des actions répondant aux intentions et aux questions des visiteurs.</p>
                                    </div>
 
                                    <!-- Menu des onglets -->
@@ -59,8 +60,7 @@ const props = defineProps({
      }
 })
 const tabs = [
-     { to: '/panel/hub/settings/general', label: 'Général' },
-     { to: '/panel/hub/settings/personality', label: 'Personnalité' }
+     { to: '/panel/hub/tasks/list', label: 'Mes tâches' },
 ]
 const isActive = (tab) => {
      return route.path.startsWith(tab.to) || (route.path === '/panel/hub/settings' && tab.to.includes('general'))

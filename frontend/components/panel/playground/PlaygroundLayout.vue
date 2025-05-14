@@ -59,8 +59,7 @@ const props = defineProps({
      }
 })
 const tabs = [
-     { to: '/panel/hub/settings/general', label: 'Général' },
-     { to: '/panel/hub/settings/personality', label: 'Personnalité' }
+     { to: '/panel/hub/playground/live-chat', label: 'Chat en direct' },
 ]
 const isActive = (tab) => {
      return route.path.startsWith(tab.to) || (route.path === '/panel/hub/settings' && tab.to.includes('general'))

@@ -4,7 +4,7 @@ const layoutLoadingPanel = useState('layoutLoadingPanel')
 const router = useRouter()
 onMounted(async () => {
      layoutLoadingPanel.value = false
-     await router.replace('/panel/hub/settings/general')
+     await router.replace('/panel/hub/tasks/list')
 })
 definePageMeta({
      layout: 'panel',
