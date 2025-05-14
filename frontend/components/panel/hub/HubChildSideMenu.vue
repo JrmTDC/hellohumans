@@ -27,7 +27,7 @@ const menuItems = ref([
 ])
 
 const menuSubs = ref([
-     { sub: 'knowledge', icon: rawIcon(iconDataSource),     routeURL: '/panel/hub/data-sources/added',     name: 'Source de données' },
+     { sub: 'knowledge', icon: rawIcon(iconDataSource), routeURL: '/panel/hub/data-sources/added',     name: 'Source de données' },
      { sub: 'knowledge', icon: rawIcon(iconDataSuggestion), routeURL: '/panel/hub/data-sources/suggestions', name: 'Suggestions de données' },
 ])
 
