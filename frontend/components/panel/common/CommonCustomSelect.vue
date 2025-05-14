@@ -11,7 +11,7 @@
           </div>
           <!-- Liste des options -->
           <Transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
-               <div v-if="isOpen" class="absolute z-50 w-full mt-1 bg-white rounded-[8px] shadow-lg max-h-[280px] overflow-auto " :class="dropdownClass">
+               <div v-if="isOpen" class="absolute z-50 min-w-full mt-1 bg-white rounded-[8px] shadow-lg max-h-[280px] overflow-auto" :class="dropdownClass" :style="{ width: selectWidth + 'px' }">
                     <ul class="p-[8px]">
                          <li v-for="(option, index) in options" :key="index" class="px-[8px] py-[9px] rounded-[4px] cursor-pointer hover:bg-[rgb(220,233,255)] transition-colors" :class="{ 'bg-[rgb(245,247,249)]': isOptionSelected(option) }" @click.stop="selectOption(option)">
                               <slot name="option" :option="option">
@@ -66,6 +66,7 @@ const emit = defineEmits(['update:modelValue', 'change']);
 
 const isOpen = ref(false);
 const selectContainer = ref(null);
+const selectWidth = ref(0);
 
 // Trouver l'option sélectionnée initiale
 const selectedOption = ref(
@@ -104,16 +105,26 @@ const handleEscape = (event) => {
      }
 };
 
+// Mettre à jour la largeur du sélecteur
+const updateSelectWidth = () => {
+     if (selectContainer.value) {
+          selectWidth.value = selectContainer.value.offsetWidth;
+     }
+};
+
 // Ajouter les écouteurs d'événements
 onMounted(() => {
      document.addEventListener('click', handleClickOutside);
      document.addEventListener('keydown', handleEscape);
+     updateSelectWidth();
+     window.addEventListener('resize', updateSelectWidth);
 });
 
 // Nettoyer les écouteurs d'événements
 onBeforeUnmount(() => {
      document.removeEventListener('click', handleClickOutside);
      document.removeEventListener('keydown', handleEscape);
+     window.removeEventListener('resize', updateSelectWidth);
 });
 
 // Mettre à jour l'option sélectionnée quand les props changent
