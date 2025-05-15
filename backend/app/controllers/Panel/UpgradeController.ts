@@ -102,6 +102,7 @@ class UpgradeController {
                     selectedChoiceIndex: 0,
                     comingSoon: mod.comingSoon || false,
                     disabled: mod.disabled || false,
+                    displayMore: mod.display_more || false,
                }))
 
                return {
