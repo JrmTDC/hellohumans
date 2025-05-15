@@ -64,11 +64,18 @@
           <!-- Prix -->
           <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start px-[20px] pb-[16px] pt-0', borderClasses, orderClass(4) ]">
                <span>
-                    <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">€</span>
+                    <span class="h-auto relative text-[40px] leading-[52px] tracking-[-0.02em] text-[#080f1a] font-medium">{{ displayedPriceMonth }}<span class="text-[40px] leading-[52px] tracking-[-0.02em] font-medium">€</span>
                     </span>
                     <span class="text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a] font-medium ml-[4px]">{{ t('panel.components.upgrade.planCard.perMonth') }}</span>
                </span>
-               <p v-if="billingCycle === 'year'" class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Prix facturé : <span class="ml-[2px]">0<span>€</span> <span>{{ t('panel.components.upgrade.planCard.perYear') }}</span></span></p>
+               <p v-if="billingCycle === 'year'" class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">
+                    <template v-if="props.plan?.billingYear">
+                         Prix facturé : <span class="ml-[2px]">{{ displayedPriceYear }}<span>€</span> <span>{{ t('panel.components.upgrade.planCard.perYear') }}</span></span>
+                    </template>
+                    <template v-else>
+                         Offre que par mois
+                    </template>
+               </p>
           </div>
 
           <!-- Bouton (ou étiquette) Sélectionné -->
@@ -111,7 +118,8 @@ interface Plan {
      monthlyPrice: number
      discountMonths: number
      popular?: boolean
-     includedFeatures: string[]
+     includedFeatures: string[],
+     billingYear: boolean
 }
 const { t } = useI18n()
 const props = defineProps<{
@@ -128,6 +136,10 @@ const isCurrent = computed(() =>
      props.plan.id === panelStore.project?.subscription?.current_plan_id
 )
 
+function roundUpToTwoDecimals(num: number): number {
+     return Math.ceil(num * 100) / 100;
+}
+
 function handleSelectPlan() {
      emit('selectPlan', props.plan.id)
 }
@@ -138,13 +150,19 @@ const hasSubscription = computed(() =>
 )
 
 // Calcul du prix
-const displayedPrice = computed(() => {
+const displayedPriceMonth = computed(() => {
      if (props.billingCycle === 'month') {
           return props.plan.monthlyPrice
      } else {
-          // ex. (12 - discountMonths) * monthlyPrice
-          return props.plan.monthlyPrice * (12 - props.plan.discountMonths)
+          if(props.plan?.billingYear){
+               return roundUpToTwoDecimals(props.plan.monthlyPrice * (12 - props.plan.discountMonths) / 12)
+          }else{
+               return props.plan.monthlyPrice
+          }
      }
+})
+const displayedPriceYear = computed(() => {
+     return props.plan.monthlyPrice * (12 - props.plan.discountMonths)
 })
 
 // Gérer la bordure : verte si c’est l’offre actuelle **ET** sélectionnée, bleu si sélectionnée seulement, gris sinon
@@ -163,7 +181,7 @@ const borderTopClasses = computed(() => {
 
 // Pour le bas arrondi (bordure du bas incluse)
 const borderBottomClasses = computed(() => {
-     if (isCurrent.value && props.selected) return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#0d2d16]'
+     if (isCurrent.value && props.selected) return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#0566ff]'
      if (props.selected)                    return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#0566ff]'
      return 'border-l-[2px] border-r-[2px] border-b-[2px] border-[#eff2f6]'
 })

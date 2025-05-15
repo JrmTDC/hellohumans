@@ -51,6 +51,7 @@ class UpgradeController {
                     baseSubtitle: plan.baseSubtitle?.[lang] || '',
                     popular: plan.popular || false,
                     includedModules: plan.includedModules || [],
+                    billingYear: plan.billing_year || false,
                }))
 
                return {
