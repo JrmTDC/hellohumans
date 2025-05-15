@@ -33,7 +33,8 @@ export interface UpgradePlan {
      includedFeatures: string[]
      baseSubtitle: string
      popular?: boolean
-     includedModules?: string[]
+     includedModules?: string[],
+     billingYear?: boolean
 }
 
 export interface ModuleAddOn {
