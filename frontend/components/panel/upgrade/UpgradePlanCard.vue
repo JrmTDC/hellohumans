@@ -149,6 +149,13 @@ const hasSubscription = computed(() =>
      Boolean(panelStore.project?.subscription?.current_plan_id)
 )
 
+// Au chargement, si c'est l'offre actuelle, on la sélectionne automatiquement
+onMounted(() => {
+     if (isCurrent.value) {
+          handleSelectPlan()
+     }
+})
+
 // Calcul du prix
 const displayedPriceMonth = computed(() => {
      if (props.billingCycle === 'month') {
