@@ -107,6 +107,10 @@ const panelStore  = usePanelStore()
 
 const { t } = useI18n()
 
+onMounted(() => {
+     props.module.selected = subscriptionState.value
+})
+
 const props = defineProps<{
      module: any
      billingCycle: 'month' | 'year'
