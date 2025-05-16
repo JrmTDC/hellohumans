@@ -79,7 +79,6 @@ const layoutLoadingPanel = useState('layoutLoadingPanel')
 onMounted(async () => {
      if (!panelStore.plans.length) await panelStore.fetchPlans()
 
-     upgradeStore.restore()
      await nextTick()
      measureAllSections()
      layoutLoadingPanel.value = false

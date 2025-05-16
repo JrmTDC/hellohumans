@@ -132,7 +132,6 @@ const handleLogin = async () => {
 }
 onMounted(() => {
      localStorage.removeItem('onboardingStore')
-     localStorage.removeItem('upgradeStore')
 })
 
 const { setMeta } = usePanelPageMeta()
