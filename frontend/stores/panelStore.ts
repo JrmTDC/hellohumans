@@ -53,7 +53,8 @@ export interface ModuleAddOn {
      selectedChoiceIndex?: number
      selected: boolean
      disabled?: boolean
-     comingSoon?: boolean
+     comingSoon?: boolean,
+     displayMore?: boolean
 }
 interface StripeSetupIntent {
      client_secret?: string

@@ -1,204 +1,105 @@
 <template>
-          <!-- On enveloppe tout le moduleCard dans un Tooltip si needed -->
-          <PanelCommonTooltip
-               v-if="module.comingSoon || isIncluded"
-               :text="module.comingSoon ? t('panel.components.upgrade.ModuleCard.comingSoon') : t('panel.components.upgrade.ModuleCard.included')"
-               placement="top"
-               variant="white"
-               :arrow="false"
-          >
-               <div class="relative flex flex-col justify-start items-[normal] rounded-[12px]" :class="[ borderClasses, index >= 1 ? 'mt-[20px]' : '' ]">
+     <div class="relative flex-col justify-start items-[normal] rounded-[12px] border-2" :class="[ borderClasses, index >= 1 ? 'mt-[25px]' : '' ]">
 
-                    <!-- Bloc du haut -->
-                    <div class="flex flex-col justify-start items-[normal] p-[20px]">
-                         <div class="flex flex-row justify-start items-center">
-                              <div class="flex flex-col mr-auto">
-                                   <!-- Switch OFF -->
-                                   <label v-if="!checked" class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px]" :class="[ module.comingSoon ? 'opacity-60 cursor-not-allowed' : '', isIncluded ? 'opacity-60 cursor-not-allowed' : '' ]">
-                                        <input
-                                             type="checkbox"
-                                             role="switch"
-                                             class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
-                                             :checked="checked"
-                                             :disabled="isIncluded || module.comingSoon"
-                                             @change="toggle(true)"
-                                        />
-                                        <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)]"></div>
-                                   </label>
+          <span v-if="isIncluded" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#dce9ff] text-[#0049bd]">Inclus dans votre offre</span>
 
-                                   <!-- Switch ON -->
-                                   <label v-else class="relative inline-block align-top rounded-[17px] border border-[#0566ff] bg-[#0566ff] w-[36px] max-w-[36px] h-[22px] shadow-[inset_0px_0px_0px_11px_#0566ff]" :class="[ module.comingSoon ? 'opacity-60 cursor-not-allowed' : '', isIncluded ? 'opacity-60 cursor-not-allowed' : '' ]">
-                                        <input
-                                             type="checkbox"
-                                             role="switch"
-                                             class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
-                                             :checked="checked"
-                                             :disabled="isIncluded || module.comingSoon"
-                                             @change="toggle(false)"
-                                        />
-                                        <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0"
-                                        ></div>
-                                   </label>
-                                   <span class="block w-[12px] h-[12px]"></span>
-                              </div>
+          <span v-else-if="module.comingSoon" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#f0f0f0] text-[#647491]">Bientot dispo</span>
 
-                              <div class="flex flex-col self-end">
-                                   <!-- "À partir de" si c'est un module multipleChoice NON coché -->
-                                   <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ t('panel.components.upgrade.ModuleCard.startingAt') }}</p>
-                                   <span class="block w-[2px] h-[2px]"></span>
-                              </div>
-                         </div>
+          <span v-else-if="isCurrentModule" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px]" :class="checked ? 'bg-[#dce9ff] text-[#0049bd]' : 'bg-[#ff073d] text-[#fff]'">{{ checked ? t('panel.components.upgrade.ModuleCard.currentOffer') : 'Module supprimé' }}</span>
 
+          <span v-else-if="checked" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#dce9ff] text-[#0049bd]">{{ t('panel.components.upgrade.ModuleCard.inCart') }}</span>
 
-                         <div class="flex flex-row justify-start items-center">
-                              <div class="flex flex-col justify-start items-[normal] flex-grow">
-                                   <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em] text-[#080f1a]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ module.name }}</h2>
-                                   <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ module.description }}</p>
-                              </div>
-
-                              <!-- Prix affiché -->
-                              <div class="flex flex-col justify-start items-[normal] whitespace-nowrap h-full ml-[12px]">
-                                   <div class="flex flex-row justify-start items-center">
-                                        <span>
-                                             <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ displayedPrice }}<span class="text-[24px] leading-[31px] tracking-[-0.01em] font-medium">€</span></span>
-                                             <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'month' ? t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
-                                        </span>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-
-                    <!-- Si multi-choix ET module coché, on affiche le menu déroulant -->
-                    <div v-if="module.multipleChoice && checked" class="flex flex-col justify-start items-[normal] px-[24px] pb-[24px] pt-0">
-                         <div class="flex flex-row justify-start items-center">
-                              <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">
-                                   {{ t('panel.components.upgrade.ModuleCard.selectLabel') }}
-                              </p>
-                              <!-- info-bulle d'exemple -->
-                              <div class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center">
-                                   <svgo-panel-icon-helper class="w-[14px] h-[14px] fill-[#647491]" />
-                              </div>
-                         </div>
-                         <span class="block w-[12px] h-[12px]"></span>
-
-                         <div class="flex flex-col justify-start items-[normal]">
-                              <div class="mb-0 text-left relative w-full">
-                                   <select class="block w-full h-[34px] text-[14px] leading-[18px] border border-[#d3dbe5] rounded-[6px] px-[8px]" @change="onChoiceChange($event)">
-                                        <option
-                                             v-for="(choice, idx) in module.choices"
-                                             :key="idx"
-                                             :value="idx"
-                                             :selected="idx === module.selectedChoiceIndex"
-                                        >
-                                             {{ choice.label }} ({{ choice.monthlyPrice }} {{ t('panel.components.upgrade.ModuleCard.perMonth') }})
-                                        </option>
-                                   </select>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </PanelCommonTooltip>
-
-     <!-- Si aucun tooltip n'est nécessaire (pas comingSoon, pas included) -->
-     <div v-else class="relative flex-col justify-start items-[normal] rounded-[12px]" :class="[ borderClasses, index >= 1 ? 'mt-[20px]' : '' ]">
-
-
-          <span
-               v-if="checked"
-               class="uppercase whitespace-nowrap absolute top-[-8px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px]"
-               :class="isCurrentModule ? 'bg-[#dce9ff] text-[#0049bd]' : 'bg-[#dce9ff] text-[#0049bd]'"
-          >
-                    {{ isCurrentModule ? t('panel.components.upgrade.ModuleCard.currentOffer') : t('panel.components.upgrade.ModuleCard.inCart') }}
-                    </span>
-
-
-          <!-- Même contenu que ci-dessus, sans l’enveloppe Tooltip -->
+          <!-- Bloc du haut -->
           <div class="flex flex-col justify-start items-[normal] p-[20px]">
                <div class="flex flex-row justify-start items-center">
                     <div class="flex flex-col mr-auto">
-                         <label v-if="!checked" class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] cursor-pointer w-[36px] h-[22px]">
+                         <!-- Switch OFF -->
+                         <label v-if="!checked" class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px]" :class="[ module.comingSoon ? 'opacity-60 cursor-not-allowed' : '', isIncluded ? 'opacity-60 cursor-not-allowed' : '', isCurrentModule ? 'bg-[#ff073d]' : '' ]">
                               <input
                                    type="checkbox"
                                    role="switch"
                                    class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
                                    :checked="checked"
-                                   :disabled="false"
+                                   :disabled="isIncluded || module.comingSoon"
                                    @change="toggle(true)"
                               />
-                              <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)]"
-                              ></div>
+                              <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)]"></div>
                          </label>
 
-                         <label v-else class="relative inline-block align-top rounded-[17px] border border-[#0566ff] bg-[#0566ff] cursor-pointer w-[36px] h-[22px] shadow-[inset_0px_0px_0px_11px_#0566ff]"
-                         >
+                         <!-- Switch ON -->
+                         <label v-else class="relative inline-block align-top rounded-[17px] border border-[#0566ff] bg-[#0566ff] w-[36px] max-w-[36px] h-[22px] shadow-[inset_0px_0px_0px_11px_#0566ff]" :class="[ module.comingSoon ? 'opacity-60 cursor-not-allowed' : '', isIncluded ? 'opacity-60 cursor-not-allowed' : '' ]">
                               <input
                                    type="checkbox"
                                    role="switch"
                                    class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
                                    :checked="checked"
-                                   :disabled="false"
+                                   :disabled="isIncluded || module.comingSoon"
                                    @change="toggle(false)"
                               />
-                              <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0"
-                              ></div>
+                              <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0">
+                              </div>
                          </label>
                          <span class="block w-[12px] h-[12px]"></span>
                     </div>
 
                     <div class="flex flex-col self-end">
-                         <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]">{{ t('panel.components.upgrade.ModuleCard.startingAt') }}</p>
+                         <!-- "À partir de" si c'est un module multipleChoice NON coché -->
+                         <p v-if="module.multipleChoice && !checked" class="mt-0 mb-0 font-normal text-[11px] leading-[14px] tracking-[-0.01em] text-right text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ t('panel.components.upgrade.ModuleCard.startingAt') }}</p>
                          <span class="block w-[2px] h-[2px]"></span>
-                    </div>
-                    </div>
-
-                    <div class="flex flex-row justify-start items-center">
-                         <div class="flex flex-col justify-start items-[normal] flex-grow">
-                              <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em] text-[#080f1a]">
-                                   {{ module.name }}
-                              </h2>
-                              <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]">
-                                   {{ module.description }}
-                              </p>
-                         </div>
-
-                         <div class="flex flex-col justify-start items-[normal] whitespace-nowrap h-full ml-[12px]">
-                              <div class="flex flex-row justify-start items-center">
-                                   <span>
-                                        <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ displayedPrice }}<span class="text-[24px] leading-[31px] font-medium">€</span>
-                                        </span>
-                                        <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">{{ billingCycle === 'month' ?  t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
-                                   </span>
-                              </div>
-                         </div>
                     </div>
                </div>
 
-               <div v-if="module.multipleChoice && checked" class="flex flex-col justify-start items-[normal] px-[24px] pb-[24px] pt-0">
-                    <div class="flex flex-row justify-start items-center">
-                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">{{ t('panel.components.upgrade.ModuleCard.selectLabel') }}</p>
-                         <div class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center">
-                              <svgo-panel-icon-helper class="w-[14px] h-[14px] fill-[#647491]" />
-                         </div>
-                    </div>
-                    <span class="block w-[12px] h-[12px]"></span>
 
-                    <div class="flex flex-col">
-                         <div class="mb-0 text-left relative w-full">
-                              <select class="block w-full h-[34px] text-[14px] leading-[18px] border border-[#d3dbe5] rounded-[6px] px-[8px]" @change="onChoiceChange($event)">
-                                   <option
-                                        v-for="(choice, idx) in module.choices"
-                                        :key="idx"
-                                        :value="idx"
-                                        :selected="idx === module.selectedChoiceIndex"
-                                   >
-                                        {{ choice.label }} ({{ choice.monthlyPrice }} {{ t('panel.components.upgrade.ModuleCard.perMonth') }})
-                                   </option>
-                              </select>
+               <div class="flex flex-row justify-start items-center">
+                    <div class="flex flex-col justify-start items-[normal] flex-grow">
+                         <h2 class="mt-0 mb-0 font-medium text-[18px] leading-[24px] tracking-[-0.01em] text-[#080f1a]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ module.name }}</h2>
+                         <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ module.description }}</p>
+                    </div>
+
+                    <!-- Prix affiché -->
+                    <div class="flex flex-col justify-start items-[normal] whitespace-nowrap h-full ml-[12px]">
+                         <div class="flex flex-row justify-start items-center">
+                              <span>
+                                   <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ displayedPrice }}<span class="text-[24px] leading-[31px] tracking-[-0.01em] font-medium">€</span></span>
+                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'month' ? t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
+                              </span>
                          </div>
+                         <button v-if="module.displayMore" class="flex flex-row justify-start items-center bg-transparent text-[#0566ff] no-underline text-[13px] leading-[18px] min-w-[64px] py-0 hover:underline hover:text-[#0047b7]">En s'avoir plus
+                         </button>
+
                     </div>
                </div>
           </div>
 
+          <!-- Si multi-choix ET module coché, on affiche le menu déroulant -->
+          <div v-if="module.multipleChoice && checked" class="flex flex-col justify-start items-[normal] px-[24px] pb-[24px] pt-0">
+               <div class="flex flex-row justify-start items-center">
+                    <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#080f1a]">
+                         {{ t('panel.components.upgrade.ModuleCard.selectLabel') }}
+                    </p>
+                    <!-- info-bulle d'exemple -->
+                    <div class="shadow-[0px_1px_3px_0px_rgba(136,148,171,0.56)] bg-white rounded-[4px] w-[18px] h-[18px] ml-[8px] cursor-pointer flex items-center justify-center">
+                         <svgo-panel-icon-helper class="w-[14px] h-[14px] fill-[#647491]" />
+                    </div>
+               </div>
+               <span class="block w-[12px] h-[12px]"></span>
+
+               <div class="flex flex-col justify-start items-[normal]">
+                    <div class="mb-0 text-left relative w-full">
+                         <select class="block w-full h-[34px] text-[14px] leading-[18px] border border-[#d3dbe5] rounded-[6px] px-[8px]" @change="onChoiceChange($event)">
+                              <option
+                                   v-for="(choice, idx) in module.choices"
+                                   :key="idx"
+                                   :value="idx"
+                                   :selected="idx === module.selectedChoiceIndex"
+                              >
+                                   {{ choice.label }} ({{ choice.monthlyPrice }} {{ t('panel.components.upgrade.ModuleCard.perMonth') }})
+                              </option>
+                         </select>
+                    </div>
+               </div>
+          </div>
+     </div>
 </template>
 <script setup lang="ts">
 
@@ -289,9 +190,11 @@ const displayedPrice = computed(() => {
      }
 })
 // en haut du <script setup>
-const borderClasses = computed(() =>
-     checked.value
-          ? 'border-2 border-[#0566ff]'
-          : 'border border-[#e2e8ef]'
-)
+const borderClasses = computed(() => {
+     if (isCurrentModule.value) {
+          return checked.value ? 'border-[#0566ff]' : 'border-[#ff073d]'
+     } else {
+          return checked.value ? 'border-[#0566ff]' : 'border-[#e2e8ef]'
+     }
+})
 </script>
