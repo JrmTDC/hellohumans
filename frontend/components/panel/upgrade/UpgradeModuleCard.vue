@@ -3,11 +3,11 @@
 
           <span v-if="isIncluded" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#dce9ff] text-[#0049bd]">Inclus dans votre offre</span>
 
-          <span v-else-if="module.comingSoon" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#f0f0f0] text-[#647491]">Bientot dispo</span>
+          <span v-else-if="module.comingSoon" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#f0f0f0] text-[#647491]">Bientôt disponible</span>
 
-          <span v-else-if="isCurrentModule" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px]" :class="checked ? 'bg-[#dce9ff] text-[#0049bd]' : 'bg-[#ff073d] text-[#fff]'">{{ checked ? t('panel.components.upgrade.ModuleCard.currentOffer') : 'Module supprimé' }}</span>
+          <span v-else-if="isCurrentModule" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px]" :class="checked ? 'bg-[#dce9ff] text-[#0049bd]' : 'bg-[#ff073d] text-[#fff]'">{{ checked ? 'Module actuel' : 'Module supprimé' }}</span>
 
-          <span v-else-if="checked" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#dce9ff] text-[#0049bd]">{{ t('panel.components.upgrade.ModuleCard.inCart') }}</span>
+          <span v-else-if="checked" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#dce9ff] text-[#0049bd]">Ajouté à votre panier</span>
 
           <!-- Bloc du haut -->
           <div class="flex flex-col justify-start items-[normal] p-[20px]">
@@ -117,24 +117,36 @@ const props = defineProps<{
      includedModules: string[]
 }>()
 
+// repère si le module fait partie de l’offre actuelle
+const isIncluded = computed(() =>
+     props.includedModules.includes(props.module.id)
+)
+
 console.log('props', props.includedModules)
 
-// Le module est coché => si selected ou si inclus
-const checked = computed(() => {
-     if (props.includedModules.includes(props.module.key)) {
-          return true
-     }
-     return props.module.selected
-})
 
-// Le module est "inclus" => input disabled, pas togglable
-const isIncluded = computed(() => props.includedModules.includes(props.module.key))
+ // Repère si on a déjà initialisé l’état du switch
+      const overrideChecked = ref<boolean | null>(null)
 
-function toggle(checkedVal: boolean) {
-     // Si c'est inclus ou comingSoon => do nothing
-     if (isIncluded.value || props.module.comingSoon) return
-     props.onToggle(props.module.id, checkedVal)
-}
+      // À l’ouverture, on coche automatiquement si dans la souscription
+           onMounted(() => {
+                  overrideChecked.value = panelStore.project?.subscription?.current_modules.includes(props.module.id) || false
+                     })
+
+      // Le “checked” réel est soit notre override, soit la sélection manuelle
+           const checked = computed(() =>
+             overrideChecked.value !== null
+               ? overrideChecked.value
+                    : props.module.selected
+                )
+
+      function toggle(checkedVal: boolean) {
+             if (props.module.comingSoon) return
+             // on met à jour notre override pour garder l’état après refresh
+                  overrideChecked.value = checkedVal
+                  // on notifie le store pour sauvegarde
+                  props.onToggle(props.module.id, checkedVal)
+                }
 
 const isCurrentModule = computed(() =>
      !!panelStore.project?.subscription?.current_modules.includes(props.module.id)
