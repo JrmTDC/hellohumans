@@ -76,6 +76,7 @@ const router = useRouter()
 const trialActive = ref(false)
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 
+// Redirection forcée vers index.vue quand on rafraîchit la page
 onMounted(async () => {
      if (!panelStore.plans.length) await panelStore.fetchPlans()
 

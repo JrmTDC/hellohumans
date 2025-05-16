@@ -84,8 +84,6 @@ onMounted(async () => {
      if (!panelStore.plans.length) await panelStore.fetchPlans()
      if (!panelStore.modules.length) await panelStore.fetchModules()
 
-     upgradeStore.restore()
-
      if (!upgradeStore.currentPlan) {
           await router.replace('/panel/upgrade')
           return

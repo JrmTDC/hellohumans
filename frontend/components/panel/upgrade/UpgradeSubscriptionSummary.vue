@@ -172,18 +172,30 @@ const billingCycleLocal = computed<'month'|'year'>({
      }
 })
 
+const selectedModules = computed(() => {
+     // Modules sélectionnés
+     const selected = props.selectedModules
+     
+     // Modules de l'abonnement actuel
+     const subModules = panelStore.project?.subscription?.current_modules || []
+     
+     // Filtrer les modules en fonction de leur état de sélection
+     const allModules = selected.filter(mod => {
+          // Si le module est inclus dans le plan actuel
+          const isIncludedInPlan = props.selectedPlan?.includedModules?.includes(mod.key) || false
+          // Si le module est inclus, il est toujours affiché
+          if (isIncludedInPlan) {
+               return true
+          }
+          // Sinon, on vérifie s'il est sélectionné
+          return mod.selected
+     })
+     
+     return allModules
+})
 
 const showModules = computed(() => props.showModules)
-const totalPriceLocal = computed(() => props.totalPrice)
 const nextButtonLabel = computed(() => props.nextButtonLabel || t('panel.components.upgrade.subscriptionSummary.defaultButtonLabel'))
-
-const planPrice = computed(() => {
-     if (!props.selectedPlan) return 0
-     const { monthlyPrice, discountMonths } = props.selectedPlan
-     return billingCycleLocal.value === 'month'
-          ? monthlyPrice
-          : monthlyPrice * (12 - discountMonths)
-})
 
 const firstFeature = computed(() => {
      if (!props.selectedPlan?.includedFeatures.length) return ''
@@ -225,6 +237,39 @@ watch(disableAnnual, (off) => {
           billingCycleLocal.value = 'month'
      }
 });
+
+// Calculer le prix du plan
+const planPrice = computed(() => {
+     if (!props.selectedPlan) return 0
+     const { monthlyPrice, discountMonths } = props.selectedPlan
+     return billingCycleLocal.value === 'month'
+          ? monthlyPrice
+          : monthlyPrice * (12 - discountMonths)
+})
+
+// Calculer le prix total
+const totalPriceLocal = computed(() => {
+     let total = planPrice.value
+     for (const mod of props.selectedModules) {
+          total += modulePrice(mod)
+     }
+     return total
+})
+
+// Réagir aux changements des modules et du plan
+watch(() => props.selectedPlan, () => {
+     // Mise à jour du prix du plan
+     nextTick(() => {
+          planPrice.value
+     })
+})
+
+watch(() => props.selectedModules, () => {
+     // Mise à jour du prix total
+     nextTick(() => {
+          totalPriceLocal.value
+     })
+})
 
 function goNext() {
      emit('goNext')

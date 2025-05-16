@@ -36,8 +36,7 @@
                                    :disabled="isIncluded || module.comingSoon"
                                    @change="toggle(false)"
                               />
-                              <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0">
-                              </div>
+                              <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0"></div>
                          </label>
                          <span class="block w-[12px] h-[12px]"></span>
                     </div>
@@ -117,22 +116,47 @@ const props = defineProps<{
      includedModules: string[]
 }>()
 
-console.log('props', props.includedModules)
+const currentModules = computed(() => panelStore.project?.subscription?.current_modules || [])
 
-// Le module est coché => si selected ou si inclus
+const overrideChecked = ref<boolean | null>(null)
+
+
+// Obtenir l'état de l'abonnement
+const subscriptionState = computed(() => {
+     // Vérifier si l'abonnement existe
+     if (!panelStore.project?.subscription?.current_modules) return false
+     
+     // Vérifier si le module est dans l'abonnement
+     return panelStore.project.subscription.current_modules.includes(props.module.id)
+})
+
 const checked = computed(() => {
+     // Si le module est inclus dans le plan (toujours coché)
      if (props.includedModules.includes(props.module.key)) {
           return true
      }
+
+     // Utiliser l'état persistant si disponible
      return props.module.selected
 })
 
 // Le module est "inclus" => input disabled, pas togglable
-const isIncluded = computed(() => props.includedModules.includes(props.module.key))
+const isIncluded = computed(() => {
+     // Seul les modules inclus dans le plan sont désactivés
+     return props.includedModules.includes(props.module.key)
+})
 
 function toggle(checkedVal: boolean) {
-     // Si c'est inclus ou comingSoon => do nothing
-     if (isIncluded.value || props.module.comingSoon) return
+     // Si le module est inclus dans le plan => ne peut pas être désélectionné
+     if (props.includedModules.includes(props.module.key)) {
+          if (!checkedVal) return // empêche la désélection
+          props.onToggle(props.module.id, true)
+          return
+     }
+     // Si le module est comingSoon => do nothing
+     if (props.module.comingSoon) return
+     
+     // Pour les autres modules (abonnement ou sélection manuelle)
      props.onToggle(props.module.id, checkedVal)
 }
 

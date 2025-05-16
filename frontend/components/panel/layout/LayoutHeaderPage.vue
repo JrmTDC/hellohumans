@@ -1,4 +1,9 @@
 <template>
+     <PanelModalAdsModuleGuidePlus modal-id="44ef5d1e64dfd6f4d" :show-learn-more="true" @learn-more="handleLearnMore">
+          <template #content>
+               Votre contenu ici
+          </template>
+     </PanelModalAdsModuleGuidePlus>
      <header class="app-content-header flex items-center bg-[#f5f7f9] flex-[0_0_58px] flex-row h-[58px] justify-start pl-[24px] pr-[12px] relative z-[12]">
           <div class="flex flex-row justify-start items-center flex-grow w-full">
                <h1 class="inline-flex items-center text-[20px] font-medium tracking-[-0.01em] leading-[26px] mb-0 mr-auto mt-0 max-w-[calc(100%-268px)]">
@@ -81,7 +86,10 @@ const props = defineProps({
      isBilled: Boolean,
      isPaid: Boolean
 })
-
+const handleLearnMore = () => {
+     // Action à effectuer quand on clique sur "En savoir plus"
+     // Redirection ou autre logique
+}
 const isUsageMenuOpen = ref(false)
 const isHelpMenuOpen = ref(false)
 const usageMenuRef = ref(null)

@@ -8,6 +8,26 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      const panelStore = usePanelStore()
      const selectedPlanId = ref<string | null>(null)
      const billingCycle = ref<'month' | 'year'>('month')
+     const selectedModules = ref<Record<string, boolean>>({})
+
+     // Initialiser les modules avec leurs états par défaut
+     const initSelectedModules = () => {
+          // Réinitialiser l'état
+          selectedModules.value = {}
+          
+          // Si un abonnement existe
+          const sub = panelStore.project?.subscription
+          if (sub?.current_modules) {
+               sub.current_modules.forEach(moduleId => {
+                    selectedModules.value[moduleId] = true
+               })
+          }
+     }
+
+     // Initialiser les modules au chargement
+     onMounted(() => {
+          initSelectedModules()
+     })
 
      const currentPlan = computed(() =>
           panelStore.plans.find((p) => p.id === selectedPlanId.value) || null
@@ -57,7 +77,14 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      function toggleModule(moduleId: string, checked: boolean) {
           const mod = panelStore.modules.find((m) => m.id === moduleId)
           if (mod) {
-               mod.selected = checked
+               // Si le module est inclus dans le plan
+               if (currentPlan.value?.includedModules?.includes(mod.key)) {
+                    mod.selected = true
+               } else {
+                    mod.selected = checked
+                    // Mettre à jour l'état persistant
+                    selectedModules.value[moduleId] = checked
+               }
           }
      }
 
@@ -91,8 +118,28 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                selectedPlanId.value = sub.current_plan_id
                // Sélectionner les modules existants
                const currentModules = sub.current_modules || []
+               
+               // D'abord vérifier le plan actuel
+               const currentPlan = panelStore.plans.find(p => p.id === selectedPlanId.value)
+               
+               // Initialiser les modules
                panelStore.modules.forEach(mod => {
-                    mod.selected = currentModules.includes(mod.key)
+                    // Si le module est inclus dans le plan actuel
+                    const isIncludedInPlan = currentPlan?.includedModules?.includes(mod.key) || false
+                    // Si le module est inclus, il est toujours sélectionné
+                    if (isIncludedInPlan) {
+                         mod.selected = true
+                    }
+                    // Sinon, on vérifie s'il est dans l'abonnement
+                    else {
+                         // D'abord vérifier l'état persistant
+                         const persistedState = selectedModules.value[mod.id]
+                         if (persistedState !== undefined) {
+                              mod.selected = persistedState
+                         } else {
+                              mod.selected = currentModules.includes(mod.id)
+                         }
+                    }
                })
           }
      })

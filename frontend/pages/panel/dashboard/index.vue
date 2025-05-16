@@ -1,14 +1,4 @@
 <template>
-          <PanelModalAds 
-       modal-id="mon-identifiant-unssique"
-       title="Mon Titre"
-       :show-learn-more="true"
-       @learn-more="handleLearnMore"
-     >
-       <template #content>
-         Votre contenu ici
-       </template>
-     </PanelModalAds>
      <div class="dashboard-content flex-1 overflow-x-hidden overflow-y-auto relative">
           <div class="grid grid-cols-1 grid-rows-1 h-full max-h-full overflow-hidden ml-[24px] ">
                <div class="min-h-full h-full pr-[12px]">
@@ -90,10 +80,6 @@ const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMet
 
 const pageTitle = computed(() => t('panel.pages.dashboard.metaTitle'));
 const pageDescription = computed(() => t('panel.pages.dashboard.metaDescription'));
-const handleLearnMore = () => {
-     // Action à effectuer quand on clique sur "En savoir plus"
-     // Redirection ou autre logique
-   }
 watchEffect(() => {
      setMeta({
           title: pageTitle.value,
