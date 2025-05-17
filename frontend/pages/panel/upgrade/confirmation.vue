@@ -28,12 +28,19 @@ const upgradeStore = useUpgradeStore()
 const router = useRouter()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const subscriptionPaiement = useState('subscriptionPaiement')
+const upgradeFlow = useUpgradeFlow()
 
 onMounted(async () => {
      if(!subscriptionPaiement.value) {
           await router.push('/panel/upgrade')
      }
      layoutLoadingPanel.value = false
+     
+     if (upgradeFlow.currentStep < 2 || !subscriptionPaiement.value) {
+          router.replace('/panel/upgrade')
+          return
+     }
+     upgradeFlow.setStep(3)
 })
 
 

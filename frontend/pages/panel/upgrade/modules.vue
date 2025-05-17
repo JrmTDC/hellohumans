@@ -72,15 +72,15 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const router = useRouter()
+const layoutLoadingPanel = useState('layoutLoadingPanel')
 const panelStore = usePanelStore()
 const upgradeStore = useUpgradeStore()
-const router = useRouter()
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
-const layoutLoadingPanel = useState('layoutLoadingPanel')
+const upgradeFlow = useUpgradeFlow()
 
 onMounted(async () => {
-
      if (!panelStore.plans.length) await panelStore.fetchPlans()
      if (!panelStore.modules.length) await panelStore.fetchModules()
 
@@ -89,6 +89,12 @@ onMounted(async () => {
           return
      }
      layoutLoadingPanel.value = false
+     console.log(upgradeFlow.currentStep)
+     if (upgradeFlow.currentStep < 1 || !upgradeStore.currentPlan) {
+          router.replace('/panel/upgrade')
+          return
+     }
+     upgradeFlow.setStep(2)
 })
 
 function toggleModule(moduleId: string, checked: boolean) {

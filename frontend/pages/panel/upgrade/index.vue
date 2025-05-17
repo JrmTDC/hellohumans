@@ -75,6 +75,7 @@ const panelStore = usePanelStore()
 const router = useRouter()
 const trialActive = ref(false)
 const layoutLoadingPanel = useState('layoutLoadingPanel')
+const upgradeFlow = useUpgradeFlow()
 
 // Redirection forcée vers index.vue quand on rafraîchit la page
 onMounted(async () => {
@@ -83,6 +84,7 @@ onMounted(async () => {
      await nextTick()
      measureAllSections()
      layoutLoadingPanel.value = false
+     upgradeFlow.setStep(1)
 })
 
 function measureAllSections(){

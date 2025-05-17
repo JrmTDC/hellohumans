@@ -164,20 +164,6 @@ function toggle(checkedVal: boolean) {
      props.onToggle(props.module.id, checkedVal)
 }
 
-      // Le “checked” réel est soit notre override, soit la sélection manuelle
-           const checked = computed(() =>
-             overrideChecked.value !== null
-               ? overrideChecked.value
-                    : props.module.selected
-                )
-
-      function toggle(checkedVal: boolean) {
-             if (props.module.comingSoon) return
-             // on met à jour notre override pour garder l’état après refresh
-                  overrideChecked.value = checkedVal
-                  // on notifie le store pour sauvegarde
-                  props.onToggle(props.module.id, checkedVal)
-                }
 
 const isCurrentModule = computed(() =>
      !!panelStore.project?.subscription?.current_modules.includes(props.module.id)
