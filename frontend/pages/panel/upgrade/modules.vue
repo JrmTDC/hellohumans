@@ -88,13 +88,12 @@ onMounted(async () => {
           await router.replace('/panel/upgrade')
           return
      }
-     layoutLoadingPanel.value = false
-     console.log(upgradeFlow.currentStep)
      if (upgradeFlow.currentStep < 1 || !upgradeStore.currentPlan) {
           router.replace('/panel/upgrade')
           return
      }
      upgradeFlow.setStep(2)
+     layoutLoadingPanel.value = false
 })
 
 function toggleModule(moduleId: string, checked: boolean) {

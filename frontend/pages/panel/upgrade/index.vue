@@ -83,8 +83,8 @@ onMounted(async () => {
 
      await nextTick()
      measureAllSections()
-     layoutLoadingPanel.value = false
      upgradeFlow.setStep(1)
+     layoutLoadingPanel.value = false
 })
 
 function measureAllSections(){

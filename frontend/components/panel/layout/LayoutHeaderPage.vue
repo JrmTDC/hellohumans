@@ -1,9 +1,18 @@
 <template>
-     <PanelModalAdsModuleGuidePlus modal-id="44ef5d1e64dfd6f4d" :show-learn-more="true" @learn-more="handleLearnMore">
-          <template #content>
-               Votre contenu ici
-          </template>
-     </PanelModalAdsModuleGuidePlus>
+     <PanelModalBaseAds modal-id="44ef5d1e64dfd6f4d"  @close="handleClose">
+
+               <img src="public/assets/img/modules/ads_guideplus.png" alt="Image" class="w-full rounded-t-[8px]" />
+               <div class="text-left px-[32px] pt-[32px] pb-[24px] rounded-[8px] mt-[-8px] relative">
+                    <h2 class="mt-0 mb-0 font-semibold text-[20px] leading-[26px] tracking-[-0.01em]">Guide+ – Le compagnon touristique intelligent intégré à votre chatbot</h2>
+                    <div class="mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] mt-[12px]">Offrez à vos utilisateurs une expérience enrichie grâce à Guide+, le module dédié aux lieux touristiques. Une fois activé, votre chatbot devient un guide culturel interactif, grâce à une base de données constamment à jour et adaptée à votre territoire
+                    </div>
+               </div>
+               <div class="flex flex-row justify-end items-center px-[32px] py-[24px] shadow-[0_0_0_0_transparent] transition-shadow duration-300 relative">
+                    <button class="rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] inline-flex items-center justify-center bg-[#0566ff] border border-transparent border-[#0566ff] text-white text-center align-middle hover:bg-[#003d9e] hover:border-[#003d9e] hover:text-white">Découvrir Guide+</button>
+               </div>
+
+
+     </PanelModalBaseAds>
      <header class="app-content-header flex items-center bg-[#f5f7f9] flex-[0_0_58px] flex-row h-[58px] justify-start pl-[24px] pr-[12px] relative z-[12]">
           <div class="flex flex-row justify-start items-center flex-grow w-full">
                <h1 class="inline-flex items-center text-[20px] font-medium tracking-[-0.01em] leading-[26px] mb-0 mr-auto mt-0 max-w-[calc(100%-268px)]">

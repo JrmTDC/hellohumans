@@ -12,44 +12,5 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-const props = defineProps({
-     modalId: {
-          type: String,
-          required: true
-     },
-     title: {
-          type: String,
-          default: () => "sdqdqs"
-     },
-     showLearnMore: {
-          type: Boolean,
-          default: false
-     },
-     delay: {
-          type: Number,
-          default: 1000
-     }
-})
 
-const emit = defineEmits(['learn-more'])
-const showModal = ref(false)
-const modalShownKey = `modal_shown_${props.modalId}`
-onMounted(() => {
-     const hasModalBeenShown = localStorage.getItem(modalShownKey)
-     if (!hasModalBeenShown) {
-          setTimeout(() => {
-               showModal.value = true
-          }, props.delay)
-     }
-})
-
-const closeModal = () => {
-     localStorage.setItem(modalShownKey, 'true')
-     showModal.value = false
-}
-
-const handleLearnMore = () => {
-     emit('learn-more')
-     closeModal()
-}
 </script>
