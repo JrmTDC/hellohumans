@@ -2,7 +2,7 @@
      <div class="relative overflow-hidden bg-[#f5f7f9] z-[1]">
           <div class=" overflow-x-hidden w-full h-full">
                <div class="min-w-full table min-h-full h-full">
-                    <PanelCommonChildSideMenu :items="menuItems" :subs="menuSubs"/>
+                    <PanelCommonChildSideMenu :items="menuItems" :subs="menuSubs" :extLinks="menuExtLinks"/>
                </div>
           </div>
      </div>
@@ -24,35 +24,50 @@ const menuItems = ref([
           type: 'link',
           icon: rawIcon(iconHub),
           routeURL: '/panel/hub',
-          name: t('panel.components.hubChildSideMenu.menuItems.hub')
+          name: t('panel.components.hubChildSideMenu.menuItems.hub'),
+          isActive: undefined,
+          beta: false,
+          disabled: false
      },
      {
           id:'knowledge',
           type: 'submenu',
           icon: rawIcon(iconKnowledge),
-          name: t('panel.components.hubChildSideMenu.menuItems.knowledge')
+          routeURL: '',
+          name: t('panel.components.hubChildSideMenu.menuItems.knowledge'),
+          isActive: undefined,
+          beta: false,
+          disabled: false
      },
      {
+          id:'playground',
           type: 'link',
           icon: rawIcon(iconPlayground),
           routeURL: '/panel/hub/playground',
           name: t('panel.components.hubChildSideMenu.menuItems.playground'),
-          isActive: (route) => route.path.startsWith('/panel/hub/playground/live-chat')
+          isActive: (route: { path: string }) => route.path.startsWith('/panel/hub/playground/live-chat'),
+          beta: false,
+          disabled: false
      },
      {
+          id:'task',
           type: 'link',
           icon: rawIcon(iconTask),
           routeURL: '/panel/hub/tasks',
           name: t('panel.components.hubChildSideMenu.menuItems.task'),
+          isActive: undefined,
           beta:true,
           disabled: true,
      },
      {
+          id:'setup',
           type: 'link',
           icon: rawIcon(iconSetup),
           routeURL: '/panel/hub/settings/general',
           name: t('panel.components.hubChildSideMenu.menuItems.setup'),
-          isActive: (route) => route.path.startsWith('/panel/hub/settings')
+          isActive: (route: { path: string }) => route.path.startsWith('/panel/hub/settings'),
+          beta: false,
+          disabled: false
      }
 ])
 
@@ -68,6 +83,12 @@ const menuSubs = ref([
           routeURL: '/panel/hub/data-sources/suggestions',
           name: 'Suggestions de données'
      },
+])
+const menuExtLinks = ref([
+     {
+          routeURL: '/panel/analytics',
+          name: 'Analytique'
+     }
 ])
 
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()

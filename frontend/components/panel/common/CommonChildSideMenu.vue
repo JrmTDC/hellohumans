@@ -74,6 +74,12 @@
                          </NuxtLink>
                     </template>
                </li>
+               <template v-if="extLinks && extLinks.length">
+                    <li class="m-[8px] p-0 h-[1px] border-t border-t-[rgb(211,219,229)] opacity-50"></li>
+                    <li v-for="extLink in extLinks" :key="extLink.routeURL" class="flex flex-col w-full relative text-[#354869] p-0 text-[14px] leading-[18px] tracking-[-0.01em]">
+                         <NuxtLink :to="extLink.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal" >{{ extLink.name }}<span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span> <SvgoPanelCommonIconLink class="min-w-[16px] min-h-[16px] w-[16px] h-[16px] fill-[#354869]"/></NuxtLink>
+                    </li>
+               </template>
           </template>
      </ul>
 </template>
@@ -85,7 +91,7 @@ interface SidebarItem {
      group?: string
      type: string
      icon: any
-     routeURL?: string
+     routeURL: string
      name: string
      beta?: boolean
      disabled?: boolean
@@ -99,18 +105,23 @@ interface SidebarGroup {
 interface SidebarSub {
      sub: string
      icon: any
-     routeURL?: string
+     routeURL: string
      name: string
      beta?: boolean
+}
+interface SidebarExtLink{
+     routeURL: string
+     name: string
 }
 
 const props = defineProps<{
      items: SidebarItem[]
      groups?: SidebarGroup[] | null
      subs?: SidebarSub[] | null
+     extLinks?: SidebarExtLink[] | null
 }>()
 
-const { items, groups, subs } = toRefs(props)
+const { items, groups, subs, extLinks } = toRefs(props)
 const route = useRoute()
 
 // regroupe les sous-éléments par parent
@@ -156,7 +167,7 @@ const groupedItems = computed<Record<string, SidebarItem[]>>(() => {
 })
 
 // Vérifier si un élément de menu est actif (pour les sous-menus)
-const isItemActive = (item) => {
+const isItemActive = (item: SidebarItem) => {
      // Si l'élément a une fonction isActive personnalisée, on l'utilise
      if (typeof item.isActive === 'function') {
           return item.isActive(route);
@@ -170,7 +181,7 @@ const isItemActive = (item) => {
 };
 
 // Vérifier s'il y a des éléments visibles dans un groupe
-const hasVisibleItemsInGroup = (groupId) => {
+const hasVisibleItemsInGroup = (groupId: string) => {
      return (groupedItems.value[groupId] || []).some(item => !item.disabled);
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-[-20px] mr-[-20px] pt-[12px] mt-[20px]">
+  <div class="ml-[-20px] mr-[-20px] pt-[12px] mt-[20px] ">
     <!-- Section Principale -->
     <section class="mr-[20px] ml-[20px]">
       <h3 class="flex items-center mt-0 mb-0 pt-0 pb-0 text-[18px] leading-[23px] tracking-[-0.01em] w-auto max-w-[750px] font-medium">

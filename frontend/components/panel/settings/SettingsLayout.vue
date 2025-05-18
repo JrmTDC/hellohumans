@@ -5,7 +5,7 @@
                <div class="overflow-x-hidden w-full h-full">
                     <div class="min-h-full h-full">
                          <div class="min-h-full h-full pr-[12px]">
-                              <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%]">
+                              <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%] pb-[20px]">
 
                                    <!-- En-tête -->
                                    <div class="flex flex-col justify-start items-stretch">
