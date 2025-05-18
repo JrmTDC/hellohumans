@@ -1,25 +1,71 @@
 ﻿<template>
      <div class="relative overflow-hidden bg-[#f5f7f9] z-[1]">
           <div class=" overflow-x-hidden w-full h-full">
-               <PanelCommonChildSideMenu :items="menuItems" :groups="menuGroups" />
+               <PanelCommonChildSideMenu :items="menuItems" :groups="menuGroups" :subs="menuSubs" />
           </div>
      </div>
 </template>
 
 <script setup lang="ts">
 const { t } = useI18n()
+import MenuChat from "assets/icons/panel/settings/iconMenuChat.svg";
 import MenuAppearance from "assets/icons/panel/settings/iconMenuAppearance.svg";
 import MenuSetup from "assets/icons/panel/settings/iconMenuSetup.svg";
 import MenuTranslation from "assets/icons/panel/settings/iconMenuTranslation.svg";
+
 const menuGroups = ref([
-     { id: 'chat', name: t('panel.components.settingsChildSideMenu.menuGroups.chat') },
-     { id: 'settings', name: t('panel.components.settingsChildSideMenu.menuGroups.settings') }
+     {
+          id: 'chats',
+          name: t('panel.components.settingsChildSideMenu.menuGroups.chat')
+     },
+     {
+          id: 'settings',
+          name: t('panel.components.settingsChildSideMenu.menuGroups.settings')
+     }
 ])
 const menuItems = ref([
-     { group:'chat', type: 'link', icon: rawIcon(MenuAppearance), routeURL: '/panel/settings/chat/appearance', name: t('panel.components.settingsChildSideMenu.chat.appearance') },
-     { group:'chat', type: 'link', icon: rawIcon(MenuSetup), routeURL: '/panel/', name: t('panel.components.settingsChildSideMenu.chat.installa') },
-     { group:'chat', type: 'link', icon: rawIcon(MenuTranslation), routeURL: '/panel/', name: t('panel.components.settingsChildSideMenu.chat.translations') },
-     { group:'settings',  type: 'link', icon: rawIcon(MenuAppearance), routeURL: '/panel/', name: t('panel.components.settingsChildSideMenu.settings.teste') }
+     {
+          id: 'chat',
+          group:'chats',
+          type: 'submenu',
+          icon: rawIcon(MenuChat),
+          routeURL: '/panel/settings/chat/appearance',
+          name: "Chat en direct",
+          isActive: undefined,
+          beta: false,
+          disabled: false
+     },
+     {
+          id: 'teste',
+          group:'settings',
+          type: 'link',
+          icon: rawIcon(MenuAppearance),
+          routeURL: '/panel/',
+          name: t('panel.components.settingsChildSideMenu.settings.teste'),
+          isActive: undefined,
+          beta: false,
+          disabled: false
+     }
+])
+const menuSubs = ref([
+     {
+          sub: 'chat',
+          icon: rawIcon(MenuAppearance),
+          routeURL: '/panel/settings/chat/appearance',
+          name: t('panel.components.settingsChildSideMenu.chat.appearance'),
+     },
+     {
+          sub: 'chat',
+          icon: rawIcon(MenuSetup),
+          routeURL: '/panel/',
+          name: t('panel.components.settingsChildSideMenu.chat.installa'),
+     },
+     {
+          sub: 'chat',
+          icon: rawIcon(MenuTranslation),
+          routeURL: '/panel/',
+          name: t('panel.components.settingsChildSideMenu.chat.translations'),
+     },
 ])
 const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMeta } = usePanelPageMeta()
 const pageTitle = computed(() => t('panel.components.settingsChildSideMenu.metaTitle'));

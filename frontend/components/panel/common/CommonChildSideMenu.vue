@@ -12,7 +12,7 @@
                                         <component :is="item.icon" class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] mr-[8px]" />
                                         <span class="block w-[2px] min-w-[2px] h-[2px] min-h-[2px] ml-0"></span>
                                         {{ item.name }}
-                                        <SvgoPanelCommonIconArrowMenu class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] ml-auto" :class="{ 'rotate-90': openItems.has(item.id) }"/>
+                                        <SvgoPanelCommonMenuIconArrow class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] ml-auto" :class="{ 'rotate-90': openItems.has(item.id) }"/>
                                    </div>
                                    <div v-if="openItems.has(item.id)" class="pl-[24px]">
                                         <ul class="list-none p-0 m-0">
@@ -48,7 +48,7 @@
                               <component :is="item.icon" class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] mr-[8px]" />
                               <span class="block w-[2px] min-w-[2px] h-[2px] min-h-[2px] ml-0"></span>
                               {{ item.name }}
-                              <SvgoPanelCommonIconArrowMenu class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] ml-auto" :class="{ 'rotate-90': openItems.has(item.id) }"/>
+                              <SvgoPanelCommonMenuIconArrow class="w-[16px] h-[16px] min-h-[16px] min-w-[16px] fill-[#001433] ml-auto" :class="{ 'rotate-90': openItems.has(item.id) }"/>
                          </div>
                          <div v-if="openItems.has(item.id)" class="pl-[10px]">
                               <ul class="list-none p-0 m-0">
@@ -77,7 +77,7 @@
                <template v-if="extLinks && extLinks.length">
                     <li class="m-[8px] p-0 h-[1px] border-t border-t-[rgb(211,219,229)] opacity-50"></li>
                     <li v-for="extLink in extLinks" :key="extLink.routeURL" class="flex flex-col w-full relative text-[#354869] p-0 text-[14px] leading-[18px] tracking-[-0.01em]">
-                         <NuxtLink :to="extLink.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal" >{{ extLink.name }}<span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span> <SvgoPanelCommonIconLink class="min-w-[16px] min-h-[16px] w-[16px] h-[16px] fill-[#354869]"/></NuxtLink>
+                         <NuxtLink :to="extLink.routeURL" class="flex items-center w-full p-[9px_12px] rounded-[8px] transition bg-transparent text-[#354869] hover:bg-[#64749114] hover:text-[#001433] font-normal" >{{ extLink.name }}<span class="block w-[8px] min-w-[8px] h-[8px] min-h-[8px]"></span> <SvgoPanelCommonMenuIconLink class="min-w-[16px] min-h-[16px] w-[16px] h-[16px] fill-[#354869]"/></NuxtLink>
                     </li>
                </template>
           </template>
