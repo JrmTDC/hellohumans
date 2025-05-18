@@ -1,17 +1,17 @@
 <template>
-     <PanelModalBaseAds modal-id="44ef5d1e64dfd6f4d"  @close="handleClose">
-
-               <img src="public/assets/img/modules/ads_guideplus.png" alt="Image" class="w-full rounded-t-[8px]" />
+     <PanelModalBaseAds modal-id="qsdqsd64qsdqs" v-slot="{ redirect }">
+               <div class="w-[500px] h-[200px] overflow-hidden bg-gray-100 ">
+                    <img src="public/assets/img/modules/ads_guideplus.png" alt="Image"
+                         class="max-w-full object-cover [object-position:0px_-44px]" />
+               </div>
                <div class="text-left px-[32px] pt-[32px] pb-[24px] rounded-[8px] mt-[-8px] relative">
                     <h2 class="mt-0 mb-0 font-semibold text-[20px] leading-[26px] tracking-[-0.01em]">Guide+ – Le compagnon touristique intelligent intégré à votre chatbot</h2>
                     <div class="mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] mt-[12px]">Offrez à vos utilisateurs une expérience enrichie grâce à Guide+, le module dédié aux lieux touristiques. Une fois activé, votre chatbot devient un guide culturel interactif, grâce à une base de données constamment à jour et adaptée à votre territoire
                     </div>
                </div>
                <div class="flex flex-row justify-end items-center px-[32px] py-[24px] shadow-[0_0_0_0_transparent] transition-shadow duration-300 relative">
-                    <button class="rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] inline-flex items-center justify-center bg-[#0566ff] border border-transparent border-[#0566ff] text-white text-center align-middle hover:bg-[#003d9e] hover:border-[#003d9e] hover:text-white">Découvrir Guide+</button>
+                    <button @click="redirect('/panel/upgrade/')" class="rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] inline-flex items-center justify-center bg-[#0566ff] border border-transparent border-[#0566ff] text-white text-center align-middle hover:bg-[#003d9e] hover:border-[#003d9e] hover:text-white">Découvrir Guide+</button>
                </div>
-
-
      </PanelModalBaseAds>
      <header class="app-content-header flex items-center bg-[#f5f7f9] flex-[0_0_58px] flex-row h-[58px] justify-start pl-[24px] pr-[12px] relative z-[12]">
           <div class="flex flex-row justify-start items-center flex-grow w-full">
@@ -89,16 +89,19 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const router = useRouter()
 const showReportModal = ref(false)
 const props = defineProps({
      title: String,
      isBilled: Boolean,
      isPaid: Boolean
 })
+
 const handleLearnMore = () => {
-     // Action à effectuer quand on clique sur "En savoir plus"
-     // Redirection ou autre logique
+     router.push('/guideplus')
+     emit('close')
 }
+
 const isUsageMenuOpen = ref(false)
 const isHelpMenuOpen = ref(false)
 const usageMenuRef = ref(null)

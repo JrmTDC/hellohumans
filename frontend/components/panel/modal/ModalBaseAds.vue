@@ -5,12 +5,11 @@
                     <div class="flex flex-col items-center bg-white relative rounded-[8px]">
 
                          <!-- Close button -->
-                         <button @click="emit('close')" class="absolute bg-white rounded-full border-[3px] border-white shadow-[0px_8px_20px_rgba(0,20,51,0.24)] cursor-pointer flex items-center justify-center w-[36px] h-[36px] top-[-12px] right-[-12px] hover:bg-[#dce9ff]">
+                         <button @click="closeModal()" class="absolute bg-white rounded-full border-[3px] border-white shadow-[0px_8px_20px_rgba(0,20,51,0.24)] cursor-pointer flex items-center justify-center w-[36px] h-[36px] top-[-12px] right-[-12px] hover:bg-[#dce9ff]">
                               <svgo-panel-icon-cross class="w-[22px] h-[22px] fill-[#647491]" />
                          </button>
-
                          <!-- Slot pour contenu -->
-                         <slot />
+                         <slot :close="closeModal" :redirect="handleRedirect" />
                     </div>
                </div>
           </div>
@@ -18,14 +17,7 @@
 </template>
 
 <script setup lang="ts">
-
-const { t } = useI18n()
-const emit = defineEmits(['close'])
-
-const show = ref(false)
-onMounted(() => {
-     setTimeout(() => (show.value = true), 100)
-})
+const router = useRouter()
 const props = defineProps({
      modalId: {
           type: String,
@@ -36,23 +28,32 @@ const props = defineProps({
           default: 1000
      }
 })
-const showModal = ref(false)
+
+const emit = defineEmits(['close', 'redirect'])
+
+const show = ref(false)
 const modalShownKey = `modal_shown_${props.modalId}`
+
 onMounted(() => {
      const hasModalBeenShown = localStorage.getItem(modalShownKey)
      if (!hasModalBeenShown) {
           setTimeout(() => {
-               showModal.value = true
+               show.value = true
           }, props.delay)
      }
 })
 
 const closeModal = () => {
      localStorage.setItem(modalShownKey, 'true')
-     showModal.value = false
+     emit('close')
+     show.value = false
 }
 
-const handleLearnMore = () => {
+const handleRedirect = (to: string) => {
+     if (to) {
+          router.push(to)
+     }
      closeModal()
 }
+
 </script>
