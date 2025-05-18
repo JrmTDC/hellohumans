@@ -19,7 +19,7 @@
                     ''
                ]">
                     <div class="relative p-[5px_8px] z-[1] transition duration-[60ms]">
-                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em]">{{ text }}</p>
+                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em]">{{ props.uppercase ? text.toUpperCase() : text }}</p>
                     </div>
                     <div v-if="arrow" class="absolute" :style="arrowStyle">
                          <div class="">
@@ -41,7 +41,7 @@
                     ''
                ]">
                     <div class="px-[9px] py-[5px] relative z-[1] duration-200">
-                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em]">{{ text }}</p>
+                         <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em]">{{ props.uppercase ? text.toUpperCase() : text }}</p>
                     </div>
                     <div v-if="arrow" class="absolute" :style="arrowStyle">
                          <div class="">
@@ -58,19 +58,11 @@ import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({
      text: { type: String, required: true },
-     placement: {
-          type: String,
-          default: 'top'
-     },
-     variant: {
-          type: String,
-          default: 'blue'
-     },
-     arrow:{
-          type: Boolean,
-          default: false
-     },
-     offset: { type: Number, default: 1 }
+     placement: { type: String, default: 'top' },
+     variant: { type: String, default: 'blue' },
+     arrow: { type: Boolean, default: false },
+     offset: { type: Number, default: 1 },
+     uppercase: { type: Boolean, default: false }
 })
 
 const show = ref(false)

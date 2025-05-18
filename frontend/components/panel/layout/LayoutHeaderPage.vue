@@ -22,14 +22,12 @@
                <div class="relative flex flex-row justify-start items-center ml-[16px]" ref="helpMenuRef">
                     <div @click="toggleHelpMenu" class="inline-flex relative align-top">
                          <button class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[30px] h-[30px] hover:bg-[#dce9ff] group">
-                              <svgo-panel-icon-help class="w-[22px] h-[22px] fill-[#8796af] group-hover:fill-[#0566ff]" />
+                              <SvgoPanelIconHelp class="w-[22px] h-[22px] fill-[#647491] group-hover:fill-[#0566ff]" />
                          </button>
                     </div>
-
                     <div v-if="isHelpMenuOpen" class="usage-dropdown">
                          <div class="absolute right-[8px] top-[42px] z-[2]"><svgo-panel-icon-triangle-up class="w-[17px] h-[7px] fill-[#ffff]" /></div>
                          <div class="absolute top-[49px] right-[0] box-content w-fit bg-white p-[8px] shadow-[0_8px_20px_rgba(0,20,51,0.24)] rounded-[8px] overflow-auto max-h-[calc(-150px+100vh)] z-[1]">
-
                               <NuxtLink to="/help" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group">
                                    <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                                         {{ t('panel.components.layout.herderPage.helpMenu.needHelp') }}
@@ -48,8 +46,16 @@
                          </div>
                     </div>
                </div>
-               <div class="relative flex flex-row justify-start items-center ml-[16px]" ref="usageMenuRef">
-
+               <div class="w-[1px] h-[32px] bg-[rgb(226,232,239)] ml-[8px]"></div>
+               <div class="relative flex flex-row justify-start items-center ml-[16px]">
+                    <div class="inline-flex relative align-top">
+                         <button class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[30px] h-[30px] hover:bg-[#dce9ff] group">
+                              <SvgoPanelCommonHeaderIconNotification class="w-[22px] h-[22px] fill-[#647491] group-hover:fill-[#0566ff]" />
+                         </button>
+                    </div>
+               </div>
+               <div class="w-[1px] h-[32px] bg-[rgb(226,232,239)] ml-[8px]"></div>
+               <div class="relative flex flex-row justify-start items-center" ref="usageMenuRef">
                     <div @click="toggleUsageMenu" class="flex ml-[8px] flex-row justify-start items-center p-[6px] rounded-[6px] cursor-pointer text-[rgb(58,35,0)] bg-transparent hover:bg-[rgb(220,233,255)] group">
                          <svgo-panel-icon-usage-menu class="w-[20px] h-[20px] fill-[#8796af] transition-transform group-hover:fill-[rgb(5,102,255)]" :class="{ 'rotate-180': isUsageMenuOpen }" />
                          <span class="block w-[4px] min-w-[4px] h-[4px] min-h-[4px]"></span>

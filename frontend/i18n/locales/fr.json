@@ -140,6 +140,11 @@
                     "metaTitle": "Tableau de bord",
                     "metaDescription": "Consultez la performance et l’utilisation de votre agent AI."
                },
+               "customers": {
+                    "title": "Visiteurs",
+                    "metaTitle": "Visiteurs",
+                    "metaDescription": "Consultez les visiteurs de votre site et les conversations traitées par votre agent IA."
+               },
                "hub": {
                     "index": {
                          "title": "Hub"
@@ -356,6 +361,7 @@
                     "menuNavPage": {
                          "dashboard": "Tableau de bord",
                          "siteAnalysis": "Agent IA {botName} ",
+                         "visitors": "Visiteurs",
                          "analytics": "Analytique",
                          "immobilier": "Immobilier",
                          "gettingStarted": "Bien démarrer",

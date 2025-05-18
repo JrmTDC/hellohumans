@@ -4,14 +4,13 @@
 
                <!-- Éléments du haut -->
                <li v-for="item in topItems" >
-                    <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
+                    <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue" uppercase >
                          <NuxtLink v-if="item.type === 'link'" :to="item.routeURL" :class="{ 'text-white bg-[#dce9ff]': route.path.startsWith(item.routeURL)}" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef]">
                               <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px]" />
                               </span>
                          </NuxtLink>
                     </PanelCommonTooltip>
-
                </li>
 
                <!-- Séparateur -->
@@ -19,7 +18,7 @@
 
                <!-- Éléments du bas -->
                <li v-for="item in bottomItems">
-                    <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue">
+                    <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue" uppercase>
                          <NuxtLink v-if="item.type === 'link'" :to="item.routeURL" :class="{ 'text-white bg-[#dce9ff]': route.path.startsWith(item.routeURL)}" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef]">
                               <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px]" />
@@ -55,6 +54,7 @@ import iconUserPicture from '~/assets/icons/panel/iconMenuUserPicture.svg'
 import iconMenuModule from '~/assets/icons/panel/iconMenuModule.svg'
 import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
 import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
+import iconMenuCustomerVisitors from '~/assets/icons/panel/iconMenuCustomerVisitors.svg'
 
 
 
@@ -67,12 +67,61 @@ const config = useRuntimeConfig()
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), routeURL: '/panel/integrations', tooltip: t('panel.components.layout.menuNavPage.integrations') },
  */
 const menuItems = ref([
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuLogo), routeURL: '/panel/dashboard', tooltip: t('panel.components.layout.menuNavPage.dashboard'), tooltipKey: 'panel.components.layout.menuNavPage.dashboard' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuRobot), routeURL: '/panel/hub', tooltip: t('panel.components.layout.menuNavPage.siteAnalysis', { botName: config.public.chatBotName }), tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuAnalytic), routeURL: '/panel/analytics', tooltip: t('panel.components.layout.menuNavPage.analytics'), tooltipKey: 'panel.components.layout.menuNavPage.analytics' },
-     { position: 'top', type: 'link', icon: rawIcon(iconMenuBulb), routeURL: '/panel/', tooltip: t('panel.components.layout.menuNavPage.immobilier', { botName: config.public.chatBotName }), tooltipKey: 'panel.components.layout.menuNavPage.immobilier' },
-     { position: 'bottom', type: 'link', icon: rawIcon(iconMenuSetting), routeURL: '/panel/settings/chat/appearance', tooltip: t('panel.components.layout.menuNavPage.settings'), tooltipKey: 'panel.components.layout.menuNavPage.settings' },
-     { position: 'bottom', type: 'button', icon: rawIcon(iconUserPicture), routeURL: null, tooltip: t('panel.components.layout.menuNavPage.account'), tooltipKey: 'panel.components.layout.menuNavPage.account' }
+     {
+          position: 'top',
+          type: 'link',
+          icon: rawIcon(iconMenuLogo),
+          routeURL: '/panel/dashboard',
+          tooltip: t('panel.components.layout.menuNavPage.dashboard'),
+          tooltipKey: 'panel.components.layout.menuNavPage.dashboard'
+     },
+     {
+          position: 'top',
+          type: 'link',
+          icon: rawIcon(iconMenuRobot),
+          routeURL: '/panel/hub',
+          tooltip: t('panel.components.layout.menuNavPage.siteAnalysis', { botName: config.public.chatBotName }),
+          tooltipKey: 'panel.components.layout.menuNavPage.siteAnalysis'
+     },
+     {
+          position: 'top',
+          type: 'link',
+          icon: rawIcon(iconMenuCustomerVisitors),
+          routeURL: '/panel/customers',
+          tooltip: t('panel.components.layout.menuNavPage.visitors'),
+          tooltipKey: 'panel.components.layout.menuNavPage.visitors'
+     },
+     {
+          position: 'top',
+          type: 'link',
+          icon: rawIcon(iconMenuAnalytic),
+          routeURL: '/panel/analytics',
+          tooltip: t('panel.components.layout.menuNavPage.analytics'),
+          tooltipKey: 'panel.components.layout.menuNavPage.analytics'
+     },
+     {
+          position: 'top',
+          type: 'link',
+          icon: rawIcon(iconMenuBulb),
+          routeURL: '/panel/immo',
+          tooltip: t('panel.components.layout.menuNavPage.immobilier'),
+          tooltipKey: 'panel.components.layout.menuNavPage.immobilier'
+     },
+     {
+          position: 'bottom',
+          type: 'link',
+          icon: rawIcon(iconMenuSetting),
+          routeURL: '/panel/settings/chat/appearance',
+          tooltip: t('panel.components.layout.menuNavPage.settings'),
+          tooltipKey: 'panel.components.layout.menuNavPage.settings' },
+     {
+          position: 'bottom',
+          type: 'button',
+          icon: rawIcon(iconUserPicture),
+          routeURL: null,
+          tooltip: t('panel.components.layout.menuNavPage.account'),
+          tooltipKey: 'panel.components.layout.menuNavPage.account'
+     }
 ])
 
 // Watch pour mettre à jour les tooltips lors du changement de langue
