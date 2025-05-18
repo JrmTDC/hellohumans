@@ -63,6 +63,53 @@
 
                                                   </div>
                                              </div>
+                                             <div class="overflow-x-auto">
+                                                  <table class="border-collapse mb-[6px] max-w-full w-full">
+                                                       <thead>
+                                                            <tr class="border-b border-b-[#eff2f6]">
+                                                                 <th class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] px-[16px] py-[12px]
+"
+                                                                 >
+                                                                      <label class="flex cursor-pointer relative">
+                                                                           <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
+                                                                           <div class="flex flex-row justify-start items-center">
+                                                                                <div class="flex items-start justify-start rounded-[5px]">
+                                                                                          <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
+                                                                                </div>
+                                                                           </div>
+                                                                      </label>
+                                                                 </th>
+
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Radar</span></th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Email</span></th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Pays</span></th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            <tr class="border-b border-b-[#eff2f6]">
+                                                                 <td class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] h-[56px] px-[16px] py-[8px]">
+                                                                      <label class="flex cursor-pointer relative">
+                                                                           <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
+                                                                           <div class="flex flex-row justify-start items-center">
+                                                                                <div class="flex items-start justify-start rounded-[5px]">
+                                                                                     <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
+                                                                                </div>
+                                                                           </div>
+                                                                      </label>
+                                                                 </td>
+                                                                 <td>
+                                                                      <div class="bg-[rgb(203,216,82)] rounded-full text-white cursor-default flex-shrink-0 float-left text-[18px] h-[30px] leading-[1.66] mr-[10px] text-center select-none w-[30px]">87</div>
+                                                                 </td>
+                                                                 <td>
+                                                                      <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">jrm@tiensdonc.com</p>
+                                                                 </td>
+                                                                 <td>
+                                                                      <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">France</p>
+                                                                 </td>
+                                                            </tr>
+                                                       </tbody>
+                                                  </table>
+                                             </div>
                                              <div class="text-[22px] pt-[170px] pb-[115px] text-center bg-[position:50%_55px] bg-no-repeat bg-[length:80px_80px]" :style="{ backgroundImage: `url('${backgroundNoCustomer}')` }">Désolé, aucun contact n’a été identifié</div>
                                              <div class="mt-[10px] mb-[25px] mx-auto"></div>
                                         </div>
