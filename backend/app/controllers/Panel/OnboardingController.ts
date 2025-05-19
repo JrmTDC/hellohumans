@@ -1,5 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import supabaseService  from '#services/supabaseService'
+import { randomBytes } from 'crypto'
 
 class OnboardingController {
      private async getUserLang(auth_id: string): Promise<string> {
@@ -162,6 +163,8 @@ class OnboardingController {
                     })
                }
 
+               // Génération automatique d'une clé publique sécurisée
+               const publicKey = randomBytes(32).toString('hex')
                // Création du projet principal
                const { data: projectData, error: projectError } = await supabaseService
                     .from('client_projects')
@@ -175,7 +178,8 @@ class OnboardingController {
                          conversations_per_month: conversationsPerMonth,
                          monthly_website_visitors: monthlyWebsiteVisitors,
                          website_hosting_platform: websiteHostingPlatform,
-                         primary_use: primaryUse
+                         primary_use: primaryUse,
+                         public_key: publicKey,
                     })
                     .select()
                     .single()
