@@ -4,66 +4,14 @@ import supabaseService from '#services/supabaseService'
 class ClientController {
      public async getClient(ctx: HttpContext) {
           try {
-               // 1. Vérifie si selected_client_id correspond à un lien dans client_users
-               let client_users_data = null
-               let selected_client_id = ctx.user.selected_client_id
-               if (selected_client_id) {
-                    const { data } = await supabaseService
-                         .from('client_users')
-                         .select('client_id')
-                         .eq('user_id', ctx.user.id)
-                         .eq('client_id', selected_client_id)
-                         .maybeSingle()
-
-                    client_users_data = data
-
-                    // Si le client n’est pas associé à l'utilisateur → on l’ignore
-                    if (!client_users_data) {
-                         selected_client_id = null
-                    }
-               }
-
-               // 2. Si aucun client sélectionné ou invalide → prendre le plus récent
-               if (!selected_client_id) {
-                    const { data: fallbackClientUsers, error: fallbackError } = await supabaseService
-                         .from('client_users')
-                         .select('client_id')
-                         .eq('user_id', ctx.user.id)
-                         .order('created_at', { ascending: false })
-                         .limit(1)
-                         .maybeSingle()
-
-                    if (fallbackError || !fallbackClientUsers) {
-                         return ctx.response.notFound({
-                              error: { name: 'noClient', description: 'Aucun client lié à cet utilisateur.' }
-                         })
-                    }
-
-                    selected_client_id = fallbackClientUsers.client_id
-
-                    // Mettre à jour selected_client_id dans la table users
-                    await supabaseService
-                         .from('users')
-                         .update({ selected_client_id: selected_client_id })
-                         .eq('id', ctx.user.id)
-               }
-
-               // 3. Récupérer le client final
-               const { data: clientData, error: clientError } = await supabaseService
-                    .from('clients')
-                    .select('*')
-                    .eq('id', selected_client_id)
-                    .single()
-
-               if (clientError || !clientData) {
+               if (!ctx.client) {
                     return ctx.response.notFound({
-                         error: { name: 'clientNotFound', description: 'Client introuvable.' }
+                         error: { name: 'noClientFound', description: 'Aucun client lié à cet utilisateur.' }
                     })
                }
-
-               // 4. Retourne l’utilisateur et le client sélectionné
+               // Retourne l’utilisateur et le client sélectionné
                return {
-                    client: clientData
+                    client: ctx.client
                }
           } catch (error) {
                console.error('Erreur ClientController.getClient:', error)

@@ -120,46 +120,17 @@ class ProjectController{
 
      public async getProjects(ctx: HttpContext) {
           try {
-               let selected_client_id = ctx.user.selected_client_id
-
-               // 1. Vérification du lien utilisateur ↔ client
-               let { data: clientUser, error: clientUserError } = await supabaseService
-                    .from('client_users')
-                    .select('id, client_id')
-                    .eq('user_id', ctx.user.id)
-                    .eq('client_id', selected_client_id)
-                    .maybeSingle()
-
-               // 2. Si le lien est invalide ou non existant, on prend le dernier client
-               if (!clientUser || clientUserError) {
-                    const { data: lastClientUser, error: lastClientError } = await supabaseService
-                         .from('client_users')
-                         .select('client_id')
-                         .eq('user_id', ctx.user.id)
-                         .order('created_at', { ascending: false })
-                         .limit(1)
-                         .maybeSingle()
-
-                    if (!lastClientUser || lastClientError) {
-                         return ctx.response.notFound({
-                              error: { name: 'noClientFound', description: 'Aucun client lié à cet utilisateur.' }
-                         })
-                    }
-
-                    selected_client_id = lastClientUser.client_id
-
-                    // Mise à jour du client sélectionné dans la table users
-                    await supabaseService
-                         .from('users')
-                         .update({ selected_client_id: selected_client_id })
-                         .eq('id', ctx.user.id)
+               if (!ctx.user.selected_client_id) {
+                    return ctx.response.notFound({
+                         error: { name: 'noClientFound', description: 'Aucun client lié à cet utilisateur.' }
+                    })
                }
 
-               // 3. Récupération des projets du client
+               // Récupération des projets du client
                const { data: projects, error: projectsError } = await supabaseService
                     .from('client_projects')
                     .select('*')
-                    .eq('client_id', selected_client_id)
+                    .eq('client_id', ctx.user.selected_client_id)
                     .order('created_at', { ascending: false })
 
                if (projectsError) {
