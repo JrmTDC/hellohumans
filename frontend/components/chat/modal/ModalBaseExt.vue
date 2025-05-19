@@ -5,7 +5,7 @@
           :class="['transition-opacity duration-[150ms] ease-linear backdrop-blur-sm', show ? 'opacity-100' : 'opacity-0']"
      >
           <div class="m-auto transition duration-300 ease-out outline-none" :class="[show ? 'translate-y-0' : 'translate-y-[-25%]']">
-               <div class="m-auto w-[min(-32px+100vw,500px)] h-auto">
+               <div class="m-auto w-[min(-32px+100vw,1000px)] h-auto">
                     <div class="flex flex-col items-center bg-white relative rounded-[8px]">
 
                          <!-- Close button -->
