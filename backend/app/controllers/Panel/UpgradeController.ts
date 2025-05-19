@@ -2,32 +2,8 @@ import { HttpContext } from '@adonisjs/core/http'
 import supabase from '#services/supabaseService'
 
 class UpgradeController {
-     private async getUserLang(auth_id: string): Promise<string> {
-          const { data, error } = await supabase
-               .from('users')
-               .select('lang')
-               .eq('auth_id', auth_id)
-               .single()
-
-          if (error || !data?.lang) {
-               console.warn('Langue non trouvée, fallback en')
-               return 'en'
-          }
-
-          return data.lang
-     }
-
-     public async getPlans({ auth, response }: HttpContext) {
+     public async getPlans(ctx: HttpContext) {
           try {
-               const auth_id = auth?.user?.id
-               if (!auth_id) {
-                    return response.unauthorized({
-                         error: { name: 'unauthorized', description: 'Utilisateur non connecté.' },
-                    })
-               }
-
-               const lang = await this.getUserLang(auth_id)
-
                const { data, error } = await supabase
                     .from('subscription_plans')
                     .select('*')
@@ -36,19 +12,19 @@ class UpgradeController {
 
                if (error || !data) {
                     console.error('Erreur récupération plans:', error)
-                    return response.internalServerError({
+                    return ctx.response.internalServerError({
                          error: { name: 'supabaseError', description: 'Erreur lors de la récupération des offres.' },
                     })
                }
 
                const plans = data.map((plan) => ({
                     id: plan.id,
-                    name: plan.name?.[lang] || plan.name?.['en'] || 'No name',
-                    description: plan.description?.[lang] || plan.description?.['en'] || '',
+                    name: plan.name?.[ctx.user.lang] || plan.name?.['en'] || 'No name',
+                    description: plan.description?.[ctx.user.lang] || plan.description?.['en'] || '',
                     monthlyPrice: Number(plan.monthlyPrice),
                     discountMonths: plan.discountMonths || 0,
-                    includedFeatures: plan.includedFeatures?.[lang] || [],
-                    baseSubtitle: plan.baseSubtitle?.[lang] || '',
+                    includedFeatures: plan.includedFeatures?.[ctx.user.lang] || [],
+                    baseSubtitle: plan.baseSubtitle?.[ctx.user.lang] || '',
                     popular: plan.popular || false,
                     includedModules: plan.includedModules || [],
                     billingYear: plan.billing_year || false,
@@ -59,23 +35,14 @@ class UpgradeController {
                }
           } catch (err) {
                console.error('Erreur UpgradeController.getPlans:', err)
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' },
                })
           }
      }
 
-     public async getModules({ auth, response }: HttpContext) {
+     public async getModules(ctx: HttpContext) {
           try {
-               const auth_id = auth?.user?.id
-               if (!auth_id) {
-                    return response.unauthorized({
-                         error: { name: 'unauthorized', description: 'Utilisateur non connecté.' },
-                    })
-               }
-
-               const lang = await this.getUserLang(auth_id)
-
                const { data, error } = await supabase
                     .from('subscription_modules')
                     .select('*')
@@ -84,16 +51,16 @@ class UpgradeController {
 
                if (error || !data) {
                     console.error('Erreur récupération modules:', error)
-                    return response.internalServerError({
+                    return ctx.response.internalServerError({
                          error: { name: 'supabaseError', description: 'Erreur lors de la récupération des modules.' },
                     })
                }
 
                const modules = data.map((mod) => ({
                     id: mod.id,
-                    name: mod.name?.[lang] || mod.name?.['fr'] || 'Sans nom',
+                    name: mod.name?.[ctx.user.lang] || mod.name?.['fr'] || 'Sans nom',
                     key: mod.key,
-                    description: mod.description?.[lang] || mod.description?.['fr'] || '',
+                    description: mod.description?.[ctx.user.lang] || mod.description?.['fr'] || '',
                     basePrice: Number(mod.basePrice),
                     discountMonths: mod.discountMonths || 0,
                     selected: false,
@@ -110,7 +77,7 @@ class UpgradeController {
                }
           } catch (err) {
                console.error('Erreur UpgradeController.getModules:', err)
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' },
                })
           }
