@@ -4,7 +4,7 @@ import supabaseService from '#services/supabaseService'
 import vine from '@vinejs/vine'
 
 class SubscriptionController {
-     public async confirmUpgrade({ client, project, subscription, request, response }: HttpContext) {
+     public async confirmUpgrade(ctx: HttpContext) {
           try {
                /* -------- Validation -------- */
                const schema = vine.object({
@@ -18,27 +18,27 @@ class SubscriptionController {
                     modules = [],
                     billing_cycle,
                     payment_method_id,
-               } = await vine.compile(schema).validate(request.all())
+               } = await vine.compile(schema).validate(ctx.request.all())
                /* -------- Création / mise à jour Stripe -------- */
                let subStripe
-               if (!subscription?.stripe_subscription_id) {
-                    const customerId = await ensureCustomer(client)
+               if (!ctx.subscription?.stripe_subscription_id) {
+                    const customerId = await ensureCustomer(ctx.client)
                     subStripe = await createSubscription({
                          customerId,
                          plan_id,
                          modules,
                          billing: billing_cycle,
                          paymentMethodId: payment_method_id,
-                         projectId: project.id
+                         projectId: ctx.project.id
                     })
                } else {
                     subStripe = await updateSubscription({
-                         subscriptionId: subscription.stripe_subscription_id,
+                         subscriptionId: ctx.subscription.stripe_subscription_id,
                          plan_id,
                          modules,
                          billing: billing_cycle,
                          paymentMethodId: payment_method_id,
-                         projectId: project.id
+                         projectId: ctx.project.id
                     })
                }
 
@@ -66,7 +66,7 @@ class SubscriptionController {
                     .from('client_project_subscriptions')
                     .upsert(
                          {
-                              project_id: project.id,
+                              project_id: ctx.project.id,
                               current_plan_id: plan_id,
                               current_modules: modules,
                               billing_cycle,
@@ -77,7 +77,7 @@ class SubscriptionController {
                          { onConflict: 'project_id' },
                     )
 
-               return response.ok({
+               return ctx.response.ok({
                     status: subStripe.status,
                     requiresAction,
                     clientSecret,
@@ -88,7 +88,7 @@ class SubscriptionController {
                console.error('[confirmUpgrade]', e)
 
                if (e.type === 'StripeCardError') {
-                    return response.status(402).json({
+                    return ctx.response.status(402).json({
                          error: {
                               name: 'payment_error',
                               type: e.type,
@@ -100,7 +100,7 @@ class SubscriptionController {
                }
 
                if (e.type?.startsWith('Stripe')) {
-                    return response.status(400).json({
+                    return ctx.response.status(400).json({
                          error: {
                               name: 'stripe_error',
                               type: e.type,
@@ -109,7 +109,7 @@ class SubscriptionController {
                     })
                }
 
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: {
                          name: 'server_error',
                          message: e.message || 'Erreur interne',
