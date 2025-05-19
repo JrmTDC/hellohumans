@@ -7,7 +7,6 @@
                     <div class="min-h-full h-full">
                          <div class="min-h-full h-full pr-[12px]">
                               <div class="p-[24px_28px] border border-[#e2e8ef] bg-white rounded-[16px] min-h-[calc(100%-12px)] flex-[1_1_0%]">
-
                                    <div class="flex flex-col justify-start items-stretch">
                                         <div class="flex flex-row justify-start items-center w-full">
                                              <h2 class="mr-auto mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">Tous les contacts</h2>
@@ -74,7 +73,7 @@
                                                                            <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
                                                                            <div class="flex flex-row justify-start items-center">
                                                                                 <div class="flex items-start justify-start rounded-[5px]">
-                                                                                          <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
+                                                                                     <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
                                                                                 </div>
                                                                            </div>
                                                                       </label>
@@ -82,31 +81,38 @@
 
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Radar</span></th>
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Email</span></th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Activité récente</span></th>
+
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Pays</span></th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            <tr class="border-b border-b-[#eff2f6]">
-                                                                 <td class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] h-[56px] px-[16px] py-[8px]">
-                                                                      <label class="flex cursor-pointer relative">
-                                                                           <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
-                                                                           <div class="flex flex-row justify-start items-center">
-                                                                                <div class="flex items-start justify-start rounded-[5px]">
-                                                                                     <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
-                                                                                </div>
+                                                       <tr class="border-b border-b-[#eff2f6]">
+                                                            <td class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] h-[56px] px-[16px] py-[8px]">
+                                                                 <label class="flex cursor-pointer relative">
+                                                                      <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
+                                                                      <div class="flex flex-row justify-start items-center">
+                                                                           <div class="flex items-start justify-start rounded-[5px]">
+                                                                                <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
                                                                            </div>
-                                                                      </label>
-                                                                 </td>
-                                                                 <td>
-                                                                      <div class="bg-[rgb(203,216,82)] rounded-full text-white cursor-default flex-shrink-0 float-left text-[18px] h-[30px] leading-[1.66] mr-[10px] text-center select-none w-[30px]">87</div>
-                                                                 </td>
-                                                                 <td>
-                                                                      <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">jrm@tiensdonc.com</p>
-                                                                 </td>
-                                                                 <td>
-                                                                      <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">France</p>
-                                                                 </td>
-                                                            </tr>
+                                                                      </div>
+                                                                 </label>
+                                                            </td>
+                                                            <td>
+                                                                 <div class="bg-[rgb(203,216,82)] rounded-full text-white cursor-default flex-shrink-0 float-left text-[18px] h-[30px] leading-[1.66] mr-[10px] text-center select-none w-[30px]">87</div>
+                                                            </td>
+                                                            <td>
+                                                                 <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">jrm@tiensdonc.com</p>
+                                                            </td>
+                                                            <td>
+                                                                 <button type="button" class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[28px] h-[28px] hover:bg-[rgb(220,233,255)]">
+                                                                      <SvgoPanelCustomersIconChat class="min-w-[20px] min-h-[20px] w-[20px] h-[20px] fill-[rgb(100,116,145)]" />
+                                                                 </button>
+                                                            </td>
+                                                            <td>
+                                                                 <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">(FR) France</p>
+                                                            </td>
+                                                       </tr>
                                                        </tbody>
                                                   </table>
                                              </div>

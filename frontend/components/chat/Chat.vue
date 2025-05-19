@@ -1,5 +1,5 @@
 <template>
-     <div id="hellohumans-chat-config" class="block border-none fixed inset-auto bottom-0 right-0 opacity-100 bg-transparent m-0 max-h-[100dvh] max-w-[100vw] translate-y-0 transition-none visible z-[999999999]"
+     <div id="hellohumans-chat-iframe" class="block border-none fixed inset-auto bottom-0 right-0 opacity-100 bg-transparent m-0 max-h-[100dvh] max-w-[100vw] translate-y-0 transition-none visible z-[999999999]"
           :class="[
                isVisible ? 'w-[424px] h-[747px] max-h-[100%]' : 'w-[112px] h-[140px] max-h-[100dvh]'
           ]">
@@ -124,7 +124,7 @@ import ChatModal from '@/components/chat/ChatModal.vue'
 
 // --- ÉTAT PRINCIPAL DU CHAT ---
 const config = useRuntimeConfig()
-const apiUrl = `${config.public.apiBaseUrl}/api/chat/`
+const apiUrl = `${config.public.apiBaseUrl}/chat`
 
 // Variables / Refs principales
 const message = ref('')         // Message en cours de saisie

@@ -1,13 +1,12 @@
 <template>
-     <PanelModalBaseAds modal-id="qsdqsd64qsdqs" v-slot="{ redirect }">
+     <PanelModalBaseAds modal-id="qsdqsdfsdfsefdfsd64qsdqs" v-slot="{ redirect }">
                <div class="w-[500px] h-[200px] overflow-hidden bg-gray-100 ">
                     <img src="public/assets/img/modules/ads_guideplus.png" alt="Image"
                          class="max-w-full object-cover [object-position:0px_-44px]" />
                </div>
                <div class="text-left px-[32px] pt-[32px] pb-[24px] rounded-[8px] mt-[-8px] relative">
                     <h2 class="mt-0 mb-0 font-semibold text-[20px] leading-[26px] tracking-[-0.01em]">Guide+ – Le compagnon touristique intelligent intégré à votre chatbot</h2>
-                    <div class="mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] mt-[12px]">Offrez à vos utilisateurs une expérience enrichie grâce à Guide+, le module dédié aux lieux touristiques. Une fois activé, votre chatbot devient un guide culturel interactif, grâce à une base de données constamment à jour et adaptée à votre territoire
-                    </div>
+                    <div class="mb-0 font-normal text-[16px] leading-[20px] tracking-[-0.01em] mt-[12px]">Offrez à vos utilisateurs une expérience enrichie grâce à Guide+, le module dédié aux lieux touristiques. Une fois activé, votre chatbot devient un guide culturel interactif, grâce à une base de données constamment à jour et adaptée à votre territoire</div>
                </div>
                <div class="flex flex-row justify-end items-center px-[32px] py-[24px] shadow-[0_0_0_0_transparent] transition-shadow duration-300 relative">
                     <button @click="redirect('/panel/upgrade/')" class="rounded-[8px] text-[16px] h-[38px] leading-[20px] min-w-[80px] px-[16px] inline-flex items-center justify-center bg-[#0566ff] border border-transparent border-[#0566ff] text-white text-center align-middle hover:bg-[#003d9e] hover:border-[#003d9e] hover:text-white">Découvrir Guide+</button>
