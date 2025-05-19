@@ -12,12 +12,7 @@ import OnboardingController from '#controllers/Panel/OnboardingController'
 import SupportController from '#controllers/Panel/SupportController'
 import SubscriptionController from '#controllers/Panel/SubscriptionController'
 import StripeController from "#controllers/Panel/StripeController";
-
-//import StripeWebhookController from "#controllers/Panel/StripeWebhookController";
-
 import { middleware } from '#start/kernel'
-
-
 
 // Routes de chat
 router.group(() => {
@@ -53,7 +48,7 @@ router.group(() => {
      router.post('/onboarding', (ctx) => OnboardingController.create(ctx))
 })
      .prefix('/panel')
-     .use(middleware.panel_ensure_user())
+     .use(middleware.panel_access())
 
 // Routes global protégées par l'authentification
 router.group(() => {
