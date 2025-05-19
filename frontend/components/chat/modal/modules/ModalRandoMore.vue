@@ -13,23 +13,22 @@
                     </div>
                </div>
                <!-- Colonne Droite : Contenu -->
-               <div class="flex flex-col text-left">
+               <div class="flex flex-col text-left ml-[25px]">
                     <div class="mt-[20px]">
                          <!-- Header -->
-                         <div class="flex text-left  px-6">
+                         <div class="flex text-left">
                               <svg class="my-auto mx-0" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                                    <rect x="0.5" y="0.5" width="33" height="33" rx="16.5" fill="#3866FB"/>
                                    <rect x="0.5" y="0.5" width="33" height="33" rx="16.5" stroke="#9B9B9B"/>
                                    <path d="M28 26.7138L24.8276 20.3586L23.2414 17.1809L23.0034 14.7599H23.6379L26.1759 18.2401C26.2552 18.3158 26.4138 18.3914 26.4931 18.3914C26.731 18.3914 26.969 18.1645 26.969 17.8618C26.969 17.7105 26.8897 17.5592 26.8103 17.4836V17.4079L22.6069 10.9013C22.6069 10.6743 22.5276 10.523 22.369 10.523H22.0517V9.99342L22.2103 9.84211C22.9241 9.61513 23.4 8.93421 23.4 8.10197C23.4 7.11842 22.6069 6.28618 21.5759 6.28618C20.5448 6.28618 19.7517 7.11842 19.7517 8.10197C19.7517 8.85855 20.2276 9.53947 20.9414 9.76645V10.5987H20.8621C20.7828 10.5987 20.7034 10.75 20.6241 10.9013L20.3069 11.2039L19.6724 12.1118L19.1172 12.7928L19.2759 13.4737L19.4345 13.7007L19.9103 14.1546L20.069 16.8783L18.8793 19.148L17.4517 21.9474L15.0724 17.1053L14.9931 16.4243C15.0724 16.4243 15.1517 16.5 15.3103 16.5H16.8172C17.1345 16.5 17.3724 16.3487 17.3724 16.1974V16.1217L17.4517 12.4901C17.4517 12.4901 17.0552 11.6579 16.8966 11.2796C16.7379 10.977 16.2621 10.2961 16.2621 10.2961C16.1828 10.2204 16.1034 10.2204 16.0241 10.2204H15.0724L14.9931 10.1447V10.0691C14.9931 9.8421 14.8345 9.69079 14.5966 9.69079H14.1207V8.78289C14.9138 8.48026 15.469 7.79934 15.469 6.96711C15.469 5.83224 14.5172 5 13.3276 5C12.1379 5 11.1862 5.90789 11.1862 6.96711C11.1862 7.875 11.8207 8.63158 12.6931 8.85855V9.69079H12.0586C11.8207 9.69079 11.6621 9.8421 11.6621 10.0691V10.1447L9.12414 13.625L5.39655 15.4408C5.15862 15.5921 5 15.7434 5 15.8947C5 16.273 5.47586 16.5 6.11034 16.5757L8.96552 22.6283L6.90345 26.4868C6.82414 26.6382 6.74483 26.7895 6.74483 27.0164C6.74483 27.4704 7.14138 27.9243 7.53793 27.9243C7.77586 27.9243 8.01379 27.773 8.17241 27.6217V27.5461L9.83793 24.6711L11.4241 28L11.9 27.773L10.1552 24.2171L12.6931 19.8289H13.9621L16.5 23.9901L15.1517 26.7138C15.0724 26.7895 15.0724 26.9408 15.0724 27.0921C15.0724 27.5461 15.3897 27.9243 15.8655 27.9243C16.1034 27.9243 16.2621 27.8487 16.4207 27.6217C16.5 27.5461 16.5793 27.3947 16.5793 27.3191L17.3724 25.6546L18.0069 26.7895C18.0069 26.8651 18.0862 26.9408 18.0862 27.0921C18.4034 27.5461 18.8793 27.773 19.2759 27.5461C19.5931 27.3947 19.6724 27.0164 19.5931 26.6382L18.1655 23.7632L19.1966 21.5691L23.3207 21.4934L26.1759 27.2434C26.1759 27.3191 26.2552 27.3947 26.2552 27.4704V27.5461C26.4138 27.6974 26.6517 27.8487 26.8897 27.8487C27.3655 27.8487 27.6828 27.4704 27.6828 27.0164C28 26.8651 28 26.7895 28 26.7138ZM11.8207 17.1053L11.0276 18.8454L9.20345 22.1743L6.42759 16.5757C6.74483 16.5 6.98276 16.4243 7.06207 16.3487H7.14138L10.2345 14.7599L11.7414 13.3224L11.8207 16.3487V17.1053Z" fill="white"/>
                               </svg>
-                              <div class="ml-4">
+                              <div class="ml-2">
                                    <h3 class="text-[14px]">Saint-Ilpize</h3>
-                                   <h1 class="text-[30px] font-semibold">PR288 Au Pays De La Terre Cuite</h1>
+                                   <h1 class="text-[30px] font-semibold">PR288 Aux portes du Château</h1>
                               </div>
-
                          </div>
 
-                         <div class="flex text-left px-6 text-[14px] text-[#606060] mt-3">
+                         <div class="flex text-left text-[12px] text-[#606060] mt-3">
                               <div class="bg-[#3866FB] bg-opacity-10 px-2 py-0.5 rounded-[6px]">
                                    Archéologie et histoire
                               </div>
@@ -46,7 +45,7 @@
                                    Point de vue
                               </div>
                          </div>
-                         <div class="flex text-left px-6 text-[14px] text-[#606060] mt-3">
+                         <div class="flex text-left text-[14px] text-[#606060] mt-3">
                               <svg class="my-auto mx-0" width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                    <g clip-path="url(#clip0_3374_11714)">
                                         <path d="M7.23214 2.37521C10.3393 2.37521 12.8571 4.89307 12.8571 8.00021C12.8571 11.1074 10.3393 13.6252 7.23214 13.6252C4.125 13.6252 1.60714 11.1074 1.60714 8.00021C1.60714 4.89307 4.125 2.37521 7.23214 2.37521ZM7.23214 0.768066C3.24107 0.768066 0 4.00914 0 8.00021C0 11.9913 3.24107 15.2324 7.23214 15.2324C11.2232 15.2324 14.4643 11.9913 14.4643 8.00021C14.4643 4.00914 11.2232 0.768066 7.23214 0.768066Z" fill="#D32F2F"/>
@@ -124,22 +123,223 @@
                          </div>
                     </div>
                     <div class = "overflow-y-auto max-h-[414px] mt-[15px] mb-[15px]">
-                         <div class="flex flex-col text-left px-6">
+                         <div class="flex flex-col text-left">
                               <p class="text-[16px] text-[#000]">
                                    Saint-Ilpize sous tous les angles : le site perché sur son piton de basalte, les remparts, le village étagé sur l’abrupt rocheux, la tour du château et la chapelle qui coiffent l’ensemble. Vous pourrez admirez la vue sur la vallée et les vestiges du vignoble de la Ribeyre.
                               </p>
                          </div>
-                         <div class="flex flex-col text-left px-6">
-                              <p class="text-[16px] text-[#606060] mt-3">
-                                   Le pont suspendu sur l’Allier <br>
-                                   Achevé en 1879, le pont suspendu, construit par l’ingénieur Ferdinand Arnodin, a remplacé le bac devenu dangereux à cause des nombreuses crues de l’Allier. Il s’agissait d’un ouvrage de dernière génération, avec un système de haubans destiné à maintenir le tablier. Celui-ci a été remplacé par un tablier métallique en 1970 permettant ainsi de faire passer la charge admissible à 16 tonnes. Le tablier est renforcé par des poutres latérales qui servent de garde-corps. En raison de défaillances, le pont est actuellement interdit aux poids lourds et aux véhicules hors gabarit. Un gué, situé quelques centaines de mètres en aval, permet à ces véhicules de franchir la rivière.
-                              </p>
-                              <p class="text-[16px] text-[#606060] mt-3">
+                         <div class="flex flex-col text-left">
+                              <p class="text-[14px] text-[#606060] mt-3">
                                    Le pont suspendu sur l’Allier <br>
                                    Achevé en 1879, le pont suspendu, construit par l’ingénieur Ferdinand Arnodin, a remplacé le bac devenu dangereux à cause des nombreuses crues de l’Allier. Il s’agissait d’un ouvrage de dernière génération, avec un système de haubans destiné à maintenir le tablier. Celui-ci a été remplacé par un tablier métallique en 1970 permettant ainsi de faire passer la charge admissible à 16 tonnes. Le tablier est renforcé par des poutres latérales qui servent de garde-corps. En raison de défaillances, le pont est actuellement interdit aux poids lourds et aux véhicules hors gabarit. Un gué, situé quelques centaines de mètres en aval, permet à ces véhicules de franchir la rivière.
                               </p>
                          </div>
-                         <hr class="border-black border-opacity-20 border-1 w-3/4 mx-auto mt-4"/>
+
+                         <hr class="border-black border-opacity-20 border-1 mt-[20px]"/>
+
+                         <div class="mt-[15px]">
+                              <h2 class="text-[16px] text-black">Description</h2>
+
+                              <div class="relative top-[20px]">
+                                   <!-- Ligne verticale fixée à gauche -->
+                                   <div class="absolute left-[10px] h-full w-[1px] bg-black"></div>
+
+                                   <!-- Étapes -->
+                                   <div class="space-y-[25px]">
+
+                                        <!-- Étape 1 -->
+                                        <div class="relative flex items-center">
+                                             <!-- Point SVG centré sur la ligne -->
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11928)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M8.51594 13.766H9.63375V7.18881L8.43688 8.24475L7.80469 7.50506L9.99531 5.22412H11.085L11.0791 5.23537L11.085 5.22943V13.7657H12.1972V14.8666H8.51594V13.766Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11928">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>
+                                                       Dos à la mairie de Saint-Ilpize, partir à gauche dans le village, passer sous un porche et prendre à gauche. Suivre le chemin pentu qui monte au château [Saint-Ilpize : village fortifié et site perché du château (XIVe siècle), vue sur la vallée de l’Allier, Villeneuve-d’Allier, le pont suspendu et les terrasses de la Ribeyre]. En haut [O> église Sainte-Madeleine, XIVe et
+                                                       XVe siècles], virer à gauche.
+                                                  </p>
+                                             </div>
+                                        </div>
+
+                                        <!-- Étape 2 -->
+                                        <div class="relative flex items-center">
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11932)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M7.77539 14.0071L9.90414 9.90832C10.0743 9.58828 10.2334 9.26246 10.381 8.93145C10.5032 8.65301 10.5991 8.40926 10.6688 8.20051C10.7385 7.99145 10.7866 7.80988 10.8129 7.65582C10.8391 7.50145 10.8526 7.36238 10.8526 7.2377C10.8526 7.04207 10.8345 6.8777 10.7988 6.74395C10.7629 6.6102 10.7104 6.50301 10.6407 6.42207C10.5717 6.34179 10.4818 6.2822 10.381 6.24988C10.2649 6.21421 10.144 6.19702 10.0226 6.19895C9.69133 6.19895 9.45133 6.33582 9.30258 6.60863C9.15383 6.88145 9.07945 7.27395 9.07945 7.78582V8.33363H7.95039C7.91256 8.14101 7.87683 7.94798 7.8432 7.75457C7.81179 7.56528 7.79663 7.37364 7.79789 7.18176C7.79789 6.93707 7.84039 6.69332 7.92477 6.45051C8.00945 6.2077 8.14227 5.98832 8.32289 5.7927C8.50352 5.59707 8.73383 5.43895 9.01445 5.31832C9.29445 5.19801 9.6307 5.1377 10.0223 5.1377C10.4438 5.1377 10.8041 5.18676 11.1035 5.28488C11.4026 5.38238 11.6482 5.52582 11.8401 5.71395C12.032 5.90207 12.172 6.13145 12.2607 6.40238C12.3495 6.67332 12.3935 6.98051 12.3935 7.3227C12.3935 7.51832 12.3754 7.71145 12.3398 7.90145C12.3041 8.09145 12.2448 8.29488 12.1623 8.51113C12.0791 8.7277 11.9723 8.96363 11.8404 9.21988C11.7085 9.47613 11.547 9.76957 11.3548 10.1005L9.45227 13.7136H12.2695V14.8655H7.77539V14.0071Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11932">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>Suivre tout droit la route qui monte. Après quelques mètres, poursuivre sur le chemin pentu à droite ( > parc à moutons). Environ 1 km plus loin, déboucher sur une route que l’on suit à droite.</p>
+                                             </div>
+                                        </div>
+
+                                        <!-- Étape 3 -->
+                                        <div class="relative flex items-center">
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11936)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M7.64198 12.9006C7.64198 12.7387 7.65323 12.5609 7.67573 12.3672C7.69823 12.1734 7.73417 11.9728 7.78292 11.7659H8.92354V12.2569C8.92354 12.5581 8.94886 12.8103 8.99948 13.0134C9.05042 13.2166 9.11917 13.3803 9.20542 13.5047C9.29198 13.6284 9.39542 13.7172 9.51604 13.77C9.63667 13.8228 9.76823 13.8491 9.91136 13.8491C10.0504 13.8491 10.1767 13.8294 10.2895 13.79C10.4023 13.7503 10.4985 13.6856 10.5776 13.5953C10.6567 13.505 10.7167 13.3891 10.7582 13.2481C10.7998 13.1069 10.8204 12.9347 10.8204 12.7316V11.6644C10.8225 11.4823 10.8045 11.3006 10.7667 11.1225C10.7307 10.9644 10.6732 10.8319 10.5945 10.7247C10.5144 10.6169 10.4073 10.5322 10.2839 10.4794C10.156 10.4225 9.99792 10.3947 9.80948 10.3947H9.19417V9.3503H9.80948C9.93011 9.3503 10.0429 9.33062 10.1482 9.29093C10.2535 9.25155 10.346 9.18749 10.4248 9.09905C10.5042 9.01093 10.566 8.89687 10.6114 8.75749C10.6567 8.61812 10.6792 8.44905 10.6792 8.24937V7.23874C10.6792 6.88124 10.6095 6.61905 10.4701 6.45124C10.331 6.28374 10.1242 6.19968 9.84948 6.19968C9.54417 6.19968 9.31011 6.33655 9.14636 6.60936C8.98292 6.88218 8.90104 7.27468 8.90104 7.78655V8.33437H7.77198C7.73093 8.14811 7.69508 7.96074 7.66448 7.77249C7.63355 7.57736 7.6184 7.38005 7.61917 7.18249C7.61917 6.9378 7.66448 6.69405 7.75479 6.45124C7.84511 6.20843 7.98167 5.98905 8.16417 5.79343C8.34667 5.5978 8.57823 5.43968 8.85886 5.31905C9.13886 5.19874 9.46948 5.13843 9.84979 5.13843C10.2598 5.13843 10.6117 5.18562 10.9054 5.27968C11.1992 5.37374 11.4389 5.51218 11.6254 5.69468C11.8117 5.87718 11.9489 6.10124 12.0373 6.36624C12.1257 6.63186 12.1701 6.93374 12.1701 7.27249V7.86499C12.1701 8.13968 12.1354 8.38343 12.0657 8.59624C12.0031 8.79382 11.9118 8.98113 11.7948 9.15218C11.6892 9.30463 11.5617 9.44068 11.4164 9.55593C11.2835 9.66201 11.1385 9.75201 10.9845 9.82405V9.86937C11.169 9.93149 11.3453 10.0159 11.5095 10.1206C11.6717 10.2241 11.8117 10.3569 11.9304 10.5184C12.0489 10.6803 12.142 10.8762 12.2098 11.1056C12.2776 11.335 12.3117 11.6081 12.3117 11.9244V12.5622C12.3117 13.0062 12.2476 13.3806 12.1195 13.6859C11.9917 13.9906 11.8185 14.2362 11.6001 14.4225C11.3775 14.6109 11.1166 14.7486 10.8354 14.8259C10.5435 14.9091 10.236 14.9503 9.91229 14.9503C9.17479 14.9503 8.61198 14.7716 8.22448 14.4137C7.83573 14.0559 7.64198 13.5519 7.64198 12.9006Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11936">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>Virer à gauche sur une autre route pour atteindre Cissac.</p>
+                                             </div>
+                                        </div>
+
+                                        <!-- Étape 4 -->
+                                        <div class="relative flex items-center">
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11940)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M7.03906 12.3699L9.85094 5.22241H11.5953V11.9918H12.4872V13.1377H11.5953V14.8652H10.2347V13.1377H7.03906V12.3699ZM10.2347 11.9918V10.569L10.3703 6.93304H10.2006L8.52938 11.9915L10.2347 11.9918Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11940">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>Dans le hameau [O> fontaine, four à pain, croix, métier à ferrer], s’engager à droite dans le chemin de la Fontaine. Monter à travers les champs jusqu’à une route. La suivre à droite sur quelques mètres et prendre sur la gauche un sentier, en contrebas, qui longe la route. On retrouve la route un peu plus loin.</p>
+                                             </div>
+                                        </div>
+
+                                        <!-- Étape 5 -->
+                                        <div class="relative flex items-center">
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11944)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M7.80469 12.8837C7.80469 12.5412 7.85156 12.1687 7.94594 11.7662H9.08594V12.5565C9.08594 13.0155 9.15281 13.3459 9.28656 13.5471C9.42031 13.7487 9.63969 13.8493 9.94406 13.8493C10.2528 13.8493 10.4713 13.7384 10.5991 13.5162C10.7272 13.2943 10.7912 12.9743 10.7912 12.5568V10.6934C10.7912 10.4524 10.7706 10.2577 10.7291 10.1093C10.6875 9.96054 10.6312 9.84366 10.5597 9.75929C10.4943 9.6788 10.407 9.61891 10.3084 9.58679C10.2069 9.55589 10.1012 9.54061 9.995 9.54148C9.78406 9.54148 9.60344 9.60085 9.45312 9.71929C9.30281 9.83804 9.17844 9.97991 9.08062 10.1455H8.00219V5.22241H12.1466V6.51523H9.22187V8.89804C9.38562 8.71342 9.58933 8.56859 9.8175 8.4746C10.054 8.37349 10.3087 8.3216 10.5659 8.3221C11.1641 8.3221 11.6025 8.52366 11.8812 8.92648C12.16 9.32929 12.2991 9.9221 12.2991 10.7049V12.3418C12.2991 12.8387 12.235 13.2537 12.1072 13.5868C11.9794 13.9196 11.81 14.1871 11.5991 14.3884C11.3881 14.5896 11.1447 14.7334 10.8678 14.8202C10.591 14.9069 10.3026 14.9507 10.0125 14.9502C9.655 14.9502 9.33906 14.9021 9.06406 14.8062C8.78938 14.7099 8.55906 14.5718 8.3725 14.3912C8.1845 14.2081 8.03992 13.9853 7.94937 13.739C7.85281 13.4852 7.80469 13.1999 7.80469 12.8837Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11944">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>Prendre immédiatement à gauche, dans le pré, un chemin qui descend dans la chênaie vers Chazieux. Dans le hameau [O> oratoire, calvaire, fontaine] descendre, par la ruelle à gauche, à la deuxième intersection.</p>
+                                             </div>
+                                        </div>
+                                        <!-- Étape 6 -->
+                                        <div class="relative flex items-center">
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11952)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M7.64484 8.02335C7.64484 7.57897 7.68516 7.19866 7.76641 6.88272C7.84734 6.56647 7.95453 6.30054 8.08797 6.08397C8.22141 5.86741 8.37516 5.69647 8.54828 5.56991C8.72141 5.44397 8.89922 5.34679 9.08172 5.27897C9.26422 5.21116 9.44609 5.16835 9.62672 5.14929C9.80734 5.13023 9.97266 5.12085 10.1236 5.12085C10.5111 5.12085 10.8423 5.17085 11.1173 5.27054C11.392 5.37022 11.617 5.50398 11.7917 5.67116C11.967 5.83866 12.0939 6.03335 12.173 6.25554C12.252 6.47772 12.2917 6.71085 12.2917 6.95554C12.2917 7.08741 12.2792 7.23241 12.2548 7.39054C12.2305 7.54866 12.192 7.70679 12.1392 7.86491H11.027V7.57179C11.027 7.27835 11.0089 7.03897 10.9733 6.8546C10.9373 6.67022 10.883 6.52429 10.8095 6.4171C10.7431 6.31509 10.6449 6.23779 10.5302 6.1971C10.4173 6.15741 10.2817 6.13773 10.1236 6.13773C9.79984 6.13773 9.55234 6.24804 9.38109 6.46835C9.20953 6.68835 9.12422 7.04116 9.12422 7.5271V9.38429C9.26734 9.22616 9.45453 9.09335 9.68609 8.98647C9.91734 8.87897 10.1858 8.82522 10.4905 8.82522C10.7086 8.82522 10.9298 8.86022 11.1539 8.92991C11.3777 8.9996 11.5808 9.12366 11.7636 9.30241C11.9461 9.48116 12.0948 9.72397 12.2095 10.0305C12.3242 10.3374 12.382 10.7296 12.382 11.208V12.1449C12.382 12.6605 12.3283 13.0955 12.2208 13.4493C12.1136 13.803 11.9602 14.0902 11.7605 14.3102C11.5651 14.5279 11.3174 14.692 11.0408 14.7871C10.7605 14.8849 10.4452 14.9343 10.0952 14.9343C9.69984 14.9343 9.35078 14.8815 9.04766 14.7762C8.75223 14.6756 8.48776 14.5005 8.27984 14.2677C8.07109 14.0346 7.91297 13.7305 7.80547 13.3562C7.69828 12.9818 7.64453 12.5252 7.64453 11.9868L7.64484 8.02335ZM9.12422 12.5343C9.12422 12.9783 9.20047 13.3058 9.35266 13.5168C9.50516 13.7277 9.74703 13.833 10.0783 13.833C10.368 13.833 10.5805 13.7296 10.7161 13.5224C10.8517 13.3155 10.9192 13.0052 10.9192 12.5912V11.1571C10.9192 10.9237 10.8986 10.728 10.857 10.5699C10.8158 10.4118 10.7577 10.2849 10.682 10.1887C10.6067 10.0927 10.5164 10.0243 10.4111 9.98272C10.3058 9.94116 10.187 9.92085 10.0555 9.92085C9.95669 9.92032 9.85847 9.93562 9.76453 9.96616C9.5868 10.0235 9.4252 10.1221 9.29297 10.254C9.23218 10.314 9.17559 10.3781 9.12359 10.4458V12.5343H9.12422Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11952">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>Virer à droite dans une impasse et prendre le sentier qui descend au bord de l’Allier.</p>
+                                             </div>
+                                        </div>
+                                        <!-- Étape 7 -->
+                                        <div class="relative flex items-center">
+                                             <div class="absolute left-[10px] top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <g clip-path="url(#clip0_3374_11956)">
+                                                            <path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#D32F2F"/>
+                                                            <path d="M10.6723 6.4935H7.83789V5.20068H12.2416V5.97412L9.58852 14.8491H8.00195L10.6723 6.4935Z" fill="white"/>
+                                                       </g>
+                                                       <defs>
+                                                            <clipPath id="clip0_3374_11956">
+                                                                 <rect width="20" height="20" fill="white"/>
+                                                            </clipPath>
+                                                       </defs>
+                                                  </svg>
+                                             </div>
+                                             <div class="ml-[30px] max-w-[600px] text-sm">
+                                                  <p>À la fourche, lorsque le lit de la rivière s’élargit, monter à droite ( > pente raide). Rejoindre la route et la suivre à droite sur 100 m. À l’épingle [O> table de pique-nique, conservatoire des cépages], aller à gauche jusqu’au château.</p>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <hr class="border-black border-opacity-20 border-1 mt-[50px]"/>
+
+                         <div class="mt-[20px] text-[14px] text-[#000]">
+                              <p>Redescendre par le chemin de l’aller pour retrouver le point de départ.</p>
+                              <p>Départ : Saint-Ilpize</p>
+                              <p>Arrivée : Saint-Ilpize</p>
+                              <p>Communes traversées : Saint-Ilpize</p>
+                         </div>
+
+                         <hr class="border-black border-opacity-20 border-1 mt-[20px]"/>
+
+                         <div class="mt-[20px]">
+                              <h3 class="text-[16px] text-[#000]">Recommandations</h3>
+                              <div class="flex items-center border-[1px] border-[#000] rounded-[6px] p-[5px] mt-[10px] text-[14px] text-[#000]">
+                                   <svg class="mr-[15px]" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2.1659 18.4582L10.9899 4.00517C11.1785 3.70317 11.4411 3.45432 11.7528 3.28219C12.0645 3.11005 12.4149 3.02032 12.771 3.0215C13.1271 3.02023 13.4777 3.10992 13.7895 3.28206C14.1013 3.4542 14.364 3.7031 14.5526 4.00517L23.3766 18.4582C23.7465 19.0873 23.7491 19.8618 23.3822 20.4929C23.199 20.8048 22.9381 21.0638 22.6248 21.2447C22.3115 21.4255 21.9567 21.5219 21.595 21.5246H3.94753C3.58583 21.5219 3.23099 21.4255 2.91773 21.2447C2.60446 21.0638 2.34347 20.8048 2.16028 20.4929C1.98017 20.1839 1.88574 19.8325 1.88673 19.4748C1.88771 19.1172 1.98408 18.7662 2.1659 18.4582ZM12.7715 6.2868C13.673 6.2868 14.4042 7.09854 14.4042 8.10058V12.6358C14.4042 13.6378 13.673 14.4501 12.7715 14.4501C11.8695 14.4501 11.1389 13.6378 11.1389 12.6358V8.10058C11.1389 7.09854 11.8695 6.2868 12.7715 6.2868ZM14.4042 18.2593C14.4042 18.4737 14.3619 18.686 14.2799 18.884C14.1978 19.0821 14.0776 19.2621 13.926 19.4137C13.7744 19.5653 13.5944 19.6856 13.3963 19.7676C13.1982 19.8497 12.9859 19.8919 12.7715 19.8919C12.5571 19.8919 12.3448 19.8497 12.1467 19.7676C11.9486 19.6856 11.7687 19.5653 11.617 19.4137C11.4654 19.2621 11.3452 19.0821 11.2631 18.884C11.1811 18.686 11.1389 18.4737 11.1389 18.2593C11.1389 17.8262 11.3109 17.411 11.617 17.1048C11.9232 16.7986 12.3385 16.6266 12.7715 16.6266C13.2045 16.6266 13.6198 16.7986 13.926 17.1048C14.2322 17.411 14.4042 17.8262 14.4042 18.2593Z" fill="black"/>
+                                   </svg>
+                                   <p>Pente raide</p>
+                              </div>
+                         </div>
+
+                         <hr class="border-black border-opacity-20 border-1 mt-[20px]"/>
+
+                         <div class="mt-[20px] text-[14px] text-[#000]">
+                              <h3>Accès routiers et parkings</h3>
+                              <p>Saint-Ilpize, à 14 km au sud de Brioude par les
+                                   D 912 et D 16.</p>
+                              <h3>Stationnement :</h3>
+                              <p>Parking de la mairie</p>
+                         </div>
+                    </div>
+               </div>
+               <div class="flex flex-col text-left">
+                    <div class=" mr-[10px]">
+                         <button  class="flex mt-[45px]">
+                              <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                   <rect x="0.5" y="0.5" width="33" height="33" rx="16.5" stroke="#606060"/>
+                                   <path d="M10.2 14.4375V7H22.8V14.4375M10.2 24H8.1C7.54305 24 7.0089 23.7761 6.61508 23.3776C6.22125 22.9791 6 22.4386 6 21.875V16.5625C6 15.9989 6.22125 15.4584 6.61508 15.0599C7.0089 14.6614 7.54305 14.4375 8.1 14.4375H24.9C25.457 14.4375 25.9911 14.6614 26.3849 15.0599C26.7787 15.4584 27 15.9989 27 16.5625V21.875C27 22.4386 26.7787 22.9791 26.3849 23.3776C25.9911 23.7761 25.457 24 24.9 24H22.8" stroke="#606060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                   <path d="M10 19.5H23V27.5H10V19.5Z" stroke="#606060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                         </button>
+                         <button  class="flex mt-[20px]">
+                              <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                   <rect x="0.5" y="0.5" width="33" height="33" rx="16.5" fill="white"/>
+                                   <rect x="0.5" y="0.5" width="33" height="33" rx="16.5" stroke="#606060"/>
+                                   <path d="M25.8619 20.2008V24.1392C25.8619 24.6615 25.6544 25.1625 25.285 25.5319C24.9156 25.9013 24.4146 26.1088 23.8923 26.1088H10.1083C9.5859 26.1088 9.08493 25.9013 8.71555 25.5319C8.34618 25.1625 8.13867 24.6615 8.13867 24.1392V20.2008M12.0771 15.2776L16.9995 20.2008L21.9227 15.2776M17.0003 20.2008V8.38477" stroke="#606060" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                         </button>
                     </div>
                </div>
           </div>
