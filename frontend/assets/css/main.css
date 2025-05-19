@@ -79,7 +79,11 @@ input[type='password']::-webkit-credentials-auto-fill-button {
      font-family: Mulish;
      letter-spacing: -0.24px;
 }
-
+#hellohumans-simulateVisitor{
+     @media (max-width: 1200px) {
+          background-size: calc(100% - 60px);
+     }
+}
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
 }
