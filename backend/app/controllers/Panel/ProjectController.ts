@@ -2,36 +2,15 @@ import { HttpContext } from '@adonisjs/core/http'
 import supabaseService from '#services/supabaseService'
 
 class ProjectController{
-     public async getProject({ auth, response }: HttpContext) {
+     public async getProject(ctx: HttpContext) {
           try {
-               const auth_id = auth?.user?.id
-               if (!auth_id) {
-                    return response.unauthorized({
-                         error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
-                    })
-               }
+               let selected_client_id = ctx.user.selected_client_id
 
-               // 1. Récupération de l'utilisateur interne
-               const { data: userData, error: userError } = await supabaseService
-                    .from('users')
-                    .select('id, selected_client_id')
-                    .eq('auth_id', auth_id)
-                    .single()
-
-               if (userError || !userData) {
-                    return response.notFound({
-                         error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
-                    })
-               }
-
-               const user_id = userData.id
-               let selected_client_id = userData.selected_client_id
-
-               // 2. Vérifier que ce client est bien lié à l'utilisateur
+               // 1. Vérifier que ce client est bien lié à l'utilisateur
                let { data: clientUser, error: clientUserError } = await supabaseService
                     .from('client_users')
                     .select('id, client_id, selected_project_id')
-                    .eq('user_id', user_id)
+                    .eq('user_id', ctx.user.id)
                     .eq('client_id', selected_client_id)
                     .maybeSingle()
 
@@ -40,13 +19,13 @@ class ProjectController{
                     const { data: lastClientUser, error: lastClientError } = await supabaseService
                          .from('client_users')
                          .select('client_id, id, selected_project_id')
-                         .eq('user_id', user_id)
+                         .eq('user_id', ctx.user.id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
 
                     if (!lastClientUser || lastClientError) {
-                         return response.notFound({
+                         return ctx.response.notFound({
                               error: { name: 'noClientFound', description: 'Aucun client associé à cet utilisateur.' }
                          })
                     }
@@ -58,13 +37,13 @@ class ProjectController{
                     await supabaseService
                          .from('users')
                          .update({ selected_client_id: selected_client_id })
-                         .eq('id', user_id)
+                         .eq('id', ctx.user.id)
                }
 
                const client_user_id = clientUser.client_id
                let selected_project_id = clientUser.selected_project_id
 
-               // 3. Vérifie si le projet sélectionné est bien lié au client
+               // 2. Vérifie si le projet sélectionné est bien lié au client
                if (selected_project_id) {
                     const { data: validProject } = await supabaseService
                          .from('client_projects')
@@ -78,7 +57,7 @@ class ProjectController{
                     }
                }
 
-               // 4. Si aucun projet sélectionné → on récupère le dernier du client
+               // 3. Si aucun projet sélectionné → on récupère le dernier du client
                if (!selected_project_id) {
                     const { data: lastProject } = await supabaseService
                          .from('client_projects')
@@ -89,7 +68,7 @@ class ProjectController{
                          .maybeSingle()
 
                     if (!lastProject) {
-                         return response.notFound({
+                         return ctx.response.notFound({
                               error: { name: 'noProjectFound', description: 'Aucun projet trouvé pour ce client.' }
                          })
                     }
@@ -103,7 +82,7 @@ class ProjectController{
                          .eq('id', client_user_id)
                }
 
-               // 5. On retourne uniquement le projet sélectionné
+               // 4. On retourne uniquement le projet sélectionné
                const { data: selectedProject, error: selectedProjectError } = await supabaseService
                     .from('client_projects')
                     .select('*')
@@ -111,12 +90,12 @@ class ProjectController{
                     .single()
 
                if (selectedProjectError || !selectedProject) {
-                    return response.notFound({
+                    return ctx.response.notFound({
                          error: { name: 'projectNotFound', description: 'Projet introuvable.' }
                     })
                }
 
-               // 6. On retourne uniquement le projet sélectionné
+               // 5. On retourne uniquement le projet sélectionné
                const { data: projectSubscription } = await supabaseService
                     .from('client_project_subscriptions')
                     .select('*')
@@ -133,57 +112,36 @@ class ProjectController{
 
           } catch (error) {
                console.error('Erreur ClientController.getProject:', error)
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' }
                })
           }
      }
 
-     public async getProjects({ auth, response }: HttpContext) {
+     public async getProjects(ctx: HttpContext) {
           try {
-               const auth_id = auth?.user?.id
-               if (!auth_id) {
-                    return response.unauthorized({
-                         error: { name: 'unauthorized', description: 'Utilisateur non connecté.' }
-                    })
-               }
+               let selected_client_id = ctx.user.selected_client_id
 
-               // 1. Récupération de l'utilisateur interne
-               const { data: userData, error: userError } = await supabaseService
-                    .from('users')
-                    .select('id, selected_client_id')
-                    .eq('auth_id', auth_id)
-                    .single()
-
-               if (userError || !userData) {
-                    return response.notFound({
-                         error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
-                    })
-               }
-
-               const user_id = userData.id
-               let selected_client_id = userData.selected_client_id
-
-               // 2. Vérification du lien utilisateur ↔ client
+               // 1. Vérification du lien utilisateur ↔ client
                let { data: clientUser, error: clientUserError } = await supabaseService
                     .from('client_users')
                     .select('id, client_id')
-                    .eq('user_id', user_id)
+                    .eq('user_id', ctx.user.id)
                     .eq('client_id', selected_client_id)
                     .maybeSingle()
 
-               // 3. Si le lien est invalide ou non existant, on prend le dernier client
+               // 2. Si le lien est invalide ou non existant, on prend le dernier client
                if (!clientUser || clientUserError) {
                     const { data: lastClientUser, error: lastClientError } = await supabaseService
                          .from('client_users')
                          .select('client_id')
-                         .eq('user_id', user_id)
+                         .eq('user_id', ctx.user.id)
                          .order('created_at', { ascending: false })
                          .limit(1)
                          .maybeSingle()
 
                     if (!lastClientUser || lastClientError) {
-                         return response.notFound({
+                         return ctx.response.notFound({
                               error: { name: 'noClientFound', description: 'Aucun client lié à cet utilisateur.' }
                          })
                     }
@@ -194,10 +152,10 @@ class ProjectController{
                     await supabaseService
                          .from('users')
                          .update({ selected_client_id: selected_client_id })
-                         .eq('id', user_id)
+                         .eq('id', ctx.user.id)
                }
 
-               // 4. Récupération des projets du client
+               // 3. Récupération des projets du client
                const { data: projects, error: projectsError } = await supabaseService
                     .from('client_projects')
                     .select('*')
@@ -205,7 +163,7 @@ class ProjectController{
                     .order('created_at', { ascending: false })
 
                if (projectsError) {
-                    return response.internalServerError({
+                    return ctx.response.internalServerError({
                          error: { name: 'projectFetchError', description: 'Erreur lors de la récupération des projets.' }
                     })
                }
@@ -215,49 +173,30 @@ class ProjectController{
                }
           } catch (error) {
                console.error('Erreur ClientController.getProjects:', error)
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' }
                })
           }
      }
 
-     public async switchProject({ auth, params, response }: HttpContext) {
+     public async switchProject(ctx: HttpContext) {
           try {
-               const auth_id = auth?.user?.id
-               const project_id = params.uuid
-
-               if (!auth_id || !project_id) {
-                    return response.badRequest({
-                         error: { name: 'invalidRequest', description: 'Paramètre manquant ou utilisateur non connecté.' }
+               if (!ctx.params.uuid) {
+                    return ctx.response.badRequest({
+                         error: { name: 'invalidRequest', description: 'Paramètre manquant.' }
                     })
                }
-
-               // 1. Récupération de l'utilisateur interne
-               const { data: userData, error: userError } = await supabaseService
-                    .from('users')
-                    .select('id, selected_client_id')
-                    .eq('auth_id', auth_id)
-                    .single()
-
-               if (!userData || userError) {
-                    return response.notFound({
-                         error: { name: 'userNotFound', description: 'Utilisateur introuvable.' }
-                    })
-               }
-
-               const user_id = userData.id
-               const selected_client_id = userData.selected_client_id
 
                // 2. Vérifie que le client est bien lié à cet utilisateur
                const { data: clientUser, error: clientUserError } = await supabaseService
                     .from('client_users')
                     .select('id')
-                    .eq('user_id', user_id)
-                    .eq('client_id', selected_client_id)
+                    .eq('user_id', ctx.user.id)
+                    .eq('client_id', ctx.user.selected_client_id)
                     .maybeSingle()
 
                if (!clientUser || clientUserError) {
-                    return response.forbidden({
+                    return ctx.response.forbidden({
                          error: { name: 'forbidden', description: 'Aucun lien avec ce client.' }
                     })
                }
@@ -266,12 +205,12 @@ class ProjectController{
                const { data: validProject, error: projectError } = await supabaseService
                     .from('client_projects')
                     .select('id')
-                    .eq('id', project_id)
-                    .eq('client_id', selected_client_id)
+                    .eq('id', ctx.params.uuid)
+                    .eq('client_id', ctx.user.selected_client_id)
                     .maybeSingle()
 
                if (!validProject || projectError) {
-                    return response.notFound({
+                    return ctx.response.notFound({
                          error: { name: 'invalidProject', description: 'Ce projet n\'est pas lié à votre compte client.' }
                     })
                }
@@ -279,24 +218,24 @@ class ProjectController{
                // 4. Mise à jour de selected_project_id dans client_users
                const { error: updateError } = await supabaseService
                     .from('client_users')
-                    .update({ selected_project_id: project_id })
+                    .update({ selected_project_id: ctx.params.uuid })
                     .eq('id', clientUser.id)
 
                if (updateError) {
-                    return response.internalServerError({
+                    return ctx.response.internalServerError({
                          error: { name: 'updateFailed', description: 'Échec de la mise à jour du projet.' }
                     })
                }
 
                return {
                     user: {
-                         selected_project_id: project_id
+                         selected_project_id: ctx.params.uuid
                     }
                }
 
           } catch (error) {
                console.error('Erreur ClientController.switchProject:', error)
-               return response.internalServerError({
+               return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' }
                })
           }
