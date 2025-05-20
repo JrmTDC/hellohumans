@@ -1,7 +1,10 @@
 <template>
-     <div id="hellohumans-chat-iframe" class="block border-none fixed inset-auto bottom-0 right-0 opacity-100 bg-transparent m-0 max-h-[100dvh] max-w-[100vw] translate-y-0 transition-none visible z-[999999999]"
+     <div id="hellohumans-chat-iframe" class="block border-none fixed inset-[auto_0_0_auto] opacity-100 text-[inherit] bg-transparent !bg-transparent m-0 max-w-[100vw] translate-y-0 !transition-none visible z-[999999999] rounded-[47px_30px_]()_]()"
           :class="[
-               isVisible ? 'w-[424px] h-[747px] max-h-[100%]' : 'w-[112px] h-[140px] max-h-[100dvh]'
+               isVisible ? [
+                    isChatActive ? 'w-[424px] h-[747px] max-h-[100%]' : 'w-[424px] h-[469px] max-h-[100%]'
+               ] : 'w-[112px] h-[140px] max-h-[100dvh]',
+
           ]">
           <!-- BOUTON FLOTANT POUR OUVRIR -->
           <div class="fixed w-[112px] h-[140px] bottom-[12px] flex items-center justify-center pointer-events-none z-[1] right-0">

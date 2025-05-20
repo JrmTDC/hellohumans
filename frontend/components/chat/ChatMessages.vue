@@ -3,7 +3,7 @@
           id="conversation-group"
           ref="chatContainer"
           v-auto-animate
-          class="w-full overflow-y-auto bg-white transition duration-300 min-h-[160px] h-[487px] px-6 flex-1 max-h-full static"
+          class="w-full overflow-auto bg-white transition-all duration-300 min-h-[160px] h-[487px] px-[24px] flex-[1_1_auto]"
      >
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
                <!-- Boucle sur tous les messages -->
@@ -11,19 +11,19 @@
                     v-for="(msg, index) in messages"
                     :key="index"
                     :class="[
-          msg.sender === 'user'
+          msg.sender === 'visitor'
             ? 'hhcss_message-visitor mt-[9px] text-white float-right '
             : 'hhcss_message-operator mt-[9px] text-[rgb(6,19,43)] float-left border border-transparent',
           msg.status === 'unavailable' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
           'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
         ]" :style="[
-             msg.sender === 'user' ? { background: clientConfig.backgroundColor, color: clientConfig.textColor } : { background:`linear-gradient(white, white) padding-box padding-box,
+             msg.sender === 'visitor' ? { background: chatStore.project?.config.backgroundColor, color: chatStore.project?.config.textColor } : { background:`linear-gradient(white, white) padding-box padding-box,
                linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` },
              msg.status === 'unavailable' ? { } : {},
         ]"
                >
                     <!-- Affichage du texte du message -->
-                    <span v-html="formatMessage(msg.text)" class="whitespace-pre-line"></span>
+                    <span v-html="formatMessage(msg.content)" class="whitespace-pre-line"></span>
 
                     <!-- Si le message contient des choices, on affiche des boutons -->
                     <div v-if="msg.choices" class="mt-2 flex flex-wrap gap-2">
@@ -33,7 +33,7 @@
                               @mouseover="hoverIndex = index"
                               @mouseleave="hoverIndex = null"
                               class="px-3 py-2 border rounded cursor-pointer hover:text-white"
-                              :style="{ background: hoverIndex === index ? clientConfig.backgroundColor : '' }"
+                              :style="{ background: hoverIndex === index ? chatStore.project?.config.backgroundColor : '' }"
                               @click="$emit('choiceSelected', choice)"
                          >{{ choice }}
                          </button>
@@ -62,23 +62,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import { colord } from 'colord';
-
+const chatStore = useChatStore();
 const emits = defineEmits(['choiceSelected']);
 
 const props = defineProps<{
-     messages: Array<{
-          text: string;
-          datetime: string;
-          status: string;
-          sender: string;
-          choices?: string[];
-     }>;
-     isLoading: boolean;
-     isChatActive: boolean;
-     clientConfig: object;
-}>();
+     messages: ChatMessage[]
+     isLoading: boolean
+     isChatActive: boolean
+}>()
 
 // Références pour la zone de chat et la scrollbar
 const chatContainer = ref<HTMLElement | null>(null);
@@ -86,10 +78,8 @@ const customScrollbar = ref<HTMLElement | null>(null);
 const scrollbarContainer = ref<HTMLElement | null>(null);
 const hoverIndex = ref(null);
 
-const clientConfig = toRef(props, 'clientConfig');
-
-const variation1 = computed(() => colord(clientConfig.value.backgroundColor).rotate(-15).lighten(0).toHex());
-const variation2 = computed(() => colord(clientConfig.value.backgroundColor).rotate(-20).lighten(0.1).toHex());
+const variation1 = computed(() => colord(chatStore.project?.config.backgroundColor).rotate(-15).lighten(0).toHex());
+const variation2 = computed(() => colord(chatStore.project?.config.backgroundColor).rotate(-20).lighten(0.1).toHex());
 
 let isDragging = false;
 let startY = 0;
@@ -230,8 +220,10 @@ function scrollToBottom() {
 }
 
 // Formatage du texte (gras, italique, listes, etc.)
-function formatMessage(text: string) {
-     return text
+function formatMessage(content: string) {
+     if (!content) return ''
+
+     return content
           .replace(/\n/g, "<br>") // Remplace les sauts de ligne par <br>
           .replace(/(\d{1,2}\s\w+\s\w+)/g, "<strong>$1</strong>") // Met en gras les adresses ou dates
           .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Formatage en gras **Texte**

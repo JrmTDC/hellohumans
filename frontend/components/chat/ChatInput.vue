@@ -25,7 +25,7 @@
                  <svgo-chat-icon-sortcut-enter class="w-[11px] h-[10px]" fill="#647491" />
             </div>
           </span>
-                         <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:clientConfig.actionColor }" />
+                         <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.project?.config.actionColor }" />
                     </button>
                </div>
           </div>
@@ -44,13 +44,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
 
 const emits = defineEmits(['update:currentMessage', 'sendMessage']);
-
+const chatStore = useChatStore();
 const props = defineProps<{
      currentMessage: string;
-     clientConfig: object;
 }>();
 
 // On crée un modèle local pour pouvoir utiliser v-model

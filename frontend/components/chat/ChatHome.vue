@@ -34,7 +34,7 @@
                     <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
                     <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
                </div>
-               <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:clientConfig.actionColor }" />
+               <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.project?.config.actionColor }" />
           </button>
 
           <!-- Powered by HelloHumans Agent -->
@@ -56,7 +56,7 @@
                     @click="$emit('openChat')"
                     class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold"
                >
-                    <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:clientConfig.actionColor }"/>
+                    <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:chatStore.project?.config.actionColor }"/>
                     <span class="text-sm text-gray-700">Accueil</span>
                </button>
 
@@ -67,7 +67,7 @@
                     @mouseleave="isHovered = false"
                     class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700"
                >
-                    <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? clientConfig.actionColor : '' }" />
+                    <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? chatStore.project?.config.actionColor : '' }" />
                     <span class="text-sm">Discussion</span>
                </button>
           </div>
@@ -75,9 +75,9 @@
 </template>
 <script setup lang="ts">
 
+const chatStore = useChatStore();
 const props = defineProps<{
      suggestedQuestions: string[];
-     clientConfig: object;
 }>();
 
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
