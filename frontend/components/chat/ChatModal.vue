@@ -25,7 +25,7 @@
                     <div class="relative left-0 p-[15px]">
                          <svgo-chat-icon-input class="w-[24px] h-[24px] fill-[#0566ff] rotate-45 absolute top-[28px] left-[25px]" />
                          <input
-                              v-model="localUser"
+                              v-model="visitorEmail"
                               type="email"
                               placeholder="Entrez votre email"
                               class="border border-[rgba(108,125,159,0.24)] text-[15px] p-[9px_12px_10px_40px] leading-normal m-0 w-full rounded-[10px] focus:outline-none h-[50px]"
@@ -55,26 +55,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
 
+const chatStore = useChatStore();
 const props = defineProps<{
      show: boolean;
      isLoading : boolean;
-     clientConfig: object;
 }>();
 
 const emits = defineEmits(['accept', 'close', 'loading']);
-const localUser = ref('');
+const visitorEmail = ref('');
 const isVisible = ref(false); // Pour contrôler l'animation proprement
 
 // Vérifier si l'utilisateur a déjà accepté le RGPD
 onMounted(() => {
-     const storedUserData = localStorage.getItem('user');
-     if (storedUserData) {
-          const userData = JSON.parse(storedUserData);
-          if (userData.rgpd === 'accepted' && userData.uuid) {
-               localUser.value = userData.email;
-               emits('accept', userData.email, 'isLoading', false);
+     const ispChatLocalStorage = localStorage.getItem('hhs_isp_chat');
+     if (ispChatLocalStorage) {
+          const ispChatData = JSON.parse(ispChatLocalStorage);
+          if (ispChatData.visitor.gdprConsent === true) {
+               visitorEmail.value = ispChatData.visitor.email;
+               emits('accept', ispChatData.visitor.email, 'isLoading', false);
           }
      }
 });
@@ -82,7 +81,7 @@ onMounted(() => {
 
 // Vérifier si l'email est valide
 const isEmailValid = computed(() => {
-     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(localUser.value);
+     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(visitorEmail.value);
 });
 
 // Activer l'animation avec un petit délai
@@ -101,7 +100,7 @@ watch(() => props.show, (newVal) => {
 // Quand l’utilisateur clique “J’accepte”
 function onAccept() {
      if (!isEmailValid.value || props.isLoading) return;
-     emits('accept', localUser.value);
+     emits('accept', visitorEmail.value);
 }
 
 // Quand l’utilisateur clique sur “Fermer” (croix en haut)

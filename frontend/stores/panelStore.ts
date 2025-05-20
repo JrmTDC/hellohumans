@@ -100,12 +100,8 @@ export const usePanelStore = defineStore('panel', () => {
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
 
-     const panelReturn = ref<string | null>(null)
-
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-          panelReturn.value = null
-
           try {
                // 1) Vérifier la session utilisateur
                const userRes = await apiFetch('/user')
@@ -172,7 +168,6 @@ export const usePanelStore = defineStore('panel', () => {
 
      async function initPanelData(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-          panelReturn.value = null
           try {
                // 1) Vérifier la session / récupérer l’utilisateur
                if (!user.value) {
@@ -198,7 +193,6 @@ export const usePanelStore = defineStore('panel', () => {
 
      async function fetchUpgrade(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-          panelReturn.value = null
           try {
                // 1) Vérifier la session / récupérer l’utilisateur
                if (!user.value) {
@@ -222,7 +216,6 @@ export const usePanelStore = defineStore('panel', () => {
 
      async function fetchPlans(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
-          panelReturn.value = null
           try {
                // 1) Vérifier la session / récupérer l’utilisateur
                if (!user.value) {
@@ -242,7 +235,6 @@ export const usePanelStore = defineStore('panel', () => {
 
      async function fetchModules() {
           const { apiFetch } = usePanelApi()
-          panelReturn.value = null
           try {
                // 1) Vérifier la session / récupérer l’utilisateur
                if (!user.value) {
