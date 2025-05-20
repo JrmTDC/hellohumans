@@ -14,13 +14,13 @@
                     class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto
              transition duration-150 ease-in-out relative text-[#007dfc]
              shadow-[0px_4px_24px_#02061033] hover:scale-110"
-                    :style="{ background: clientConfig.backgroundColor }"
+                    :style="{ background: chatStore.project?.config.backgroundColor }"
                >
                     <svgo-chat-button-icon-chat class="w-[24px] h-[24px]" />
                </button>
                <!-- Icône de notifications désactivées (optionnel) -->
                <div
-                    v-if="!isOpen && !notificationSound"
+                    v-if="!isOpen && !notificationSnoozed"
                     class="absolute top-[37px] right-[23px] font-bold pointer-events-none
              rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px]
              bg-white outline outline-1 outline-[rgb(226,232,239)] text-[rgb(8,15,26)] z-1"
@@ -39,13 +39,12 @@
                     isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
                ]"
           >
-               <div v-auto-animate class="flex-1 overflow-hidden">
+               <div v-auto-animate class="min-h-0 flex flex-col flex-[1_1_0%] inset-0">
                     <!-- HEADER -->
                     <ChatHeader
-                         :clientConfig="clientConfig"
                          :isChatActive="isChatActive"
                          :isOpen="isOpen"
-                         :notificationSound="notificationSound"
+                         :notificationSnoozed="notificationSnoozed"
                          :showOptions="showOptions"
                          @goToHome="goToHome"
                          @toggleChat="toggleChat"
@@ -60,7 +59,6 @@
                     <!-- ÉCRAN D'ACCUEIL -->
                     <ChatHome
                          v-if="!isChatActive"
-                         :clientConfig="clientConfig"
                          :suggestedQuestions="formattedQuestions"
                          @sendSuggestedMessage="sendSuggestedMessage"
                          @openChat="() => (isChatActive = true)"
@@ -69,7 +67,6 @@
                     <!-- LISTE DES MESSAGES -->
                     <ChatMessages
                          v-if="isChatActive"
-                         :clientConfig="clientConfig"
                          :messages="messages"
                          :isLoading="isLoading"
                          :isChatActive="isChatActive"
@@ -79,7 +76,6 @@
                     <!-- CHAMP DE SAISIE -->
                     <ChatInput
                          v-if="isChatActive && !disableInput"
-                         :clientConfig="clientConfig"
                          v-model:currentMessage="message"
                          :disableInput="disableInput"
                          @sendMessage="sendMessage"
@@ -88,7 +84,6 @@
 
                <!-- MODAL RGPD -->
                <ChatModal
-                    :clientConfig="clientConfig"
                     :show="showRGPDModal"
                     @accept="onAcceptRGPD"
                     @close="onCloseRGPD"
@@ -98,8 +93,7 @@
                <!-- OPTIONS -->
                <ChatOptions
                     v-if="showOptions"
-                    :clientConfig="clientConfig"
-                    :notificationSound="notificationSound"
+                    :notificationSnoozed="notificationSnoozed"
                     :isExpanded="isExpanded"
                     :optionsBox="optionsBox"
                     @toggleNotifications="toggleNotifications"
@@ -114,16 +108,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { useRuntimeConfig } from '#imports'
 
-// SOUS-COMPOSANTS
-import ChatHeader from '@/components/chat/ChatHeader.vue'
-import ChatHome from '@/components/chat/ChatHome.vue'
-import ChatMessages from '@/components/chat/ChatMessages.vue'
-import ChatInput from '@/components/chat/ChatInput.vue'
-import ChatOptions from '@/components/chat/ChatOptions.vue'
-import ChatModal from '@/components/chat/ChatModal.vue'
+type ChatMessage = {
+     id: string;
+     idFromServer?: string;
+     type: 'text' | string;
+     sender: 'visitor' | 'bot';
+     content: string;
+     time_sent: number;
+     isAIAssistant?: boolean;
+     aiAssistantResponseType?: string;
+     questionMessageId?: string | null;
+     disableTextInput?: boolean;
+     choices?: string[];
+     status?: 'success' | 'unavailable';
+}
+
+const chatStore = useChatStore()
 
 // --- ÉTAT PRINCIPAL DU CHAT ---
 const config = useRuntimeConfig()
@@ -132,11 +133,11 @@ const apiUrl = `${config.public.apiBaseUrl}/chat`
 // Variables / Refs principales
 const message = ref('')         // Message en cours de saisie
 const clientKey = ref(`${config.public.apiClientKey}`)
-const messages = ref<any[]>([]) // Historique des messages
+const messages = ref<ChatMessage[]>([]) // Historique des messages
 const isLoading = ref(false)    // Indicateur de chargement
 const isOpen = ref(false)       // Gère l'ouverture du chatbot
 const isChatActive = ref(false) // Vue "home" vs "chat"
-const notificationSound = ref(true)
+const notificationSnoozed = ref(true)
 const isExpanded = ref(false)
 const showOptions = ref(false)
 const isSending = ref(false)
@@ -156,23 +157,30 @@ const optionsBox = ref<HTMLElement | null>(null)
 // Vérifie si on est dans le navigateur (pour localStorage)
 const isBrowser = typeof window !== 'undefined'
 
-const props = defineProps<{
-     clientConfig: object;
-}>();
+const formattedMessages = computed(() => messages.value)
 
 const formattedQuestions = computed(() =>
-     props.clientConfig?.suggestedQuestionsString
-          ? props.clientConfig.suggestedQuestionsString.split(';')
+     chatStore.project?.config.suggestedQuestionsString
+          ? chatStore.project?.config.suggestedQuestionsString.split(';')
           : []
 )
 
 // Sauvegarder l'historique des messages dans localStorage
 watch(
      messages,
-     newMessages => {
-          if (isBrowser) {
-               localStorage.setItem('user_messages', JSON.stringify(newMessages))
+     (newMessages) => {
+          if (!isBrowser) return
+
+          const raw = localStorage.getItem('hhs_isp_chat')
+          let existing = {}
+          try {
+               existing = raw ? JSON.parse(raw) : {}
+          } catch {
+               existing = {}
           }
+
+          existing.messages = newMessages
+          localStorage.setItem('hhs_isp_chat', JSON.stringify(existing))
      },
      { deep: true }
 )
@@ -182,17 +190,21 @@ onMounted(() => {
      document.addEventListener('click', handleClickOutside)
 
      if (isBrowser) {
-          // Récupérer l'état de notifications
-          const userLocalStorage = localStorage.getItem('user_settings')
-          if (userLocalStorage !== null) {
-               const userLS = JSON.parse(userLocalStorage)
-               notificationSound.value = userLS.notificationSound === true
-          }
+          const raw = localStorage.getItem('hhs_isp_chat')
+          if (raw) {
+               try {
+                    const parsed = JSON.parse(raw)
 
-          // Récupérer l'historique
-          const savedMessages = localStorage.getItem('user_messages')
-          if (savedMessages) {
-               messages.value = JSON.parse(savedMessages)
+                    if (Array.isArray(parsed.messages)) {
+                         messages.value = parsed.messages
+                    }
+
+                    if (typeof parsed.notificationSnoozed === 'boolean') {
+                         notificationSnoozed.value = !parsed.notificationSnoozed
+                    }
+               } catch (err) {
+                    console.warn('hhs_isp_chat corrompu ou vide')
+               }
           }
      }
 })
@@ -221,16 +233,16 @@ async function sendMessage() {
      if (!message.value.trim()) return
 
      // Vérification RGPD
-     const userSettingsLocalStorage = localStorage.getItem('user_settings')
-     let userSetting: any = {}
+     const ispChatLocalStorage = localStorage.getItem('hhs_isp_chat')
+     let ispChatData: any = {}
      try {
-          userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {}
+          ispChatData = ispChatLocalStorage ? JSON.parse(ispChatLocalStorage) : {}
      } catch (error) {
-          userSetting = {}
+          ispChatData = {}
      }
 
      // Si pas accepté RGPD => forcer la modal
-     if (userSetting.rgpd !== 'accepted') {
+     if (!ispChatData.visitor || ispChatData.visitor.gdprConsent !== true) {
           pendingMessage.value = message.value
           showRGPDModal.value = true
           return
@@ -238,85 +250,61 @@ async function sendMessage() {
 
      // On push d'abord le message user dans la conversation
      messages.value.push({
-          text: message.value,
-          datetime: new Date().toISOString(),
-          status: 'success',
-          sender: 'user',
+          id: crypto.randomUUID(),
+          sender: 'visitor',
+          type: 'text',
+          content: message.value,
+          time_sent: Date.now(),
      })
 
      isLoading.value = true
-     const userMessage = message.value
+     const visitorMessage = message.value
      message.value = ''
 
-     if (userSetting.uuid || !isSending.value) {
+     if (ispChatData.visitor.public_key || !isSending.value) {
           isSending.value = true
-          try {
-               const res = await fetch(apiUrl + '/messages', {
-                    method: 'POST',
-                    headers: {
-                         'Content-Type': 'application/json',
-                         'x-client-key': clientKey.value,
-                    },
-                    body: JSON.stringify({
-                         user_uuid: userSetting.uuid,
-                         message: userMessage,
-                    }),
-               })
-               const resUserMessage = await res.json()
 
-               if (!res.ok) {
-                    if (resUserMessage.error?.name === 'user_invalid') {
-                         removeLastUserMessage();
-                         isLoading.value = false
-                         pendingMessage.value = userMessage
-                         showRGPDModal.value = true
-                         return
-                    }
-                    messages.value.push({
-                         text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
-                         datetime: new Date().toISOString(),
-                         status: 'unavailable',
-                         sender: 'bot',
-                    })
-               } else {
-                    // Notification audio ?
-                    if (userSetting.notificationSound) {
-                         playNotificationSound()
-                    }
-                    // SI L'API RETOURNE DES CHOICES
-                    if (resUserMessage.success?.choices) {
-                         messages.value.push({
-                              text: resUserMessage.success.response,
-                              datetime: new Date().toISOString(),
-                              status: 'success',
-                              sender: 'bot',
-                              choices: resUserMessage.success.choices, // <-- On stocke les choix
-                         })
-                         // On désactive l'input tant que l'utilisateur n'a pas choisi
-                         disableInput.value = true
-                    } else {
-                         // Réponse classique
-                         messages.value.push({
-                              text: resUserMessage.success.response,
-                              datetime: new Date().toISOString(),
-                              status: "success",
-                              sender: 'bot',
-                         })
-                         disableInput.value = false
-                    }
+          const sendResult = await chatStore.messageSend(visitorMessage)
+
+          if (!sendResult.success) {
+               if (sendResult.reason === 'user_invalid') {
+                    removeLastUserMessage()
+                    isLoading.value = false
+                    pendingMessage.value = visitorMessage
+                    showRGPDModal.value = true
+                    return
                }
 
-               isLoading.value = false
-               isSending.value = false
-          } catch (error) {
                messages.value.push({
-                    text: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
-                    datetime: new Date().toISOString(),
-                    status: 'unavailable',
+                    id: crypto.randomUUID(),
+                    type: 'text',
                     sender: 'bot',
+                    status: 'unavailable',
+                    content: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
+                    time_sent: Date.now(),
                })
                isLoading.value = false
                isSending.value = false
+               return
+          }
+
+          // Success → message AI
+          const botMessage = sendResult.message
+
+          // Jouer un son si pas désactivé
+          const chatLocalData = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+          if (chatLocalData.notificationSnoozed !== true) {
+               playNotificationSound()
+          }
+
+          // Ajouter visuellement le message bot (pour affichage immédiat)
+          messages.value.push(botMessage)
+          isLoading.value = false
+          isSending.value = false
+
+          // Gérer si le message contient des options (choices)
+          if (botMessage.choices && botMessage.choices.length > 0) {
+               disableInput.value = true
           }
      }
 }
@@ -377,74 +365,42 @@ function toggleExpend() {
 
 // Activer/désactiver les notifications
 function toggleNotifications() {
-     notificationSound.value = !notificationSound.value
-     if (isBrowser) {
-          const userSettingsLocalStorage = localStorage.getItem('user_settings');
-          let userSetting = {};
+     notificationSnoozed.value = !notificationSnoozed.value
 
+     if (isBrowser) {
+          const raw = localStorage.getItem('hhs_isp_chat')
+          let existing = {}
           try {
-               userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {};
-          } catch (error) {
-               userSetting = {};
+               existing = raw ? JSON.parse(raw) : {}
+          } catch {
+               existing = {}
           }
 
-          localStorage.setItem(
-               'user_settings',
-               JSON.stringify({
-                    ...userSetting,
-                    notificationSound: notificationSound.value,
-               })
-          );
+          existing.notificationSnoozed = !notificationSnoozed.value
+          localStorage.setItem('hhs_isp_chat', JSON.stringify(existing))
      }
+
      showOptions.value = false
 }
 
 // RGPD : accepter
-async function onAcceptRGPD(userData: string) {
+async function onAcceptRGPD(email: string) {
      try {
           onLoadingRGPD.value = true
-          const res = await fetch(apiUrl + '/users', {
-               method: 'POST',
-               headers: {
-                    'Content-Type': 'application/json',
-                    'x-client-key': clientKey.value,
-               },
-               body: JSON.stringify({
-                    email: userData,
-                    rgpd: 'accepted',
-               }),
-          })
-          const resData = await res.json()
-          if (res.status === 200) {
-               const userSettingsLocalStorage = localStorage.getItem('user_settings')
-               let userSetting: any = {}
-               try {
-                    userSetting = userSettingsLocalStorage ? JSON.parse(userSettingsLocalStorage) : {}
-               } catch (error) {
-                    userSetting = {}
+          await chatStore.visitorCreate(email)
+
+          setTimeout(() => {
+               showRGPDModal.value = false
+               // On envoie immédiatement le pendingMessage
+               if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
+                    message.value = pendingMessage.value
+                    pendingMessage.value = null
+                    sendMessage()
                }
+               onLoadingRGPD.value = false
+          }, 2000)
 
-               localStorage.setItem(
-                    'user_settings',
-                    JSON.stringify({
-                         ...userSetting,
-                         uuid: resData.success.user.uuid,
-                         notificationSound: userSetting.notificationSound ?? true,
-                         rgpd: 'accepted',
-                    })
-               )
 
-               setTimeout(() => {
-                    showRGPDModal.value = false
-                    // On envoie immédiatement le pendingMessage
-                    if (pendingMessage.value && pendingMessage.value.trim().length > 0) {
-                         message.value = pendingMessage.value
-                         pendingMessage.value = null
-                         sendMessage()
-                    }
-                    onLoadingRGPD.value = false
-               }, 2000)
-          }
      } catch (err) {
           console.error("Erreur enregistrement de l'utilisateur:", err)
           onLoadingRGPD.value = false

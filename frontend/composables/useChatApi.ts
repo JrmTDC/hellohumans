@@ -1,17 +1,24 @@
-import { useRuntimeConfig } from '#imports'
-import { useChatStore } from '~/stores/chatStore'
-
 export function useChatApi() {
      const config = useRuntimeConfig()
-     const apiUrl = `${config.public.apiBaseUrl}/api/chat/`
+     const apiUrl = `${config.public.apiBaseUrl}/chat`
 
      const chatStore = useChatStore()
-     const apiKey = () => chatStore.config.apiKey || ''
+     const apiKey = () => 'a676d92ebf97e101a7ef70c19583f22f64eeea66ee6f39c0d7d1bbddd4cb5e8c'
+
+     const visitorPublicKey = () => {
+          const storedVisitorData = localStorage.getItem('hhs_isp_chat')
+          if (storedVisitorData) {
+              const visitorData = JSON.parse(storedVisitorData)
+              return visitorData.visitor.public_key
+          }
+          return null
+     }
 
      async function apiFetch(path: string, options: RequestInit = {}) {
           const headers = {
                'Content-Type': 'application/json',
-               'x-client-key': apiKey(),
+               'x-project-public-key': apiKey(),
+               'x-visitor-public-key': visitorPublicKey(),
                ...(options.headers || {})
           }
 

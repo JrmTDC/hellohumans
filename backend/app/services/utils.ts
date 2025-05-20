@@ -1,28 +1,32 @@
 import { HttpContext } from '@adonisjs/core/http'
 import dns from 'dns'
+import { v4 as uuidv4 } from 'uuid'
+import * as UAParser from 'ua-parser-js'
 import { promisify } from 'util'
 
 const lookup = promisify(dns.lookup)
 
-/**
- * Récupère l'IP de l'utilisateur via plusieurs sources possibles
- */
-export function getUserIp(request: HttpContext['request']): string {
-     let ip = request.ip()
-     if (Array.isArray(ip)) {
-          ip = ip[0]
+export function generateUuid(): string {
+     return uuidv4()
+}
+
+export function getUserIp(request: HttpContext['request']): string | null {
+     return request.header('x-forwarded-for')?.split(',')[0]?.trim() ||
+          request.ip() ||
+          null
+}
+
+export function parseUserAgent(userAgent: string) {
+     const parser = new UAParser.UAParser(userAgent)
+     const result = parser.getResult()
+
+     return {
+          browser: result.browser.name || '',
+          browserVersion: result.browser.version || '',
+          os: result.os.name || '',
+          osVersion: result.os.version || '',
+          isMobile: result.device?.type === 'mobile' || result.device?.type === 'tablet' || false
      }
-     if (!ip) {
-          const xForwardedFor = request.headers()['x-forwarded-for']
-          if (typeof xForwardedFor === 'string') {
-               ip = xForwardedFor
-          } else if (Array.isArray(xForwardedFor)) {
-               ip = xForwardedFor[0]
-          } else {
-               ip = request.request.socket.remoteAddress || ''
-          }
-     }
-     return ip || ''
 }
 
 /**
