@@ -8,10 +8,12 @@
                     <span>Modal Test</span>
                </button>
           </div>
-          <Chat :clientConfig="clientConfig" />
+          <Chat v-if="chatLoading" />
      </div>
 </template>
 <script setup lang="ts">
+
+import {nextTick} from "vue";
 
 const { t } = useI18n()
 const panelStore = usePanelStore()
@@ -19,10 +21,14 @@ const layoutLoadingPanel = useState('layoutLoadingPanel')
 const backgroundPlaceHodlder = useSvgBase64Loader('panel/simulateVisitor/backgroundPlaceHolder')
 const chatStore = useChatStore()
 const showModuleRandoMoreModal = ref(false)
+const chatLoading = ref(false)
+
 onMounted(async () => {
      setTimeout(() => {
           layoutLoadingPanel.value = false
-          chatStore.fetchConfig()
+          chatStore.fetchChatProject()
+          nextTick()
+          chatLoading.value = true
      }, 400)
 })
 
@@ -30,7 +36,6 @@ const { pageHeaderTitle, pageHeaderBilled, pageHeaderPaid, pageMenuPanel, setMet
 
 const pageTitle = computed(() => t('panel.pages.dashboard.metaTitle'));
 const pageDescription = computed(() => t('panel.pages.dashboard.metaDescription'));
-const clientConfig = computed(() => chatStore.config)
 
 watchEffect(() => {
      setMeta({

@@ -1,7 +1,10 @@
 import router from '@adonisjs/core/services/router'
-import ClientsController from '#controllers/Chat/ClientsController'
-import VisitorsController from '#controllers/Chat/VisitorsController'
-import MessagesController from '#controllers/Chat/MessagesController'
+// Chat
+import ChatProjectController from '#controllers/Chat/ProjectController'
+import ChatClientController from '#controllers/Chat/ClientController'
+import ChatVisitorController from '#controllers/Chat/VisitorController'
+import ChatMessageController from '#controllers/Chat/MessageController'
+// Panel
 import AuthController from '#controllers/Panel/AuthController'
 import UpgradeController from '#controllers/Panel/UpgradeController'
 import UsageController from '#controllers/Panel/UsageController'
@@ -16,12 +19,14 @@ import { middleware } from '#start/kernel'
 
 // Routes de chat
 router.group(() => {
-     router.get('/clients', (ctx) => ClientsController.show(ctx))
-     router.post('/visitors', (ctx) => VisitorsController.store(ctx))
-     router.post('/messages', (ctx) => MessagesController.sendMessage(ctx))
+     router.get('/client', (ctx) => ChatClientController.show(ctx))
+     router.get('/project', (ctx) => ChatProjectController.show(ctx))
+     router.get('/visitor', (ctx) => ChatVisitorController.getVisitor(ctx))
+     router.post('/visitor', (ctx) => ChatVisitorController.createVisitor(ctx))
+     router.post('/messages', (ctx) => ChatMessageController.sendMessage(ctx))
 })
      .prefix('/chat')
-     .use(middleware.chat_security())
+     .use(middleware.chat_access())
 
 // Routes d'authentification et de gestion du mot de passe
 router.group(() => {
@@ -46,12 +51,6 @@ router.group(() => {
      router.post('/lang', (ctx) => UserController.updateLang(ctx))
      router.get('/onboarding/activities', (ctx) => OnboardingController.getActivities(ctx))
      router.post('/onboarding', (ctx) => OnboardingController.create(ctx))
-})
-     .prefix('/panel')
-     .use(middleware.panel_access())
-
-// Routes global protégées par l'authentification
-router.group(() => {
      router.post('/report-issue', (ctx) => SupportController.reportIssue(ctx))
 })
      .prefix('/panel')
