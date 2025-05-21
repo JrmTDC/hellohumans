@@ -29,20 +29,20 @@
                                              <PanelSettingsExpandableSection title="Général" :isBilled="false">
                                                   <div class="flex flex-col justify-start items-start gap-3">
                                                        <label class="block">Couleur d'arrière-plan :</label>
-                                                       <ColorPicker type="backgroundColors" v-model="chatStore.config.backgroundColor" @update:textColor="chatStore.config.textColor = $event" />
+                                                       <PanelChatColorPicker type="backgroundColors" v-model="chatStore.configChat.backgroundColor" @update:textColor="chatStore.configChat.textColor = $event" />
                                                   </div>
                                                   <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
                                                        <label class="block">Couleur du texte :</label>
-                                                       <ColorPicker type="textColors" v-model="chatStore.config.textColor" />
+                                                       <PanelChatColorPicker type="textColors" v-model="chatStore.configChat.textColor" />
                                                   </div>
                                                   <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
                                                        <label class="block">Couleur de l'action :</label>
-                                                       <ColorPicker type="actionColors" v-model="chatStore.config.actionColor" />
+                                                       <PanelChatColorPicker type="actionColors" v-model="chatStore.configChat.actionColor" />
                                                   </div>
 
                                                   <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
                                                        <label class="block">Logo de la marque</label>
-                                                       <ColorPicker type="iconColors" v-model="chatStore.config.iconColor" />
+                                                       <PanelChatColorPicker type="iconColors" v-model="chatStore.configChat.iconColor" />
                                                   </div>
                                              </PanelSettingsExpandableSection>
 
@@ -61,17 +61,18 @@
                                              <!-- SECTION PACK NATURE -->
                                              <PanelSettingsExpandableSection title="Pack Nature" :isBilled="true" :isPaid="true">
                                                   <label class="block mb-2">Activer le Pack Nature ? </label>
-                                                  <input type="checkbox" v-model="chatStore.config.has_nature_pack" />
+                                                  <input type="checkbox" v-model="chatStore.configChat.has_nature_pack" />
                                              </PanelSettingsExpandableSection>
 
                                              <div class="sticky bottom-0 py-[20px] bg-white border-t border-t-[#eff2f6]">
-                                                  <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 bg-[#0566ff] border border-[#0566ff] text-white hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white">Sauvegarder</button>
+                                                  <button :disabled="saving" @click="handleSaveChatConfigClick" class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] border transition text-white" :class="saving ? 'bg-gray-400 border-gray-400 cursor-not-allowed' : 'bg-[#0566ff] border-[#0566ff] hover:bg-[#0049bd] hover:border-[#0049bd]'">{{ saving ? 'Enregistrement…' : 'Sauvegarder' }}
+                                                  </button>
                                              </div>
                                         </div>
 
                                         <div class="self-stretch w-[430px] min-w-[430px]">
                                              <div class="h-full sticky top-0 min-h-[628px] bg-[linear-gradient(rgb(255,255,255)_0%,rgba(255,255,255,0)_500px),url(data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7)] bg-repeat w-full">
-                                                  <Chat v-if="chatLoading" />
+                                                  <Chat v-if="chatLoading" :previewMode="true" forcedState="home"  />
                                              </div>
                                         </div>
                                    </div>
@@ -84,14 +85,15 @@
 </template>
 <script setup lang="ts">
 import Chat from "~/components/chat/Chat.vue";
-import ColorPicker from "~/components/panel/ColorPicker.vue";
 import {nextTick} from "vue";
 
 const { t } = useI18n()
+const panelStore = usePanelStore()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
 const chatLoading = ref(false)
-
+const saving = ref(false)
+const { push } = useToast()
 onMounted(async () => {
      layoutLoadingPanel.value = false
      setTimeout(() => {
@@ -105,4 +107,13 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel'
 })
+async function handleSaveChatConfigClick () {
+     if (saving.value) return
+     saving.value = true
+     const ok = await panelStore.saveChatConfig()
+     saving.value = false
+
+     if (ok) push('Paramètres enregistrés.', { type: 'success' })
+     else  push('Erreur lors de la sauvegarde', { type: 'error', duration: 5000 })
+}
 </script>

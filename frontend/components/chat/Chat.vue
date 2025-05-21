@@ -14,7 +14,7 @@
                     class="w-[60px] h-[60px] rounded-[30px] flex items-center justify-center pointer-events-auto
              transition duration-150 ease-in-out relative text-[#007dfc]
              shadow-[0px_4px_24px_#02061033] hover:scale-110"
-                    :style="{ background: chatStore.project?.config.backgroundColor }"
+                    :style="{ background: chatStore.configChat.backgroundColor }"
                >
                     <svgo-chat-button-icon-chat class="w-[24px] h-[24px]" />
                </button>
@@ -126,8 +126,10 @@ type ChatMessage = {
 
 const chatStore = useChatStore()
 
-// --- ÉTAT PRINCIPAL DU CHAT ---
-const config = useRuntimeConfig()
+const props = defineProps<{
+     previewMode?: boolean
+     forcedState?: 'home' | 'conversation' | 'modal'
+}>()
 
 // Variables / Refs principales
 const message = ref('')         // Message en cours de saisie
@@ -158,8 +160,8 @@ const isBrowser = typeof window !== 'undefined'
 const formattedMessages = computed(() => messages.value)
 
 const formattedQuestions = computed(() =>
-     chatStore.project?.config.suggestedQuestionsString
-          ? chatStore.project?.config.suggestedQuestionsString.split(';')
+     chatStore.configChat.suggestedQuestionsString
+          ? chatStore.configChat.suggestedQuestionsString.split(';')
           : []
 )
 
@@ -186,7 +188,13 @@ watch(
 // Écouter les clics pour fermer le menu d'options
 onMounted(() => {
      document.addEventListener('click', handleClickOutside)
-
+     if (props.previewMode) {
+          isOpen.value = true
+          isVisible.value = true
+          if (props.forcedState === 'conversation') isChatActive.value = true
+          if (props.forcedState === 'home') isChatActive.value = false
+          if (props.forcedState === 'modal') showRGPDModal.value = true
+     }
      if (isBrowser) {
           const raw = localStorage.getItem('hhs_isp_chat')
           if (raw) {
@@ -228,6 +236,7 @@ function sendSuggestedMessage(question: string) {
 
 // Envoi d'un message
 async function sendMessage() {
+     if (props.previewMode) return
      if (!message.value.trim()) return
 
      // Vérification RGPD
@@ -309,6 +318,7 @@ async function sendMessage() {
 
 // Quand l'utilisateur **clique un choix** renvoyé par l'API
 function onChoiceSelected(choice: string) {
+     if (props.previewMode) return
      removeLastChoiceMessage();
      disableInput.value = false
      message.value = choice
@@ -338,6 +348,7 @@ function clearChatAndClose() {
 
 // Ouvrir/Fermer le chatbot
 function toggleChat() {
+     if (props.previewMode) return
      isOpen.value = !isOpen.value
      setTimeout(() => {
           isVisible.value = !isVisible.value

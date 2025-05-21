@@ -25,7 +25,7 @@
                  <svgo-chat-icon-sortcut-enter class="w-[11px] h-[10px]" fill="#647491" />
             </div>
           </span>
-                         <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.project?.config.actionColor }" />
+                         <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.configChat.actionColor }" />
                     </button>
                </div>
           </div>

@@ -8,7 +8,7 @@
                     <span>Modal Test</span>
                </button>
           </div>
-          <Chat v-if="chatLoading" />
+          <Chat v-if="chatLoading" :previewMode="false"  />
      </div>
 </template>
 <script setup lang="ts">
@@ -16,17 +16,18 @@
 import {nextTick} from "vue";
 
 const { t } = useI18n()
-const panelStore = usePanelStore()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const backgroundPlaceHodlder = useSvgBase64Loader('panel/simulateVisitor/backgroundPlaceHolder')
 const chatStore = useChatStore()
 const showModuleRandoMoreModal = ref(false)
 const chatLoading = ref(false)
+const route = useRoute()
+const queryProjectKey = computed(() => route.query.projectPublicKey as string || '')
 
 onMounted(async () => {
      setTimeout(() => {
           layoutLoadingPanel.value = false
-          chatStore.fetchChatProject()
+          chatStore.fetchChatProject(queryProjectKey.value)
           nextTick()
           chatLoading.value = true
      }, 400)

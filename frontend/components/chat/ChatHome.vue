@@ -1,29 +1,31 @@
 <template>
      <div class="p-[24px] pt-[0] pb-[0] max-h-[434px] mt-[-40px] overflow-y-auto flex flex-col z-30 scroll-px-[24px] flex-[1_1_0%]">
           <!-- Questions suggérées -->
-          <div v-if="suggestedQuestions" class="flex rounded-[12px] divide-solid overflow-y-hidden mb-[16px] w-full border border-[#EFF2F6] z-20">
-               <div class="flex flex-col w-full items-center overflow-y-auto bg-[#fff]">
-                    <div
-                         v-for="(question, index) in suggestedQuestions"
-                         :key="index"
-                         class="w-full"
-                    >
-                         <button
-                              @click="$emit('sendSuggestedMessage', question)"
-                              class="flex scroll-px-[16px] items-center gap-[8px] justify-between w-full hover:bg-[#EFF2F6] p-[16px]"
+          <template v-if="suggestedQuestions && suggestedQuestions.length">
+               <div v-if="suggestedQuestions" class="flex rounded-[12px] divide-solid overflow-y-hidden mb-[16px] w-full border border-[#EFF2F6] z-20">
+                    <div class="flex flex-col w-full items-center overflow-y-auto bg-[#fff]">
+                         <div
+                              v-for="(question, index) in suggestedQuestions"
+                              :key="index"
+                              class="w-full"
                          >
+                              <button
+                                   @click="$emit('sendSuggestedMessage', question)"
+                                   class="flex scroll-px-[16px] items-center gap-[8px] justify-between w-full hover:bg-[#EFF2F6] p-[16px]"
+                              >
                                 <span class="text-[15px] font-medium text-left text-[#06132b] overflow-hidden text-ellipsis">
                                   {{ question }}
                                 </span>
-                              <svgo-chat-icon-next class="w-[20px] h-[20px]"/>
-                         </button>
-                         <hr
-                              class="ml-[15px] mr-[15px]"
-                              v-if="index !== suggestedQuestions.length - 1"
-                         />
+                                   <svgo-chat-icon-next class="w-[20px] h-[20px]"/>
+                              </button>
+                              <hr
+                                   class="ml-[15px] mr-[15px]"
+                                   v-if="index !== suggestedQuestions.length - 1"
+                              />
+                         </div>
                     </div>
                </div>
-          </div>
+          </template>
 
           <!-- Bouton Chat avec nous -->
           <button
@@ -34,7 +36,7 @@
                     <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
                     <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
                </div>
-               <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.project?.config.actionColor }" />
+               <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.configChat.actionColor }" />
           </button>
 
           <!-- Powered by HelloHumans Agent -->
@@ -56,7 +58,7 @@
                     @click="$emit('openChat')"
                     class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold"
                >
-                    <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:chatStore.project?.config.actionColor }"/>
+                    <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:chatStore.configChat.actionColor }"/>
                     <span class="text-sm text-gray-700">Accueil</span>
                </button>
 
@@ -67,7 +69,7 @@
                     @mouseleave="isHovered = false"
                     class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700"
                >
-                    <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? chatStore.project?.config.actionColor : '' }" />
+                    <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? chatStore.configChat.actionColor : '' }" />
                     <span class="text-sm">Discussion</span>
                </button>
           </div>

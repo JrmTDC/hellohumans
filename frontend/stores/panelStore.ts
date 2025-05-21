@@ -87,6 +87,7 @@ interface Client {
 
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
+     const chatStore = useChatStore()
 
      const user = ref<User | null>(null)
      const client = ref<Client | null>(null)
@@ -449,6 +450,20 @@ export const usePanelStore = defineStore('panel', () => {
           return res.success
      }
 
+     async function saveChatConfig(): Promise<boolean> {
+          const { apiFetch } = usePanelApi()
+          try {
+               const res = await apiFetch('/config-chat', {
+                    method: 'POST',
+                    body: JSON.stringify({ config: chatStore.configChat }),
+               })
+               return !!res.success
+          } catch (err) {
+               console.error('Erreur sauvegarde config chat:', err)
+               return false
+          }
+     }
+
      async function logout() {
           user.value = null
           project_usages.value = []
@@ -490,6 +505,7 @@ export const usePanelStore = defineStore('panel', () => {
           fetchStripeSetupIntent,
           fetchStripePaymentMethods,
           fetchUpgradePreview,
+          saveChatConfig,
           logout
      }
 })

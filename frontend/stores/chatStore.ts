@@ -18,16 +18,31 @@ interface Visitor {
      gdprConsent: boolean
 }
 
+const configChat = reactive({
+     name: 'HelloHumans',
+     suggestedQuestionsString: '',
+     backgroundColor: '#0566ff',
+     textColor: '#ffffff',
+     actionColor: '#0566ff',
+     isCustomBackground: false
+})
+
 export const useChatStore = defineStore('chat', () => {
      const project = ref<Project | null>(null)
      const visitor = ref<Visitor | null>(null)
 
      // --- Récupération projet ---
-     async function fetchChatProject() {
-          const { apiFetch } = useChatApi()
+     async function fetchChatProject(overriddenKey?: string) {
+          const { apiFetch } = useChatApi(overriddenKey)
           try {
                const projectRes = await apiFetch('/project')
                project.value = projectRes.success.project || null
+               configChat.name = project.value?.config.name || 'HelloHumans'
+               configChat.suggestedQuestionsString = project.value?.config.suggestedQuestionsString || ''
+               configChat.backgroundColor = project.value?.config.backgroundColor || '#0566ff'
+               configChat.textColor = project.value?.config.textColor || '#ffffff'
+               configChat.actionColor = project.value?.config.actionColor || '#0566ff'
+               configChat.isCustomBackground = project.value?.config.isCustomBackground || false
                return true
           } catch (err: any) {
                return false
@@ -35,8 +50,8 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      // --- Création du visiteur ---
-     async function visitorCreate(email: string) {
-          const { apiFetch } = useChatApi()
+     async function visitorCreate(email: string,overriddenKey?: string) {
+          const { apiFetch } = useChatApi(overriddenKey)
           try {
                const payload = {
                     project_public_key: project.value?.public_key,
@@ -70,8 +85,8 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      // --- Envoi message et ajout au localStorage ---
-     async function messageSend(message: string) {
-          const { apiFetch } = useChatApi()
+     async function messageSend(message: string,overriddenKey?: string) {
+          const { apiFetch } = useChatApi(overriddenKey)
           try {
                const payload = { message }
 
@@ -130,6 +145,7 @@ export const useChatStore = defineStore('chat', () => {
      return {
           project,
           visitor,
+          configChat,
           fetchChatProject,
           visitorCreate,
           messageSend,

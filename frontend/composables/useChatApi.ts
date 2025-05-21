@@ -1,8 +1,8 @@
-export function useChatApi() {
+export function useChatApi(overriddenKey?: string) {
      const config = useRuntimeConfig()
      const panelStore = usePanelStore()
      const apiUrl = `${config.public.apiBaseUrl}/chat`
-     const projectPublicKey = () => panelStore.project?.public_key || ''
+     const projectPublicKey = () => overriddenKey || panelStore.project?.public_key || ''
 
      const visitorPublicKey = () => {
           const storedVisitorData = localStorage.getItem('hhs_isp_chat')
