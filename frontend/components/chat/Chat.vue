@@ -18,7 +18,7 @@
                </button>
 
                <div
-                    v-if="!isOpen && !notificationSnoozed"
+                    v-if="!isOpen && notificationSnoozed"
                     class="absolute top-[37px] right-[23px] w-5 h-5 rounded-[10px] flex items-center justify-center bg-white outline outline-1 outline-[#e2e8ef]"
                >
                     <svgo-chat-icon-notification-disabled class="w-4 h-4" />
@@ -125,7 +125,7 @@ const messages = ref<ChatMessage[]>([])
 const isLoading = ref(false)
 const isOpen = ref(false)
 const isChatActive = ref(false)
-const notificationSnoozed = ref(true)
+const notificationSnoozed = ref(false)
 const isExpanded = ref(false)
 const showOptions = ref(false)
 const isSending = ref(false)
@@ -185,7 +185,9 @@ onMounted(async () => {
                }
                if (typeof parsed.notificationSnoozed === 'boolean')
                     notificationSnoozed.value = parsed.notificationSnoozed
-          } catch { /* JSON corrompu : on ignore */ }
+          } catch {
+
+          }
      }
 
      if (props.previewMode) {

@@ -12,13 +12,13 @@
                          <svgo-chat-icon-hp-off
                               class="fill-[#abb3c3] h-[20px] w-[20px]"
                               id="ic_notificationsOn"
-                              v-if="!notificationSnoozed"
+                              v-if="notificationSnoozed"
                          />
                          <svgo-chat-icon-hp-on
                               class="   h-[20px] w-[20px]" :style="{ fill:primaryColor }"
                               v-else
                          />
-                         <span class="ml-[10px] text-[#06132b]">Son {{ notificationSnoozed ? "activé" : "désactivé" }}</span>
+                         <span class="ml-[10px] text-[#06132b]">Son {{ !notificationSnoozed ? "activé" : "désactivé" }}</span>
                          <input
                               type="checkbox"
                               id="audio-switch"
@@ -28,8 +28,8 @@
                          />
                          <label
                               for="audio-switch"
-                              class="flex items-center cursor-pointer w-10 h-5 bg-[#2f3941] rounded-full transition-colors duration-300 m-auto" :style="{ backgroundColor: notificationSnoozed ? primaryColor : '#abb3c3' }">
-                              <svgo-chat-btn-puce class="fill-[#fff] h-[16px] w-[16px] transition-transform duration-300" :style="{ transform: notificationSnoozed ? 'translateX(20px)' : 'translateX(3px)', }"/>
+                              class="flex items-center cursor-pointer w-10 h-5 bg-[#2f3941] rounded-full transition-colors duration-300 m-auto" :style="{ backgroundColor: !notificationSnoozed ? primaryColor : '#abb3c3' }">
+                              <svgo-chat-btn-puce class="fill-[#fff] h-[16px] w-[16px] transition-transform duration-300" :style="{ transform: !notificationSnoozed ? 'translateX(20px)' : 'translateX(3px)', }"/>
                          </label>
                     </button>
                </li>
