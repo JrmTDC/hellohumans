@@ -55,7 +55,7 @@
                                              <PanelSettingsExpandableSection title="Visibilité et position" :isBilled="false">
                                                   <label class="block mb-2">Afficher le chat ?</label>
                                                   <input type="checkbox" v-model="chatStore.showChat" />
-                                                  <textarea v-model="chatStore.suggestedQuestionsString" class="border px-3 py-2 rounded w-full"></textarea>
+                                                  <textarea v-model="chatStore.suggestedQuestions" class="border px-3 py-2 rounded w-full"></textarea>
                                              </PanelSettingsExpandableSection>
 
                                              <!-- SECTION PACK NATURE -->

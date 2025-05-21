@@ -49,7 +49,10 @@
      <div class="bg-white flex flex-col px-[24px]">
           <div class="px-5 py-3 flex justify-center items-start gap-1 self-stretch border-t border-[#e2e8ef] bg-white">
                <!-- Home -->
-               <button class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold">
+               <button
+                    @click="$emit('openChat')"
+                    class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold"
+               >
                     <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:chatStore.configChat.actionColor }"/>
                     <span class="text-sm text-gray-700">Accueil</span>
                </button>

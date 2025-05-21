@@ -160,7 +160,7 @@ function resizeToContent() {
 onMounted(async () => {
      await chatStore.fetchChatProject()
      isReady.value = true
-
+     
      const raw = localStorage.getItem('hhs_isp_chat')
      if (raw) {
           try {

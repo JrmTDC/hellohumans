@@ -5,7 +5,7 @@ interface Project {
      website: string
      config: {
           name: string
-          suggestedQuestionsString: string
+          suggestedQuestions: string
           backgroundColor: string
           textColor: string
           actionColor: string
@@ -20,7 +20,7 @@ interface Visitor {
 
 const configChat = reactive({
      name: 'HelloHumans',
-     suggestedQuestionsString: '',
+     suggestedQuestions: '',
      backgroundColor: '#0566ff',
      textColor: '#ffffff',
      actionColor: '#0566ff',
@@ -58,7 +58,7 @@ export const useChatStore = defineStore('chat', () => {
                const projectRes = await apiFetch('/project')
                project.value = projectRes.success.project || null
                configChat.name = project.value?.config.name || 'HelloHumans'
-               configChat.suggestedQuestionsString = project.value?.config.suggestedQuestionsString || ''
+               configChat.suggestedQuestions = project.value?.config.suggestedQuestions || ''
                configChat.backgroundColor = project.value?.config.backgroundColor || '#0566ff'
                configChat.textColor = project.value?.config.textColor || '#ffffff'
                configChat.actionColor = project.value?.config.actionColor || '#0566ff'

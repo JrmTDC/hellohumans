@@ -1,7 +1,7 @@
 <template>
      <div
           ref="optionsBox"
-          class="absolute top-[72px] right-[24px] bg-white rounded-[8px] shadow-[0px_6px_32px_0px_rgba(0,18,46,0.16)] p-[12px_6px] z-[300] min-w-[230px]"
+          class="absolute top-[72px] right-[24px] bg-white rounded-[8px] shadow-[0px_6px_32px_0px_rgba(0,18,46,0.16)] p-[12px_6px] z-[30] min-w-[230px]"
      >
           <ul class="m-0 p-0">
                <li class="rounded-[6px] flex">
