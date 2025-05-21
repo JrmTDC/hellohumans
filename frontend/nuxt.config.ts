@@ -1,16 +1,7 @@
 export default defineNuxtConfig({
      compatibilityDate: '2024-11-01',
      devtools: { enabled: true },
-     modules: [
-       '@pinia/nuxt',
-       '@nuxtjs/tailwindcss',
-       'nuxt-svgo',
-       '@nuxtjs/color-mode',
-       'nuxt-echarts',
-       'dayjs-nuxt',
-       '@nuxtjs/i18n',
-       '@nuxtjs/supabase'
-     ],
+     modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-svgo', '@nuxtjs/color-mode', 'nuxt-echarts', 'dayjs-nuxt', '@nuxtjs/i18n', '@nuxtjs/supabase', '@formkit/auto-animate'],
      app: {
           head: {
                title: 'AI Service Chatbot | Hellohumans',

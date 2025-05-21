@@ -1,5 +1,5 @@
 <template>
-     <div id="hellohumans-chat-iframe" class="block border-none fixed inset-[auto_0_0_auto] opacity-100 text-[inherit] bg-transparent !bg-transparent m-0 max-w-[100vw] translate-y-0 !transition-none visible z-[999999999] rounded-[47px_30px_]()_]()"
+     <div v-if="isReady" id="hellohumans-chat-iframe" class="block border-none fixed inset-[auto_0_0_auto] opacity-100 text-[inherit] bg-transparent !bg-transparent m-0 max-w-[100vw] translate-y-0 !transition-none visible z-[999999999] rounded-[47px_30px_]()_]()"
           :class="[
                isVisible ? [
                     isChatActive ? 'w-[424px] h-[747px] max-h-[100%]' : 'w-[424px] h-[469px] max-h-[100%]'
@@ -125,12 +125,16 @@ type ChatMessage = {
 }
 
 const chatStore = useChatStore()
+const isReady   = ref(false)
 
 const props = defineProps<{
      previewMode?: boolean
      forcedState?: 'home' | 'conversation' | 'modal'
+     projectPublicKey?: string
 }>()
-
+if (props.projectPublicKey) {
+     chatStore.setProjectPublicKey(props.projectPublicKey)
+}
 // Variables / Refs principales
 const message = ref('')         // Message en cours de saisie
 const messages = ref<ChatMessage[]>([]) // Historique des messages
@@ -185,15 +189,20 @@ watch(
      { deep: true }
 )
 
-// Écouter les clics pour fermer le menu d'options
 onMounted(() => {
-     document.addEventListener('click', handleClickOutside)
-     if (props.previewMode) {
-          isOpen.value = true
-          isVisible.value = true
-          if (props.forcedState === 'conversation') isChatActive.value = true
-          if (props.forcedState === 'home') isChatActive.value = false
-          if (props.forcedState === 'modal') showRGPDModal.value = true
+     const ok = chatStore.fetchChatProject()
+     if (!ok) return
+     isReady.value = true
+     if (props.previewMode) initPreviewState()
+
+     function initPreviewState() {
+          if (props.previewMode) {
+               isOpen.value = true
+               isVisible.value = true
+               if (props.forcedState === 'conversation') isChatActive.value = true
+               if (props.forcedState === 'home') isChatActive.value = false
+               if (props.forcedState === 'modal') showRGPDModal.value = true
+          }
      }
      if (isBrowser) {
           const raw = localStorage.getItem('hhs_isp_chat')
@@ -213,6 +222,7 @@ onMounted(() => {
                }
           }
      }
+     document.addEventListener('click', handleClickOutside)
 })
 
 // Désactiver l'écouteur de clics

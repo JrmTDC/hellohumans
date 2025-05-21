@@ -27,13 +27,33 @@ const configChat = reactive({
      isCustomBackground: false
 })
 
+interface BotMessage {
+     id: string
+     idFromServer: string
+     type: string
+     sender: string
+     content: string
+     time_sent: number
+     isAIAssistant: boolean
+     aiAssistantResponseType: string
+     questionMessageId: string | null
+     disableTextInput: boolean
+     choices: any[]
+}
+
+
 export const useChatStore = defineStore('chat', () => {
      const project = ref<Project | null>(null)
      const visitor = ref<Visitor | null>(null)
+     const projectPublicKey   = ref<string | null>(null)
+
+     function setProjectPublicKey(key: string | null) {
+          projectPublicKey.value = key
+     }
 
      // --- Récupération projet ---
-     async function fetchChatProject(overriddenKey?: string) {
-          const { apiFetch } = useChatApi(overriddenKey)
+     async function fetchChatProject() {
+          const { apiFetch } = useChatApi()
           try {
                const projectRes = await apiFetch('/project')
                project.value = projectRes.success.project || null
@@ -50,8 +70,8 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      // --- Création du visiteur ---
-     async function visitorCreate(email: string,overriddenKey?: string) {
-          const { apiFetch } = useChatApi(overriddenKey)
+     async function visitorCreate(email: string) {
+          const { apiFetch } = useChatApi()
           try {
                const payload = {
                     project_public_key: project.value?.public_key,
@@ -85,18 +105,20 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      // --- Envoi message et ajout au localStorage ---
-     async function messageSend(message: string,overriddenKey?: string) {
-          const { apiFetch } = useChatApi(overriddenKey)
+     async function messageSend(message: string): Promise<{
+          success: boolean
+          message?: BotMessage
+          reason?: 'user_invalid' | 'internal_error'
+     }> {
+          const { apiFetch } = useChatApi()
           try {
                const payload = { message }
-
                const res = await apiFetch('/message', {
                     method: 'POST',
                     body: JSON.stringify(payload),
                })
 
-               const botMsg = res.success.message
-               if (!botMsg) throw new Error('missing_bot_message')
+               const botMsg = res.success.message || null
 
                // Chargement / fallback des données locales
                let chatData: Record<string, any> = {}
@@ -143,9 +165,11 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      return {
+          projectPublicKey,
           project,
           visitor,
           configChat,
+          setProjectPublicKey,
           fetchChatProject,
           visitorCreate,
           messageSend,

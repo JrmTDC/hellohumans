@@ -72,7 +72,7 @@
 
                                         <div class="self-stretch w-[430px] min-w-[430px]">
                                              <div class="h-full sticky top-0 min-h-[628px] bg-[linear-gradient(rgb(255,255,255)_0%,rgba(255,255,255,0)_500px),url(data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7)] bg-repeat w-full">
-                                                  <Chat v-if="chatLoading" :previewMode="true" forcedState="home"  />
+                                                  <Chat :previewMode="true" forcedState="home" :projectPublicKey="panelStore.project?.public_key" />
                                              </div>
                                         </div>
                                    </div>
@@ -84,23 +84,16 @@
      </div>
 </template>
 <script setup lang="ts">
-import Chat from "~/components/chat/Chat.vue";
-import {nextTick} from "vue";
 
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
-const chatLoading = ref(false)
 const saving = ref(false)
 const { push } = useToast()
 onMounted(async () => {
-     layoutLoadingPanel.value = false
      setTimeout(() => {
           layoutLoadingPanel.value = false
-          chatStore.fetchChatProject()
-          nextTick()
-          chatLoading.value = true
      }, 400)
 })
 
