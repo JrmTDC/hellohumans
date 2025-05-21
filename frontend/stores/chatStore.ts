@@ -80,7 +80,7 @@ export const useChatStore = defineStore('chat', () => {
                     body: JSON.stringify(payload),
                })
 
-               const botMsg = res.message
+               const botMsg = res.success.message
                if (!botMsg) throw new Error('missing_bot_message')
 
                // Chargement / fallback des données locales

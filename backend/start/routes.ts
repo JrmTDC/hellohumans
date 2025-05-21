@@ -23,7 +23,7 @@ router.group(() => {
      router.get('/project', (ctx) => ChatProjectController.show(ctx))
      router.get('/visitor', (ctx) => ChatVisitorController.getVisitor(ctx))
      router.post('/visitor', (ctx) => ChatVisitorController.createVisitor(ctx))
-     router.post('/messages', (ctx) => ChatMessageController.sendMessage(ctx))
+     router.post('/message', (ctx) => ChatMessageController.sendMessage(ctx))
 })
      .prefix('/chat')
      .use(middleware.chat_access())

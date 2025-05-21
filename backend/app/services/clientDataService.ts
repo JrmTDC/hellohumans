@@ -1,12 +1,12 @@
 import { ClientDataRow } from '#contracts/interfaces'
 import { supabase } from '#services/supabaseService'
 
-export async function loadClientData(clientUUID: string): Promise<{ prompt: string }> {
+export async function loadClientData(clientID: string): Promise<{ prompt: string }> {
      // On récupère toutes les lignes de la table client_data pour un clientKey
      const { data, error } = await supabase
           .from('client_data')
           .select('prompt, lists')
-          .eq('client_uuid', clientUUID)
+          .eq('id', clientID)
 
      if (error) {
           console.error('Erreur loadClientData:', error)
