@@ -1,9 +1,8 @@
 export function useChatApi() {
      const config = useRuntimeConfig()
+     const panelStore = usePanelStore()
      const apiUrl = `${config.public.apiBaseUrl}/chat`
-
-     const chatStore = useChatStore()
-     const apiKey = () => 'a676d92ebf97e101a7ef70c19583f22f64eeea66ee6f39c0d7d1bbddd4cb5e8c'
+     const projectPublicKey = () => panelStore.project?.public_key || ''
 
      const visitorPublicKey = () => {
           const storedVisitorData = localStorage.getItem('hhs_isp_chat')
@@ -11,13 +10,13 @@ export function useChatApi() {
               const visitorData = JSON.parse(storedVisitorData)
               return visitorData.visitor.public_key
           }
-          return null
+          return ''
      }
 
      async function apiFetch(path: string, options: RequestInit = {}) {
           const headers = {
                'Content-Type': 'application/json',
-               'x-project-public-key': apiKey(),
+               'x-project-public-key': projectPublicKey(),
                'x-visitor-public-key': visitorPublicKey(),
                ...(options.headers || {})
           }

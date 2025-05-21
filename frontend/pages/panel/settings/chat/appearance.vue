@@ -64,12 +64,6 @@
                                                   <input type="checkbox" v-model="chatStore.config.has_nature_pack" />
                                              </PanelSettingsExpandableSection>
 
-                                             <!-- SECTION AVANCÉ -->
-                                             <PanelSettingsExpandableSection title="Avancé" :isBilled="false">
-                                                  <label class="block mb-2">Clé API Client :</label>
-                                                  <input v-model="chatStore.config.apiKey" type="text" class="border px-3 py-2 rounded w-full" />
-                                             </PanelSettingsExpandableSection>
-
                                              <div class="sticky bottom-0 py-[20px] bg-white border-t border-t-[#eff2f6]">
                                                   <button class="rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 bg-[#0566ff] border border-[#0566ff] text-white hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white">Sauvegarder</button>
                                              </div>
@@ -77,7 +71,7 @@
 
                                         <div class="self-stretch w-[430px] min-w-[430px]">
                                              <div class="h-full sticky top-0 min-h-[628px] bg-[linear-gradient(rgb(255,255,255)_0%,rgba(255,255,255,0)_500px),url(data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7)] bg-repeat w-full">
-                                                  <Chat :clientConfig="clientConfig" />
+                                                  <Chat v-if="chatLoading" />
                                              </div>
                                         </div>
                                    </div>
@@ -91,14 +85,21 @@
 <script setup lang="ts">
 import Chat from "~/components/chat/Chat.vue";
 import ColorPicker from "~/components/panel/ColorPicker.vue";
+import {nextTick} from "vue";
 
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
-const clientConfig = computed(() => chatStore.config)
+const chatLoading = ref(false)
 
 onMounted(async () => {
      layoutLoadingPanel.value = false
+     setTimeout(() => {
+          layoutLoadingPanel.value = false
+          chatStore.fetchChatProject()
+          nextTick()
+          chatLoading.value = true
+     }, 400)
 })
 
 definePageMeta({

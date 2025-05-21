@@ -17,7 +17,8 @@ interface Project {
      id: string
      name: string
      subscription?: ProjectSubscription | null
-     website: string
+     website: string,
+     public_key: string
 }
 interface UpgradePreviewResponse {
      today_amount: number

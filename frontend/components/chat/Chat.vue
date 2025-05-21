@@ -128,11 +128,9 @@ const chatStore = useChatStore()
 
 // --- ÉTAT PRINCIPAL DU CHAT ---
 const config = useRuntimeConfig()
-const apiUrl = `${config.public.apiBaseUrl}/chat`
 
 // Variables / Refs principales
 const message = ref('')         // Message en cours de saisie
-const clientKey = ref(`${config.public.apiClientKey}`)
 const messages = ref<ChatMessage[]>([]) // Historique des messages
 const isLoading = ref(false)    // Indicateur de chargement
 const isOpen = ref(false)       // Gère l'ouverture du chatbot
