@@ -2,6 +2,7 @@
      <PanelCommonLoadingOverlay v-if="layoutLoadingPanel" :progress="progress" />
      <PanelLayoutAccountBlocked v-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
+          <PanelCommonToastContainer />
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />
                <div class="app-content-wrapper items-stretch bg-[#f5f7f9] flex flex-1 flex-col justify-start max-w-[calc(100%-65px)] overflow-hidden relative">
