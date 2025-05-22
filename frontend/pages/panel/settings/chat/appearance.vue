@@ -70,9 +70,15 @@
                                              </div>
                                         </div>
 
-                                        <div class="self-stretch w-[430px] min-w-[430px]">
-                                             <div class="h-full sticky top-0 min-h-[628px] bg-[linear-gradient(rgb(255,255,255)_0%,rgba(255,255,255,0)_500px),url(data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7)] bg-repeat w-full">
-                                                  <Chat :previewMode="true" forcedState="home" :projectPublicKey="panelStore.project?.public_key" />
+                                        <div class="self-stretch relative pl-0 rounded-[6px] w-[450px] min-w-[450px] 2xl:w-[416px] 2xl:min-w-[416px]">
+                                             <div class="h-full sticky top-0 min-h-[628px] bg-repeat w-full" :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }">
+                                                  <div class="flex items-center bg-white text-[rgb(100,116,145)] pt-[15px] px-[20px] pb-0 rounded-tr-[6px] z-[999999999999]">
+                                                       <label class="inline-block font-normal max-w-full">Aperçu&nbsp;:</label>
+                                                       <div class="mb-0 text-left relative ml-[4px] z-[999999999999]">
+                                                            <PanelCommonDropdownSelect v-model="selected" :items="options" />
+                                                       </div>
+                                                  </div>
+                                                  <Chat :previewMode="true" :forcedState="selected" :projectPublicKey="panelStore.project?.public_key" />
                                              </div>
                                         </div>
                                    </div>
@@ -90,6 +96,15 @@ const panelStore = usePanelStore()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
 const saving = ref(false)
+const backgroundSettingChat = 'data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7'
+const options = [
+     { label: 'Accueil', value: 'home' },
+     { label: 'Chat', value: 'conversation' },
+     { label: 'Minimisé', value: 'minimal' },
+     { label: 'Accord RGPD', value: 'modal' }
+] as const
+const selected = ref<'home' | 'minimal' | 'conversation' | 'modal'>('minimal')
+
 const { push } = useToast()
 onMounted(async () => {
      setTimeout(() => {

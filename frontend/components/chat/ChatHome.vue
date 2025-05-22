@@ -56,7 +56,7 @@
                     class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700"
                >
                     <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? chatStore.configChat.actionColor : '' }" />
-                    <span class="text-sm">Discussion</span>
+                    <span class="text-sm">Discuter</span>
                </button>
           </div>
      </div>

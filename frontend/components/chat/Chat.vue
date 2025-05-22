@@ -112,7 +112,7 @@ const chatStore = useChatStore()
 
 const props = defineProps<{
      previewMode?: boolean
-     forcedState?: 'home' | 'conversation' | 'modal'
+     forcedState?: 'minimal' | 'home' | 'conversation' | 'modal'
      projectPublicKey?: string
 }>()
 
@@ -155,6 +155,22 @@ function resizeToContent() {
      const max = window.innerHeight - 73 /* 47 + 26 */
      wrapperH.value = Math.min(Math.max(real, min), max)
 }
+async function applyForcedState(value: typeof props.forcedState) {
+     if (!props.previewMode) return
+
+     isOpen.value = value !== 'minimal'
+     isVisible.value = value !== 'minimal'
+     isChatActive.value = ['conversation', 'modal'].includes(value || '')
+
+     if (value === 'modal') {
+          await nextTick()
+          setTimeout(() => {
+               showRGPDModal.value = true
+          }, 400)
+     }else{
+          showRGPDModal.value = false
+     }
+}
 
 /* ----- lifecycle ----- */
 onMounted(async () => {
@@ -193,10 +209,7 @@ onMounted(async () => {
      if (props.previewMode) {
           isOpen.value = true
           isVisible.value = true
-          if (props.forcedState === 'conversation') isChatActive.value = true
-          if (props.forcedState === 'modal') showRGPDModal.value = true
      }
-
      await nextTick(resizeToContent)
 
      const ro = new ResizeObserver(resizeToContent)
@@ -209,6 +222,7 @@ onMounted(async () => {
      document.addEventListener('click', e => {
           if (optionsBox.value && !optionsBox.value.contains(e.target as Node)) showOptions.value = false
      })
+     applyForcedState(props.forcedState)
 })
 
 onUnmounted(() => {
@@ -216,7 +230,7 @@ onUnmounted(() => {
      ro.disconnect()
      window.removeEventListener('resize', resizeToContent)
 })
-
+watch(() => props.forcedState, applyForcedState)
 
 /* ----- ui ----- */
 function toggleChat() {

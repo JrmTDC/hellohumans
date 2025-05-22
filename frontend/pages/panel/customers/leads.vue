@@ -131,7 +131,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-const backgroundNoCustomer = useSvgBase64Loader('panel/customers/backgroundNoCustomers')
+const backgroundNoCustomer = useAssetBase64Loader('panel/customers/backgroundNoCustomers')
 
 onMounted(async () => {
      layoutLoadingPanel.value = false

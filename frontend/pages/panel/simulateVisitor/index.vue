@@ -14,7 +14,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-const backgroundPlaceHodlder = useSvgBase64Loader('panel/simulateVisitor/backgroundPlaceHolder')
+const backgroundPlaceHodlder = useAssetBase64Loader('panel/simulateVisitor/backgroundPlaceHolder')
 const showModuleRandoMoreModal = ref(false)
 const route = useRoute()
 const queryProjectKey = computed(() => route.query.projectPublicKey as string || '')
