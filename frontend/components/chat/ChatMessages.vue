@@ -13,40 +13,22 @@
                          Messages précédents
                     </button>
 
-
                <!-- Boucle sur tous les messages filteredMessages -->
-               <div
-                    v-for="(msg, index) in filteredMessages" :key="msg.id"
-                    :class="[
-          msg.sender === 'visitor'
-            ? 'hhcss_message-visitor mt-[9px] text-white float-right '
-            : 'hhcss_message-operator mt-[9px] text-[rgb(6,19,43)] float-left border border-transparent',
-          msg.status === 'unavailable' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : '',
-          'hhcss_message py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out'
-        ]" :style="[
-             msg.sender === 'visitor' ? { background: chatStore.configChat.backgroundColor, color: chatStore.project?.config.textColor } : { background:`linear-gradient(white, white) padding-box padding-box,
-               linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` },
-             msg.status === 'unavailable' ? { } : {},
-        ]"
-               >
-                    <!-- Affichage du texte du message -->
-                    <span v-html="formatMessage(msg.content)" class="whitespace-pre-line"></span>
+               <div v-for="(msg, index) in filteredMessages" :key="msg.id" class="mt-[9px] my-[2px] max-w-[85%]" :class="[msg.sender === 'visitor' ? 'hhcss_message-visitor float-right text-right' : 'hhcss_message-operator float-left text-left',  msg.status === 'unavailable' ? 'hhcss_chat-error' : 'hhcss_message']">
+                    <div :class="[msg.sender === 'visitor' ? 'text-white ': 'text-[rgb(6,19,43)] border border-transparent', msg.status === 'unavailable' ? 'text-[#06132b] bg-[#f0f2f7]' : '','py-[10px] px-4 rounded-[20px] text-[15px] leading-[20px] break-words inline-block clear-both relative transition-[margin] duration-[280ms] ease-in-out']" :style="[msg.sender === 'visitor' ? { background: chatStore.configChat.backgroundColor, color: chatStore.project?.config.textColor } : { background:`linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` }, msg.status === 'unavailable' ? { } : {},]">
+                         <!-- Affichage du texte du message -->
+                         <span v-html="formatMessage(msg.content)" class="whitespace-pre-line"></span>
 
-                    <!-- Si le message contient des choices, on affiche des boutons -->
-                    <div v-if="msg.choices" class="mt-2 flex flex-wrap gap-2">
-                         <button
-                              v-for="(choice, index) in msg.choices"
-                              :key="choice"
-                              @mouseover="hoverIndex = index"
-                              @mouseleave="hoverIndex = null"
-                              class="px-3 py-2 border rounded cursor-pointer hover:text-white"
-                              :style="{ background: hoverIndex === index ? chatStore.configChat.backgroundColor : '' }"
-                              @click="$emit('choiceSelected', choice)"
-                         >{{ choice }}
-                         </button>
+                         <!-- Si le message contient des choices, on affiche des boutons -->
+                         <div v-if="msg.choices" class="mt-2 flex flex-wrap gap-2">
+                              <button v-for="(choice, index) in msg.choices" :key="choice" @mouseover="hoverIndex = index" @mouseleave="hoverIndex = null" class="px-3 py-2 border rounded cursor-pointer hover:text-white" :style="{ background: hoverIndex === index ? chatStore.configChat.backgroundColor : '' }" @click="$emit('choiceSelected', choice)">{{ choice }}</button>
+                         </div>
+                    </div>
+                    <!-- Affichage de la date sous le dernier message visible -->
+                    <div v-if="index === filteredMessages.length - 1" class="text-[10px] text-[#c7cbd6] text-center break-words mt-[2px]">
+                         {{ formatDate(msg) }}
                     </div>
                </div>
-
                <!-- État d'écriture (isLoading) -->
                <div
                     v-if="isLoading"
@@ -189,13 +171,31 @@ watch(() => props.messages.length, () => {
 // Quand l'utilisateur clique pour afficher les anciens messages
 function onShowHistory() {
      showPreviousMessages.value = true
-     lastActivityTime.value = Date.now()
+     scrollToBottom();
+}
 
-     // On redémarre le timer pour recacher au bout de 2 min
-     if (hideTimer) clearTimeout(hideTimer)
-     hideTimer = setTimeout(() => {
-          showPreviousMessages.value = false
-     }, 2 * 60 * 1000)
+function formatDate(msg: ChatMessage): string {
+     const date = new Date(msg.time_sent)
+     const now = new Date()
+
+     const isToday = date.toDateString() === now.toDateString()
+     const isYesterday = date.toDateString() === new Date(now.setDate(now.getDate() - 1)).toDateString()
+
+     const time = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+     const senderLabel = msg.sender === 'visitor' ? 'Vous' : 'HelloHuman AI Agent'
+
+     if (isToday) {
+          return `${senderLabel} - Aujourd'hui, ${time}`
+     } else if (isYesterday) {
+          return `${senderLabel} - Hier, ${time}`
+     } else {
+          const fullDate = date.toLocaleDateString('fr-FR', {
+               day: 'numeric',
+               month: 'long',
+               year: 'numeric',
+          })
+          return `${senderLabel} - ${fullDate}, ${time}`
+     }
 }
 
 // Met à jour la scrollbar custom
