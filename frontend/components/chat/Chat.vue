@@ -121,7 +121,7 @@ if (props.projectPublicKey) chatStore.setProjectPublicKey(props.projectPublicKey
 /* ----- state ----- */
 const isReady = ref(false)
 const message = ref('')
-const messages = ref<ChatMessage[]>([])
+const messages = computed(() => chatStore.messages)
 const isLoading = ref(false)
 const isOpen = ref(false)
 const isChatActive = ref(false)
@@ -197,7 +197,7 @@ onMounted(async () => {
           if (props.forcedState === 'modal') showRGPDModal.value = true
      }
 
-     nextTick(resizeToContent)
+     await nextTick(resizeToContent)
 
      const ro = new ResizeObserver(resizeToContent)
      chatContent.value && ro.observe(chatContent.value)
@@ -206,15 +206,17 @@ onMounted(async () => {
      watch(isVisible, v => v && nextTick(resizeToContent))
      window.addEventListener('resize', resizeToContent)
 
-     onUnmounted(() => {
-          ro.disconnect()
-          window.removeEventListener('resize', resizeToContent)
-     })
-
      document.addEventListener('click', e => {
           if (optionsBox.value && !optionsBox.value.contains(e.target as Node)) showOptions.value = false
      })
 })
+
+onUnmounted(() => {
+     const ro = new ResizeObserver(resizeToContent)
+     ro.disconnect()
+     window.removeEventListener('resize', resizeToContent)
+})
+
 
 /* ----- ui ----- */
 function toggleChat() {
@@ -240,8 +242,7 @@ function goToHome() {
      isChatActive.value = false
 }
 function clearChatAndClose() {
-     messages.value = []
-     localStorage.removeItem('user_messages')
+     chatStore.clearMessages()
      showOptions.value = false
 }
 
@@ -262,14 +263,6 @@ async function sendMessage() {
           return
      }
 
-     messages.value.push({
-          id: crypto.randomUUID(),
-          sender: 'visitor',
-          type: 'text',
-          content: message.value,
-          time_sent: Date.now()
-     })
-
      isLoading.value = true
      const userTxt = message.value
      message.value = ''
@@ -283,22 +276,12 @@ async function sendMessage() {
                     removeLastUserMessage()
                     pendingMessage.value = userTxt
                     showRGPDModal.value = true
-               } else {
-                    messages.value.push({
-                         id: crypto.randomUUID(),
-                         sender: 'bot',
-                         type: 'text',
-                         status: 'unavailable',
-                         content: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
-                         time_sent: Date.now()
-                    })
                }
           } else {
-               const bot = res.message
+               const content = res?.message
                const localCfg = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
                if (!localCfg.notificationSnoozed) playNotificationSound()
-               messages.value.push(bot)
-               if (bot.choices?.length) disableInput.value = true
+               if (content && content.choices?.length) disableInput.value = true
           }
 
           isLoading.value = false
@@ -321,7 +304,7 @@ async function onAcceptRGPD(email: string) {
      if (pendingMessage.value) {
           message.value = pendingMessage.value
           pendingMessage.value = null
-          sendMessage()
+          await sendMessage()
      }
      onLoadingRGPD.value = false
 }

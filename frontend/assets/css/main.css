@@ -194,7 +194,7 @@ button:hover .hhcss_iconChatFillPath{
 #hellohumans-chat-iframe{
     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
-.hhcss_message-operator.hhcss_chat-error{
+.hhcss_message-operator .hhcss_chat-error{
      color: #06132b;
      background: #f0f2f7;
 }

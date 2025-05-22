@@ -26,19 +26,19 @@ const configChat = reactive({
      actionColor: '#0566ff',
      isCustomBackground: false
 })
-
-interface BotMessage {
+interface ChatMessage {
      id: string
-     idFromServer: string
+     idFromServer?: string
      type: string
-     sender: string
+     sender: 'visitor' | 'bot'
      content: string
      time_sent: number
-     isAIAssistant: boolean
-     aiAssistantResponseType: string
-     questionMessageId: string | null
-     disableTextInput: boolean
-     choices: any[]
+     isAIAssistant?: boolean
+     aiAssistantResponseType?: string
+     questionMessageId?: string | null
+     disableTextInput?: boolean
+     choices?: string[]
+     status?: 'success' | 'unavailable'
 }
 
 
@@ -46,6 +46,29 @@ export const useChatStore = defineStore('chat', () => {
      const project = ref<Project | null>(null)
      const visitor = ref<Visitor | null>(null)
      const projectPublicKey   = ref<string | null>(null)
+     const messages = ref<ChatMessage[]>([])
+
+     function loadMessagesFromStorage() {
+          try {
+               const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+               if (Array.isArray(data.messages)) {
+                    messages.value = data.messages
+               }
+          } catch (e) {
+               messages.value = []
+          }
+     }
+
+     function clearMessages() {
+          messages.value = []
+          const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+          localStorage.setItem('hhs_isp_chat', JSON.stringify({ ...data, messages: [] }))
+     }
+
+     function updateStorageMessages() {
+          const existing = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+          localStorage.setItem('hhs_isp_chat', JSON.stringify({ ...existing, messages: messages.value }))
+     }
 
      function setProjectPublicKey(key: string | null) {
           projectPublicKey.value = key
@@ -105,14 +128,37 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      // --- Envoi message et ajout au localStorage ---
-     async function messageSend(message: string): Promise<{
+     async function messageSend(content: string): Promise<{
           success: boolean
-          message?: BotMessage
+          message?: ChatMessage
           reason?: 'user_invalid' | 'internal_error'
      }> {
           const { apiFetch } = useChatApi()
+
+          // Chargement / fallback des données locales
+          let chatData: Record<string, any> = {}
           try {
-               const payload = { message }
+               chatData = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+          } catch {
+               chatData = {}
+          }
+          if (!Array.isArray(chatData.messages)) {
+               chatData.messages = []
+          }
+
+          const structuredVisitorMessage : ChatMessage = {
+               id: crypto.randomUUID(),
+               sender: 'visitor',
+               type: 'text',
+               content: content,
+               time_sent: Date.now(),
+               status: 'success'
+          }
+          chatData.messages.push(structuredVisitorMessage)
+          messages.value.push(structuredVisitorMessage)
+          updateStorageMessages()
+          try {
+               const payload = { message:content }
                const res = await apiFetch('/message', {
                     method: 'POST',
                     body: JSON.stringify(payload),
@@ -120,20 +166,8 @@ export const useChatStore = defineStore('chat', () => {
 
                const botMsg = res.success.message || null
 
-               // Chargement / fallback des données locales
-               let chatData: Record<string, any> = {}
-               try {
-                    chatData = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-               } catch {
-                    chatData = {}
-               }
-
-               if (!Array.isArray(chatData.messages)) {
-                    chatData.messages = []
-               }
-
                // Formatage du message AI
-               const structuredMessage = {
+               const structuredLoopiMessage : ChatMessage = {
                     id: botMsg.id,
                     idFromServer: botMsg.idFromServer || botMsg.id,
                     type: botMsg.type || 'text',
@@ -144,22 +178,33 @@ export const useChatStore = defineStore('chat', () => {
                     aiAssistantResponseType: botMsg.aiAssistantResponseType ?? 'answer_generated',
                     questionMessageId: botMsg.questionMessageId || null,
                     disableTextInput: false,
-                    choices: botMsg.choices || []
+                    choices: botMsg.choices || [],
+                    status: 'success'
                }
 
                // Ajout au localStorage
-               chatData.messages.push(structuredMessage)
-               localStorage.setItem('hhs_isp_chat', JSON.stringify(chatData))
-
+               chatData.messages.push(structuredLoopiMessage)
+               messages.value.push(structuredLoopiMessage)
+               updateStorageMessages()
                return {
                     success: true,
-                    message: structuredMessage,
+                    message: structuredLoopiMessage,
                }
           } catch (err: any) {
+               const structuredLoopiErrorMessage : ChatMessage = {
+                    id: crypto.randomUUID(),
+                    sender: 'bot',
+                    type: 'text',
+                    status: 'unavailable',
+                    content: "Oups... Un problème est survenu ! Je n’arrive pas à répondre pour le moment. 🚀",
+                    time_sent: Date.now()
+               }
+               //chatData.messages.push(structuredLoopiErrorMessage)
+               messages.value.push(structuredLoopiErrorMessage)
+
                if (err.message === 'user_invalid') {
                     return { success: false, reason: 'user_invalid' }
                }
-
                return { success: false, reason: 'internal_error' }
           }
      }
@@ -169,6 +214,9 @@ export const useChatStore = defineStore('chat', () => {
           project,
           visitor,
           configChat,
+          messages,
+          clearMessages,
+          loadMessagesFromStorage,
           setProjectPublicKey,
           fetchChatProject,
           visitorCreate,

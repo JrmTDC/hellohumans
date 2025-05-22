@@ -69,7 +69,7 @@ class MessagesController {
                     type: 'text',
                     sender: 'bot',
                     content: botMsg.content,
-                    time_sent: new Date(botMsg.created_at).getTime(),
+                    time_sent: new Date(botMsg.inserted_at).getTime(),
                     isAIAssistant: true,
                     aiAssistantResponseType: 'answer_generated',
                },

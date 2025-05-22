@@ -14,8 +14,8 @@
                     </button>
 
                <!-- Boucle sur tous les messages filteredMessages -->
-               <div v-for="(msg, index) in filteredMessages" :key="msg.id" class="mt-[9px] my-[2px] max-w-[85%]" :class="[msg.sender === 'visitor' ? 'hhcss_message-visitor float-right text-right' : 'hhcss_message-operator float-left text-left',  msg.status === 'unavailable' ? 'hhcss_chat-error' : 'hhcss_message']">
-                    <div :class="[msg.sender === 'visitor' ? 'text-white ': 'text-[rgb(6,19,43)] border border-transparent', msg.status === 'unavailable' ? 'text-[#06132b] bg-[#f0f2f7]' : '','py-[10px] px-4 rounded-[20px] text-[15px] leading-[20px] break-words inline-block clear-both relative transition-[margin] duration-[280ms] ease-in-out']" :style="[msg.sender === 'visitor' ? { background: chatStore.configChat.backgroundColor, color: chatStore.project?.config.textColor } : { background:`linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` }, msg.status === 'unavailable' ? { } : {},]">
+               <div v-for="(msg, index) in filteredMessages" :key="msg.id" class="mt-[9px] my-[2px] max-w-[85%]" :class="[msg.sender === 'visitor' ? 'hhcss_message-visitor float-right text-right' : 'hhcss_message-operator float-left text-left']">
+                    <div class="flex" :class="[msg.sender === 'visitor' ? 'text-white mx-auto mr-0': 'text-[rgb(6,19,43)] border border-transparent mx-auto ml-0', msg.status === 'unavailable' ? 'hhcss_chat-error text-[#06132b] bg-[#f0f2f7]' : 'hhcss_message','py-[10px] px-4 rounded-[20px] text-[15px] leading-[20px] break-words inline-block clear-both relative transition-[margin] duration-[280ms] ease-in-out w-fit']" :style="[msg.sender === 'visitor' ? { background: chatStore.configChat.backgroundColor, color: chatStore.project?.config.textColor } : { background:`linear-gradient(white, white) padding-box padding-box, linear-gradient(135deg, ${variation1}, ${variation2}) border-box border-box` }, msg.status === 'unavailable' ? `background:#f0f2f7 color:#06132b` : ``]">
                          <!-- Affichage du texte du message -->
                          <span v-html="formatMessage(msg.content)" class="whitespace-pre-line"></span>
 
@@ -49,8 +49,21 @@
           </div>
      </div>
 </template>
-
 <script setup lang="ts">
+type ChatMessage = {
+     id: string
+     idFromServer?: string
+     type: string
+     sender: 'visitor' | 'bot'
+     content: string
+     time_sent: number
+     isAIAssistant?: boolean
+     aiAssistantResponseType?: string
+     questionMessageId?: string | null
+     disableTextInput?: boolean
+     choices?: string[]
+     status?: 'success' | 'unavailable'
+}
 import { colord } from 'colord';
 const chatStore = useChatStore();
 const emits = defineEmits(['choiceSelected']);
@@ -66,6 +79,7 @@ const chatContainer = ref<HTMLElement | null>(null);
 const customScrollbar = ref<HTMLElement | null>(null);
 const scrollbarContainer = ref<HTMLElement | null>(null);
 const hoverIndex = ref(null);
+const config = useRuntimeConfig()
 
 const variation1 = computed(() => colord(chatStore.configChat.backgroundColor).rotate(-15).lighten(0).toHex());
 const variation2 = computed(() => colord(chatStore.configChat.backgroundColor).rotate(-20).lighten(0.1).toHex());
@@ -90,6 +104,7 @@ const filteredMessages = computed(() => {
 let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
+     chatStore.loadMessagesFromStorage()
      const lastMessage = props.messages[props.messages.length - 1]
      const now = Date.now()
      const twoMinutes = 2 * 60 * 1000
@@ -161,13 +176,6 @@ watch(
      { deep: true }
 );
 
-watch(() => props.messages.length, () => {
-     if (hideTimer) clearTimeout(hideTimer)
-     hideTimer = setTimeout(() => {
-          showPreviousMessages.value = false
-     }, 2 * 60 * 1000)
-})
-
 // Quand l'utilisateur clique pour afficher les anciens messages
 function onShowHistory() {
      showPreviousMessages.value = true
@@ -180,9 +188,8 @@ function formatDate(msg: ChatMessage): string {
 
      const isToday = date.toDateString() === now.toDateString()
      const isYesterday = date.toDateString() === new Date(now.setDate(now.getDate() - 1)).toDateString()
-
      const time = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-     const senderLabel = msg.sender === 'visitor' ? 'Vous' : 'HelloHuman AI Agent'
+     const senderLabel = msg.sender === 'visitor' ? 'Vous' : `Agent IA ${config.public.chatBotName}`
 
      if (isToday) {
           return `${senderLabel} - Aujourd'hui, ${time}`
