@@ -1,5 +1,5 @@
 <template>
-     <div class="fixed top-[64px] left-1/2 transform -translate-x-1/2 z-[1000]">
+     <div id="hellohumans-toast" class="fixed top-[64px] left-1/2 transform -translate-x-1/2 z-[1000]">
           <transition-group name="toast" tag="ul"
                             class="flex flex-col items-center space-y-3 list-none m-0 p-0">
                <li v-for="toast in toasts" :key="toast.id">

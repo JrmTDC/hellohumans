@@ -84,6 +84,14 @@ input[type='password']::-webkit-credentials-auto-fill-button {
           background-size: calc(100% - 60px);
      }
 }
+#hellohumans-toast{
+     font-family: euclidcircularb, serif;
+     letter-spacing: -0.24px;
+}
+#hellohumans-connection{
+     font-family: euclidcircularb, serif;
+     letter-spacing: -0.24px;
+}
 button:hover .hhcss_iconChatFillPath{
     fill: #0566ff;
 }

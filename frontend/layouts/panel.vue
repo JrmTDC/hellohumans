@@ -2,6 +2,11 @@
      <PanelCommonLoadingOverlay v-if="layoutLoadingPanel" :progress="progress" />
      <PanelLayoutAccountBlocked v-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
+          <div id="hellohumans-connection" class="relative flex flex-col z-[100]">
+               <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] opacity-0 text-[rgb(8,15,26)] z-[999999] bg-[rgb(255,194,97)] text-center transition-all duration-[150ms] ease-in-out text-[14px] leading-[18px] tracking-[-0.01em] rounded-b-[3px] shadow-[0_1px_3px_rgba(0,20,51,0.24)] px-[20px] py-[7px] opacity-100 -translate-x-1/2 translate-y-0">
+                    Toutes nos excuses. <strong>HelloHumans a rencontré des problèmes de connexion.</strong> Veuillez patienter 5 secondes.
+               </div>
+          </div>
           <PanelCommonToastContainer />
           <div v-if="pageMenuPanel" class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
                <PanelLayoutMenuNavPage />

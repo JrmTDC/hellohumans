@@ -3,7 +3,7 @@
           <div class="relative overflow-hidden bg-[#f5f7f9] z-[1]">
                <PanelSettingsChildSideMenu />
           </div>
-          <div data-radix-scroll-area-viewport class="overflow-hidden">
+          <div data-radix-scroll-area-viewport class="overflow-hidden overflow-y-auto">
                <div class="overflow-x-hidden w-full h-full">
                     <div class="min-h-full h-full">
                          <div class="min-h-full h-full pr-[12px]">

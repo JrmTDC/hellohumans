@@ -2,7 +2,7 @@
      <div class="grid grid-cols-[232px_1fr] grid-rows-1 gap-0 h-full max-h-full overflow-hidden">
           <PanelVisitorsChildSideMenu />
 
-          <div data-radix-scroll-area-viewport class="overflow-hidden">
+          <div data-radix-scroll-area-viewport class="overflow-hidden overflow-y-auto">
                <div class="overflow-x-hidden w-full h-full">
                     <div class="min-h-full h-full">
                          <div class="min-h-full h-full pr-[12px]">
