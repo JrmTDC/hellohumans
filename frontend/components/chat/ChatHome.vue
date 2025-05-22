@@ -33,16 +33,10 @@
                </div>
                <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.configChat.actionColor }" />
           </button>
-
-          <!-- Powered by HelloHumans Agent -->
+          <div class="flex-[1_100_16px]"></div>
+          <!-- Powered by HelloHumans -->
           <div class="flex justify-center items-center flex-[0_0_48px]">
-               <a
-                    href="https://hellohumans.fr"
-                    target="_blank"
-                    class="text-[#6e7a95] text-xs font-normal uppercase text-center"
-               >
-                    Propulsé par HelloHumans
-               </a>
+               <a href="https://hellohumans.fr" target="_blank" class="flex items-center text-[rgb(136,148,171)] font-normal text-[10px] uppercase text-center">Propulsé par <svgo-chat-logo-hello-humans-full class="ml-[5px] w-[90px] h-auto fill-[rgb(100,116,145)]" /></a>
           </div>
      </div>
      <!-- Barre de navigation du bas (ex: Accueil, Discussion) -->

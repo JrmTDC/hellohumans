@@ -30,14 +30,8 @@
                </div>
           </div>
           <div class="h-[30px] relative">
-               <div>
-                    <a
-                         href="https://hellohumans.fr"
-                         target="_blank"
-                         class="mr-0 float-right flex no-underline text-[#bfc3cb] text-xs font-normal uppercase ltr text-[11px]"
-                    >
-                         Propulsé par HelloHumans
-                    </a>
+               <div class="flex justify-end items-center flex-[0_0_48px]">
+                    <a href="https://hellohumans.fr" target="_blank" class="flex items-center text-[rgb(136,148,171)] font-normal text-[10px] uppercase text-center">Propulsé par <svgo-chat-logo-hello-humans-full class="ml-[5px] w-[90px] h-auto fill-[rgb(100,116,145)]" /></a>
                </div>
           </div>
      </div>
