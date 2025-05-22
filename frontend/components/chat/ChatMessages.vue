@@ -92,34 +92,29 @@ let isDragging = false;
 let startY = 0;
 let startScrollTop = 0;
 
-const showPreviousMessages = ref(false)
-const lastActivityTime = ref(Date.now())
+const showPreviousMessages = ref(true)
 
 // Montre uniquement les messages envoyés après le seuil
 const filteredMessages = computed(() => {
-     const twoMinutes = 2 * 60 * 1000
-     const now = Date.now()
-
      if (showPreviousMessages.value) return props.messages
 
-     // Messages récents uniquement (envoyés dans les 2 dernières minutes)
-     return props.messages.filter((msg) => {
-          return msg.time_sent > now - twoMinutes
-     })
+     // N'affiche que les messages récents (moins de 2 minutes)
+     const now = Date.now()
+     const twoMinutes = 2 * 60 * 1000
+     return props.messages.filter(msg => now - msg.time_sent < twoMinutes)
 })
-
-// Met à jour l'activité dès qu’un message est envoyé ou reçu
-watch(() => props.messages, () => {
-     if (!showPreviousMessages.value) {
-          const latest = props.messages[props.messages.length - 1]
-          if (latest) lastActivityTime.value = latest.time_sent
-     }
-}, { deep: true })
 
 // Masquer l’historique après 2 minutes d’inactivité
 let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
+     const lastMessage = props.messages[props.messages.length - 1]
+     const now = Date.now()
+     const twoMinutes = 2 * 60 * 1000
+
+     if (lastMessage && (now - lastMessage.time_sent > twoMinutes)) {
+          showPreviousMessages.value = false
+     }
      // On attache l'event listener si le chat est actif
      if (props.isChatActive && chatContainer.value) {
           chatContainer.value.addEventListener('scroll', updateScrollbar);
