@@ -6,10 +6,17 @@
           class="w-full overflow-auto bg-white transition-all duration-300 min-h-[160px] h-[487px] px-[24px] flex-[1_1_auto]"
      >
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
-               <!-- Boucle sur tous les messages -->
+
+                    <!-- Affichage du message d'introduction -->
+                    <button v-if="!showPreviousMessages" @click="onShowHistory" class="mx-auto mb-[20px] flex items-center bg-white tracking-[-0.1px] text-center text-[12px] font-semibold text-[rgb(136,148,171)] rounded-[14px] border border-[rgba(136,148,171,0.24)] pr-[10px]">
+                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px]"/>
+                         Messages précédents
+                    </button>
+
+
+               <!-- Boucle sur tous les messages filteredMessages -->
                <div
-                    v-for="(msg, index) in messages"
-                    :key="index"
+                    v-for="(msg, index) in filteredMessages" :key="msg.id"
                     :class="[
           msg.sender === 'visitor'
             ? 'hhcss_message-visitor mt-[9px] text-white float-right '
@@ -85,6 +92,33 @@ let isDragging = false;
 let startY = 0;
 let startScrollTop = 0;
 
+const showPreviousMessages = ref(false)
+const lastActivityTime = ref(Date.now())
+
+// Montre uniquement les messages envoyés après le seuil
+const filteredMessages = computed(() => {
+     const twoMinutes = 2 * 60 * 1000
+     const now = Date.now()
+
+     if (showPreviousMessages.value) return props.messages
+
+     // Messages récents uniquement (envoyés dans les 2 dernières minutes)
+     return props.messages.filter((msg) => {
+          return msg.time_sent > now - twoMinutes
+     })
+})
+
+// Met à jour l'activité dès qu’un message est envoyé ou reçu
+watch(() => props.messages, () => {
+     if (!showPreviousMessages.value) {
+          const latest = props.messages[props.messages.length - 1]
+          if (latest) lastActivityTime.value = latest.time_sent
+     }
+}, { deep: true })
+
+// Masquer l’historique après 2 minutes d’inactivité
+let hideTimer: ReturnType<typeof setTimeout> | null = null
+
 onMounted(() => {
      // On attache l'event listener si le chat est actif
      if (props.isChatActive && chatContainer.value) {
@@ -149,6 +183,25 @@ watch(
      },
      { deep: true }
 );
+
+watch(() => props.messages.length, () => {
+     if (hideTimer) clearTimeout(hideTimer)
+     hideTimer = setTimeout(() => {
+          showPreviousMessages.value = false
+     }, 2 * 60 * 1000)
+})
+
+// Quand l'utilisateur clique pour afficher les anciens messages
+function onShowHistory() {
+     showPreviousMessages.value = true
+     lastActivityTime.value = Date.now()
+
+     // On redémarre le timer pour recacher au bout de 2 min
+     if (hideTimer) clearTimeout(hideTimer)
+     hideTimer = setTimeout(() => {
+          showPreviousMessages.value = false
+     }, 2 * 60 * 1000)
+}
 
 // Met à jour la scrollbar custom
 function updateScrollbar() {
