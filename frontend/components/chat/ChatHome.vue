@@ -1,9 +1,9 @@
 <template>
-     <div class="p-[24px] pt-[0] pb-[0] mt-[-40px] overflow-y-auto flex flex-col z-[300] scroll-px-[24px] flex-[1_1_0%]">
+     <div class="p-[24px] pt-[0] pb-[0] mt-[-40px] flex flex-col z-[300] scroll-px-[24px] flex-1 overflow-y-auto">
           <!-- Questions suggérées -->
           <template v-if="suggestedQuestions && suggestedQuestions.length">
                <div class="flex w-full rounded-[12px] border border-[rgb(226,232,239)] overflow-y-hidden mb-[16px]">
-                    <div class="flex flex-col items-center w-full bg-white overflow-y-auto">
+                    <div class="flex flex-col items-center w-full bg-white max-h-[250px] overflow-y-auto">
                          <template
                               v-for="(question, index) in suggestedQuestions"
                               :key="index">
@@ -67,5 +67,13 @@ const chatStore = useChatStore();
 const suggestedQuestions = computed(() => chatStore.configChat.suggestedQuestions);
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
 const isHovered = ref(false);
+
+const props = defineProps({
+     previewMode: {
+          type: Boolean,
+          default: false
+     }
+});
+const previewMode = computed(() => props.previewMode);
 
 </script>

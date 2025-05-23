@@ -10,9 +10,7 @@
 
           <!-- Contenu affiché si ouvert -->
           <div v-show="isOpen" class="h-auto transition-[height] duration-[421ms] ease-in-out border-t border-[rgb(239,242,246)] overflow-visible visible" v-auto-animate>
-               <div class="p-[20px]">
-                    <slot></slot>
-               </div>
+               <slot></slot>
           </div>
      </div>
 </template>
@@ -26,7 +24,7 @@ const props = defineProps({
      isPaid: Boolean // Indique si le module est payé
 })
 
-const isOpen = ref(false)
+const isOpen = ref(true)
 
 const toggleOpen = () => {
      isOpen.value = !isOpen.value

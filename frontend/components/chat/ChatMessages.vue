@@ -3,8 +3,9 @@
           id="conversation-group"
           ref="chatContainer"
           v-auto-animate
-          class="w-full overflow-auto bg-white transition-all duration-300 min-h-[160px] h-[487px] px-[24px] flex-[1_1_auto]"
+          class="w-full overflow-y-auto bg-white transition-all duration-300 min-h-[160px] px-[24px] flex-[1_1_auto] max-h-[487px]"
      >
+
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
 
                     <!-- Affichage du message d'introduction -->

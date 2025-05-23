@@ -27,41 +27,93 @@
 
                                              <!-- SECTION GÉNÉRAL -->
                                              <PanelSettingsExpandableSection title="Général" :isBilled="false">
-                                                  <div class="flex flex-col justify-start items-start gap-3">
-                                                       <label class="block">Couleur d'arrière-plan :</label>
-                                                       <PanelChatColorPicker type="backgroundColors" v-model="chatStore.configChat.backgroundColor" @update:textColor="chatStore.configChat.textColor = $event" />
-                                                  </div>
-                                                  <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                                       <label class="block">Couleur du texte :</label>
-                                                       <PanelChatColorPicker type="textColors" v-model="chatStore.configChat.textColor" />
-                                                  </div>
-                                                  <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                                       <label class="block">Couleur de l'action :</label>
-                                                       <PanelChatColorPicker type="actionColors" v-model="chatStore.configChat.actionColor" />
-                                                  </div>
+                                                  <div class="p-[20px]">
+                                                       <div class="flex flex-col justify-start items-start gap-3">
+                                                            <label class="block">Couleur d'arrière-plan :</label>
+                                                            <PanelChatColorPicker type="backgroundColors" v-model="chatStore.configChat.backgroundColor" @update:textColor="chatStore.configChat.textColor = $event" />
+                                                       </div>
+                                                       <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                                            <label class="block">Couleur du texte :</label>
+                                                            <PanelChatColorPicker type="textColors" v-model="chatStore.configChat.textColor" />
+                                                       </div>
+                                                       <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                                            <label class="block">Couleur de l'action :</label>
+                                                            <PanelChatColorPicker type="actionColors" v-model="chatStore.configChat.actionColor" />
+                                                       </div>
 
-                                                  <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                                       <label class="block">Logo de la marque</label>
-                                                       <PanelChatColorPicker type="iconColors" v-model="chatStore.configChat.iconColor" />
+                                                       <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
+                                                            <label class="block">Logo de la marque</label>
+                                                            <PanelChatColorPicker type="iconColors" v-model="chatStore.configChat.iconColor" />
+                                                       </div>
                                                   </div>
                                              </PanelSettingsExpandableSection>
 
                                              <!-- SECTION CONTENU -->
                                              <PanelSettingsExpandableSection title="Contenu" :isBilled="false">
-                                                  <label class="block mb-2">Questions suggérées :</label>
-                                             </PanelSettingsExpandableSection>
 
-                                             <!-- SECTION VISIBILITÉ & POSITION -->
-                                             <PanelSettingsExpandableSection title="Visibilité et position" :isBilled="false">
-                                                  <label class="block mb-2">Afficher le chat ?</label>
-                                                  <input type="checkbox" v-model="chatStore.showChat" />
-                                                  <textarea v-model="chatStore.suggestedQuestions" class="border px-3 py-2 rounded w-full"></textarea>
-                                             </PanelSettingsExpandableSection>
 
-                                             <!-- SECTION PACK NATURE -->
-                                             <PanelSettingsExpandableSection title="Pack Nature" :isBilled="true" :isPaid="true">
-                                                  <label class="block mb-2">Activer le Pack Nature ? </label>
-                                                  <input type="checkbox" v-model="chatStore.configChat.has_nature_pack" />
+                                                  <div class="mt-[20px] flex items-center relative flex-row-reverse flex-wrap justify-start">
+                                                       <div class="flex flex-row justify-start items-center flex-[1_1_0%] border-b border-b-[#e2e8ef]">
+                                                            <NuxtLink v-for="tab in tabsContenu" :key="tab.to" :to="tab.to" class="relative px-[12px] pt-[16px] pb-[20px] text-[16px] transition-colors duration-200" :class="{ 'text-[#0566ff] border-b-[3px] border-b-[#0566ff]': isActive(tab), 'text-[#080f1a] hover:text-[#0566ff] border-b-transparent border-b-[3px]': !isActive(tab) }">
+                                                                 <div class="flex flex-row justify-center items-center">
+                                                                      <div class="flex flex-row justify-start items-center">{{ tab.label }}</div>
+                                                                 </div>
+                                                            </NuxtLink>
+                                                       </div>
+                                                  </div>
+
+                                                  <div class="p-[20px]">
+                                                       <div class="pb-0 pt-0 flex flex-col justify-start items-[normal] max-w-[750px]">
+                                                            <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)]">Souhaitez la bienvenue à vos visiteurs lorsqu'ils ouvrent le widget.</p>
+                                                            <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
+                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">En-tête</label>
+                                                                 <div class="w-full">
+                                                                      <textarea class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]">Bonjour 👋</textarea>
+                                                                 </div>
+                                                            </div>
+
+                                                            <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
+                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">Message</label>
+                                                                 <div class="w-full">
+                                                                      <textarea class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]">Bienvenue sur le site de l'Office de Tourisme, Avez vous besoin d’aider ?</textarea>
+                                                                 </div>
+                                                            </div>
+
+                                                            <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
+                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">Amorces de conversation <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Les visiteurs peuvent rapidement entamer une conversation avec {{ chatBotName }}</p>
+                                                                 </label>
+                                                                 <div class="w-full">
+                                                                      <div class="w-full flex flex-col mb-[8px]">
+                                                                           <div class="flex flex-row justify-start items-center p-[12px] rounded-[12px] mb-[8px] bg-[rgb(245,247,249)]">
+                                                                                <SvgoPanelSettingsIconDragDrop class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(100,116,145)] cursor-grab" />
+                                                                                <div class="ml-[12px]">
+                                                                                     <label class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px]">
+                                                                                          <input type="checkbox" role="switch" class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"/>
+                                                                                          <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)]"></div>
+                                                                                     </label>
+                                                                                </div>
+                                                                                <div class="flex flex-col justify-start items-[normal] w-full ml-[12px]">
+                                                                                     <div class="mt-0 mb-0 relative w-full">
+                                                                                          <input type="text" class="block w-full flex-[1_1_0%] text-[14px] h-[34px] border-2 border-[rgb(211,219,229)] rounded-[8px] bg-white px-[12px] outline-none text-[rgb(8,15,26)] focus:border-[rgb(5,102,255)]" placeholder="Libellé…" maxlength="500">
+                                                                                     </div>
+
+                                                                                </div>
+                                                                                <button class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[28px] h-[28px] ml-[12px] focus:bg-[rgb(252,217,222)] active:bg-[rgb(248,166,178)] hover:bg-[rgb(252,217,222)] group">
+                                                                                     <SvgoPanelSettingsIconTrash class="min-w-[20px] min-h-[20px] w-[20px] h-[20px] fill-[#647491] group-focus:fill-[rgb(232,19,50)] group-hover:fill-[rgb(232,19,50)] group-active:fill-[rgb(232,19,50)]"
+                                                                                     />
+                                                                                </button>
+                                                                           </div>
+                                                                      </div>
+                                                                      <div class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] cursor-pointer">
+                                                                           <SvgoPanelSettingsIconAdd class="ml-[-2px] mr-[6px] fill-[#080f1a] h-[20px] w-[20px]"/>
+                                                                           <span>Ajouter nouveau</span>
+                                                                      </div>
+
+                                                                 </div>
+                                                            </div>
+
+                                                       </div>
+                                                  </div>
                                              </PanelSettingsExpandableSection>
 
                                              <div class="sticky bottom-0 py-[20px] bg-white border-t border-t-[#eff2f6]">
@@ -71,14 +123,21 @@
                                         </div>
 
                                         <div class="self-stretch relative pl-0 rounded-[6px] w-[450px] min-w-[450px] 2xl:w-[416px] 2xl:min-w-[416px]">
-                                             <div class="h-full sticky top-0 min-h-[628px] bg-repeat w-full" :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }">
-                                                  <div class="flex items-center bg-white text-[rgb(100,116,145)] pt-[15px] px-[20px] pb-0 rounded-tr-[6px] z-[999999999999]">
-                                                       <label class="inline-block font-normal max-w-full">Aperçu&nbsp;:</label>
-                                                       <div class="mb-0 text-left relative ml-[4px] z-[999999999999]">
-                                                            <PanelCommonDropdownSelect v-model="selected" :items="options" />
+                                             <div class="absolute inset-0 z-0 bg-repeat pointer-events-none" :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }"/>
+                                             <div class="relative z-10 flex flex-col justify-between h-full min-h-[628px]">
+                                                  <div class="sticky top-0 items-center bg-white text-[rgb(100,116,145)] pt-[15px] px-[20px] pb-0 rounded-tr-[6px] z-[999999999999]">
+                                                       <div class="flex items-center">
+                                                            <label class="inline-block font-normal max-w-full">Aperçu&nbsp;:</label>
+                                                            <div class="mb-0 text-left relative ml-[4px] z-[999999999999]">
+                                                                 <PanelCommonDropdownSelect v-model="selected" :items="options" />
+                                                            </div>
                                                        </div>
                                                   </div>
-                                                  <Chat :previewMode="true" :forcedState="selected" :projectPublicKey="panelStore.project?.public_key" />
+                                                  <div class="relative flex-1">
+                                                       <div class="sticky bottom-[24px] top-[115px] mx-auto w-[450px] 2xl:w-[416px]">
+                                                            <Chat :previewMode="true" :forcedState="selected" :projectPublicKey="panelStore.project?.public_key"/>
+                                                       </div>
+                                                  </div>
                                              </div>
                                         </div>
                                    </div>
@@ -93,6 +152,8 @@
 
 const { t } = useI18n()
 const panelStore = usePanelStore()
+const route = useRoute()
+const config = useRuntimeConfig()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
 const saving = ref(false)
@@ -100,11 +161,11 @@ const backgroundSettingChat = 'data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X
 const options = [
      { label: 'Accueil', value: 'home' },
      { label: 'Chat', value: 'conversation' },
-     { label: 'Minimisé', value: 'minimal' },
-     { label: 'Accord RGPD', value: 'modal' }
+     { label: 'Accord RGPD', value: 'modal' },
+     { label: 'Minimisé', value: 'minimal' }
 ] as const
-const selected = ref<'home' | 'minimal' | 'conversation' | 'modal'>('minimal')
-
+const selected = ref<'home' | 'minimal' | 'conversation' | 'modal'>('home')
+const chatBotName = config.public.chatBotName
 const { push } = useToast()
 onMounted(async () => {
      setTimeout(() => {
@@ -123,5 +184,14 @@ async function handleSaveChatConfigClick () {
 
      if (ok) push('Paramètres enregistrés.', { type: 'success' })
      else  push('Erreur lors de la sauvegarde', { type: 'error', duration: 5000 })
+}
+const tabsContenu = [
+     { to: '', label: 'Accueil' },
+     { to: '', label: 'Chat' },
+     { to: '', label: 'RGPD' },
+     { to: '', label: 'Minimisé' }
+]
+const isActive = (tab) => {
+     return route.path.startsWith(tab.to) || (route.path === '/panel/hub/settings' && tab.to.includes('general'))
 }
 </script>

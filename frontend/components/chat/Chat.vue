@@ -2,9 +2,8 @@
      <div
           v-if="isReady"
           id="hellohumans-chat-iframe"
-          class="fixed inset-[auto_0_0_auto] z-[999999999] bg-transparent border-none"
-          :class="wrapperWidth"
-          :style="wrapperStyle"
+          :class="[previewMode ? 'relative static w-full h-auto scale-100 opacity-100' : 'fixed inset-[auto_0_0_auto] z-[999999999] bg-transparent border-none',wrapperWidth ]"
+          :style="previewMode ? wrapperStylePreview : wrapperStyle"
      >
           <!-- bubble -->
           <div class="fixed right-0 bottom-[12px] w-[112px] h-[140px] flex items-center justify-center pointer-events-none z-[1]">
@@ -34,7 +33,7 @@
                     isExpanded ? 'w-[593px]' : 'w-[372px]',
                     isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
                ]"
-               style="max-height:calc(100% - 47px)"
+               :style="previewMode ? 'max-height:100%' : 'max-height:calc(100% - 47px)'"
 
           >
                <ChatHeader
@@ -55,6 +54,7 @@
                     v-if="!isChatActive"
                     @sendSuggestedMessage="sendSuggestedMessage"
                     @openChat="() => (isChatActive = true)"
+                    :previewMode="previewMode"
                />
                <ChatMessages
                     v-else
@@ -148,6 +148,11 @@ const wrapperStyle = computed(() => ({
      maxHeight: isVisible.value ? 'calc(100% - 47px)' : '140px',
      transition: 'height .25s ease'
 }))
+const wrapperStylePreview = computed(() => ({
+     height: `${wrapperH.value}px`,
+     maxHeight: isVisible.value ? 'calc(100% - 115px)' : '140px',
+     transition: 'height .25s ease'
+}))
 function resizeToContent() {
      if (!chatContent.value) return
      const real = chatContent.value.scrollHeight
@@ -222,7 +227,7 @@ onMounted(async () => {
      document.addEventListener('click', e => {
           if (optionsBox.value && !optionsBox.value.contains(e.target as Node)) showOptions.value = false
      })
-     applyForcedState(props.forcedState)
+     await applyForcedState(props.forcedState)
 })
 
 onUnmounted(() => {
