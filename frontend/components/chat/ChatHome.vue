@@ -62,9 +62,9 @@
      </div>
 </template>
 <script setup lang="ts">
-
 const chatStore = useChatStore();
-const suggestedQuestions = computed(() => chatStore.configChat.suggestedQuestions);
+const suggestedQuestions = computed(() => chatStore.suggestions.value)
+
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
 const isHovered = ref(false);
 

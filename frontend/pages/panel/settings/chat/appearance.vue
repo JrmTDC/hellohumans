@@ -51,16 +51,8 @@
                                              <!-- SECTION CONTENU -->
                                              <PanelSettingsExpandableSection title="Contenu" :isBilled="false">
 
+                                                  <PanelCommonTabs :tabs="tabsContenu" class="mt-5"/>
 
-                                                  <div class="mt-[20px] flex items-center relative flex-row-reverse flex-wrap justify-start">
-                                                       <div class="flex flex-row justify-start items-center flex-[1_1_0%] border-b border-b-[#e2e8ef]">
-                                                            <NuxtLink v-for="tab in tabsContenu" :key="tab.to" :to="tab.to" class="relative px-[12px] pt-[16px] pb-[20px] text-[16px] transition-colors duration-200" :class="{ 'text-[#0566ff] border-b-[3px] border-b-[#0566ff]': isActive(tab), 'text-[#080f1a] hover:text-[#0566ff] border-b-transparent border-b-[3px]': !isActive(tab) }">
-                                                                 <div class="flex flex-row justify-center items-center">
-                                                                      <div class="flex flex-row justify-start items-center">{{ tab.label }}</div>
-                                                                 </div>
-                                                            </NuxtLink>
-                                                       </div>
-                                                  </div>
 
                                                   <div class="p-[20px]">
                                                        <div class="pb-0 pt-0 flex flex-col justify-start items-[normal] max-w-[750px]">
@@ -83,18 +75,57 @@
                                                                  <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">Amorces de conversation <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Les visiteurs peuvent rapidement entamer une conversation avec {{ chatBotName }}</p>
                                                                  </label>
                                                                  <div class="w-full">
+
+                                                                      <PanelCommonDragList v-model="chatStore.suggestions" @sorted="chatStore.saveOrder">
+                                                                           <template #item="{ item }">
+                                                                                <PanelCommonSuggestionItem :item="item" @delete="chatStore.removeSuggestion" />
+                                                                           </template>
+                                                                      </PanelCommonDragList>
+
+
+
+                                                                      <!-- Listes des amorces de conversation ajouté  --->
                                                                       <div class="w-full flex flex-col mb-[8px]">
+
+                                                                           <!-- Amorces off --->
                                                                            <div class="flex flex-row justify-start items-center p-[12px] rounded-[12px] mb-[8px] bg-[rgb(245,247,249)]">
                                                                                 <SvgoPanelSettingsIconDragDrop class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(100,116,145)] cursor-grab" />
                                                                                 <div class="ml-[12px]">
-                                                                                     <label class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px]">
-                                                                                          <input type="checkbox" role="switch" class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"/>
-                                                                                          <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)]"></div>
-                                                                                     </label>
+                                                                                     <PanelCommonTooltip text="Activer" left-ajust="-10" placement="bottom" variant="white" >
+                                                                                          <label class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px] cursor-pointer">
+                                                                                               <input type="checkbox" role="switch" class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"/>
+                                                                                               <div class="absolute left-[1px] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)]"></div>
+                                                                                          </label>
+                                                                                     </PanelCommonTooltip>
                                                                                 </div>
                                                                                 <div class="flex flex-col justify-start items-[normal] w-full ml-[12px]">
                                                                                      <div class="mt-0 mb-0 relative w-full">
-                                                                                          <input type="text" class="block w-full flex-[1_1_0%] text-[14px] h-[34px] border-2 border-[rgb(211,219,229)] rounded-[8px] bg-white px-[12px] outline-none text-[rgb(8,15,26)] focus:border-[rgb(5,102,255)]" placeholder="Libellé…" maxlength="500">
+                                                                                          <input type="text" class="block w-full flex-[1_1_0%] text-[14px] h-[34px] border-2 border-[rgb(211,219,229)] rounded-[8px] bg-white px-[12px] outline-none text-[rgb(8,15,26)] focus:border-[rgb(5,102,255)] hover:border-[#acb8cb]" placeholder="Libellé…" maxlength="500">
+                                                                                     </div>
+
+                                                                                </div>
+                                                                                <button class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[28px] h-[28px] ml-[12px] focus:bg-[rgb(252,217,222)] active:bg-[rgb(248,166,178)] hover:bg-[rgb(252,217,222)] group">
+                                                                                     <SvgoPanelSettingsIconTrash class="min-w-[20px] min-h-[20px] w-[20px] h-[20px] fill-[#647491] group-focus:fill-[rgb(232,19,50)] group-hover:fill-[rgb(232,19,50)] group-active:fill-[rgb(232,19,50)]"
+                                                                                     />
+                                                                                </button>
+                                                                           </div>
+
+                                                                           <!-- Amorces on --->
+                                                                           <div class="flex flex-row justify-start items-center p-[12px] rounded-[12px] mb-[8px] bg-[rgb(245,247,249)]">
+                                                                                <SvgoPanelSettingsIconDragDrop class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(100,116,145)] cursor-grab" />
+                                                                                <div class="ml-[12px]">
+                                                                                     <PanelCommonTooltip text="Désactiver" left-ajust="-10" placement="bottom" variant="white">
+                                                                                          <label class="relative inline-block align-top rounded-[17px] border border-[#0566ff] bg-[#0566ff] w-[36px] max-w-[36px] h-[22px] shadow-[inset_0px_0px_0px_11px_#0566ff] cursor-pointer">
+                                                                                               <input type="checkbox" role="switch" class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"/>
+                                                                                               <div class="absolute left-[calc(100%-1px)] top-[1px] bottom-[1px] w-[18px] rounded-full bg-white transition-[left,transform] duration-200 ease-in-out shadow-[0px_2px_8px_rgba(0,20,51,0.28)] translate-x-[-100%] translate-y-0"></div>
+                                                                                          </label>
+
+
+                                                                                     </PanelCommonTooltip>
+                                                                                </div>
+                                                                                <div class="flex flex-col justify-start items-[normal] w-full ml-[12px]">
+                                                                                     <div class="mt-0 mb-0 relative w-full">
+                                                                                          <input type="text" class="block w-full flex-[1_1_0%] text-[14px] h-[34px] border-2 border-[rgb(211,219,229)] rounded-[8px] bg-white px-[12px] outline-none text-[rgb(8,15,26)] focus:border-[rgb(5,102,255)] hover:border-[#acb8cb]" placeholder="Libellé…" maxlength="500">
                                                                                      </div>
 
                                                                                 </div>
@@ -104,10 +135,11 @@
                                                                                 </button>
                                                                            </div>
                                                                       </div>
-                                                                      <div class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] cursor-pointer">
-                                                                           <SvgoPanelSettingsIconAdd class="ml-[-2px] mr-[6px] fill-[#080f1a] h-[20px] w-[20px]"/>
-                                                                           <span>Ajouter nouveau</span>
-                                                                      </div>
+
+
+                                                                      <button @click="chatStore.addSuggestion" class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] cursor-pointer">
+                                                                           <SvgoPanelSettingsIconAdd class="ml-[-2px] mr-[6px] fill-[#080f1a] h-[20px] w-[20px]"/>Ajouter nouveau
+                                                                      </button>
 
                                                                  </div>
                                                             </div>
@@ -191,7 +223,4 @@ const tabsContenu = [
      { to: '', label: 'RGPD' },
      { to: '', label: 'Minimisé' }
 ]
-const isActive = (tab) => {
-     return route.path.startsWith(tab.to) || (route.path === '/panel/hub/settings' && tab.to.includes('general'))
-}
 </script>

@@ -41,33 +41,57 @@ interface ChatMessage {
      status?: 'success' | 'unavailable'
 }
 
+interface Suggestion {
+     id: string
+     label: string
+     enabled: boolean
+     order: number
+}
 
 export const useChatStore = defineStore('chat', () => {
      const project = ref<Project | null>(null)
      const visitor = ref<Visitor | null>(null)
      const projectPublicKey   = ref<string | null>(null)
      const messages = ref<ChatMessage[]>([])
+     const suggestions = ref<Suggestion[]>([])
 
-     function loadMessagesFromStorage() {
-          try {
-               const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-               if (Array.isArray(data.messages)) {
-                    messages.value = data.messages
-               }
-          } catch (e) {
-               messages.value = []
-          }
+     function loadFromStorage () {
+          const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+
+          if (Array.isArray(data.messages))       messages.value      = data.messages
+          if (Array.isArray(data.suggestions))    suggestions.value   = data.suggestions
+     }
+
+     function updateStorage (partial: Record<string, any>) {
+          const existing = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+          localStorage.setItem('hhs_isp_chat', JSON.stringify({ ...existing, ...partial }))
+     }
+
+     function addSuggestion () {
+          suggestions.value.push({
+               id: crypto.randomUUID(),
+               label: '',
+               enabled: true,
+               order: suggestions.value.length
+          })
+     }
+
+     function removeSuggestion (id:string) {
+          suggestions.value = suggestions.value.filter(s => s.id !== id)
+     }
+
+     function toggleSuggestion (id:string) {
+          const s = suggestions.value.find(x=>x.id===id)
+          if (s) s.enabled = !s.enabled
+     }
+
+     function saveOrder (ordered:Suggestion[]) {
+          suggestions.value = ordered.map((s,idx)=>({...s, order:idx}))
      }
 
      function clearMessages() {
           messages.value = []
-          const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-          localStorage.setItem('hhs_isp_chat', JSON.stringify({ ...data, messages: [] }))
-     }
-
-     function updateStorageMessages() {
-          const existing = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-          localStorage.setItem('hhs_isp_chat', JSON.stringify({ ...existing, messages: messages.value }))
+          updateStorage({ messages: [], suggestions: suggestions.value })
      }
 
      function setProjectPublicKey(key: string | null) {
@@ -128,11 +152,7 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      // --- Envoi message et ajout au localStorage ---
-     async function messageSend(content: string): Promise<{
-          success: boolean
-          message?: ChatMessage
-          reason?: 'user_invalid' | 'internal_error'
-     }> {
+     async function messageSend(content: string): Promise<{ success: boolean, message?: ChatMessage, reason?: 'user_invalid' | 'internal_error' }> {
           const { apiFetch } = useChatApi()
 
           // Chargement / fallback des données locales
@@ -156,7 +176,7 @@ export const useChatStore = defineStore('chat', () => {
           }
           chatData.messages.push(structuredVisitorMessage)
           messages.value.push(structuredVisitorMessage)
-          updateStorageMessages()
+          updateStorage({ messages: messages.value })
           try {
                const payload = { message:content }
                const res = await apiFetch('/message', {
@@ -185,7 +205,7 @@ export const useChatStore = defineStore('chat', () => {
                // Ajout au localStorage
                chatData.messages.push(structuredLoopiMessage)
                messages.value.push(structuredLoopiMessage)
-               updateStorageMessages()
+               updateStorage({ messages: messages.value })
                return {
                     success: true,
                     message: structuredLoopiMessage,
@@ -209,17 +229,26 @@ export const useChatStore = defineStore('chat', () => {
           }
      }
 
+     watch([messages, suggestions], () => {
+          updateStorage({ messages: messages.value, suggestions: suggestions.value })
+     },{ deep:true })
+
      return {
           projectPublicKey,
           project,
           visitor,
           configChat,
           messages,
+          loadFromStorage,
+          suggestions,
           clearMessages,
-          loadMessagesFromStorage,
           setProjectPublicKey,
           fetchChatProject,
           visitorCreate,
           messageSend,
+          addSuggestion,
+          removeSuggestion,
+          toggleSuggestion,
+          saveOrder,
      }
 })
