@@ -1,6 +1,6 @@
 <template>
      <div
-          class="relative inline-block"
+          class="relative inline-block flex"
           @mouseenter="show = true"
           @mouseleave="show = false"
           ref="wrapper"
