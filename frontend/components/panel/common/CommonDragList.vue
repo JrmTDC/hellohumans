@@ -3,13 +3,17 @@
           v-model="modelValue"
           item-key="id"
           tag="div"
+          handle=".drag-handle"
           :component-data="{ class: 'w-full space-y-[8px]' }"
           @end="onSorted"
+
      >
           <template #item="{ element }">
                <slot name="item" :item="element" />
           </template>
      </Draggable>
+
+
 </template>
 
 <script setup lang="ts">

@@ -51,11 +51,11 @@
                                              <!-- SECTION CONTENU -->
                                              <PanelSettingsExpandableSection title="Contenu" :isBilled="false">
 
-                                                  <PanelCommonTabs :tabs="tabsContenu" class="mt-5"/>
+                                                  <PanelCommonTabs :tabs="tabsContenu" class="mt-5" @click="(tab) => selectedTab.value = tab.label"/>
 
 
                                                   <div class="p-[20px]">
-                                                       <div class="pb-0 pt-0 flex flex-col justify-start items-[normal] max-w-[750px]">
+                                                       <div v-if="selectedTab === 'Accueil'" class="pb-0 pt-0 flex flex-col justify-start items-[normal] max-w-[750px]">
                                                             <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)]">Souhaitez la bienvenue à vos visiteurs lorsqu'ils ouvrent le widget.</p>
                                                             <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
                                                                  <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">En-tête</label>
@@ -79,7 +79,7 @@
                                                                       <div class="w-full flex flex-col mb-[8px]">
                                                                            <PanelCommonDragList v-model="chatStore.suggestions" @sorted="chatStore.saveOrder">
                                                                                 <template #item="{ item }">
-                                                                                     <PanelCommonSuggestionItem :item="item" @delete="chatStore.removeSuggestion" />
+                                                                                     <PanelCommonSuggestionItem :key="item.id" :item="item" @delete="chatStore.removeSuggestion" />
                                                                                 </template>
                                                                            </PanelCommonDragList>
                                                                       </div>
@@ -136,6 +136,7 @@ const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
 const saving = ref(false)
 const backgroundSettingChat = 'data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7'
+const selectedTab = ref('Accueil')
 const options = [
      { label: 'Accueil', value: 'home' },
      { label: 'Chat', value: 'conversation' },
