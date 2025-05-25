@@ -23,10 +23,7 @@
           </template>
 
           <!-- Bouton Chat avec nous -->
-          <button
-               @click="$emit('openChat')"
-               class="flex px-4 py-3 items-center gap-2 w-full rounded-xl border border-[#e2e8ef] bg-white hover:bg-[#EFF2F6] z-20"
-          >
+          <button @click="$emit('openChat')" class="flex px-4 py-3 items-center gap-2 w-full rounded-xl border border-[#e2e8ef] bg-white hover:bg-[#EFF2F6] z-20">
                <div class="flex flex-col items-start gap-[2px] flex-grow">
                     <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
                     <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
