@@ -102,7 +102,6 @@ let hideTimer: ReturnType<typeof setTimeout> | null = null
 onMounted(() => {
 
      const chatStore = useChatStore();
-     chatStore.loadMessagesFromStorage()
      const lastMessage = props.messages[props.messages.length - 1]
      const now = Date.now()
      const twoMinutes = 2 * 60 * 1000
