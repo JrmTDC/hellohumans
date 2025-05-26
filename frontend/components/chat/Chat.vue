@@ -346,4 +346,7 @@ function removeLastChoiceMessage() {
      const last = [...messages.value].reverse().find(m => m.sender === 'bot' && m.choices?.length)
      if (last) last.choices = []
 }
+watch(() => chatStore.suggestions, () => {
+     nextTick(() => resizeToContent())
+}, { deep: true })
 </script>
