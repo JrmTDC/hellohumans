@@ -28,51 +28,40 @@
                                              <!-- SECTION GÉNÉRAL -->
                                              <PanelSettingsExpandableSection title="Général" :isBilled="false">
                                                   <div class="p-[20px]">
-                                                       <div class="flex flex-col justify-start items-start gap-3">
-                                                            <label class="block">Couleur d'arrière-plan :</label>
-                                                            <PanelChatColorPicker type="backgroundColors" v-model="chatStore.configChat.backgroundColor" @update:textColor="chatStore.configChat.textColor = $event" />
+                                                       <div>
+                                                            <PanelChatColorPicker type="backgroundColors" v-model="chatStore.configChat.backgroundColor" label="Couleur d'arrière-plan" @update:textColor="chatStore.configChat.textColor = $event" />
                                                        </div>
-                                                       <div  class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                                            <label class="block">Couleur du texte :</label>
-                                                            <PanelChatColorPicker type="textColors" v-model="chatStore.configChat.textColor" />
+                                                       <div class="mt-[20px]">
+                                                            <PanelChatColorPicker type="textColors" v-model="chatStore.configChat.textColor" label="Couleur du texte" />
                                                        </div>
-                                                       <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                                            <label class="block">Couleur de l'action :</label>
-                                                            <PanelChatColorPicker type="actionColors" v-model="chatStore.configChat.actionColor" />
+                                                       <div class="mt-[20px]">
+                                                            <PanelChatColorPicker type="actionColors" v-model="chatStore.configChat.actionColor" label="Couleur de l'action"  />
                                                        </div>
 
-                                                       <div class="flex flex-col justify-start items-start gap-3 mt-[20px]">
-                                                            <label class="block">Logo de la marque</label>
-                                                            <PanelChatColorPicker type="iconColors" v-model="chatStore.configChat.iconColor" />
-                                                       </div>
+
+
+
                                                   </div>
                                              </PanelSettingsExpandableSection>
 
                                              <!-- SECTION CONTENU -->
                                              <PanelSettingsExpandableSection title="Contenu" :isBilled="false">
 
-                                                  <PanelCommonTabs :tabs="tabsContenu" class="mt-5" @click="(tab) => selectedTab.value = tab.label"/>
-
+                                                  <PanelCommonTabs :tabs="tabsContenu" v-model="selectedTab" class="mt-5"/>
 
                                                   <div class="p-[20px]">
-                                                       <div v-if="selectedTab === 'Accueil'" class="pb-0 pt-0 flex flex-col justify-start items-[normal] max-w-[750px]">
+                                                       <div v-if="selectedTab === 'home'" class="pb-0 pt-0 flex flex-col justify-start items-[normal] max-w-[750px]">
                                                             <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)]">Souhaitez la bienvenue à vos visiteurs lorsqu'ils ouvrent le widget.</p>
-                                                            <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
-                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">En-tête</label>
-                                                                 <div class="w-full">
-                                                                      <textarea v-model="chatStore.configChat.welcomeTitle" class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]"></textarea>
-                                                                 </div>
+                                                            <div class="mt-[20px]">
+                                                                 <PanelCommonTextareaField v-model="chatStore.configChat.welcomeTitle" label="En-tête" />
+                                                            </div>
+
+                                                            <div class="mt-[20px]">
+                                                                 <PanelCommonTextareaField v-model="chatStore.configChat.welcomeMessage" label="Message" />
                                                             </div>
 
                                                             <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
-                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">Message</label>
-                                                                 <div class="w-full">
-                                                                      <textarea v-model="chatStore.configChat.welcomeMessage" class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]"></textarea>
-                                                                 </div>
-                                                            </div>
-
-                                                            <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
-                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">Amorces de conversation <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Les visiteurs peuvent rapidement entamer une conversation avec {{ chatBotName }}</p>
+                                                                 <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_175px] xl:max-w-[min(180px,12vw)] text-[14px]">Amorces de conversation <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">Les visiteurs peuvent rapidement entamer une conversation avec {{ chatBotName }}</p>
                                                                  </label>
                                                                  <div class="w-full">
 
@@ -102,37 +91,26 @@
                                         </div>
 
                                         <div class="sticky top-[24px] self-start relative pl-0 rounded-[6px] w-[450px] min-w-[450px] 2xl:w-[416px] 2xl:min-w-[416px] h-[calc(100vh-48px)]">
-                                             <div
-                                                  class="absolute inset-0 z-0 bg-repeat pointer-events-none"
-                                                  :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }"
-                                             />
+                                             <div class="absolute inset-0 z-0 bg-repeat pointer-events-none" :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }"/>
 
-                                             <!-- ✅ Conteneur sticky avec preview chat -->
+                                             <!-- Conteneur sticky avec preview chat -->
                                              <div class="relative z-10 flex flex-col h-full max-h-full">
                                                   <!-- Bandeau dropdown -->
                                                   <div class="sticky top-0 z-[2] bg-white text-[rgb(100,116,145)] pt-[15px] px-[20px] pb-0 rounded-tr-[6px]">
                                                        <div class="flex items-center">
                                                             <label class="inline-block font-normal max-w-full">Aperçu&nbsp;:</label>
                                                             <div class="mb-0 text-left relative ml-[4px]">
-                                                                 <PanelCommonDropdownSelect v-model="selected" :items="options" />
+                                                                 <PanelCommonDropdownSelect v-model="selected" :items="chatScreenOptions" />
                                                             </div>
                                                        </div>
                                                   </div>
 
                                                   <!-- Chat sticky à droite -->
                                                   <div class="flex-1 flex items-end justify-center px-[10px] pb-[24px] pt-[30px] overflow-hidden">
-                                                       <Chat
-                                                            class="w-full max-w-[416px] h-full"
-                                                            :previewMode="true"
-                                                            :forcedState="selected"
-                                                            :projectPublicKey="panelStore.project?.public_key"
-                                                       />
+                                                       <Chat class="w-full max-w-[416px] h-full" :previewMode="true" :forcedState="selected" :projectPublicKey="panelStore.project?.public_key" />
                                                   </div>
                                              </div>
                                         </div>
-
-
-
                                    </div>
                               </div>
                          </div>
@@ -151,14 +129,6 @@ const layoutLoadingPanel = useState('layoutLoadingPanel')
 const chatStore = useChatStore()
 const saving = ref(false)
 const backgroundSettingChat = 'data:image/gif;base64,R0lGODlhEAAQAJEAAAAAAP////X19f///yH5BAEAAAMALAAAAAAQABAAAAIflG+hq4jM3IFLJhqswNly/XkcBpIiVaInlLJr9FZWAQA7'
-const selectedTab = ref('Accueil')
-const options = [
-     { label: 'Accueil', value: 'home' },
-     { label: 'Chat', value: 'conversation' },
-     { label: 'Accord RGPD', value: 'modal' },
-     { label: 'Minimisé', value: 'minimal' }
-] as const
-const selected = ref<'home' | 'minimal' | 'conversation' | 'modal'>('home')
 const chatBotName = config.public.chatBotName
 const { push } = useToast()
 onMounted(async () => {
@@ -179,10 +149,22 @@ async function handleSaveChatConfigClick () {
      if (ok) push('Paramètres enregistrés.', { type: 'success' })
      else  push('Erreur lors de la sauvegarde', { type: 'error', duration: 5000 })
 }
+const chatScreenOptions = [
+     { label: 'Accueil', value: 'home' },
+     { label: 'Chat', value: 'conversation' },
+     { label: 'Accord RGPD', value: 'modal' },
+     { label: 'Minimisé', value: 'minimal' }
+] as const
+const selectedTab = ref('home')
+const selected = ref<'home' | 'minimal' | 'conversation' | 'modal'>('home')
+
+watch(selectedTab, (newVal) => {
+     selected.value = newVal as typeof selected.value
+})
 const tabsContenu = [
-     { to: '', label: 'Accueil' },
-     { to: '', label: 'Chat' },
-     { to: '', label: 'RGPD' },
-     { to: '', label: 'Minimisé' }
+     { value: 'home', label: 'Accueil' },
+     { value: 'conversation', label: 'Chat' },
+     { value: 'modal', label: 'Accord RGPD' },
+     { value: 'minimal', label: 'Minimisé' }
 ]
 </script>

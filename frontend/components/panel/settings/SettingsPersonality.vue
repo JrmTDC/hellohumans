@@ -33,23 +33,16 @@
                <div class="pt-[20px] pb-[20px]">
                     <div class="flex flex-col justify-start items-[normal] max-w-[750px] pt-0 pb-[32px]">
                          <!-- Sélecteur de style de communication -->
-                         <div class="flex flex-row justify-start items-start">
-                              <label for="" class="flex-[1_0_145px] min-w-[145px] max-w-[min(180px,12vw)] inline-block font-normal">
-                                   <div class="flex flex-col justify-start items-[normal]">
-                                        <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">Style de communication</p>
+
+                         <PanelCommonCustomSelect v-model="selectedStyle" :options="communicationStyles" option-key="value" option-label="label" placeholder="Sélectionnez un style de communication" dropdown-class="min-w-[581px] max-w-[256px]" @change="handleStyleChange" label="Style de communication">
+                              <template #option="{ option }">
+                                   <div class="flex flex-col">
+                                        <span class="text-[14px] leading-[18px]">{{ option.label }}</span>
+                                        <span v-if="option.description" class="text-[12px] text-[rgb(100,116,145)] mt-1">{{ option.description }}</span>
                                    </div>
-                              </label>
-                              <div class="flex-[1_1_0%] relative ml-[24px]">
-                                   <PanelCommonCustomSelect v-model="selectedStyle" :options="communicationStyles" option-key="value" option-label="label" placeholder="Sélectionnez un style de communication" dropdown-class="min-w-[581px] max-w-[256px]" @change="handleStyleChange">
-                                        <template #option="{ option }">
-                                             <div class="flex flex-col">
-                                                  <span class="text-[14px] leading-[18px]">{{ option.label }}</span>
-                                                  <span v-if="option.description" class="text-[12px] text-[rgb(100,116,145)] mt-1">{{ option.description }}</span>
-                                             </div>
-                                        </template>
-                                   </PanelCommonCustomSelect>
-                              </div>
-                         </div>
+                              </template>
+                         </PanelCommonCustomSelect>
+
                          <hr class="w-full border-t border-t-[rgb(239,242,246)] mt-[20px] mb-0">
                          <!-- Toggle Liens "En savoir plus" -->
                          <div class="mt-[20px] flex flex-row justify-start items-start">

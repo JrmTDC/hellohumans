@@ -1,6 +1,6 @@
 <template>
-     <div class="flex flex-row justify-start items-start w-full">
-          <div class="flex flex-col justify-start items-[normal] flex-[1_0_145px] min-w-[145px] max-w-[min(180px,12vw)]">
+     <div class="flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
+          <div v-if="label || helperText" class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:flex-[1_0_175px] xl:max-w-[min(180px,12vw)] text-[14px]">
                <label v-if="label" class="inline-block font-normal">
                     <div class="flex flex-col justify-start items-[normal]">
                          <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">{{ label }}
@@ -10,7 +10,7 @@
                     </div>
                </label>
           </div>
-          <div class="flex-[1_1_0%] relative ml-[24px]">
+          <div class="w-full">
                <div class="relative">
                     <input :type="type" :value="modelValue" :placeholder="placeholder" :disabled="disabled" :class="['block w-full border-solid border-2','rounded-[8px] outline-none text-[14px] leading-[18px] tracking-[-0.01em]','px-[14px] h-[34px]',disabled ? 'border-[rgb(226,232,239)] text-[rgb(100,116,145)] bg-[rgb(239,242,246)]' : 'border-[rgb(211,219,229)] text-[rgb(8,15,26)]',error ? 'border-red-500' : '']" v-bind="$attrs" @input="onInput">
                     <!-- Icône de droite -->

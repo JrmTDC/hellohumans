@@ -1,12 +1,16 @@
 <template>
      <div class="flex border-b border-[#e2e8ef]">
-          <NuxtLink v-for="tab in tabs" :key="tab.to" :to="tab.to" @click.prevent="$emit('click', tab)" class="relative px-3 pt-4 pb-5 text-[16px] transition-colors" :class="isActive(tab) ? 'text-[#0566ff] border-b-3 border-[#0566ff]' : 'text-[#080f1a] hover:text-[#0566ff]'">
+          <button v-for="tab in tabs" :key="tab.value" @click="$emit('update:modelValue', tab.value)" class="relative px-3 pt-4 pb-5 text-[16px] transition-colors cursor-pointer" :class="[ modelValue === tab.value ? 'text-[#0566ff] border-b-[3px] border-[#0566ff]' : 'text-[#080f1a] border-b-[3px] border-transparent']">
                {{ tab.label }}
-          </NuxtLink>
+          </button>
      </div>
 </template>
+
 <script setup lang="ts">
-const props = defineProps<{ tabs:{to:string,label:string}[] }>()
-const route = useRoute()
-const isActive = (t:any)=> route.path.startsWith(t.to)
+defineProps<{
+     tabs: { value: string; label: string }[]
+     modelValue: string
+}>()
+
+defineEmits(['update:modelValue'])
 </script>

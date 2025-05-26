@@ -1,80 +1,77 @@
 <template>
-     <div class="relative w-full" ref="pickerContainer">
-          <!-- Bouton principal -->
-          <div
-               class="flex items-center p-2 border rounded cursor-pointer hover:bg-gray-100 transition"
-               @click="togglePicker"
-          >
-               <!-- Cercle de couleur -->
-               <div class="w-6 h-6 rounded-full border shadow-sm" :style="{ background: selectedColor }" />
-               <!-- Libellé -->
-               <span class="ml-3 flex-1 text-left text-sm text-gray-700">
-        {{ selectedTheme?.name || selectedColor }}
-      </span>
-               <!-- Flèche -->
-               <svgo-chat-icon-input-select
-                    class="w-6 h-6 transform transition-transform fill-[#080f1a]"
-                    :class="{ 'rotate-180': isOpen }"
-               />
+     <div class="flex flex-col gap-[12px] justify-start items-start" :class="['xl:flex-row']">
+          <!-- Label + helper -->
+          <div v-if="label || helperText" class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_175px] xl:max-w-[min(180px,12vw)] text-[14px]">
+               <label class="inline-block font-normal">
+                    <div class="flex flex-col justify-start items-[normal]">
+                         <p class="font-normal text-[14px] leading-[18px] tracking-[-0.01em]">
+                              {{ label }}
+                              <span v-if="required" class="text-red-500">*</span>
+                         </p>
+                         <p v-if="helperText" class="mt-[4px] font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">{{ helperText }}</p>
+                    </div>
+               </label>
           </div>
 
-          <!-- Boîte déroulante -->
-          <div
-               v-if="isOpen"
-               class="min-w-[375.8px] max-w-[256px] shadow-[0px_8px_20px_rgba(0,20,51,0.24)] bg-white rounded-[8px] absolute z-[10] max-h-[280px] p-3 overflow-y-auto"
-          >
-               <!-- Couleur personnalisée -->
+          <!-- Picker -->
+          <div class="w-full relative group" ref="pickerContainer">
                <div
-                    class="relative flex items-center p-[9px_8px] cursor-pointer hover:bg-[#dce9ff] rounded"
-                    @click="colorInput.click()"
+                    class="flex justify-between items-center h-[34px] text-[14px] leading-[18px] tracking-[-0.01em] rounded-[8px] outline-none px-[14px] py-[6px] pr-[7px] min-w-0 bg-white cursor-pointer border-2 focus:border-[#0566ff] transition-colors"
+                    :class="isOpen ? 'border-[#0566ff]' : 'border-[rgb(211,219,229)] hover:border-[rgb(172,184,203)]'"
+                    @click="togglePicker"
                >
-                    <svgo-chat-icon-picker-color class="w-6 h-6 fill-[#647491]" />
-                    <span class="ml-3 flex-1 text-left text-sm text-gray-700">Choisissez votre couleur</span>
-                    <input
-                         type="color"
-                         ref="colorInput"
-                         v-model="selectedCustomColor"
-                         class="absolute opacity-0 w-full h-full cursor-pointer"
-                    />
+                    <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                         <div class="w-5 h-5 rounded-full border shadow-sm" :style="{ background: selectedColor }" />
+                         <span>{{ selectedTheme?.name || selectedColor }}</span>
+                    </div>
+                    <SvgoPanelHubIconArrowSelect class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(8,15,26)] transition-transform duration-200" :class="{ 'rotate-180': isOpen }"/>
                </div>
 
-               <ul v-if="selectedCustomColor" class="mb-2">
-                    <li
-                         class="flex items-center cursor-pointer p-2 rounded hover:bg-[#dce9ff]"
-                         @click="applyCustomColor"
+               <!-- Dropdown -->
+               <Transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+                    <div
+                         v-if="isOpen"
+                         class="absolute z-50 min-w-full mt-1 bg-white rounded-[8px] shadow-lg max-h-[340px] overflow-auto"
+                         :style="{ width: pickerContainer?.offsetWidth + 'px' }"
                     >
-                         <div class="w-6 h-6 rounded-full border shadow-sm" :style="{ background: selectedCustomColor }" />
-                         <span class="ml-3 text-sm text-gray-700">{{ selectedCustomColor }}</span>
-                    </li>
-               </ul>
+                         <ul class="p-[8px]">
+                              <!-- Couleur personnalisée -->
+                              <li class="relative flex items-center cursor-pointer px-[8px] py-[9px] rounded hover:bg-[#dce9ff]" @click.stop="colorInput?.click()">
+                                   <svgo-chat-icon-picker-color class="w-5 h-5 fill-[#647491] mr-3" />
+                                   <span class="flex-1 text-sm text-left text-gray-700">Choisissez votre couleur</span>
+                                   <input type="color" ref="colorInput" v-model="selectedCustomColor" class="absolute opacity-0 w-full h-full cursor-pointer"/>
+                              </li>
 
-               <!-- Liste prédéfinie -->
-               <div>
-                    <span class="block text-xs text-gray-500 mb-1 p-[14px_8px_4px]">{{ title }}</span>
-                    <ul>
-                         <li
-                              v-for="item in items"
-                              :key="item.name"
-                              @click="applyPreset(item)"
-                              class="flex items-center cursor-pointer rounded hover:bg-[#dce9ff] p-[9px_8px]"
-                         >
-                              <div class="w-6 h-6 rounded-full border shadow-sm" :style="{ background: item.color }" />
-                              <span class="ml-3 text-sm text-gray-700">{{ item.name }}</span>
-                         </li>
-                    </ul>
-               </div>
+                              <li v-if="selectedCustomColor" class="flex items-center cursor-pointer px-[8px] py-[9px] rounded hover:bg-[#dce9ff]" @click="applyCustomColor">
+                                   <div class="w-5 h-5 rounded-full border shadow-sm mr-3" :style="{ background: selectedCustomColor }" />
+                                   <span class="text-sm text-gray-700">{{ selectedCustomColor }}</span>
+                              </li>
+
+                              <li class="px-[8px] pt-4 pb-2 text-xs text-gray-500 font-medium">{{ title }}</li>
+
+                              <!-- Couleurs prédéfinies -->
+                              <li v-for="item in items" :key="item.name" class="flex items-center cursor-pointer px-[8px] py-[9px] rounded hover:bg-[#dce9ff]" @click="applyPreset(item)">
+                                   <div class="w-5 h-5 rounded-full border shadow-sm mr-3" :style="{ background: item.color }" />
+                                   <span class="text-sm text-gray-700">{{ item.name }}</span>
+                              </li>
+                         </ul>
+                    </div>
+               </Transition>
           </div>
      </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
-/* ---------- props / emits ---------- */
-const props = defineProps<{ modelValue?: string; type?: string }>()
+const props = defineProps({
+     modelValue: { type: String, default: '' },
+     type: { type: String, default: '' },
+     label: { type: String, default: '' },
+     helperText: { type: String, default: '' },
+     required: { type: Boolean, default: false }
+})
 const emit = defineEmits(['update:modelValue', 'update:textColor', 'update:isCustomBackground'])
 
-/* ---------- state ---------- */
 const isOpen = ref(false)
 const selectedColor = ref(props.modelValue || '#0566ff')
 const selectedTheme = ref<{ name: string; color: string; textColor?: string } | null>(null)
@@ -82,7 +79,6 @@ const selectedCustomColor = ref<string | null>(null)
 const pickerContainer = ref<HTMLElement | null>(null)
 const colorInput = ref<HTMLInputElement | null>(null)
 
-/* ---------- preset arrays (complets) ---------- */
 const backgroundColors = ref([
      { name: 'Dégradé 1', color: 'linear-gradient(115deg,#2a27da,#00ccff)', textColor: '#fff' },
      { name: 'Dégradé 2', color: 'linear-gradient(115deg,#401dba,#825bf0)', textColor: '#fff' },
@@ -130,8 +126,6 @@ const actionColors = ref([
      { name: 'Indigo', color: '#030353' },
      { name: 'Noir', color: '#000000' }
 ])
-
-/* ---------- computed ---------- */
 const items = computed(() => {
      if (props.type === 'backgroundColors') return backgroundColors.value
      if (props.type === 'textColors') return textColors.value
@@ -139,10 +133,7 @@ const items = computed(() => {
 })
 const title = computed(() => (props.type === 'backgroundColors' ? 'Thèmes :' : 'Couleurs prédéfinies :'))
 
-/* ---------- helpers ---------- */
-function togglePicker() {
-     isOpen.value = !isOpen.value
-}
+function togglePicker() { isOpen.value = !isOpen.value }
 
 function applyPreset(item: any) {
      selectedColor.value = item.color
@@ -173,24 +164,17 @@ function getContrastColor(hex: string): string {
      return brightness > 128 ? '#000000' : '#FFFFFF'
 }
 
-/* ---------- synchronisation externe ---------- */
-watch(
-     () => props.modelValue,
-     (val) => {
-          if (!val) return
-          selectedColor.value = val
-          const match = items.value.find((i) => i.color === val)
-          selectedTheme.value = match ?? null
-     },
-     { immediate: true }
-)
+watch(() => props.modelValue, (val) => {
+     if (!val) return
+     selectedColor.value = val
+     const match = items.value.find((i) => i.color === val)
+     selectedTheme.value = match ?? null
+}, { immediate: true })
 
-/* ---------- couleur personnalisée immédiate ---------- */
 watch(selectedCustomColor, (val) => {
      if (val) applyCustomColor()
 })
 
-/* ---------- fermer si clic extérieur ---------- */
 function handleClickOutside(e: MouseEvent) {
      if (pickerContainer.value && !pickerContainer.value.contains(e.target as Node)) isOpen.value = false
 }
