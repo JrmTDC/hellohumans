@@ -1,12 +1,9 @@
 <template>
-     <div id="conversation-group" ref="chatContainer" v-auto-animate class="w-full overflow-y-auto bg-white transition-all duration-300 min-h-[160px] px-[24px] flex-[1_1_auto] max-h-[487px]">
-
+     <div id="conversation-group" ref="chatContainer" v-auto-animate class="w-full overflow-y-auto bg-white transition-all duration-300 min-h-[160px] px-[24px] flex-[1_1_auto] max-h-[487px] h-screen">
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
-
                     <!-- Affichage du message d'introduction -->
-                    <button v-if="!showPreviousMessages" @click="onShowHistory" class="mx-auto mb-[20px] flex items-center bg-white tracking-[-0.1px] text-center text-[12px] font-semibold text-[rgb(136,148,171)] rounded-[14px] border border-[rgba(136,148,171,0.24)] pr-[10px]">
-                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px]"/>
-                         Messages précédents
+                    <button v-if="!showPreviousMessages" @click="!previewMode && onShowHistory" class="mx-auto mb-[20px] flex items-center bg-white tracking-[-0.1px] text-center text-[12px] font-semibold text-[rgb(136,148,171)] rounded-[14px] border border-[rgba(136,148,171,0.24)] pr-[10px]">
+                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px]"/> Messages précédents
                     </button>
 
                <!-- Boucle sur tous les messages filteredMessages -->
@@ -17,7 +14,7 @@
 
                          <!-- Si le message contient des choices, on affiche des boutons -->
                          <div v-if="msg.choices" class="mt-2 flex flex-wrap gap-2">
-                              <button v-for="(choice, index) in msg.choices" :key="choice" @mouseover="hoverIndex = index" @mouseleave="hoverIndex = null" class="px-3 py-2 border rounded cursor-pointer hover:text-white" :style="{ background: hoverIndex === index ? chatStore.configChat.backgroundColor : '' }" @click="$emit('choiceSelected', choice)">{{ choice }}</button>
+                              <button v-for="(choice, index) in msg.choices" :key="choice" @mouseover="hoverIndex = index" @mouseleave="hoverIndex = null" class="px-3 py-2 border rounded cursor-pointer hover:text-white" :style="{ background: hoverIndex === index ? chatStore.configChat.backgroundColor : '' }" @click="!previewMode && $emit('choiceSelected', choice)">{{ choice }}</button>
                          </div>
                     </div>
                     <!-- Affichage de la date sous le dernier message visible -->
@@ -205,6 +202,10 @@ function formatDate(msg: ChatMessage): string {
 // Met à jour la scrollbar custom
 function updateScrollbar() {
      if (!chatContainer.value || !customScrollbar.value) return;
+
+     const props = defineProps<{
+          previewMode: boolean;
+     }>();
 
      const scrollHeight = chatContainer.value.scrollHeight;
      const scrollTop = chatContainer.value.scrollTop;

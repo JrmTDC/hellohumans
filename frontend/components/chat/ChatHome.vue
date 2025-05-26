@@ -4,16 +4,9 @@
           <template v-if="suggestedQuestions.length">
                <div class="flex w-full rounded-[12px] border border-[rgb(226,232,239)] overflow-y-hidden mb-[16px]">
                     <div class="flex flex-col items-center w-full bg-white max-h-[250px] overflow-y-auto">
-                         <template
-                              v-for="(question, index) in suggestedQuestions"
-                              :key="index">
-                              <button
-                                   @click="$emit('sendSuggestedMessage', question.id)"
-                                   class="flex items-center justify-between w-full bg-transparent px-[16px] py-[16px] gap-[8px]"
-                              >
-                                <span class="text-[15px] font-normal text-left text-[rgb(6,19,43)] overflow-hidden text-ellipsis line-clamp-3">
-                                  {{ question.label }}
-                                </span>
+                         <template v-for="(question, index) in suggestedQuestions" :key="index">
+                              <button @click="!previewMode && $emit('sendSuggestedMessage', question.label)" class="flex items-center justify-between w-full bg-transparent px-[16px] py-[16px] gap-[8px]">
+                                   <span class="text-[15px] font-normal text-left text-[rgb(6,19,43)] overflow-hidden text-ellipsis line-clamp-3">{{ question.label }}</span>
                                    <svgo-chat-icon-next class="w-[20px] h-[20px]"/>
                               </button>
                               <hr v-if="index !== suggestedQuestions.length - 1" class="w-[calc(100%-32px)] border-b border-b-[rgb(226,232,239)] mx-[16px] my-0" />
@@ -23,7 +16,7 @@
           </template>
 
           <!-- Bouton Chat avec nous -->
-          <button @click="$emit('openChat')" class="flex px-4 py-3 items-center gap-2 w-full rounded-xl border border-[#e2e8ef] bg-white hover:bg-[#EFF2F6] z-20">
+          <button @click="!previewMode && $emit('openChat')" class="flex px-4 py-3 items-center gap-2 w-full rounded-xl border border-[#e2e8ef] bg-white hover:bg-[#EFF2F6] z-20">
                <div class="flex flex-col items-start gap-[2px] flex-grow">
                     <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
                     <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
@@ -46,12 +39,7 @@
                </button>
 
                <!-- Chat -->
-               <button
-                    @click="$emit('openChat')"
-                    @mouseover="isHovered = true"
-                    @mouseleave="isHovered = false"
-                    class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700"
-               >
+               <button @click="!previewMode && $emit('openChat')" @mouseover="isHovered = true" @mouseleave="isHovered = false" class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700">
                     <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? chatStore.configChat.actionColor : '' }" />
                     <span class="text-sm">Discuter</span>
                </button>
@@ -69,12 +57,7 @@ const suggestedQuestions = computed(() =>
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
 const isHovered = ref(false);
 
-const props = defineProps({
-     previewMode: {
-          type: Boolean,
-          default: false
-     }
-});
-const previewMode = computed(() => props.previewMode);
-
+const props = defineProps<{
+     previewMode: boolean;
+}>();
 </script>

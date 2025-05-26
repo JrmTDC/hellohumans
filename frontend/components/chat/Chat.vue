@@ -43,6 +43,7 @@
                     @goToHome="goToHome"
                     @toggleChat="toggleChat"
                     @toggleOptions="toggleOptions"
+                    :previewMode="previewMode"
                />
 
                <div class="relative z-10">
@@ -61,6 +62,7 @@
                     :isLoading="isLoading"
                     :isChatActive="isChatActive"
                     @choiceSelected="onChoiceSelected"
+                    :previewMode="previewMode"
                />
 
                <ChatInput
@@ -75,6 +77,7 @@
                     :isLoading="onLoadingRGPD"
                     @accept="onAcceptRGPD"
                     @close="onCloseRGPD"
+                    :previewMode="previewMode"
                />
 
                <ChatOptions
@@ -86,6 +89,7 @@
                     @toggleExpend="toggleExpend"
                     @clearChatAndClose="clearChatAndClose"
                     @closeOptions="showOptions = false"
+                    :previewMode="previewMode"
                />
           </div>
      </div>
@@ -110,7 +114,7 @@ type ChatMessage = {
 const chatStore = useChatStore()
 
 const props = defineProps<{
-     previewMode?: boolean
+     previewMode: boolean
      forcedState?: 'minimal' | 'home' | 'conversation' | 'modal'
      projectPublicKey?: string
 }>()

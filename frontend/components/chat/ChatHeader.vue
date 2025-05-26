@@ -6,17 +6,10 @@
                </div>
                <div v-else>
                     <div class="flex space-x-2 items-center">
-                         <button
-                              @click="$emit('goToHome')"
-                              class="hhcss_btnOption group ml-[-15px]"
-                         >
+                         <button @click="!previewMode && $emit('goToHome')" class="hhcss_btnOption group ml-[-15px]">
                               <svgo-chat-icon-back class="w-[24px] h-[24px]" :style="{ fill: chatStore.configChat.textColor }"/>
 
-                              <span
-                                   class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] start-full ms-[10px] translate-x-[-5px] translate-y-[-50%] opacity-0 group-hover:opacity-100"
-                              >
-              Retour
-            </span>
+                              <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] start-full ms-[10px] translate-x-[-5px] translate-y-[-50%] opacity-0 group-hover:opacity-100">Retour</span>
                          </button>
                          <svgo-chat-logo-hello-humans-mini class="w-[24px] h-[27px]" :style="{ fill: chatStore.configChat.textColor }"/>
                          <div class="flex space-x-2 items-center">
@@ -28,24 +21,16 @@
                <div class="flex">
                     <!-- Open options -->
 
-                    <button @click.stop="$emit('toggleOptions')" class="hhcss_btnOption group">
+                    <button @click.stop="!previewMode && $emit('toggleOptions')" class="hhcss_btnOption group">
                          <svgo-chat-icon-option class="w-[24px] h-[24px]" :style="{ fill: chatStore.configChat.textColor }"/>
-                         <span
-                              v-if="!showOptions"
-                              class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100"
-                         >Ouvrir les options</span>
-                         <span
-                              v-else
-                              class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100"
-                         >Fermer les options</span>
+                         <span v-if="!showOptions" class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100">Ouvrir les options</span>
+                         <span v-else class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100">Fermer les options</span>
                     </button>
 
                     <!-- Minimize -->
-                    <button @click="$emit('toggleChat')" class="hhcss_btnOption group mr-[-15px]">
+                    <button @click="!previewMode && $emit('toggleChat')" class="hhcss_btnOption group mr-[-15px]">
                          <svgo-chat-icon-minimize class="w-[24px] h-[24px]" :style="{ fill: chatStore.configChat.textColor }"/>
-                         <span
-                              class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100"
-                         >Réduire</span>
+                         <span class="bg-white px-2 py-[6px] rounded shadow-lg text-[13px] absolute pointer-events-none whitespace-nowrap transition-[opacity,transform] duration-[160ms] ease-in-out z-1 top-1/2 text-[#06132B] end-full me-[10px] translate-x-[5px] translate-y-[-50%] opacity-0 group-hover:opacity-100">Réduire</span>
                     </button>
                </div>
           </div>
@@ -75,6 +60,7 @@ const props = defineProps<{
      isOpen: boolean;
      notificationSnoozed: boolean;
      showOptions: boolean;
+     previewMode: boolean;
 }>();
 
 const emits = defineEmits([
