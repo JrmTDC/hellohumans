@@ -2,9 +2,8 @@
      <div
           v-if="isReady"
           id="hellohumans-chat-iframe"
-          :class="[previewMode ? 'relative static w-full h-auto scale-100 opacity-100' : 'fixed inset-[auto_0_0_auto] z-[999999999] bg-transparent border-none',wrapperWidth ]"
-          :style="previewMode ? wrapperStylePreview : wrapperStyle"
-     >
+          :class="[previewMode ? 'relative h-full static w-full h-auto scale-100 opacity-100' : 'fixed inset-[auto_0_0_auto] z-[999999999] bg-transparent border-none',wrapperWidth ]"
+          :style="previewMode ? wrapperStylePreview : wrapperStyle">
           <!-- bubble -->
           <div class="fixed right-0 bottom-[12px] w-[112px] h-[140px] flex items-center justify-center pointer-events-none z-[1]">
                <button
@@ -138,7 +137,7 @@ const optionsBox = ref<HTMLElement | null>(null)
 
 /* ----- size handling ----- */
 const chatContent = ref<HTMLElement | null>(null)
-const wrapperH = ref(140)
+const wrapperH = ref(0)
 
 const wrapperWidth = computed(() =>
      isVisible.value ? (isExpanded.value ? 'w-[593px]' : 'w-[372px]') : 'w-[112px]'
@@ -149,17 +148,19 @@ const wrapperStyle = computed(() => ({
      transition: 'height .25s ease'
 }))
 const wrapperStylePreview = computed(() => ({
-     height: `${wrapperH.value}px`,
-     maxHeight: isVisible.value ? 'calc(100% - 115px)' : '140px',
+     height: '100%',
+     maxHeight: '100%',
      transition: 'height .25s ease'
 }))
-function resizeToContent() {
+
+function resizeToContent () {
      if (!chatContent.value) return
-     const real = chatContent.value.scrollHeight
-     const min = isChatActive.value ? 747 : 469
-     const max = window.innerHeight - 73 /* 47 + 26 */
-     wrapperH.value = Math.min(Math.max(real, min), max)
+
+     const contentHeight = chatContent.value.scrollHeight
+     const windowHeight = window.innerHeight
+     wrapperH.value = Math.min(contentHeight + 40, windowHeight - 150) // padding de sécurité
 }
+
 async function applyForcedState(value: typeof props.forcedState) {
      if (!props.previewMode) return
 
@@ -215,7 +216,10 @@ onMounted(async () => {
           isOpen.value = true
           isVisible.value = true
      }
-     await nextTick(resizeToContent)
+     await nextTick(() => {
+          resizeToContent()
+          setTimeout(resizeToContent, 500)
+     })
 
      const ro = new ResizeObserver(resizeToContent)
      chatContent.value && ro.observe(chatContent.value)

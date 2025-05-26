@@ -1,20 +1,36 @@
 <template>
-     <Draggable v-model="modelValue" item-key="id" tag="div" handle=".drag-handle" :component-data="{ class: 'w-full space-y-[8px]' }" @end="onSorted">
-          <template #item="{ element }">
-               <slot name="item" :item="element" />
-          </template>
+     <Draggable :list="list"
+     item-key="id"
+     handle=".drag-handle"
+     tag="div"
+     :animation="180"
+     class="w-full space-y-[8px]"
+     ghost-class="drag-ghost"
+     @end="emitSorted"
+     >
+     <!-- La racine du slot DOIT avoir la key -->
+     <template #item="{ element }">
+          <PanelCommonSuggestionItem
+               :key="element.id"
+               :item="element"
+               @delete="id => $emit('delete', id)"
+          />
+     </template>
      </Draggable>
 </template>
+
 <script setup lang="ts">
 import Draggable from 'vuedraggable'
-const props = defineProps<{ modelValue: any[] }>()
-const emit = defineEmits(['update:modelValue', 'sorted'])
-const modelValue = computed({
-     get: () => props.modelValue,
-     set: (v) => emit('update:modelValue', v),
-})
 
-function onSorted() {
-     emit('sorted', [...modelValue.value])
+const props = defineProps<{ list: any[] }>()
+const emit  = defineEmits(['update:list', 'sorted', 'delete'])
+
+function emitSorted () {
+     emit('sorted', props.list)
+     emit('update:list', props.list)   // garde le parent synchronisé
 }
 </script>
+
+<style scoped>
+.drag-ghost { opacity: 0.4; }
+</style>

@@ -60,14 +60,14 @@
                                                             <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
                                                                  <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">En-tête</label>
                                                                  <div class="w-full">
-                                                                      <textarea class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]">Bonjour 👋</textarea>
+                                                                      <textarea v-model="chatStore.configChat.welcomeTitle" class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]"></textarea>
                                                                  </div>
                                                             </div>
 
                                                             <div class="mt-[20px] flex flex-col gap-[12px] justify-start items-start" :class="[' xl:flex-row']">
                                                                  <label class="pt-0 flex-[0_0_100%] min-w-[145px] max-w-full xl:pt-[8px] xl:flex-[1_0_145px] xl:max-w-[min(180px,12vw)] text-[14px]">Message</label>
                                                                  <div class="w-full">
-                                                                      <textarea class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]">Bienvenue sur le site de l'Office de Tourisme, Avez vous besoin d’aider ?</textarea>
+                                                                      <textarea v-model="chatStore.configChat.welcomeMessage" class="h-[78px] bg-white border-2 border-[#d3dbe5] rounded-[8px] box-border font-normal outline-none relative select-text w-full px-[12px] pr-[12px] pb-[6px] pt-[6px] text-[14px] leading-[18px] tracking-[-0.01em] focus:border-[#0566ff]"></textarea>
                                                                  </div>
                                                             </div>
 
@@ -77,11 +77,12 @@
                                                                  <div class="w-full">
 
                                                                       <div class="w-full flex flex-col mb-[8px]">
-                                                                           <PanelCommonDragList v-model="chatStore.suggestions" @sorted="chatStore.saveOrder">
-                                                                                <template #item="{ item }">
-                                                                                     <PanelCommonSuggestionItem :key="item.id" :item="item" @delete="chatStore.removeSuggestion" />
-                                                                                </template>
-                                                                           </PanelCommonDragList>
+                                                                           <PanelCommonDragList
+                                                                                :list="chatStore.suggestions"
+                                                                                @update:list="chatStore.suggestions = $event"
+                                                                                @sorted="chatStore.saveOrder"
+                                                                                @delete="chatStore.removeSuggestion"
+                                                                           />
                                                                       </div>
                                                                       <button @click="chatStore.addSuggestion" class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] cursor-pointer">
                                                                            <SvgoPanelSettingsIconAdd class="ml-[-2px] mr-[6px] fill-[#080f1a] h-[20px] w-[20px]"/>Ajouter nouveau
@@ -100,24 +101,38 @@
                                              </div>
                                         </div>
 
-                                        <div class="self-stretch relative pl-0 rounded-[6px] w-[450px] min-w-[450px] 2xl:w-[416px] 2xl:min-w-[416px]">
-                                             <div class="absolute inset-0 z-0 bg-repeat pointer-events-none" :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }"/>
-                                             <div class="relative z-10 flex flex-col justify-between h-full min-h-[628px]">
-                                                  <div class="sticky top-0 items-center bg-white text-[rgb(100,116,145)] pt-[15px] px-[20px] pb-0 rounded-tr-[6px] z-[999999999999]">
+                                        <div class="sticky top-[24px] self-start relative pl-0 rounded-[6px] w-[450px] min-w-[450px] 2xl:w-[416px] 2xl:min-w-[416px] h-[calc(100vh-48px)]">
+                                             <div
+                                                  class="absolute inset-0 z-0 bg-repeat pointer-events-none"
+                                                  :style="{ backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 500px), url('${backgroundSettingChat}')` }"
+                                             />
+
+                                             <!-- ✅ Conteneur sticky avec preview chat -->
+                                             <div class="relative z-10 flex flex-col h-full max-h-full">
+                                                  <!-- Bandeau dropdown -->
+                                                  <div class="sticky top-0 z-[2] bg-white text-[rgb(100,116,145)] pt-[15px] px-[20px] pb-0 rounded-tr-[6px]">
                                                        <div class="flex items-center">
                                                             <label class="inline-block font-normal max-w-full">Aperçu&nbsp;:</label>
-                                                            <div class="mb-0 text-left relative ml-[4px] z-[999999999999]">
+                                                            <div class="mb-0 text-left relative ml-[4px]">
                                                                  <PanelCommonDropdownSelect v-model="selected" :items="options" />
                                                             </div>
                                                        </div>
                                                   </div>
-                                                  <div class="relative flex-1">
-                                                       <div class="sticky bottom-[24px] top-[115px] mx-auto w-[450px] 2xl:w-[416px]">
-                                                            <Chat :previewMode="true" :forcedState="selected" :projectPublicKey="panelStore.project?.public_key"/>
-                                                       </div>
+
+                                                  <!-- Chat sticky à droite -->
+                                                  <div class="flex-1 flex items-end justify-center px-[10px] pb-[24px] pt-[30px] overflow-hidden">
+                                                       <Chat
+                                                            class="w-full max-w-[416px] h-full"
+                                                            :previewMode="true"
+                                                            :forcedState="selected"
+                                                            :projectPublicKey="panelStore.project?.public_key"
+                                                       />
                                                   </div>
                                              </div>
                                         </div>
+
+
+
                                    </div>
                               </div>
                          </div>

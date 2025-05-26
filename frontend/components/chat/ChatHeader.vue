@@ -20,8 +20,7 @@
                          </button>
                          <svgo-chat-logo-hello-humans-mini class="w-[24px] h-[27px]" :style="{ fill: chatStore.configChat.textColor }"/>
                          <div class="flex space-x-2 items-center">
-                              <span :style="{ color: chatStore.configChat.textColor }">Bonjour !</span>
-                              <svgo-chat-emoji-hello class="w-[15px] h-[15px]"/>
+                              <span :style="{ color: chatStore.configChat.textColor }">{{ chatStore.configChat.welcomeTitle }}</span>
                          </div>
                     </div>
                </div>
@@ -54,11 +53,10 @@
           <!-- Titre si accueil -->
           <div v-if="!isChatActive" class="mt-[28px] text-white text-[32px] font-medium leading-[40px] gap-[12px] flex flex-col mb-[40px]">
                <div class="flex flex-row justify-start items-center" :style="{ color: chatStore.configChat.textColor }">
-                    Bonjour !
-                    <svgo-chat-emoji-hello class="w-[27px] h-[27px] ml-[10px]"/>
+                    {{ chatStore.configChat.welcomeTitle }}
                </div>
                <div class="text-white text-[15px] font-normal leading-[20px]" :style="{ color: chatStore.configChat.textColor }">
-                    Bienvenue sur le site de l'Office de Tourisme, Avez vous besoin d’aider ?
+                    {{ chatStore.configChat.welcomeMessage }}
                </div>
           </div>
 
