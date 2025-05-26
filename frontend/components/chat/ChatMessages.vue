@@ -1,10 +1,5 @@
 <template>
-     <div
-          id="conversation-group"
-          ref="chatContainer"
-          v-auto-animate
-          class="w-full overflow-y-auto bg-white transition-all duration-300 min-h-[160px] px-[24px] flex-[1_1_auto] max-h-[487px]"
-     >
+     <div id="conversation-group" ref="chatContainer" v-auto-animate class="w-full overflow-y-auto bg-white transition-all duration-300 min-h-[160px] px-[24px] flex-[1_1_auto] max-h-[487px]">
 
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
 
@@ -105,6 +100,8 @@ const filteredMessages = computed(() => {
 let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
+
+     const chatStore = useChatStore();
      chatStore.loadMessagesFromStorage()
      const lastMessage = props.messages[props.messages.length - 1]
      const now = Date.now()

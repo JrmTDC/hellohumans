@@ -59,7 +59,7 @@ export const useChatStore = defineStore('chat', () => {
           const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
 
           if (Array.isArray(data.messages))       messages.value      = data.messages
-          if (Array.isArray(data.suggestions))    suggestions.value   = data.suggestions
+          if (Array.isArray(data.config.suggestedQuestions))    suggestions.value   = data.config.suggestedQuestions
      }
 
      function updateStorage (partial: Record<string, any>) {
@@ -98,6 +98,15 @@ export const useChatStore = defineStore('chat', () => {
           projectPublicKey.value = key
      }
 
+     function parseSuggestedQuestionsFromConfig(list: string[]): Suggestion[] {
+          return list.map((label, index) => ({
+               id: crypto.randomUUID(),
+               label,
+               enabled: true,
+               order: index,
+          }))
+     }
+
      // --- Récupération projet ---
      async function fetchChatProject() {
           const { apiFetch } = useChatApi()
@@ -110,6 +119,10 @@ export const useChatStore = defineStore('chat', () => {
                configChat.textColor = project.value?.config.textColor || '#ffffff'
                configChat.actionColor = project.value?.config.actionColor || '#0566ff'
                configChat.isCustomBackground = project.value?.config.isCustomBackground || false
+               if (Array.isArray(configChat.suggestedQuestions)) {
+                    suggestions.value = parseSuggestedQuestionsFromConfig(configChat.suggestedQuestions)
+               }
+
                return true
           } catch (err: any) {
                return false

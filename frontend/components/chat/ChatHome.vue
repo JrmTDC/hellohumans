@@ -8,11 +8,11 @@
                               v-for="(question, index) in suggestedQuestions"
                               :key="index">
                               <button
-                                   @click="$emit('sendSuggestedMessage', question)"
+                                   @click="$emit('sendSuggestedMessage', question.id)"
                                    class="flex items-center justify-between w-full bg-transparent px-[16px] py-[16px] gap-[8px]"
                               >
                                 <span class="text-[15px] font-normal text-left text-[rgb(6,19,43)] overflow-hidden text-ellipsis line-clamp-3">
-                                  {{ question }}
+                                  {{ question.label }}
                                 </span>
                                    <svgo-chat-icon-next class="w-[20px] h-[20px]"/>
                               </button>
@@ -60,7 +60,7 @@
 </template>
 <script setup lang="ts">
 const chatStore = useChatStore();
-const suggestedQuestions = computed(() => chatStore.suggestions.value)
+const suggestedQuestions = computed(() => chatStore.suggestions)
 
 const emits = defineEmits(['sendSuggestedMessage', 'openChat']);
 const isHovered = ref(false);
