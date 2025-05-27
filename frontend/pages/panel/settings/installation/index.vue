@@ -96,7 +96,7 @@ import iconInstallationWordpress from "assets/icons/panel/settings/iconInstallat
 
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-
+const panelStore = usePanelStore()
 
 onMounted(async () => {
      layoutLoadingPanel.value = false
@@ -123,7 +123,7 @@ const installationGuides = [
           label: 'Wordpress'
      }
 ]
-const embedCode = `<script src="//code.hellohumans.fr/xxx.js" async><\/script>`
+const embedCode = `<script src="//code.hellohumans.fr/${panelStore.project.public_key}.js" async><\/script>`
 function copyToClipboard() {
      const { copy } = useClipboard(embedCode)
      copy().then(() => {
