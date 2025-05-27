@@ -15,8 +15,7 @@
                                         <div class="flex flex-col justify-start items-stretch w-full  mr-[20px]">
 
                                              <div class="flex flex-col justify-start items-stretch mb-[20px]" >
-                                                  <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">Traductions</h2>
-                                                  <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)] max-w-[750px]">Activez autant de langues que vous le souhaitez et ajoutez celles dont vous avez besoin. Le widget s'adaptera à la langue du navigateur par défaut des utilisateurs. Pour ajouter une nouvelle traduction, sélectionnez-la dans la liste déroulante.</p>
+                                                  <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em]">Préférences</h2>
                                              </div>
 
 
