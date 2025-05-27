@@ -34,14 +34,14 @@
                     <div class="flex flex-col justify-start items-[normal] max-w-[750px] pt-0 pb-[32px]">
                          <!-- Sélecteur de style de communication -->
 
-                         <PanelCommonCustomSelect v-model="selectedStyle" :options="communicationStyles" option-key="value" option-label="label" placeholder="Sélectionnez un style de communication" dropdown-class="min-w-[581px] max-w-[256px]" @change="handleStyleChange" label="Style de communication">
+                         <PanelCommonSelectField v-model="selectedStyle" :options="communicationStyles" option-key="value" option-label="label" placeholder="Sélectionnez un style de communication" dropdown-class="min-w-[581px] max-w-[256px]" @change="handleStyleChange" label="Style de communication">
                               <template #option="{ option }">
                                    <div class="flex flex-col">
                                         <span class="text-[14px] leading-[18px]">{{ option.label }}</span>
                                         <span v-if="option.description" class="text-[12px] text-[rgb(100,116,145)] mt-1">{{ option.description }}</span>
                                    </div>
                               </template>
-                         </PanelCommonCustomSelect>
+                         </PanelCommonSelectField>
 
                          <hr class="w-full border-t border-t-[rgb(239,242,246)] mt-[20px] mb-0">
                          <!-- Toggle Liens "En savoir plus" -->

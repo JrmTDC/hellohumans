@@ -5,7 +5,7 @@
                <!-- Éléments du haut -->
                <li v-for="item in topItems" >
                     <PanelCommonTooltip :text="item.tooltip" left-ajust="-10" placement="right" variant="blue" uppercase >
-                         <NuxtLink v-if="item.type === 'link'" :to="item.routeURL" :class="{ 'text-white bg-[#dce9ff]': route.path.startsWith(item.routeURL)}" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef]">
+                         <NuxtLink v-if="item.type === 'link'" :to="item.routeURL" :class="{ 'text-white bg-[#dce9ff]': route.path.startsWith(item.routeURL)}" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef] outline-none">
                               <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px]" />
                               </span>

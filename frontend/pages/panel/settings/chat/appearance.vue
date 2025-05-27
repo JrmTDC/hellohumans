@@ -37,10 +37,6 @@
                                                        <div class="mt-[20px]">
                                                             <PanelChatColorPicker type="actionColors" v-model="chatStore.configChat.actionColor" label="Couleur de l'action"  />
                                                        </div>
-
-
-
-
                                                   </div>
                                              </PanelSettingsExpandableSection>
 

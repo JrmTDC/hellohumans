@@ -12,6 +12,8 @@ import MenuChat from "assets/icons/panel/settings/iconMenuChat.svg";
 import MenuAppearance from "assets/icons/panel/settings/iconMenuAppearance.svg";
 import MenuSetup from "assets/icons/panel/settings/iconMenuSetup.svg";
 import MenuTranslation from "assets/icons/panel/settings/iconMenuTranslation.svg";
+import MenuBilling from "assets/icons/panel/settings/iconMenuBilling.svg";
+import MenuPreferences from "assets/icons/panel/settings/iconMenuPreferences.svg";
 
 const menuGroups = ref([
      {
@@ -19,8 +21,8 @@ const menuGroups = ref([
           name: t('panel.components.settingsChildSideMenu.menuGroups.chat')
      },
      {
-          id: 'settings',
-          name: t('panel.components.settingsChildSideMenu.menuGroups.settings')
+          id: 'projects',
+          name: 'Projet'
      }
 ])
 const menuItems = ref([
@@ -36,12 +38,23 @@ const menuItems = ref([
           disabled: false
      },
      {
-          id: 'teste',
-          group:'settings',
+          id: 'project-billing',
+          group:'projects',
           type: 'link',
-          icon: rawIcon(MenuAppearance),
-          routeURL: '/panel/',
-          name: t('panel.components.settingsChildSideMenu.settings.teste'),
+          icon: rawIcon(MenuBilling),
+          routeURL: '/panel/settings/billing/subscription',
+          name: 'Facturation',
+          isActive: undefined,
+          beta: false,
+          disabled: false
+     },
+     {
+          id: 'project-settings',
+          group:'projects',
+          type: 'link',
+          icon: rawIcon(MenuPreferences),
+          routeURL: '/panel/settings/preferences',
+          name: 'Préférances',
           isActive: undefined,
           beta: false,
           disabled: false
@@ -57,13 +70,13 @@ const menuSubs = ref([
      {
           sub: 'chat',
           icon: rawIcon(MenuSetup),
-          routeURL: '/panel/',
+          routeURL: '/panel/settings/installation',
           name: t('panel.components.settingsChildSideMenu.chat.installa'),
      },
      {
           sub: 'chat',
           icon: rawIcon(MenuTranslation),
-          routeURL: '/panel/',
+          routeURL: '/panel/settings/translations',
           name: t('panel.components.settingsChildSideMenu.chat.translations'),
      },
 ])
