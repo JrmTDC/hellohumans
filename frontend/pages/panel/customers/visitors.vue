@@ -22,7 +22,7 @@
                                                   </div>
                                                   <div class="flex items-start">
                                                        <SvgoPanelCustomersIconChecked class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] mr-[16px] fill-[#34b857]"/>
-                                                       <p class="mt-0 mb-0 font-normal text-[18px] leading-[23px] tracking-[-0.01em]">Analyser les conversations .</p>
+                                                       <p class="mt-0 mb-0 font-normal text-[18px] leading-[23px] tracking-[-0.01em]">Analyser les conversations.</p>
                                                   </div>
                                                   <div class="flex items-start">
                                                        <SvgoPanelCustomersIconChecked class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] mr-[16px] fill-[#34b857]"/>
@@ -40,11 +40,22 @@
                </div>
           </div>
      </div>
+     <div class="absolute left-0 bottom-[56px] w-full flex items-center justify-center z-[620]">
+          <div class="flex flex-row justify-start items-center px-[24px] py-[20px] bg-white rounded-[8px] shadow-[0_12px_32px_rgba(0,20,51,0.12)]">
+               <SvgoPanelCustomersIconInfo class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(100,116,145)]" />
+               <div class="ml-[16px] max-w-[450px]">
+                    <b>Aucun visiteur actif pour le moment. </b> La liste est mise à jour automatiquement dès qu’un visiteur accède à votre site. Vous pouvez en simuler un.
+               </div>
+               <button @click="simulateVisitor" class="inline-flex items-center justify-center align-middle select-none whitespace-nowrap text-center cursor-pointer bg-[#0566ff] border border-[#0566ff] text-white rounded-[8px] text-[14px] font-normal leading-[18px] h-[38px] min-w-[64px] px-[16px] py-0 mb-0 touch-manipulation hover:bg-[#0049bd] hover:border-[#0049bd] hover:text-white focus:outline-none focus:ring-[0.2em] focus:ring-[rgba(5,102,255,0.5)] px-[14px] h-[34px] ml-[16px]">
+                    <span>Simuler un visiteur</span>
+               </button>
+          </div>
+     </div>
 </template>
 <script setup lang="ts">
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-
+const panelStore = usePanelStore()
 onMounted(async () => {
      layoutLoadingPanel.value = false
 })
@@ -52,5 +63,11 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel'
 })
+
+function simulateVisitor() {
+     const url = '/panel/simulateVisitor?projectPublicKey=' + panelStore.project?.public_key
+     const features = 'width=800,height=680,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes'
+     window.open(url, '_blank', features)
+}
 
 </script>
