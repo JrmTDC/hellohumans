@@ -96,21 +96,6 @@
 </template>
 
 <script setup lang="ts">
-type ChatMessage = {
-     id: string
-     idFromServer?: string
-     type: string
-     sender: 'visitor' | 'bot'
-     content: string
-     time_sent: number
-     isAIAssistant?: boolean
-     aiAssistantResponseType?: string
-     questionMessageId?: string | null
-     disableTextInput?: boolean
-     choices?: string[]
-     status?: 'success' | 'unavailable'
-}
-
 const chatStore = useChatStore()
 
 const props = defineProps<{
@@ -138,6 +123,7 @@ const showRGPDModal = ref(false)
 const onLoadingRGPD = ref(false)
 const pendingMessage = ref<string | null>(null)
 const optionsBox = ref<HTMLElement | null>(null)
+const hhs_isp_chat = computed(() => chatStore.storageData)
 
 /* ----- size handling ----- */
 const chatContent = ref<HTMLElement | null>(null)
@@ -181,40 +167,13 @@ async function applyForcedState(value: typeof props.forcedState) {
           showRGPDModal.value = false
      }
 }
-
-/* ----- lifecycle ----- */
 onMounted(async () => {
-     await chatStore.fetchChatProject()
-     isReady.value = true
-
-     const raw = localStorage.getItem('hhs_isp_chat')
-     if (raw) {
-          try {
-               const parsed = JSON.parse(raw)
-               if (Array.isArray(parsed.messages)) {
-                    // normalisation : text -> content
-                    messages.value = parsed.messages.map((m: any) => ({
-                         id:          m.id || crypto.randomUUID(),
-                         type:        m.type || 'text',
-                         sender:      m.sender || 'bot',
-                         content:     m.content ?? m.text ?? '',
-                         time_sent:   m.time_sent || Date.now(),
-                         status:      m.status,
-                         choices:     m.choices || [],
-                         // autres champs si présents :
-                         idFromServer:           m.idFromServer,
-                         isAIAssistant:          m.isAIAssistant,
-                         aiAssistantResponseType:m.aiAssistantResponseType,
-                         questionMessageId:      m.questionMessageId,
-                         disableTextInput:       m.disableTextInput
-                    })) as ChatMessage[]
-               }
-               if (typeof parsed.notificationSnoozed === 'boolean')
-                    notificationSnoozed.value = parsed.notificationSnoozed
-          } catch {
-
-          }
+     if (!props.previewMode) {
+          chatStore.loadFromStorage()
      }
+     await chatStore.fetchChatProject()
+
+     isReady.value = true
 
      if (props.previewMode) {
           isOpen.value = true
@@ -261,9 +220,8 @@ function toggleExpend() {
 }
 function toggleNotifications() {
      notificationSnoozed.value = !notificationSnoozed.value
-     const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-     data.notificationSnoozed = notificationSnoozed.value
-     localStorage.setItem('hhs_isp_chat', JSON.stringify(data))
+     chatStore.updateStorage({ notificationSnoozed: notificationSnoozed.value })
+
 }
 function goToHome() {
      isChatActive.value = false
@@ -282,9 +240,8 @@ function sendSuggestedMessage(q: string) {
 
 async function sendMessage() {
      if (props.previewMode || !message.value.trim()) return
-
-     const local = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-     if (!local.visitor?.gdprConsent) {
+     if (!hhs_isp_chat.value.visitor?.gdprConsent) {
+          console.log('[Chat] RGPD consent not given, showing modal')
           pendingMessage.value = message.value
           showRGPDModal.value = true
           return
@@ -306,8 +263,7 @@ async function sendMessage() {
                }
           } else {
                const content = res?.message
-               const localCfg = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-               if (!localCfg.notificationSnoozed) playNotificationSound()
+               if (!hhs_isp_chat.value.notificationSnoozed) playNotificationSound()
                if (content && content.choices?.length) disableInput.value = true
           }
 

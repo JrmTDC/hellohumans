@@ -45,11 +45,14 @@ interface Visitor {
 }
 
 export const useChatStore = defineStore('chat', () => {
+     const panelStore = usePanelStore()
      const project = ref<Project | null>(null)
      const visitor = ref<Visitor | null>(null)
      const projectPublicKey = ref<string | null>(null)
      const messages = ref<ChatMessage[]>([])
      const suggestions = ref<Suggestion[]>([])
+     const hasLoadedStorage = ref(false)
+     const storageData = ref<Record<string, any>>(getStorageData())
 
      const configChat = reactive<ChatConfig>({
           name: 'HelloHumans',
@@ -62,6 +65,21 @@ export const useChatStore = defineStore('chat', () => {
           isCustomBackground: false
      })
 
+     function getStorageData(): Record<string, any> {
+          const key = `hhs_isp_chat_${panelStore.project?.public_key || 'default'}`
+          try {
+               return JSON.parse(localStorage.getItem(key) || '{}')
+          } catch {
+               return {}
+          }
+     }
+
+     function setStorageData(data: Record<string, any>) {
+          const key = `hhs_isp_chat_${panelStore.project?.public_key || 'default'}`
+          localStorage.setItem(key, JSON.stringify(data))
+          storageData.value = data
+     }
+
      function parseSuggestedQuestionsFromConfig(list: string[]): Suggestion[] {
           return list.map((label, index) => ({
                id: crypto.randomUUID(),
@@ -72,21 +90,22 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      function updateStorage(partial: Record<string, any>) {
-          const existing = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-          localStorage.setItem('hhs_isp_chat', JSON.stringify({ ...existing, ...partial }))
+          const merged = { ...storageData.value, ...partial }
+          setStorageData(merged)
      }
 
      function loadFromStorage() {
-          const data = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
+          const data = getStorageData()
+          storageData.value = data
 
-          if (Array.isArray(data.messages)) {
-               messages.value = data.messages
-          }
-
+          if (Array.isArray(data.messages)) messages.value = data.messages
           if (Array.isArray(data.suggestions)) {
                suggestions.value = data.suggestions
                configChat.suggestedQuestions = data.suggestions.map((s: Suggestion) => s.label)
           }
+          if (data.visitor) visitor.value = data.visitor
+
+          hasLoadedStorage.value = true
      }
 
      function addSuggestion() {
@@ -111,13 +130,13 @@ export const useChatStore = defineStore('chat', () => {
           suggestions.value.splice(
                0,
                suggestions.value.length,
-               ...ordered.map((s, i) => ({ ...s, order: i }))
+               ...ordered.map((s, i) => ({...s, order: i}))
           )
      }
 
      function clearMessages() {
           messages.value = []
-          updateStorage({ messages: [], suggestions: suggestions.value })
+          updateStorage({messages: [], suggestions: suggestions.value})
      }
 
      function setProjectPublicKey(key: string | null) {
@@ -125,8 +144,9 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      async function fetchChatProject() {
-          const { apiFetch } = useChatApi()
+          const {apiFetch} = useChatApi()
           try {
+
                const projectRes = await apiFetch('/project')
                project.value = projectRes.success.project || null
 
@@ -143,7 +163,7 @@ export const useChatStore = defineStore('chat', () => {
      }
 
      async function visitorCreate(email: string) {
-          const { apiFetch } = useChatApi()
+          const {apiFetch} = useChatApi()
           try {
                const payload = {
                     project_public_key: project.value?.public_key,
@@ -158,19 +178,7 @@ export const useChatStore = defineStore('chat', () => {
                })
 
                visitor.value = visitorRes.success.visitor || null
-
-               localStorage.setItem(
-                    'hhs_isp_chat',
-                    JSON.stringify({
-                         ...JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}'),
-                         visitor: visitor.value,
-                    })
-               )
-
-               document.cookie = `hhs_isp_chat=${JSON.stringify({
-                    visitor: visitor.value,
-               })}; path=/; max-age=31536000`
-
+               setStorageData({...getStorageData(), visitor: visitor.value})
                return true
           } catch {
                return false
@@ -182,14 +190,8 @@ export const useChatStore = defineStore('chat', () => {
           message?: ChatMessage
           reason?: 'user_invalid' | 'internal_error'
      }> {
-          const { apiFetch } = useChatApi()
-          let chatData: Record<string, any> = {}
-
-          try {
-               chatData = JSON.parse(localStorage.getItem('hhs_isp_chat') || '{}')
-          } catch {
-               chatData = {}
-          }
+          const {apiFetch} = useChatApi()
+          const chatData = getStorageData()
 
           if (!Array.isArray(chatData.messages)) {
                chatData.messages = []
@@ -206,12 +208,12 @@ export const useChatStore = defineStore('chat', () => {
 
           chatData.messages.push(structuredVisitorMessage)
           messages.value.push(structuredVisitorMessage)
-          updateStorage({ messages: messages.value })
+          updateStorage({messages: messages.value})
 
           try {
                const res = await apiFetch('/message', {
                     method: 'POST',
-                    body: JSON.stringify({ message: content }),
+                    body: JSON.stringify({message: content}),
                })
 
                const botMsg = res.success.message || null
@@ -233,7 +235,7 @@ export const useChatStore = defineStore('chat', () => {
 
                chatData.messages.push(structuredBotMessage)
                messages.value.push(structuredBotMessage)
-               updateStorage({ messages: messages.value })
+               updateStorage({messages: messages.value})
 
                return {
                     success: true,
@@ -250,17 +252,19 @@ export const useChatStore = defineStore('chat', () => {
                }
 
                messages.value.push(errorMsg)
+               updateStorage({messages: messages.value})
 
                if (err.message === 'user_invalid') {
-                    return { success: false, reason: 'user_invalid' }
+                    return {success: false, reason: 'user_invalid'}
                }
 
-               return { success: false, reason: 'internal_error' }
+               return {success: false, reason: 'internal_error'}
           }
      }
 
      // Sync suggestions -> config
      watch(suggestions, () => {
+          if (!hasLoadedStorage.value) return
           configChat.suggestedQuestions = suggestions.value.map(s => s.label)
           updateStorage({
                suggestions: suggestions.value,
@@ -275,8 +279,12 @@ export const useChatStore = defineStore('chat', () => {
           visitor,
           configChat,
           messages,
-          loadFromStorage,
           suggestions,
+          storageData,
+          loadFromStorage,
+          getStorageData,
+          setStorageData,
+          updateStorage,
           clearMessages,
           setProjectPublicKey,
           fetchChatProject,

@@ -3,7 +3,7 @@
           <ChatModalModulesModalRandoMore
                v-if="showModuleRandoMoreModal"
                @close="showModuleRandoMoreModal = false" />
-          <div class="p-[5px]">
+          <div class="hidden p-[5px]">
                <button class="bg-[rgb(255,221,167)] text-[rgb(58,35,0)] rounded-[8px] px-[20px] py-[10px] text-[16px] font-medium leading-[24px] tracking-[-0.01em] flex items-center justify-center gap-2 flex items-center mx-auto" @click="showModuleRandoMoreModal = true">
                     <span>Modal Test</span>
                </button>

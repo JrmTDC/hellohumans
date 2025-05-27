@@ -6,7 +6,7 @@
                <!-- Conteneur de la boîte en bas -->
                <div class="absolute bottom-0 left-[22px] right-[22px] w-[calc(100%-44px)] max-h-[calc(100%-8px)] p-[32px_20px] pt-[45px] bg-white rounded-t-[12px] z-[1001] overflow-hidden transform transition-transform duration-300 ease-in-out" :class="isVisible ? 'translate-y-0' : 'translate-y-full'">
                     <!-- Bouton Fermer (top right) -->
-                    <button @click="!previewMode && closeModal" class="absolute top-[20px] right-[20px] group">
+                    <button @click="closeModal" class="absolute top-[20px] right-[20px] group">
                          <svgo-chat-icon-minimize class="w-[24px] h-[24px] fill-[#6D7E9E] group-hover:fill-[#0566ff]" />
                     </button>
 
@@ -18,7 +18,7 @@
                          />
                     </div>
                     <p class="text-[13px] mt-[10px] mb-[35px] text-[#9B9B9B] leading-[18px]">Je comprends et reconnais que HelloHumans est le responsable du traitement de mes données personnelles. Toutes mes données seront traitées et protégées conformément au Règlement Général sur la Protection des Données (RGPD)</p>
-                    <button @click="!previewMode && onAccept" :disabled="!isEmailValid" class="flex-shrink-0 w-full h-[50px] text-[16px] text-white rounded-[6px] relative" :class="[isEmailValid ? 'bg-[#0566ff]' : 'bg-gray-400 cursor-not-allowed', isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0566ff]']">
+                    <button @click="onAccept" :disabled="!isEmailValid" class="flex-shrink-0 w-full h-[50px] text-[16px] text-white rounded-[6px] relative" :class="[isEmailValid ? 'bg-[#0566ff]' : 'bg-gray-400 cursor-not-allowed', isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0566ff]']">
                          <span v-if="!isLoading">J’accepte et je continue</span>
                          <span v-else class="flex items-center text-center justify-center">
                               Chargement...
@@ -40,16 +40,15 @@ const props = defineProps<{
 const emits = defineEmits(['accept', 'close', 'loading']);
 const visitorEmail = ref('');
 const isVisible = ref(false); // Pour contrôler l'animation proprement
+const hhs_isp_chat = computed(() => chatStore.storageData)
 
 // Vérifier si l'utilisateur a déjà accepté le RGPD
 onMounted(() => {
      if(props.previewMode) return
-     const ispChatLocalStorage = localStorage.getItem('hhs_isp_chat');
-     if (ispChatLocalStorage) {
-          const ispChatData = JSON.parse(ispChatLocalStorage);
-          if (ispChatData.visitor.gdprConsent === true) {
-               visitorEmail.value = ispChatData.visitor.email;
-               emits('accept', ispChatData.visitor.email, 'isLoading', false);
+     if (hhs_isp_chat.value.visitor) {
+          if (hhs_isp_chat.value.visitor.gdprConsent === true) {
+               visitorEmail.value = hhs_isp_chat.value.visitor.email;
+               emits('accept', hhs_isp_chat.value.visitor.email, 'isLoading', false);
           }
      }
 });
@@ -75,12 +74,14 @@ watch(() => props.show, (newVal) => {
 
 // Quand l’utilisateur clique “J’accepte”
 function onAccept() {
+     if(props.previewMode) return
      if (!isEmailValid.value || props.isLoading) return;
      emits('accept', visitorEmail.value);
 }
 
 // Quand l’utilisateur clique sur “Fermer” (croix en haut)
 function closeModal() {
+     if(props.previewMode) return
      isVisible.value = false; // Animation de fermeture
      setTimeout(() => emits('close'), 300); // Attendre 300ms avant de cacher complètement
 }

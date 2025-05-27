@@ -4,12 +4,10 @@ export function useChatApi() {
      const chatStore = useChatStore()
      const apiUrl = `${config.public.apiBaseUrl}/chat`
      const projectPublicKey = () => chatStore.projectPublicKey || panelStore.project?.public_key || ''
-
+     const hhs_isp_chat = computed(() => chatStore.storageData)
      const visitorPublicKey = () => {
-          const storedVisitorData = localStorage.getItem('hhs_isp_chat')
-          if (storedVisitorData) {
-              const visitorData = JSON.parse(storedVisitorData)
-              return visitorData.visitor.public_key
+          if (hhs_isp_chat.value && hhs_isp_chat.value.visitor) {
+              return hhs_isp_chat.value.visitor.public_key
           }
           return ''
      }
@@ -21,12 +19,10 @@ export function useChatApi() {
                'x-visitor-public-key': visitorPublicKey(),
                ...(options.headers || {})
           }
-
           const response = await fetch(`${apiUrl}${path}`, {
                ...options,
                headers
           })
-
           const contentType = response.headers.get('Content-Type') || ''
           const isJson = contentType.includes('application/json')
           const data = isJson ? await response.json() : await response.text()

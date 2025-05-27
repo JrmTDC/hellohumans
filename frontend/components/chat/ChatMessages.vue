@@ -65,6 +65,7 @@ const props = defineProps<{
      messages: ChatMessage[]
      isLoading: boolean
      isChatActive: boolean
+     previewMode: boolean
 }>()
 
 // Références pour la zone de chat et la scrollbar
@@ -202,10 +203,6 @@ function formatDate(msg: ChatMessage): string {
 // Met à jour la scrollbar custom
 function updateScrollbar() {
      if (!chatContainer.value || !customScrollbar.value) return;
-
-     const props = defineProps<{
-          previewMode: boolean;
-     }>();
 
      const scrollHeight = chatContainer.value.scrollHeight;
      const scrollTop = chatContainer.value.scrollTop;
