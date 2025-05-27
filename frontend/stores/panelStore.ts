@@ -18,7 +18,8 @@ interface Project {
      name: string
      subscription?: ProjectSubscription | null
      website: string,
-     public_key: string
+     public_key: string,
+     widget_installed: boolean
 }
 interface UpgradePreviewResponse {
      today_amount: number

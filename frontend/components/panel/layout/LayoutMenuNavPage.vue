@@ -100,14 +100,6 @@ const menuItems = ref([
           tooltipKey: 'panel.components.layout.menuNavPage.analytics'
      },
      {
-          position: 'top',
-          type: 'link',
-          icon: rawIcon(iconMenuBulb),
-          routeURL: '/panel/immo',
-          tooltip: t('panel.components.layout.menuNavPage.immobilier'),
-          tooltipKey: 'panel.components.layout.menuNavPage.immobilier'
-     },
-     {
           position: 'bottom',
           type: 'link',
           icon: rawIcon(iconMenuSetting),

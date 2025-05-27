@@ -14,7 +14,7 @@
                </div>
           </div>
           <div v-else class="app-container flex items-stretch flex-[1_1_100%] flex-row overflow-hidden relative">
-               <div  class="app-content">
+               <div  class="app-conten flex-1 overflow-x-hidden overflow-y-auto relative">
                     <slot />
                </div>
           </div>
