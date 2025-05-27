@@ -26,7 +26,11 @@ interface ChatConfig {
      name: string
      welcomeTitle: string
      welcomeMessage: string
-     suggestedQuestions: string[] // ← corriger ici
+     suggestedQuestions: {
+          label: string
+          enabled: boolean
+          order: number
+     }[]
      backgroundColor: string
      textColor: string
      actionColor: string
@@ -101,7 +105,11 @@ export const useChatStore = defineStore('chat', () => {
           if (Array.isArray(data.messages)) messages.value = data.messages
           if (Array.isArray(data.suggestions)) {
                suggestions.value = data.suggestions
-               configChat.suggestedQuestions = data.suggestions.map((s: Suggestion) => s.label)
+               configChat.suggestedQuestions = data.suggestions.map((s: Suggestion) => ({
+                    label: s.label,
+                    enabled: s.enabled,
+                    order: s.order,
+               }))
           }
           if (data.visitor) visitor.value = data.visitor
 
@@ -153,7 +161,12 @@ export const useChatStore = defineStore('chat', () => {
                Object.assign(configChat, project.value?.config ?? {})
 
                if (Array.isArray(configChat.suggestedQuestions)) {
-                    suggestions.value = parseSuggestedQuestionsFromConfig(configChat.suggestedQuestions)
+                    suggestions.value = configChat.suggestedQuestions.map((s, i) => ({
+                         id: crypto.randomUUID(),
+                         label: typeof s === 'object' && s.label ? s.label : String(s),
+                         enabled: typeof s.enabled === 'boolean' ? s.enabled : true,
+                         order: typeof s.order === 'number' ? s.order : i,
+                    }))
                }
 
                return true
@@ -265,7 +278,9 @@ export const useChatStore = defineStore('chat', () => {
      // Sync suggestions -> config
      watch(suggestions, () => {
           if (!hasLoadedStorage.value) return
-          configChat.suggestedQuestions = suggestions.value.map(s => s.label)
+          configChat.suggestedQuestions = suggestions.value.map(({ label, enabled, order }) => ({
+               label, enabled, order
+          }))
           updateStorage({
                suggestions: suggestions.value,
                config: configChat,

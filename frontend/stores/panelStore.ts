@@ -454,9 +454,17 @@ export const usePanelStore = defineStore('panel', () => {
      async function saveChatConfig(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
           try {
+               const fullConfig = {
+                    ...chatStore.configChat,
+                    suggestedQuestions: chatStore.suggestions.map(({ label, enabled, order }) => ({
+                         label,
+                         enabled,
+                         order
+                    }))
+               }
                const res = await apiFetch('/config-chat', {
                     method: 'POST',
-                    body: JSON.stringify({ config: chatStore.configChat }),
+                    body: JSON.stringify({ config: fullConfig }),
                })
                return !!res.success
           } catch (err) {

@@ -284,6 +284,9 @@ async function onAcceptRGPD(email: string) {
      onLoadingRGPD.value = true
      await chatStore.visitorCreate(email)
      showRGPDModal.value = false
+
+     await nextTick()
+
      if (pendingMessage.value) {
           message.value = pendingMessage.value
           pendingMessage.value = null

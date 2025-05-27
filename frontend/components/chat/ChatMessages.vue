@@ -2,8 +2,8 @@
      <div id="conversation-group" ref="chatContainer" v-auto-animate class="w-full overflow-y-auto bg-white transition-all duration-300 min-h-[160px] px-[24px] flex-[1_1_auto] max-h-[487px] h-screen">
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
                     <!-- Affichage du message d'introduction -->
-                    <button v-if="!showPreviousMessages" @click="onShowHistory" class="mx-auto mb-[20px] flex items-center bg-white tracking-[-0.1px] text-center text-[12px] font-semibold text-[rgb(136,148,171)] rounded-[14px] border border-[rgba(136,148,171,0.24)] pr-[10px]">
-                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px]"/> Messages précédents
+                    <button v-if="!showPreviousMessages" @click="onShowHistory" class="mx-auto mb-[20px] flex items-center bg-white tracking-[-0.1px] text-center text-[12px] font-semibold text-[rgb(136,148,171)] rounded-[14px] border border-[rgba(136,148,171,0.24)] pr-[10px] hover:text-[#0566ff] hover:bg-[rgba(136,148,171,0.04)] hover:border-[rgba(136,148,171,0.24)] transition-all duration-200 ease-in-out group">
+                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px] group-hover:fill-[#0566ff]"/> Messages précédents
                     </button>
 
                <!-- Boucle sur tous les messages filteredMessages -->
