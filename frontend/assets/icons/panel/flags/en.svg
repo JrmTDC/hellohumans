@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200px" height="800px" viewBox="0 0 1200 800" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>en</title>
+    <defs>
+        <polygon id="path-1" points="0 0 0 800 1200 800 1200 0"></polygon>
+        <path d="M600,400 L1200,400 L1200,800 L600,400 Z M600,400 L600,800 L0,800 L600,400 Z M600,400 L0,400 L0,0 L600,400 Z M600,400 L600,0 L1200,0 L600,400 Z" id="path-3"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-11380.000000, -3108.000000)">
+            <g id="en" transform="translate(11380.000000, 3108.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Path"></g>
+                <g id="Group" mask="url(#mask-2)">
+                    <polygon id="Path" fill="#012169" fill-rule="nonzero" points="0 0 0 800 1200 800 1200 0"></polygon>
+                    <path d="M0,0 L1200,800 M1200,0 L0,800" id="Shape" stroke="#FFFFFF" stroke-width="120" fill="#000000" fill-rule="nonzero"></path>
+                    <g id="Clipped">
+                        <mask id="mask-4" fill="white">
+                            <use xlink:href="#path-3"></use>
+                        </mask>
+                        <g id="Shape"></g>
+                        <path d="M0,0 L1200,800 M1200,0 L0,800" id="Shape" stroke="#C8102E" stroke-width="80" fill="#000000" fill-rule="nonzero" mask="url(#mask-4)"></path>
+                    </g>
+                    <path d="M600,0 L600,800 M0,400 L1200,400" id="Shape" stroke="#FFFFFF" stroke-width="200" fill="#000000" fill-rule="nonzero"></path>
+                    <path d="M600,0 L600,800 M0,400 L1200,400" id="Shape" stroke="#C8102E" stroke-width="120" fill="#000000" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

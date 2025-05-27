@@ -3,7 +3,104 @@
           <PanelVisitorsChildSideMenu />
           <div class="border border-[rgb(226,232,239)] rounded-[16px] mr-[12px] mb-[12px] bg-white overflow-y-auto">
                <div class="flex flex-row justify-start items-start min-h-full">
-                    <template v-if="panelStore.project?.widget_installed">
+                    <template v-if="panelStore.visitors.count > 0">
+                         <div class="px-[28px] py-[24px] w-full">
+                              <div class="flex flex-col justify-start items-[normal]">
+                                   <div class="flex flex-col justify-start items-[normal]">
+                                        <div class="mt-0 mb-0 flex flex-row justify-start items-center">
+                                             <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em] text-[#080f1a]">Actuellement en ligne&nbsp;:
+                                                  {{ panelStore.visitors.count }}</h2>
+                                        </div>
+                                        <p class="mt-[8px] mb-0 flex flex-row justify-start items-center font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] max-w-[750px]">Utilisez l'aperçu en temps réel pour suivre les clients qui consultent votre site Web.</p>
+                                   </div>
+                                   <div class="mt-[20px]">
+                                        <div class="flex flex-row items-center h-[32px] mr-auto">
+
+                                             <!-- Filter by country -->
+                                             <div class="mr-[8px] relative cursor-pointer">
+                                                  <div class="relative box-border">
+                                                       <div class="flex items-center justify-between w-[174px] h-[28px] rounded-[12px] bg-[rgba(100,116,145,0.08)] border-[2px] border-transparent cursor-pointer">
+                                                            <div class="flex flex-row justify-start items-center overflow-hidden">
+                                                                 <span class="ml-[10px] mr-[6px] whitespace-nowrap text-[14px] leading-[18px] text-[#001b47]">Tous les pays</span>
+                                                            </div>
+                                                            <div class="flex items-center self-stretch flex-shrink-0 box-border">
+                                                                <div class="pr-[4px] pl-0 pt-0 pb-0">
+                                                                     <div class="flex items-center justify-center">
+                                                                          <SvgoPanelCustomersIconArrowDown class="rotate-0 w-[20px] h-[20px]" />
+                                                                     </div>
+                                                                </div>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+
+                                        </div>
+                                   </div>
+                                   <div class="mt-[20px]">
+                                        <div class="flex flex-[1_1_0%] flex-col h-[calc(100vh-270px)]">
+                                             <div class="font-bold uppercase flex flex-row items-center h-[48px] overflow-hidden bg-white rounded-t-[6px]">
+                                                  <div class="flex w-full h-full px-[4px] rounded-t-[12px] border-t border-l border-r border-[rgb(226,232,239)] border-b-0">
+                                                       <div class="ml-[16px] mr-[16px] flex-[2_1_0px] min-w-[200px]">
+                                                            <div class="flex items-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] pt-[16px] font-normal capitalize">Nom</div>
+                                                       </div>
+                                                       <div class="ml-[16px] mr-[16px] flex-[1_1_0px] max-w-[170px] min-w-[96px]">
+                                                            <div class="flex items-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] pt-[16px] font-normal capitalize">Première visite</div>
+                                                       </div>
+                                                       <div class="ml-[16px] mr-[16px] flex-[1_1_0px] max-w-[93px] min-w-[83px]">
+                                                            <div class="flex items-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] pt-[16px] font-normal capitalize">
+                                                                <SvgoPanelCustomersIconEart class="h-[16px] w-[17px] fill-[#647491]"
+                                                                />
+                                                                <span class="px-[4px] pl-[3px] py-0 text-[rgb(211,219,229)]">/</span>
+                                                                <SvgoPanelCustomersIconDesktop class="h-[16px] w-[17px] fill-[#647491]"
+                                                                />
+                                                            </div>
+                                                       </div>
+                                                       <div class="ml-[16px] mr-[16px] flex-[1_1_0px] min-w-[200px]">
+                                                            <div class="flex items-center text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] pt-[16px] font-normal capitalize">Dernière page visitée</div>
+                                                       </div>
+                                                       <div class="ml-[16px] mr-[16px] !flex-[0_1_auto]"></div>
+                                                  </div>
+                                             </div>
+                                             <div class="outline-none bg-white border border-[rgb(226,232,239)] rounded-b-[12px] min-h-[66px] box-border direction-ltr relative will-change-transform overflow-hidden h-[64px]">
+                                                  <div class="w-auto h-[56px] max-h-[56px] overflow-hidden relative">
+                                                       <div class="flex flex-row items-center h-[56px] left-0 top-0 absolute w-full overflow-hidden px-[4px] cursor-pointer outline-none">
+                                                            <div class="ml-[16px] mr-[16px] overflow-hidden flex-[2_1_0px] min-w-[200px]">
+                                                                 <div class="flex flex-row justify-start items-center">
+                                                                      <div class="w-[10px] h-[10px] flex-[0_0_10px] bg-[rgb(52,184,87)] rounded-full"></div>
+                                                                      <div class="ml-[8px] flex-[0_0_30px]">
+                                                                           <div class="bg-[#cbd852] rounded-full text-white cursor-default flex-shrink-0 float-left text-[18px] h-[30px] leading-[1.66] mr-[10px] text-center select-none w-[30px]">J</div>
+                                                                      </div>
+                                                                      <div class="flex flex-col justify-center flex-[2_1_auto] min-w-0 ml-[8px]">
+                                                                           <div class="text-[16px] leading-[20px] tracking-[-0.01em] font-bold overflow-hidden text-ellipsis text-[#080f1a]">jeremy@hellohumans.fr</div>
+                                                                           <div class="text-[12px] leading-[16px] tracking-[-0.01em] mt-[2px] text-[#647491] self-start">Récurrent</div>
+                                                                      </div>
+                                                                      <div class="flex items-center overflow-hidden flex-[0_0_55px] pr-[30px] ml-[8px]"></div>
+                                                                 </div>
+                                                            </div>
+                                                            <div class="ml-[16px] mr-[16px] overflow-hidden flex-[1_1_0px] max-w-[170px] min-w-[96px]">
+                                                                 <div class="text-[#080f1a] text-[14px]">10&nbsp;jours plus tôt</div>
+                                                            </div>
+                                                            <div class="ml-[16px] mr-[16px] overflow-hidden flex-[1_1_0px] max-w-[93px] min-w-[83px]">
+                                                                 <div class="flex">
+                                                                      <SvgoPanelFlagsFr class="h-[18px] w-[18px]"/>
+                                                                      <SvgoPanelBrowsersChrome class="ml-[12px] h-[18px] w-[18px]"/>
+                                                                 </div>
+                                                            </div>
+                                                            <div class="ml-[16px] mr-[16px] overflow-hidden flex-[1_1_0px] min-w-[200]">
+                                                                 <div class="flex flex-row">
+                                                                      <NuxtLink to="/panel/simulateVisitor?projectPublicKey=4zngqfdcd8oa5u8pufdavemrpsklbi1h" class="h-[19px] overflow-hidden relative text-ellipsis whitespace-nowrap ml-[3px] text-[rgb(5,102,255)] text-[14px] hover:text-[#0047b7] hover:underline" target="_blank">/panel/simulateVisitor</NuxtLink>
+                                                                 </div>
+                                                            </div>
+                                                            <div class="ml-[16px] mr-[16px] overflow-hidden flex-[0_1_0px]"></div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                    </template>
+                    <template v-else-if="panelStore.project?.widget_installed">
                          <div class="flex-[3_1_0%] px-[12px] pr-[12px] pl-[60px] py-[60px] max-w-[812px] text-[18px] leading-[23px] tracking-[-0.01em]">
                               <h4 class="mt-0 mb-0 font-medium text-[32px] leading-[41px] tracking-[-0.01em]">Aucun visiteur n’est présent sur votre site Web en ce moment</h4>
                               <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>

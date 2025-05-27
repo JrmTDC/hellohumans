@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-
+const panelStore = usePanelStore()
 const menuGroups = ref([
      {
           id: 'visitors',
@@ -32,7 +32,7 @@ const menuItems = ref([
           isActive: undefined,
           beta: false,
           disabled: false,
-          count: "0"
+          count: panelStore.visitors.count
      },
      {
           id: 'leadsAll',

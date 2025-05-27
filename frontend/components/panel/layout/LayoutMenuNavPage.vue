@@ -8,6 +8,7 @@
                          <NuxtLink v-if="item.type === 'link'" :to="item.routeURL" :class="{ 'text-white bg-[#dce9ff]': route.path.startsWith(item.routeURL)}" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef] outline-none">
                               <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px]" />
+                                   <span v-if="item.count" class="flex items-center justify-center font-medium flex-shrink-0 bg-[#647491] text-white min-w-[14px] h-[14px] rounded-[5px] px-[4px] py-0 text-[9px] leading-[12px] tracking-[0em] absolute right-[6px] top-[6px]">{{ item.count }}</span>
                               </span>
                          </NuxtLink>
                     </PanelCommonTooltip>
@@ -22,6 +23,7 @@
                          <NuxtLink v-if="item.type === 'link'" :to="item.routeURL" :class="{ 'text-white bg-[#dce9ff]': route.path.startsWith(item.routeURL)}" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative hover:bg-[#e2e8ef]">
                               <span class="absolute inset-0 outline-none flex items-center justify-center flex-col">
                                    <component :is="item.icon" class="fill-[rgb(53,72,105)] w-[24px] h-[24px]" />
+                                   <span v-if="item.count && item.count > 0" class="flex items-center justify-center font-medium flex-shrink-0 bg-[#647491] text-white min-w-[14px] h-[14px] rounded-[5px] px-[4px] py-0 text-[9px] leading-[12px] tracking-[0em] absolute right-[6px] top-[6px]">{{ item.count }}</span>
                               </span>
                          </NuxtLink>
                          <button v-else @click="toggleSideMenuUser" class="nav-link w-[56px] h-[56px] rounded-[12px] border-[4px] border-[#f5f7f9] block text-center relative">
@@ -62,6 +64,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const config = useRuntimeConfig()
+const panelStore = usePanelStore()
 /*
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuBulb), routeURL: '/panel/getting-started', tooltip: t('panel.components.layout.menuNavPage.gettingStarted') },
      { position: 'bottom', type: 'link', icon: rawIcon(iconMenuModule), routeURL: '/panel/integrations', tooltip: t('panel.components.layout.menuNavPage.integrations') },
@@ -89,7 +92,8 @@ const menuItems = ref([
           icon: rawIcon(iconMenuCustomerVisitors),
           routeURL: '/panel/customers',
           tooltip: t('panel.components.layout.menuNavPage.visitors'),
-          tooltipKey: 'panel.components.layout.menuNavPage.visitors'
+          tooltipKey: 'panel.components.layout.menuNavPage.visitors',
+          count: panelStore.visitors.count
      },
      {
           position: 'top',

@@ -85,7 +85,9 @@ interface Client {
      id: string
      name: string
 }
-
+interface Visitors {
+     count: number
+}
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
      const chatStore = useChatStore()
@@ -100,6 +102,7 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<ModuleAddOn[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
+     const visitors = ref<Visitors>( { count: 0 })
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
 
@@ -495,6 +498,7 @@ export const usePanelStore = defineStore('panel', () => {
           project,
           projects,
           activities,
+          visitors,
           stripe,
 
           // actions
