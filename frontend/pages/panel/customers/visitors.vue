@@ -88,7 +88,7 @@
                                                             </div>
                                                             <div class="ml-[16px] mr-[16px] overflow-hidden flex-[1_1_0px] min-w-[200]">
                                                                  <div class="flex flex-row">
-                                                                      <NuxtLink to="/panel/simulateVisitor?projectPublicKey=4zngqfdcd8oa5u8pufdavemrpsklbi1h" class="h-[19px] overflow-hidden relative text-ellipsis whitespace-nowrap ml-[3px] text-[rgb(5,102,255)] text-[14px] hover:text-[#0047b7] hover:underline" target="_blank">/panel/simulateVisitor</NuxtLink>
+                                                                      <NuxtLink to="/panel/simulateVisitor?projectPublicKey" class="h-[19px] overflow-hidden relative text-ellipsis whitespace-nowrap ml-[3px] text-[rgb(5,102,255)] text-[14px] hover:text-[#0047b7] hover:underline" target="_blank">/panel/simulateVisitor</NuxtLink>
                                                                  </div>
                                                             </div>
                                                             <div class="ml-[16px] mr-[16px] overflow-hidden flex-[0_1_0px]"></div>

@@ -91,7 +91,6 @@ interface Visitors {
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
      const chatStore = useChatStore()
-
      const user = ref<User | null>(null)
      const client = ref<Client | null>(null)
      const project = ref<Project | null>(null)

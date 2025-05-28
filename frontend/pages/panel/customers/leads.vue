@@ -66,9 +66,7 @@
                                                   <table class="border-collapse mb-[6px] max-w-full w-full">
                                                        <thead>
                                                             <tr class="border-b border-b-[#eff2f6]">
-                                                                 <th class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] px-[16px] py-[12px]
-"
-                                                                 >
+                                                                 <th class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] px-[16px] py-[12px]">
                                                                       <label class="flex cursor-pointer relative">
                                                                            <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
                                                                            <div class="flex flex-row justify-start items-center">
@@ -82,7 +80,6 @@
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Radar</span></th>
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Email</span></th>
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Activité récente</span></th>
-
                                                                  <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Pays</span></th>
                                                             </tr>
                                                        </thead>
@@ -140,5 +137,4 @@ onMounted(async () => {
 definePageMeta({
      layout: 'panel'
 })
-
 </script>
