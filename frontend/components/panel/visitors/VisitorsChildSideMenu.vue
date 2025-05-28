@@ -32,7 +32,7 @@ const menuItems = ref([
           isActive: undefined,
           beta: false,
           disabled: false,
-          count: panelStore.visitors.count
+          count: panelStore.visitors.length
      },
      {
           id: 'leadsAll',

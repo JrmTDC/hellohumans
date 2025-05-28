@@ -86,7 +86,15 @@ interface Client {
      name: string
 }
 interface Visitors {
-     count: number
+     id: string
+     name: string
+     createdAt: string
+     ip: string
+     browser: string
+     country: string
+     lastActivity: string
+     lastPage: string
+     numberOfVisits: number
 }
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
@@ -101,7 +109,8 @@ export const usePanelStore = defineStore('panel', () => {
      const modules = ref<ModuleAddOn[]>([])
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
-     const visitors = ref<Visitors>( { count: 0 })
+     const visitors = ref<Visitors[]>([])
+     const leads = ref<{ id: string; name: string }[]>([])
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
 
@@ -498,6 +507,7 @@ export const usePanelStore = defineStore('panel', () => {
           projects,
           activities,
           visitors,
+          leads,
           stripe,
 
           // actions

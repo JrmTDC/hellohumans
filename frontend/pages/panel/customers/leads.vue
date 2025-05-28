@@ -32,7 +32,7 @@
                                              <div class="flex items-center flex-1 flex-wrap text-[16px] py-[13px] px-0 xl:items-start xl:flex-col xl:justify-center">
                                                   <div class="inline-flex relative align-top">
                                                        <div class="cursor-pointer">
-                                                            <button class="inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] px-[14px] min-w-auto">
+                                                            <button class="inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] px-[14px] min-w-auto active:text-[#0047b7]  hover:underline">
                                                                  <SvgoPanelCustomersIconAddFilters class="h-[20px] w-[20px] fill-[#0566ff] ml-[-2px] mr-[6px]" />
                                                                  <span class="text-[#0566ff] font-normal">Ajouter un filtre</span>
                                                             </button>
@@ -49,12 +49,12 @@
                                                        <div></div>
                                                   </div>
                                                   <div class="ml-[32px] flex">
-                                                       <button class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 select-none align-middle whitespace-nowrap">
+                                                       <button class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 select-none align-middle whitespace-nowrap hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] active:bg-[rgba(136,148,171,0.16)] active:border-[#aeb4c2] active:text-[#333]">
                                                             <SvgoPanelCustomersIconImport class="fill-[rgb(135,150,175)] ml-[-2px] mr-[6px] w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>
                                                             <span>Importer à partir d’un fichier</span>
                                                        </button>
                                                        <div class="inline-flex relative align-top ml-[10px]">
-                                                            <button class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 select-none align-middle whitespace-nowrap">
+                                                            <button class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 select-none align-middle whitespace-nowrap hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] active:bg-[rgba(136,148,171,0.16)] active:border-[#aeb4c2] active:text-[#333]">
                                                                  <SvgoPanelCustomersIconCustomize class="fill-[rgb(135,150,175)] ml-[-2px] mr-[6px] w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>
                                                                  <span>Personnaliser</span>
                                                             </button>
@@ -62,13 +62,15 @@
 
                                                   </div>
                                              </div>
-                                             <div class="overflow-x-auto">
-                                                  <table class="border-collapse mb-[6px] max-w-full w-full">
-                                                       <thead>
+
+                                             <template v-if="panelStore.leads && panelStore.leads.length > 0 ">
+                                                  <div class="overflow-x-auto">
+                                                       <table class="border-collapse mb-[6px] max-w-full w-full">
+                                                            <thead>
                                                             <tr class="border-b border-b-[#eff2f6]">
                                                                  <th class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] px-[16px] py-[12px]">
                                                                       <label class="flex cursor-pointer relative">
-                                                                           <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
+                                                                           <input type="text" class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
                                                                            <div class="flex flex-row justify-start items-center">
                                                                                 <div class="flex items-start justify-start rounded-[5px]">
                                                                                      <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
@@ -77,44 +79,68 @@
                                                                       </label>
                                                                  </th>
 
-                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Radar</span></th>
-                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Email</span></th>
-                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Activité récente</span></th>
-                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]"><span>Pays</span></th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px] hover:bg-[#f5f7f9] group cursor-pointer">
+                                                                      <button class="flex items-center">
+                                                                           <span>Radar</span>
+                                                                           <span class="flex items-center ml-[4px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"> <SvgoPanelCustomersIconOrder class="min-w-[16px] min-h-[16px] w-[16px] h-[16px] fill-[#647491]" /></span>
+                                                                      </button>
+                                                                 </th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px] group cursor-pointer hover:bg-[#f5f7f9]">
+                                                                      <button class="flex items-center">
+                                                                           <span>Email</span>
+                                                                           <span class="flex items-center ml-[4px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"> <SvgoPanelCustomersIconOrder class="min-w-[16px] min-h-[16px] w-[16px] h-[16px] fill-[#647491]" /></span>
+                                                                      </button>
+                                                                 </th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px]">
+                                                                      <span>Activité récente</span>
+                                                                 </th>
+                                                                 <th class="min-w-[100px] whitespace-nowrap text-[#647491] font-normal text-left leading-[1.28571429] min-w-[55px] px-[16px] py-[8px] align-middle text-[14px] group cursor-pointer hover:bg-[#f5f7f9]">
+                                                                      <button class="flex items-center">
+                                                                           <span>Pays</span>
+                                                                           <span class="flex items-center ml-[4px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"> <SvgoPanelCustomersIconOrder class="min-w-[16px] min-h-[16px] w-[16px] h-[16px] fill-[#647491]" /></span>
+                                                                      </button>
+                                                                 </th>
                                                             </tr>
-                                                       </thead>
-                                                       <tbody>
-                                                       <tr class="border-b border-b-[#eff2f6]">
-                                                            <td class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1] bg-transparent !bg-transparent bg-[linear-gradient(90deg,#fff_90%,hsla(0,0%,100%,0))] h-[56px] px-[16px] py-[8px]">
-                                                                 <label class="flex cursor-pointer relative">
-                                                                      <input type="text" class="absolute w-[1px] h-[1px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
-                                                                      <div class="flex flex-row justify-start items-center">
-                                                                           <div class="flex items-start justify-start rounded-[5px]">
-                                                                                <SvgoPanelCustomersIconCheckOff class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[rgb(100,116,145)] hover:fill-[#0049bd]" />
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr class="border-b border-b-[#eff2f6] hover:bg-[#f5f7f9]">
+                                                                 <td class="flex items-center sticky left-0 min-w-[62px] pl-[22px] w-[1%] z-[1]  h-[56px] px-[16px] py-[8px]">
+                                                                      <label class="flex cursor-pointer relative">
+                                                                           <input type="text" class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0">
+                                                                           <div class="flex flex-row justify-start items-center">
+                                                                                <div class="flex items-start justify-start rounded-[5px]">
+                                                                                     <SvgoPanelCustomersIconCheckOn class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] self-baseline fill-[#0566ff] hover:fill-[#0049bd]" />
+                                                                                </div>
                                                                            </div>
-                                                                      </div>
-                                                                 </label>
-                                                            </td>
-                                                            <td>
-                                                                 <div class="bg-[rgb(203,216,82)] rounded-full text-white cursor-default flex-shrink-0 float-left text-[18px] h-[30px] leading-[1.66] mr-[10px] text-center select-none w-[30px]">87</div>
-                                                            </td>
-                                                            <td>
-                                                                 <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">jrm@tiensdonc.com</p>
-                                                            </td>
-                                                            <td>
-                                                                 <button type="button" class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[28px] h-[28px] hover:bg-[rgb(220,233,255)]">
-                                                                      <SvgoPanelCustomersIconChat class="min-w-[20px] min-h-[20px] w-[20px] h-[20px] fill-[rgb(100,116,145)]" />
-                                                                 </button>
-                                                            </td>
-                                                            <td>
-                                                                 <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">(FR) France</p>
-                                                            </td>
-                                                       </tr>
-                                                       </tbody>
-                                                  </table>
-                                             </div>
-                                             <div class="text-[22px] pt-[170px] pb-[115px] text-center bg-[position:50%_55px] bg-no-repeat bg-[length:80px_80px]" :style="{ backgroundImage: `url('${backgroundNoCustomer}')` }">Désolé, aucun contact n’a été identifié</div>
-                                             <div class="mt-[10px] mb-[25px] mx-auto"></div>
+                                                                      </label>
+                                                                 </td>
+                                                                 <td class="h-[56px] border-t-0 min-w-[100px] whitespace-nowrap px-[16px] py-[8px] align-middle">
+                                                                      <div class="bg-[rgb(203,216,82)] rounded-full text-white cursor-default flex-shrink-0 float-left text-[14px] leading-[2.10] h-[30px] mr-[10px] text-center select-none w-[30px]">87</div>
+                                                                 </td>
+                                                                 <td class="h-[56px] border-t-0 min-w-[100px] whitespace-nowrap px-[16px] py-[8px] align-middle">
+                                                                      <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] overflow-hidden text-ellipsis whitespace-nowrap">jrm@tiensdonc.com</p>
+                                                                 </td>
+                                                                 <td class="h-[56px] border-t-0 min-w-[100px] whitespace-nowrap px-[16px] py-[8px] align-middle">
+                                                                      <button type="button" class="bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[28px] h-[28px] hover:bg-[rgb(220,233,255)] group">
+                                                                           <SvgoPanelCustomersIconChat class="min-w-[20px] min-h-[20px] w-[20px] h-[20px] fill-[rgb(100,116,145)] group-hover:fill-[#0566ff]" />
+                                                                      </button>
+                                                                      <button type="button" class="ml-[16px] bg-transparent border-0 inline-flex shadow-none outline-none px-[4px] py-0 items-center justify-center cursor-pointer rounded-[4px] text-current w-[28px] h-[28px] hover:bg-[rgb(220,233,255)] group">
+                                                                           <SvgoPanelCustomersIconUserInfo class="min-w-[20px] min-h-[20px] w-[20px] h-[20px] fill-[rgb(100,116,145)] group-hover:fill-[#0566ff]" />
+                                                                      </button>
+                                                                 </td>
+                                                                 <td class="h-[56px] border-t-0 min-w-[100px] whitespace-nowrap px-[16px] py-[8px] align-middle">
+                                                                      <SvgoPanelFlagsFr class="h-[18px] w-[18px]"/>
+                                                                 </td>
+                                                            </tr>
+                                                            </tbody>
+                                                       </table>
+                                                  </div>
+                                             </template>
+                                             <template v-else>
+                                                  <div class="text-[22px] pt-[170px] pb-[115px] text-center bg-[position:50%_55px] bg-no-repeat bg-[length:80px_80px]" :style="{ backgroundImage: `url('${backgroundNoCustomer}')` }">Désolé, aucun contact n’a été identifié</div>
+                                                  <div class="mt-[10px] mb-[25px] mx-auto"></div>
+                                             </template>
+
                                         </div>
                                    </div>
 
@@ -129,7 +155,7 @@
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const backgroundNoCustomer = useAssetBase64Loader('panel/customers/backgroundNoCustomers')
-
+const panelStore = usePanelStore()
 onMounted(async () => {
      layoutLoadingPanel.value = false
 })

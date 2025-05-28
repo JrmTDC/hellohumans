@@ -3,13 +3,13 @@
           <PanelVisitorsChildSideMenu />
           <div class="border border-[rgb(226,232,239)] rounded-[16px] mr-[12px] mb-[12px] bg-white overflow-y-auto">
                <div class="flex flex-row justify-start items-start min-h-full">
-                    <template v-if="panelStore.visitors.count > 0">
+                    <template v-if="panelStore.visitors && panelStore.visitors.length > 0">
                          <div class="px-[28px] py-[24px] w-full">
                               <div class="flex flex-col justify-start items-[normal]">
                                    <div class="flex flex-col justify-start items-[normal]">
                                         <div class="mt-0 mb-0 flex flex-row justify-start items-center">
                                              <h2 class="mt-0 mb-0 font-medium text-[24px] leading-[34px] tracking-[-0.01em] text-[#080f1a]">Actuellement en ligne&nbsp;:
-                                                  {{ panelStore.visitors.count }}</h2>
+                                                  {{ panelStore.visitors.length }}</h2>
                                         </div>
                                         <p class="mt-[8px] mb-0 flex flex-row justify-start items-center font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] max-w-[750px]">Utilisez l'aperçu en temps réel pour suivre les clients qui consultent votre site Web.</p>
                                    </div>
