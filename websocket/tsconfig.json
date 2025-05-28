@@ -1,0 +1,18 @@
+{
+     "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+     "compilerOptions": {
+          "rootDir": "./",
+          "outDir": "./build",
+          "paths": {
+               "#sockets/*": [
+                    "app/sockets/*"
+               ],
+               "#start/*": [
+                    "start/*"
+               ],
+               "#config/*": [
+                    "config/*"
+               ]
+          }
+     }
+}
