@@ -85,17 +85,47 @@ interface Client {
      id: string
      name: string
 }
-interface Visitors {
-     id: string
-     name: string
-     createdAt: string
+interface VisitorsLive {
      ip: string
      browser: string
+     browser_version: string
+     user_agent: string
+     os_name: string
+     os_version: string
+     mobile: boolean
+     browser_session_id: string
+     referer: string
      country: string
      lastActivity: string
      lastPage: string
      numberOfVisits: number
+     screen_width: number
+     screen_height: number
 }
+interface VisitorsLead {
+     id: string
+     name: string
+     email: string
+     city: string
+     country: string
+     phone: string
+     createdAt: string
+     status: 'new' | 'contacted' | 'qualified' | 'unqualified'
+     source: 'form' | 'chat' | 'email' | 'phone'
+     notes?: string
+}
+interface Visitors {
+     id: string
+     public_key: string
+     distinct_id: string
+     originalVisitorId: string
+     createdAt: string
+     lang: string
+     gdprConsent: boolean
+     live?: VisitorsLive
+     lead?: VisitorsLead
+}
+
 export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
      const chatStore = useChatStore()
@@ -113,6 +143,41 @@ export const usePanelStore = defineStore('panel', () => {
      const leads = ref<{ id: string; name: string }[]>([])
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
+
+     visitors.value = [
+          {
+               id: 'test',
+               public_key: 'test',
+               distinct_id: 'test',
+               originalVisitorId: 'test',
+               createdAt: 'test',
+               lang: 'test',
+               gdprConsent: true,
+               live: {
+                    ip: 'test',
+                    browser: 'test',
+                    browser_version: 'test',
+                    user_agent: 'test',
+                    os_name: 'test',
+                    os_version: 'test',
+                    mobile: true,
+                    browser_session_id: 'test',
+                    referer: 'test',
+                    country: 'test',
+                    lastActivity: 'test',
+                    lastPage: 'test',
+                    numberOfVisits: 1,
+                    screen_width: 1,
+                    screen_height: 1,
+               }
+          }
+     ]
+     leads.value = [
+          {
+               id: 'test',
+               name: 'Test Lead'
+          }
+     ]
 
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()

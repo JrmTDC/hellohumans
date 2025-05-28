@@ -38,6 +38,7 @@
                                    </div>
                                    <div class="mt-[20px]">
                                         <div class="flex flex-[1_1_0%] flex-col h-[calc(100vh-270px)]">
+                                             <!-- Table Header -->
                                              <div class="font-bold uppercase flex flex-row items-center h-[48px] overflow-hidden bg-white rounded-t-[6px]">
                                                   <div class="flex w-full h-full px-[4px] rounded-t-[12px] border-t border-l border-r border-[rgb(226,232,239)] border-b-0">
                                                        <div class="ml-[16px] mr-[16px] flex-[2_1_0px] min-w-[200px]">
@@ -61,6 +62,7 @@
                                                        <div class="ml-[16px] mr-[16px] !flex-[0_1_auto]"></div>
                                                   </div>
                                              </div>
+                                             <!-- Table Body -->
                                              <div class="outline-none bg-white border border-[rgb(226,232,239)] rounded-b-[12px] min-h-[66px] box-border direction-ltr relative will-change-transform overflow-hidden h-[64px]">
                                                   <div class="w-auto h-[56px] max-h-[56px] overflow-hidden relative">
                                                        <div class="flex flex-row items-center h-[56px] left-0 top-0 absolute w-full overflow-hidden px-[4px] cursor-pointer outline-none">
@@ -78,7 +80,7 @@
                                                                  </div>
                                                             </div>
                                                             <div class="ml-[16px] mr-[16px] overflow-hidden flex-[1_1_0px] max-w-[170px] min-w-[96px]">
-                                                                 <div class="text-[#080f1a] text-[14px]">10&nbsp;jours plus tôt</div>
+                                                                 <div class="text-[#080f1a] text-[14px]">quelques secondes plus tôt</div>
                                                             </div>
                                                             <div class="ml-[16px] mr-[16px] overflow-hidden flex-[1_1_0px] max-w-[93px] min-w-[83px]">
                                                                  <div class="flex">

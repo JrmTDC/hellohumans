@@ -45,7 +45,7 @@
                                         <div class="mt-[12px] bg-white border border-[#e2e8ef] rounded-[12px]">
                                              <div class="flex flex-row justify-start items-center p-[16px] border-b border-b-[rgb(226,232,239)] ml-auto relative">
                                                   <div class="flex flex-row justify-start items-center w-full">
-                                                       <p class="mt-0 mb-0 mr-auto font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Résultats : 0</p>
+                                                       <p class="mt-0 mb-0 mr-auto font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Résultats : {{ panelStore.visitors.length }}</p>
                                                        <div></div>
                                                   </div>
                                                   <div class="ml-[32px] flex">

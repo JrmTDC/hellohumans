@@ -1,38 +1,38 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "build": "nuxi build",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "start": "nuxt start",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "@stripe/stripe-js": "^7.0.0",
-    "@vuepic/vue-datepicker": "^11.0.2",
-    "colord": "^2.9.3",
-    "date-fns": "^4.1.0",
-    "nuxt": "^3.16.2",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "vuedraggable": "^4.1.0"
-  },
-  "devDependencies": {
-    "@formkit/auto-animate": "^0.8.2",
-    "@nuxtjs/color-mode": "^3.5.2",
-    "@nuxtjs/i18n": "^9.5.4",
-    "@nuxtjs/supabase": "^1.5.0",
-    "@nuxtjs/tailwindcss": "^6.13.1",
-    "@pinia/nuxt": "^0.11.0",
-    "dayjs-nuxt": "^2.1.11",
-    "nuxt-echarts": "^0.3.0",
-    "nuxt-svgo": "^4.1.0"
-  },
-  "engines": {
-    "node": ">=22.13.1"
-  }
+     "name": "nuxt-app",
+     "private": true,
+     "type": "module",
+     "build": "nuxi build",
+     "scripts": {
+          "build": "nuxt build",
+          "dev": "ts-node server.ts",
+          "start": "nuxt start",
+          "generate": "nuxt generate",
+          "preview": "nuxt preview",
+          "postinstall": "nuxt prepare"
+     },
+     "dependencies": {
+          "@stripe/stripe-js": "^7.0.0",
+          "@vuepic/vue-datepicker": "^11.0.2",
+          "colord": "^2.9.3",
+          "date-fns": "^4.1.0",
+          "nuxt": "^3.16.2",
+          "vue": "^3.5.13",
+          "vue-router": "^4.5.0",
+          "vuedraggable": "^4.1.0"
+     },
+     "devDependencies": {
+          "@formkit/auto-animate": "^0.8.2",
+          "@nuxtjs/color-mode": "^3.5.2",
+          "@nuxtjs/i18n": "^9.5.4",
+          "@nuxtjs/supabase": "^1.5.0",
+          "@nuxtjs/tailwindcss": "^6.13.1",
+          "@pinia/nuxt": "^0.11.0",
+          "dayjs-nuxt": "^2.1.11",
+          "nuxt-echarts": "^0.3.0",
+          "nuxt-svgo": "^4.1.0"
+     },
+     "engines": {
+          "node": ">=22.13.1"
+     }
 }
