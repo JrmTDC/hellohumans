@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import type {Socket} from "socket.io-client";
 
 interface ChatMessage {
      id: string
@@ -57,6 +58,7 @@ export const useChatStore = defineStore('chat', () => {
      const suggestions = ref<Suggestion[]>([])
      const hasLoadedStorage = ref(false)
      const storageData = ref<Record<string, any>>(getStorageData())
+     const socket = shallowRef<Socket>()
 
      const configChat = reactive<ChatConfig>({
           name: 'HelloHumans',
@@ -68,6 +70,19 @@ export const useChatStore = defineStore('chat', () => {
           actionColor: '#0566ff',
           isCustomBackground: false
      })
+
+     function visitorSocket () {
+          if (socket.value || !projectPublicKey.value) return
+          socket.value = useSocket(projectPublicKey.value, 'visitor')
+
+          socket.value.on('connect', () => {
+               console.debug('[WS-chat] connected', socket.value?.id)
+          })
+
+          socket.value.on('disconnect', () => {
+               console.debug('[WS-chat] disconnected')
+          })
+     }
 
      function getStorageData(): Record<string, any> {
           const key = `hhs_isp_chat_${panelStore.project?.public_key || 'default'}`
@@ -198,11 +213,7 @@ export const useChatStore = defineStore('chat', () => {
           }
      }
 
-     async function messageSend(content: string): Promise<{
-          success: boolean
-          message?: ChatMessage
-          reason?: 'user_invalid' | 'internal_error'
-     }> {
+     async function messageSend(content: string): Promise<{ success: boolean, message?: ChatMessage, reason?: 'user_invalid' | 'internal_error' }> {
           const {apiFetch} = useChatApi()
           const chatData = getStorageData()
 
@@ -297,6 +308,7 @@ export const useChatStore = defineStore('chat', () => {
           suggestions,
           storageData,
           loadFromStorage,
+          visitorSocket,
           getStorageData,
           setStorageData,
           updateStorage,

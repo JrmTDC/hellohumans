@@ -195,6 +195,7 @@ onMounted(async () => {
           if (optionsBox.value && !optionsBox.value.contains(e.target as Node)) showOptions.value = false
      })
      await applyForcedState(props.forcedState)
+     watch(() => chatStore.projectPublicKey, chatStore.visitorSocket, { immediate: true })
 })
 
 onUnmounted(() => {

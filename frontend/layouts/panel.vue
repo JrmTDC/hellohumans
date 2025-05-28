@@ -66,6 +66,7 @@ onMounted(async () => {
                }else{
                     await panelStore.initPanelData()
                }
+               watch(() => panelStore.project?.public_key, panelStore.visitorsLive, { immediate: true })
           }
           return
      } catch (e) {

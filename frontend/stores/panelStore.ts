@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { loadStripe } from '@stripe/stripe-js'
+import type {Socket} from "socket.io-client";
 
 interface User{
      id: string;
@@ -143,41 +144,8 @@ export const usePanelStore = defineStore('panel', () => {
      const leads = ref<{ id: string; name: string }[]>([])
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
-
-     visitors.value = [
-          {
-               id: 'test',
-               public_key: 'test',
-               distinct_id: 'test',
-               originalVisitorId: 'test',
-               createdAt: 'test',
-               lang: 'test',
-               gdprConsent: true,
-               live: {
-                    ip: 'test',
-                    browser: 'test',
-                    browser_version: 'test',
-                    user_agent: 'test',
-                    os_name: 'test',
-                    os_version: 'test',
-                    mobile: true,
-                    browser_session_id: 'test',
-                    referer: 'test',
-                    country: 'test',
-                    lastActivity: 'test',
-                    lastPage: 'test',
-                    numberOfVisits: 1,
-                    screen_width: 1,
-                    screen_height: 1,
-               }
-          }
-     ]
-     leads.value = [
-          {
-               id: 'test',
-               name: 'Test Lead'
-          }
-     ]
+     const liveVisitors = ref<VisitorsLive[]>([])
+     let socket: Socket | null = null
 
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
@@ -310,6 +278,22 @@ export const usePanelStore = defineStore('panel', () => {
                await logout()
                return false
           }
+     }
+
+     async function visitorsLive() {
+          if (socket || !project.value?.public_key) return
+          socket = useSocket(project.value.public_key, 'admin')
+
+          socket.on('visitor_connected',  (v: Visitors) => {
+               visitors.value.push(v)
+          })
+
+          socket.on('visitor_disconnected', ({ id }) => {
+               visitors.value = visitors.value.filter(v => v.id !== id)
+          })
+
+          socket.on('connect',    () => console.debug('[WS-panel] connected'))
+          socket.on('disconnect', () => { visitors.value = [] })
      }
 
      async function fetchModules() {
@@ -579,6 +563,7 @@ export const usePanelStore = defineStore('panel', () => {
           initPanelAccessSession,
           initPanelData,
           updateUserLang,
+          visitorsLive,
           switchProject,
           switchClient,
           updatePassword,

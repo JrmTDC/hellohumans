@@ -67,6 +67,7 @@ export default defineNuxtConfig({
      runtimeConfig: {
           public: {
                apiBaseUrl: process.env.API_BASE_URL || "",
+               wssBaseUrl: process.env.WSS_BASE_URL || "",
                appName: process.env.APP_NAME || "",
                appYear: process.env.APP_YEAR || "",
                supabaseBaseUrlRedirect: process.env.SUPABASE_BASE_URL_REDIRECT || "",

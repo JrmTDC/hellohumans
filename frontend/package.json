@@ -5,7 +5,7 @@
      "build": "nuxi build",
      "scripts": {
           "build": "nuxt build",
-          "dev": "ts-node server.ts",
+          "dev": "nuxt dev",
           "start": "nuxt start",
           "generate": "nuxt generate",
           "preview": "nuxt preview",
@@ -17,6 +17,7 @@
           "colord": "^2.9.3",
           "date-fns": "^4.1.0",
           "nuxt": "^3.16.2",
+          "socket.io-client": "^4.8.1",
           "vue": "^3.5.13",
           "vue-router": "^4.5.0",
           "vuedraggable": "^4.1.0"

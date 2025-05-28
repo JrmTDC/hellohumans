@@ -158,7 +158,7 @@
           </div>
      </div>
 
-     <div v-if="!panelStore.project?.widget_installed" class="absolute left-0 bottom-[56px] w-full flex items-center justify-center z-[620]">
+     <div v-if="panelStore.visitors.length === 0 && !panelStore.project?.widget_installed" class="absolute left-0 bottom-[56px] w-full flex items-center justify-center z-[620]">
           <div class="flex flex-row justify-start items-center px-[24px] py-[20px] bg-white rounded-[8px] shadow-[0_12px_32px_rgba(0,20,51,0.12)]">
                <SvgoPanelCustomersIconInfo class="min-w-[24px] min-h-[24px] w-[24px] h-[24px] fill-[rgb(100,116,145)]" />
                <div class="ml-[16px] max-w-[450px]">
