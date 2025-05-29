@@ -71,9 +71,9 @@ export const useChatStore = defineStore('chat', () => {
           isCustomBackground: false
      })
 
-     function visitorSocket () {
+     function visitorRegisterSocket () {
           if (socket.value || !projectPublicKey.value) return
-          socket.value = useSocket(projectPublicKey.value, 'visitor')
+          socket.value = useSocket(projectPublicKey.value, 'visitor', 'desktop')
 
           socket.value.on('connect', () => {
                console.debug('[WS-chat] connected', socket.value?.id)
@@ -308,7 +308,7 @@ export const useChatStore = defineStore('chat', () => {
           suggestions,
           storageData,
           loadFromStorage,
-          visitorSocket,
+          visitorRegisterSocket,
           getStorageData,
           setStorageData,
           updateStorage,

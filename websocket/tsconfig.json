@@ -2,7 +2,9 @@
      "extends": "@adonisjs/tsconfig/tsconfig.app.json",
      "compilerOptions": {
           "rootDir": "./",
-          "outDir": "./build",
+          "outDir": "./.output",
+          "strict": true,
+          "baseUrl": "./",
           "paths": {
                "#sockets/*": [
                     "app/sockets/*"
@@ -14,5 +16,6 @@
                     "config/*"
                ]
           }
-     }
+     },
+     "include": ["**/*.ts", "bin/**/*.ts"]
 }

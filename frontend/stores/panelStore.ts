@@ -145,7 +145,7 @@ export const usePanelStore = defineStore('panel', () => {
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
      const liveVisitors = ref<VisitorsLive[]>([])
-     let socket: Socket | null = null
+     const socket = shallowRef<Socket>()
 
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
@@ -280,20 +280,19 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+     async function operatorRegisterSocket() {
+          if (socket.value || !project.value?.public_key) return
+          socket.value = useSocket(project.value.public_key, 'operator', 'desktop')
 
-     async function visitorsLive() {
-          if (socket || !project.value?.public_key) return
-          socket = useSocket(project.value.public_key, 'operator')
-          visitors.value
-          socket.on('current_visitors', (visitors) => {
+          socket.value.on('current_visitors', (visitors) => {
                visitors.valuevisitors = visitors
           })
 
-          socket.on('visitor_connected', (visitor) => {
+          socket.value.on('visitor_connected', (visitor) => {
                visitors.value.push(visitor)
           })
 
-          socket.on('visitor_disconnected', ({ id }) => {
+          socket.value.on('visitor_disconnected', ({ id }) => {
                visitors.value = visitors.value.filter(v => v.id !== id)
           })
      }
@@ -565,7 +564,7 @@ export const usePanelStore = defineStore('panel', () => {
           initPanelAccessSession,
           initPanelData,
           updateUserLang,
-          visitorsLive,
+          operatorRegisterSocket,
           switchProject,
           switchClient,
           updatePassword,

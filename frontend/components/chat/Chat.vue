@@ -187,7 +187,7 @@ onMounted(async () => {
      const ro = new ResizeObserver(resizeToContent)
      chatContent.value && ro.observe(chatContent.value)
 
-     watch([messages, isChatActive, isExpanded], () => nextTick(resizeToContent), { deep: true })
+     watch([messages, isChatActive, isExpanded], () => nextTick(resizeToContent), {deep: true})
      watch(isVisible, v => v && nextTick(resizeToContent))
      window.addEventListener('resize', resizeToContent)
 
@@ -195,7 +195,9 @@ onMounted(async () => {
           if (optionsBox.value && !optionsBox.value.contains(e.target as Node)) showOptions.value = false
      })
      await applyForcedState(props.forcedState)
-     watch(() => chatStore.projectPublicKey, chatStore.visitorSocket, { immediate: true })
+     if (!props.previewMode) {
+          watch(() => chatStore.projectPublicKey, chatStore.visitorRegisterSocket, {immediate: true})
+     }
 })
 
 onUnmounted(() => {
