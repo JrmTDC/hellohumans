@@ -280,20 +280,22 @@ export const usePanelStore = defineStore('panel', () => {
           }
      }
 
+
      async function visitorsLive() {
           if (socket || !project.value?.public_key) return
-          socket = useSocket(project.value.public_key, 'admin')
+          socket = useSocket(project.value.public_key, 'operator')
+          visitors.value
+          socket.on('current_visitors', (visitors) => {
+               visitors.valuevisitors = visitors
+          })
 
-          socket.on('visitor_connected',  (v: Visitors) => {
-               visitors.value.push(v)
+          socket.on('visitor_connected', (visitor) => {
+               visitors.value.push(visitor)
           })
 
           socket.on('visitor_disconnected', ({ id }) => {
                visitors.value = visitors.value.filter(v => v.id !== id)
           })
-
-          socket.on('connect',    () => console.debug('[WS-panel] connected'))
-          socket.on('disconnect', () => { visitors.value = [] })
      }
 
      async function fetchModules() {

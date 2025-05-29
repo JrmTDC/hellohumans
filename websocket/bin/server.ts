@@ -1,54 +1,61 @@
-// bin/server.ts  (ou websocket/server.ts si service dédié)
-import 'dotenv/config'                       // <── charge .env
+import 'dotenv/config'
 import { createServer } from 'node:http'
 import { Server }       from 'socket.io'
-import { nanoid }       from 'nanoid'        // <── après  npm i nanoid
+import { nanoid }       from 'nanoid'
 
-/* ------------------------------------------------------------------ */
-/* 1.  Serveur HTTP minimal (aucune route) */
 const httpServer = createServer()
 
-/* 2.  Socket.io v4 */
+//  Socket.io v4
 export const io = new Server(httpServer, {
      cors: { origin: '*', methods: ['GET', 'POST'] },
      transports: ['websocket'],
 })
 
-/* 3. Helpers */
-type Role = 'visitor' | 'admin'
+// Helpers
+type Role = 'visitor' | 'operator'
 const room = (ppk: string, role?: Role) => (role ? `${ppk}:${role}` : ppk)
+const onlineVisitors = new Map<string, any>()
 
-/* 4.  Gestion des connexions */
+// Gestion des connexions
 io.on('connection', (socket) => {
-     const ppk  = String(socket.handshake.query.ppk  || '')
-     const role = (socket.handshake.query.role ?? 'visitor') as Role
-     const ua   = String(socket.handshake.query.device || 'unknown')
-
-     if (!ppk) return socket.disconnect()
-
-     socket.join(room(ppk, role))
+     const role = socket.handshake.query.role
+     const ppk = socket.handshake.query.ppk
 
      if (role === 'visitor') {
-          const visitorId = nanoid(8)
-          socket.data.visitorId = visitorId
+          const visitorId = socket.id
 
-          io.to(room(ppk, 'admin')).emit('visitor_connected', {
+          // stocker le visiteur
+          onlineVisitors.set(visitorId, {
                id: visitorId,
-               device: ua,
-               firstAt: Date.now(),
+               ppk,
+               ip: socket.handshake.address,
+               // tu peux rajouter plus de métadonnées ici
+          })
+
+          // informer tous les panels
+          io.emit('visitor_connected', onlineVisitors.get(visitorId))
+
+          socket.on('disconnect', () => {
+               io.emit('visitor_disconnected', { id: visitorId })
+               onlineVisitors.delete(visitorId)
           })
      }
 
-     socket.on('disconnect', () => {
-          if (role === 'visitor')
-               io.to(room(ppk, 'admin')).emit('visitor_disconnected', {
-                    id: socket.data.visitorId,
-               })
-     })
+     if (role === 'operator') {
+          // envoyer la liste des visiteurs en ligne
+          socket.emit('current_visitors', Array.from(onlineVisitors.values()))
+     }
 })
 
-/* 5.  Lancement */
+// Lancement
 const port = Number(process.env.PORT ?? 4444)
 httpServer.listen(port, () => {
-     console.log(`[WS] listening on ${port}`)
+     console.log(`
+╭─────────────────────────────────────────────────╮
+│                                                 │
+│    WebSocket server listening                   │
+│    http://localhost:${port}                        │
+│                                                 │
+╰─────────────────────────────────────────────────╯
+`)
 })
