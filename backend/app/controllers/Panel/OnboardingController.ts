@@ -131,6 +131,7 @@ class OnboardingController {
 
                // Génération automatique d'une clé publique sécurisée
                const publicKey = randomBytes(32).toString('hex')
+               const privateKey = randomBytes(32).toString('hex')
 
                // Création du projet principal
                const { data: projectData, error: projectError } = await supabaseService
@@ -147,6 +148,7 @@ class OnboardingController {
                          website_hosting_platform: websiteHostingPlatform,
                          primary_use: primaryUse,
                          public_key: publicKey,
+                         private_key: privateKey
                     })
                     .select()
                     .single()
