@@ -20,6 +20,7 @@ interface Project {
      subscription?: ProjectSubscription | null
      website: string,
      public_key: string,
+     private_key: string,
      widget_installed: boolean
 }
 interface UpgradePreviewResponse {
@@ -146,6 +147,7 @@ export const usePanelStore = defineStore('panel', () => {
      const config = useRuntimeConfig()
      const liveVisitors = ref<VisitorsLive[]>([])
      const socket = shallowRef<Socket>()
+     const wssKey = `${config.public.wssKey}`
 
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
@@ -286,7 +288,7 @@ export const usePanelStore = defineStore('panel', () => {
 
           socket.value.on('connect', () => {
                const payload: OperatorRegisterPayload = {
-                    accessKey: 'xxx',
+                    accessKey: wssKey,
                     projectPublicKey: project.value.public_key,
                     projectPrivateKey: project.value.private_key,
                     device: 'web',

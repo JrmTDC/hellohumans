@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io'
 import supabaseService from '#services/supabaseService'
-
+//process.env.WSS_KEY
 class VisitorSockets {
      public async register(socket: Socket, onlineVisitors: Map<string, any>) {
           const data = socket.handshake.query

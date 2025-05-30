@@ -68,6 +68,7 @@ export default defineNuxtConfig({
           public: {
                apiBaseUrl: process.env.API_BASE_URL || "",
                wssBaseUrl: process.env.WSS_BASE_URL || "",
+               wssKey: process.env.WSS_KEY || "",
                appName: process.env.APP_NAME || "",
                appYear: process.env.APP_YEAR || "",
                supabaseBaseUrlRedirect: process.env.SUPABASE_BASE_URL_REDIRECT || "",
