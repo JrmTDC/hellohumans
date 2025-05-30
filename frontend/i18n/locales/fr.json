@@ -648,5 +648,53 @@
                     }
                }
           }
+     },
+     "chat": {
+          "components": {
+               "header": {
+                    "back": "Retour",
+                    "openOptions": "Ouvrir les options",
+                    "closeOptions": "Fermer les options",
+                    "minimize": "Réduire",
+                    "imHereToHelp": "Je suis là pour vous aider !"
+               },
+               "home": {
+                    "talkToAssistant": "Parlez à notre assistant",
+                    "assistantSubtitle": "Je suis là pour vous aider !",
+                    "poweredBy": "Propulsé par ",
+                    "nav": {
+                         "home": "Accueil",
+                         "chat": "Discuter"
+                    }
+               },
+               "input": {
+                    "placeholder": "Écrivez un message...",
+                    "send": "Envoyer",
+                    "shortcut": "Raccourci",
+                    "poweredBy": "Propulsé par "
+               },
+               "messages": {
+                    "showHistory": "Messages précédents",
+                    "typing": "En train d'écrire",
+                    "you": "Vous",
+                    "aiAgent": "Agent IA {name}",
+                    "today": "Aujourd'hui",
+                    "yesterday": "Hier"
+               },
+               "consent": {
+                    "title": "Avant de commencer, veuillez entrer votre adresse email.",
+                    "placeholder": "Entrez votre email",
+                    "gdprNotice": "Je comprends et reconnais que HelloHumans est le responsable du traitement de mes données personnelles. Toutes mes données seront traitées et protégées conformément au Règlement Général sur la Protection des Données (RGPD)",
+                    "accept": "J’accepte et je continue",
+                    "loading": "Chargement..."
+               },
+               "options": {
+                    "soundOn": "Son activé",
+                    "soundOff": "Son désactivé",
+                    "expand": "Agrandir la discussion",
+                    "collapse": "Réduire la discussion",
+                    "clearHistory": "Effacer l'historique"
+               }
+          }
      }
 }

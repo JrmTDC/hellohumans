@@ -3,8 +3,7 @@
           <div id="messages" class="relative mt-[10px] w-full pb-6 float-left">
                     <!-- Affichage du message d'introduction -->
                     <button v-if="!showPreviousMessages" @click="onShowHistory" class="mx-auto mb-[20px] flex items-center bg-white tracking-[-0.1px] text-center text-[12px] font-semibold text-[rgb(136,148,171)] rounded-[14px] border border-[rgba(136,148,171,0.24)] pr-[10px] hover:text-[#0566ff] hover:bg-[rgba(136,148,171,0.04)] hover:border-[rgba(136,148,171,0.24)] transition-all duration-200 ease-in-out group">
-                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px] group-hover:fill-[#0566ff]"/> Messages précédents
-                    </button>
+                         <SvgoChatIconHistory class="fill-[rgb(136,148,171)] w-[19px] h-[24px] mx-[4px] group-hover:fill-[#0566ff]"/>  {{ t('chat.components.messages.showHistory') }}</button>
 
                <!-- Boucle sur tous les messages filteredMessages -->
                <div v-for="(msg, index) in filteredMessages" :key="msg.id" class="clear-both mt-[9px] my-[2px] max-w-[85%]" :class="[msg.sender === 'visitor' ? 'hhcss_message-visitor float-right text-right' : 'hhcss_message-operator float-left text-left']">
@@ -27,7 +26,7 @@
                     v-if="isLoading"
                     class="hhcss_messageLoading text-[#00a9ff] float-left border border-transparent py-[10px] px-4 rounded-[20px] my-[2px] text-[15px] leading-[20px] break-words inline-block max-w-[85%] clear-both relative transition-[margin] duration-[280ms] ease-in-out"
                >
-                    <span>En train d'écrire</span>
+                    <span>{{ t('chat.components.messages.typing') }}</span>
                     <div class="hhcss_puceAnimation">
                          <span></span>
                          <span></span>
@@ -43,6 +42,7 @@
      </div>
 </template>
 <script setup lang="ts">
+const { t } = useI18n()
 type ChatMessage = {
      id: string
      idFromServer?: string
@@ -185,12 +185,16 @@ function formatDate(msg: ChatMessage): string {
      const isToday = date.toDateString() === now.toDateString()
      const isYesterday = date.toDateString() === new Date(now.setDate(now.getDate() - 1)).toDateString()
      const time = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-     const senderLabel = msg.sender === 'visitor' ? 'Vous' : `Agent IA ${config.public.chatBotName}`
+     const senderLabel = msg.sender === 'visitor'
+          ? t('chat.components.messages.you')
+          : t('chat.components.messages.aiAgent', { name: config.public.chatBotName })
 
      if (isToday) {
-          return `${senderLabel} - Aujourd'hui, ${time}`
+          return `${senderLabel} - ${t('chat.components.messages.today')}, ${time}`
+
      } else if (isYesterday) {
-          return `${senderLabel} - Hier, ${time}`
+          return `${senderLabel} - ${t('chat.components.messages.yesterday')}, ${time}`
+
      } else {
           const fullDate = date.toLocaleDateString('fr-FR', {
                day: 'numeric',

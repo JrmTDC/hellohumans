@@ -11,17 +11,17 @@
                     </button>
 
                     <!-- Titre + formulaire RGPD -->
-                    <h2 class="text-[15px] mb-2 text-[#494949]">Avant de commencer, veuillez entrer votre adresse email.</h2>
+                    <h2 class="text-[15px] mb-2 text-[#494949]">{{ t('chat.components.consent.title') }}</h2>
                     <div class="relative left-0 p-[15px]">
                          <svgo-chat-icon-input class="w-[24px] h-[24px] fill-[#0566ff] rotate-45 absolute top-[28px] left-[25px]" />
-                         <input v-model="visitorEmail" type="email" placeholder="Entrez votre email" class="border border-[rgba(108,125,159,0.24)] text-[15px] p-[9px_12px_10px_40px] leading-normal m-0 w-full rounded-[10px] focus:outline-none h-[50px]" :disabled="isLoading" @keydown.enter.prevent="onAccept"
+                         <input v-model="visitorEmail" type="email" :placeholder="t('chat.components.consent.placeholder')" class="border border-[rgba(108,125,159,0.24)] text-[15px] p-[9px_12px_10px_40px] leading-normal m-0 w-full rounded-[10px] focus:outline-none h-[50px]" :disabled="isLoading" @keydown.enter.prevent="onAccept"
                          />
                     </div>
-                    <p class="text-[13px] mt-[10px] mb-[35px] text-[#9B9B9B] leading-[18px]">Je comprends et reconnais que HelloHumans est le responsable du traitement de mes données personnelles. Toutes mes données seront traitées et protégées conformément au Règlement Général sur la Protection des Données (RGPD)</p>
+                    <p class="text-[13px] mt-[10px] mb-[35px] text-[#9B9B9B] leading-[18px]">{{ t('chat.components.consent.gdprNotice') }}</p>
                     <button @click="onAccept" :disabled="!isEmailValid" class="flex-shrink-0 w-full h-[50px] text-[16px] text-white rounded-[6px] relative" :class="[isEmailValid ? 'bg-[#0566ff]' : 'bg-gray-400 cursor-not-allowed', isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0566ff]']">
-                         <span v-if="!isLoading">J’accepte et je continue</span>
+                         <span v-if="!isLoading">{{ t('chat.components.consent.accept') }}</span>
                          <span v-else class="flex items-center text-center justify-center">
-                              Chargement...
+                            	{{ t('chat.components.consent.loading') }}
                          </span>
                     </button>
                </div>
@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
 
 const chatStore = useChatStore();
 const props = defineProps<{

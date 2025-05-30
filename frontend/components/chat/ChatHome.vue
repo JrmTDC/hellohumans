@@ -18,15 +18,15 @@
           <!-- Bouton Chat avec nous -->
           <button @click="!previewMode && $emit('openChat')" class="flex px-4 py-3 items-center gap-2 w-full rounded-xl border border-[#e2e8ef] bg-white hover:bg-[#EFF2F6] z-20">
                <div class="flex flex-col items-start gap-[2px] flex-grow">
-                    <span class="font-semibold text-[15px] leading-[19px]">Parlez à notre assistant</span>
-                    <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">Je suis là pour vous aider !</span>
+                    <span class="font-semibold text-[15px] leading-[19px]">{{ t('chat.components.home.talkToAssistant') }}</span>
+                    <span class="text-[14px] font-normal text-left text-[#4C596B] overflow-hidden text-ellipsis line-clamp-2">{{ t('chat.components.home.assistantSubtitle') }}</span>
                </div>
                <svgo-chat-icon-send class="w-[20px] h-[21px]" :style="{ fill:chatStore.configChat.actionColor }" />
           </button>
           <div class="flex-[1_100_16px]"></div>
           <!-- Powered by HelloHumans -->
           <div class="flex justify-center items-center flex-[0_0_48px]">
-               <a href="https://hellohumans.fr" target="_blank" class="flex items-center text-[rgb(136,148,171)] font-normal text-[10px] uppercase text-center">Propulsé par <svgo-chat-logo-hello-humans-full class="ml-[5px] w-[90px] h-auto fill-[rgb(100,116,145)]" /></a>
+               <a href="https://hellohumans.fr" target="_blank" class="flex items-center text-[rgb(136,148,171)] font-normal text-[10px] uppercase text-center">{{ t('chat.components.home.poweredBy') }} <svgo-chat-logo-hello-humans-full class="ml-[5px] w-[90px] h-auto fill-[rgb(100,116,145)]" /></a>
           </div>
      </div>
      <!-- Barre de navigation du bas (ex: Accueil, Discussion) -->
@@ -35,18 +35,19 @@
                <!-- Home -->
                <button class="flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold">
                     <svgo-chat-icon-home class="w-[28px] h-[28px]" :style="{ fill:chatStore.configChat.actionColor }"/>
-                    <span class="text-sm text-gray-700">Accueil</span>
+                    <span class="text-sm text-gray-700">{{ t('chat.components.home.nav.home') }}</span>
                </button>
 
                <!-- Chat -->
                <button @click="!previewMode && $emit('openChat')" @mouseover="isHovered = true" @mouseleave="isHovered = false" class="group flex flex-1 flex-col items-center gap-[2px] text-[15px] font-semibold text-[#647491] hover:text-gray-700">
                     <svgo-chat-icon-chat class="w-[28px] h-[28px]" :style="{ fill: isHovered ? chatStore.configChat.actionColor : '' }" />
-                    <span class="text-sm">Discuter</span>
+                    <span class="text-sm">{{ t('chat.components.home.nav.chat') }}</span>
                </button>
           </div>
      </div>
 </template>
 <script setup lang="ts">
+const { t } = useI18n()
 const chatStore = useChatStore();
 const suggestedQuestions = computed(() =>
      chatStore.suggestions
