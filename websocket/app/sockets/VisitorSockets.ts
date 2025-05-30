@@ -1,46 +1,45 @@
 import type { Socket } from 'socket.io'
 import supabaseService from '#services/supabaseService'
-//process.env.WSS_KEY
+
 class VisitorSockets {
-     public async register(socket: Socket, onlineVisitors: Map<string, any>) {
-          const data = socket.handshake.query
-          const visitorId = socket.id
-          socket.emit('connected')
+     async register(socket: Socket, onlineVisitors: Map<string, any>) {
+          socket.on('visitorRegister', async (payload) => {
+               const visitor = {
+                    id: payload.id,
+                    distinct_id: payload.distinct_id,
+                    project_public_key: payload.project_public_key,
+                    email: payload.email,
+                    url: payload.url,
+                    lang: payload.lang,
+                    screen_width: payload.screen_width,
+                    screen_height: payload.screen_height,
+                    user_agent: payload.user_agent,
+                    isDesignMode: payload.isDesignMode,
+                    device: payload.device || 'desktop',
+                    connected_at: new Date().toISOString(),
+               }
 
+               // enregistrer en mémoire
+               onlineVisitors.set(visitor.id, visitor)
 
-          const visitor = {
-               id: visitorId,
-               originalVisitorId: data.originalVisitorId,
-               distinct_id: data.distinct_id,
-               country: data.country,
-               browser: data.browser,
-               browser_version: data.browser_version,
-               user_agent: data.user_agent,
-               os_name: data.os_name,
-               os_version: data.os_version,
-               mobile: data.mobile === 'true',
-               screen_width: Number(data.screen_width),
-               screen_height: Number(data.screen_height),
-               ip: socket.handshake.address,
-               created: new Date().toISOString(),
-               project_public_key: data.ppk,
-          }
+               // enregistrer en BDD (table: live_visitors)
+               await supabaseService.from('live_visitors').upsert({
+                    id: visitor.id,
+                    project_public_key: visitor.project_public_key,
+                    payload: visitor,
+                    connected_at: new Date().toISOString(),
+               })
 
+               // informer les opérateurs
+               socket.broadcast.emit('visitor_connected', visitor)
 
-          onlineVisitors.set(visitorId, visitor)
-          socket.broadcast.emit('visitorDataUpdated', { visitor_id: visitorId, data: { status: 'online', returning: true } })
-          socket.broadcast.emit('visitorEnterWebsite', visitor)
-          socket.broadcast.emit('visitorsCount', { online:onlineVisitors.size })
+               socket.on('disconnect', async () => {
+                    onlineVisitors.delete(visitor.id)
+                    socket.broadcast.emit('visitor_disconnected', { id: visitor.id })
 
-
-
-          //await supabaseService.from('visitor_lives').upsert({ ...visitor, id: visitor.distinct_id })
-
-          socket.on('disconnect', async () => {
-               socket.broadcast.emit('visitor_disconnected', { id: visitorId })
-               onlineVisitors.delete(visitorId)
-
-               //await supabaseService.from('visitor_lives').delete().eq('id', visitor.distinct_id)
+                    // supprimer de la BDD
+                    await supabaseService.from('live_visitors').delete().eq('id', visitor.id)
+               })
           })
      }
 }

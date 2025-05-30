@@ -289,8 +289,8 @@ export const usePanelStore = defineStore('panel', () => {
           socket.value.on('connect', () => {
                const payload: OperatorRegisterPayload = {
                     accessKey: wssKey,
-                    projectPublicKey: project.value.public_key,
-                    projectPrivateKey: project.value.private_key,
+                    projectPublicKey: project.value?.public_key,
+                    projectPrivateKey: project.value?.private_key,
                     device: 'web',
                     version: 1,
                }

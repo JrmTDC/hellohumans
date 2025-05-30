@@ -20,8 +20,8 @@ declare global {
      interface OperatorRegisterPayload {
           accessKey: string
           device: string
-          projectPublicKey: string
-          projectPrivateKey: string
+          projectPublicKey?: string
+          projectPrivateKey?: string
           version?: number
      }
 }
