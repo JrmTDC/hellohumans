@@ -28,15 +28,19 @@ class VisitorSockets {
 
 
           onlineVisitors.set(visitorId, visitor)
-          socket.broadcast.emit('visitorRegister', visitor)
+          socket.broadcast.emit('visitorDataUpdated', { visitor_id: visitorId, data: { status: 'online', returning: true } })
+          socket.broadcast.emit('visitorEnterWebsite', visitor)
+          socket.broadcast.emit('visitorsCount', { online:onlineVisitors.size })
 
-          await supabaseService.from('visitor_lives').upsert({ ...visitor, id: visitor.distinct_id })
+
+
+          //await supabaseService.from('visitor_lives').upsert({ ...visitor, id: visitor.distinct_id })
 
           socket.on('disconnect', async () => {
                socket.broadcast.emit('visitor_disconnected', { id: visitorId })
                onlineVisitors.delete(visitorId)
 
-               await supabaseService.from('visitor_lives').delete().eq('id', visitor.distinct_id)
+               //await supabaseService.from('visitor_lives').delete().eq('id', visitor.distinct_id)
           })
      }
 }

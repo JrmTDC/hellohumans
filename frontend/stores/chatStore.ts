@@ -76,12 +76,33 @@ export const useChatStore = defineStore('chat', () => {
           socket.value = useSocket(projectPublicKey.value, 'visitor', 'desktop')
 
           socket.value.on('connect', () => {
-               console.debug('[WS-chat] connected', socket.value?.id)
+               const visitorData: VisitorRegisterPayload = {
+                    id: visitor.value?.distinct_id || socket!.id,
+                    distinct_id: visitor.value?.distinct_id,
+                    project_public_key: projectPublicKey.value,
+                    name: visitor.value?.name || '',
+                    email: visitor.value?.email || '',
+                    ip: visitor.value?.ip || '',
+                    url: window.location.href,
+                    lang: navigator.language || 'fr',
+                    user_agent: navigator.userAgent,
+                    browser: 'Chrome',
+                    screen_width: window.innerWidth,
+                    screen_height: window.innerHeight,
+                    device: 'desktop',
+                    isDesignMode: false,
+                    after_reconnect: false,
+               }
+
+               socket.value!.emit('visitorRegister', visitorData)
           })
 
           socket.value.on('disconnect', () => {
-               console.debug('[WS-chat] disconnected')
+               console.log('[visitor] disconnected')
           })
+
+
+
      }
 
      function getStorageData(): Record<string, any> {

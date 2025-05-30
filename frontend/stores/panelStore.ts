@@ -284,12 +284,26 @@ export const usePanelStore = defineStore('panel', () => {
           if (socket.value || !project.value?.public_key) return
           socket.value = useSocket(project.value.public_key, 'operator', 'desktop')
 
-          socket.value.on('current_visitors', (visitors) => {
-               visitors.valuevisitors = visitors
+          socket.value.on('connect', () => {
+               const payload: OperatorRegisterPayload = {
+                    accessKey: 'xxx',
+                    projectPublicKey: project.value.public_key,
+                    projectPrivateKey: project.value.private_key,
+                    device: 'web',
+                    version: 1,
+               }
+
+               socket.value!.emit('operatorRegister', payload)
+          })
+
+          socket.value.on('current_visitors', (data: any[]) => {
+               visitors.value = data
           })
 
           socket.value.on('visitor_connected', (visitor) => {
-               visitors.value.push(visitor)
+               if (!visitors.value.find(v => v.id === visitor.id)) {
+                    visitors.value.push(visitor)
+               }
           })
 
           socket.value.on('visitor_disconnected', ({ id }) => {
