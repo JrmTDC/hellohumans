@@ -18,7 +18,6 @@
                                         <p class="mt-[8px] mb-0 flex flex-row justify-start items-center font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] max-w-[750px]">Utilisez l'aperçu en temps réel pour suivre les clients qui consultent votre site Web.</p>
                                    </div>
                                    <PanelCommonVisitorTable :visitors="panelStore.visitors" />
-
                               </div>
                          </div>
                     </template>
