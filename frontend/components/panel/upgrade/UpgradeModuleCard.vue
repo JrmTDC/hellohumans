@@ -1,5 +1,5 @@
 <template>
-     <div class="relative flex-col justify-start items-[normal] rounded-[12px] border-2" :class="[ borderClasses, index >= 1 ? 'mt-[25px]' : '' ]">
+     <div class="relative flex-col justify-start items-[normal] rounded-[12px] border-2 last:mb-[30px]" :class="[ borderClasses, index >= 1 ? 'mt-[25px]' : '' ]">
 
           <span v-if="isIncluded" class="uppercase whitespace-nowrap absolute top-[-12px] right-[30px] px-[8px] py-[4px] text-[11px] leading-[16px] tracking-[-0.01em] font-medium rounded-[4px] bg-[#dce9ff] text-[#0049bd]">Inclus dans votre offre</span>
 
