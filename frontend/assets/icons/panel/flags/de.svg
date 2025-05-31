@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200px" height="800px" viewBox="0 0 1200 800" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>de</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-77442.000000, -7705.000000)" fill-rule="nonzero">
+            <g id="de" transform="translate(77442.000000, 7705.000000)">
+                <rect id="black_stripe" fill="#000000" x="0" y="0" width="1200" height="800"></rect>
+                <rect id="red_stripe" fill="#DD0000" x="0" y="266.666667" width="1200" height="533.333333"></rect>
+                <rect id="gold_stripe" fill="#FFCE00" x="0" y="533.333333" width="1200" height="266.666667"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
