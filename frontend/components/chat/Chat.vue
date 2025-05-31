@@ -27,12 +27,12 @@
           <div
                v-if="isOpen || isVisible"
                ref="chatContent"
-               class="fixed bottom-[26px] right-[26px] left-auto bg-white rounded-[16px] shadow-lg overflow-hidden flex flex-col pointer-events-auto transition-[transform,opacity] duration-300 ease-in-out"
+               class="fixed bottom-[26px] right-[26px] left-auto bg-white rounded-[16px] shadow-lg overflow-hidden flex flex-col pointer-events-auto transition-[transform,opacity] duration-300 ease-in-out max-md:w-full max-md:h-full max-md:bottom-0 max-md:bg-white max-md:flex max-md:flex-col max-md:rounded-none max-md:right-0 max-md:left-auto max-md:max-h-none"
                :class="[
                     isExpanded ? 'w-[593px]' : 'w-[372px]',
                     isVisible ? 'scale-100 opacity-100' : 'scale-85 opacity-0'
                ]"
-               :style="previewMode ? 'max-height:100%' : 'max-height:calc(100% - 47px)'"
+               :style="previewMode ? 'max-height:100%' : 'max-height:calc(100% - 47px) max-md:max-h-none'"
 
           >
                <ChatHeader
