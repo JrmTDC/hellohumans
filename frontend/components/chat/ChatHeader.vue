@@ -1,5 +1,5 @@
 <template>
-     <div class="p-[24px] text-white rounded-t-lg" :style="{ background: chatStore.configChat.backgroundColor }">
+     <div class="p-[24px] text-white rounded-t-lg  max-md:rounded-none" :style="{ background: chatStore.configChat.backgroundColor }">
           <div class="flex justify-between items-center">
                <div v-if="!isChatActive">
                     <svgo-chat-logo-hello-humans-full class="w-[189px] h-[28px]" :style="{ fill: chatStore.configChat.textColor }"/>
