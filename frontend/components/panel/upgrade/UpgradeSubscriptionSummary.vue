@@ -1,25 +1,56 @@
 <template>
-     <div class="flex flex-col justify-start items-[normal] flex-grow-0 w-[482px] px-[20px] py-[32px] border border-[#e2e8ef] bg-[#f5f7f9] self-stretch flex-shrink-0 max-[1600px]:w-[400px] max-[1600px]:px-[20px] max-[1600px]:py-[32px] max-[1440px]:w-[336px] max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]">
+     <div
+          class="flex flex-col justify-start items-[normal] flex-grow-0 w-[482px]
+           px-[20px] py-[32px] border border-[#e2e8ef] bg-[#f5f7f9]
+           self-stretch flex-shrink-0
+           max-[1600px]:w-[400px] max-[1600px]:px-[20px] max-[1600px]:py-[32px]
+           max-[1440px]:w-[336px]
+           max-[1366px]:w-[448px] max-[1366px]:px-[40px] max-[1366px]:py-[32px]"
+     >
           <div class="flex flex-col justify-start items-[normal] sticky top-[96px]">
-               <p class="text-[18px] font-medium mb-0">{{ t('panel.components.upgrade.subscriptionSummary.title') }}</p>
+               <p class="text-[18px] font-medium mb-0">
+                    {{ t('panel.components.upgrade.subscriptionSummary.title') }}
+               </p>
 
-               <div class="mt-[20px] flex flex-row justify-center items-center bg-[#e5e7f7] px-[20px] py-[16px] rounded-[12px]">
-                    <svgo-panel-upgrade-icon-diamon class="min-w-[24px] min-h-[24px] h-[24px] w-[24px] fill-[#303f9f]"/>
+               <!-- Encadré “Diamant” -->
+               <div
+                    class="mt-[20px] flex flex-row justify-center items-center
+               bg-[#e5e7f7] px-[20px] py-[16px] rounded-[12px]"
+               >
+                    <svgo-panel-upgrade-icon-diamon
+                         class="min-w-[24px] min-h-[24px] h-[24px] w-[24px] fill-[#303f9f]"
+                    />
                     <p class="mt-0 mb-0 text-[14px] leading-[18px] tracking-[-0.01em] text-[#151c46] ml-[8px]">
-                         <strong>{{ t('panel.components.upgrade.subscriptionSummary.highlight') }}</strong> {{ t('panel.components.upgrade.subscriptionSummary.highlightFull') }}</p>
+                         <strong>
+                              {{ t('panel.components.upgrade.subscriptionSummary.highlight') }}
+                         </strong>
+                         {{ t('panel.components.upgrade.subscriptionSummary.highlightFull') }}
+                    </p>
                </div>
 
-               <!-- Choix de cycle -->
-               <p class="text-[12px] text-[#647491] mt-[20px] mb-0 font-medium">{{ t('panel.components.upgrade.subscriptionSummary.billingLabel') }}</p>
+               <!-- Choix du cycle de facturation -->
+               <p class="text-[12px] text-[#647491] mt-[20px] mb-0 font-medium">
+                    {{ t('panel.components.upgrade.subscriptionSummary.billingLabel') }}
+               </p>
                <div class="flex items-center mt-[20px]">
+                    <!-- Mensuel -->
                     <label class="flex items-center cursor-pointer">
                          <input type="radio" value="month" v-model="billingCycleLocal" class="hidden" />
-                         <span v-if="billingCycleLocal === 'month'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
-                         <span v-else class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
-                         <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingMonthly') }}</span>
+                         <span
+                              v-if="billingCycleLocal === 'month'"
+                              class="w-[20px] h-[20px] rounded-full bg-[#0566ff]
+                   border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"
+                         ></span>
+                         <span
+                              v-else
+                              class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"
+                         ></span>
+                         <span class="ml-[8px]">
+                              {{ t('panel.components.upgrade.subscriptionSummary.billingMonthly') }}
+                         </span>
                     </label>
 
-                    <!-- si désactivé, on affiche le tooltip -->
+                    <!-- Annuel (désactivable) -->
                     <PanelCommonTooltip
                          v-if="disableAnnual"
                          text="L’option annuelle n’est pas disponible sur cette offre."
@@ -28,17 +59,33 @@
                          arrow
                     >
                          <label class="flex items-center ml-[32px] cursor-not-allowed opacity-50">
-                              <input type="radio" value="year" v-model="billingCycleLocal" class="hidden" disabled />
+                              <input
+                                   type="radio"
+                                   value="year"
+                                   v-model="billingCycleLocal"
+                                   class="hidden"
+                                   disabled
+                              />
                               <span class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
-                              <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}</span>
+                              <span class="ml-[8px]">
+                                   {{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}
+                              </span>
                          </label>
                     </PanelCommonTooltip>
-                    <!-- sinon fonctionnement normal -->
                     <label v-else class="flex items-center ml-[32px] cursor-pointer">
                          <input type="radio" value="year" v-model="billingCycleLocal" class="hidden" />
-                         <span v-if="billingCycleLocal === 'year'" class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"></span>
-                         <span v-else class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"></span>
-                         <span class="ml-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}</span>
+                         <span
+                              v-if="billingCycleLocal === 'year'"
+                              class="w-[20px] h-[20px] rounded-full bg-[#0566ff]
+                   border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"
+                         ></span>
+                         <span
+                              v-else
+                              class="w-[20px] h-[20px] rounded-full border-[2px] border-[#647491]"
+                         ></span>
+                         <span class="ml-[8px]">
+                              {{ t('panel.components.upgrade.subscriptionSummary.billingAnnual') }}
+                         </span>
                          <span class="ml-[8px] text-[9px] bg-[#501cd8] text-white px-[4px] py-[2px] rounded">
                               {{ t('panel.components.upgrade.subscriptionSummary.billingDiscountBadge') }}
                          </span>
@@ -47,15 +94,22 @@
 
                <div class="bg-[#e2e8ef] h-px w-full mt-[20px]"></div>
 
-               <!-- Offre sélectionnée -->
+               <!-- Section “Offre sélectionnée” -->
                <div class="mt-[20px]">
-                    <p class="text-[12px] text-[#647491] font-medium mb-[16px]">{{ t('panel.components.upgrade.subscriptionSummary.planLabel') }}</p>
+                    <p class="text-[12px] text-[#647491] font-medium mb-[16px]">
+                         {{ t('panel.components.upgrade.subscriptionSummary.planLabel') }}
+                    </p>
                     <div v-if="selectedPlan">
                          <div class="flex justify-between items-center">
                               <div class="flex items-center">
                                    <h2 class="text-[16px] font-medium">{{ selectedPlan.name }}</h2>
                                    <template v-if="isCurrentPlan">
-                                        <span class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px] rounded-[5px] text-[11px] ml-[10px]">Offre actuelle</span>
+                                        <span
+                                             class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px]
+                         rounded-[5px] text-[11px] ml-[10px]"
+                                        >
+                                             Offre actuelle
+                                        </span>
                                    </template>
                               </div>
                               <div>
@@ -68,69 +122,100 @@
                          <p class="text-[14px] text-[#647491] mt-[4px]">{{ firstFeature }}</p>
                     </div>
                     <div v-else>
-                         <p class="text-[14px] text-[#647491]">{{ t('panel.components.upgrade.subscriptionSummary.planNoneSelected') }}</p>
+                         <p class="text-[14px] text-[#647491]">
+                              {{ t('panel.components.upgrade.subscriptionSummary.planNoneSelected') }}
+                         </p>
                     </div>
                </div>
 
                <div class="bg-[#e2e8ef] h-px w-full mt-[20px]"></div>
 
-               <!-- Modules sélectionnés / inclus -->
+               <!-- Section “Modules” (si showModules est vrai) -->
                <div v-if="showModules && selectedModules.length > 0" class="mt-[20px]">
-                    <p class="text-[12px] font-medium text-[#647491]">{{ t('panel.components.upgrade.subscriptionSummary.modulesLabel') }}</p>
+                    <p class="text-[12px] font-medium text-[#647491]">
+                         {{ t('panel.components.upgrade.subscriptionSummary.modulesLabel') }}
+                    </p>
                     <div v-for="mod in selectedModules" :key="mod.id" class="mt-[16px] flex flex-col">
                          <div class="flex justify-between items-center">
                               <div class="flex items-center">
                                    <h2 class="text-[16px] font-medium">{{ mod.name }}</h2>
                                    <template v-if="panelStore.project?.subscription?.current_modules.includes(mod.id)">
-                                        <span class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px] rounded-[5px] text-[11px] ml-[10px]">Offre actuelle</span>
+                                        <span
+                                             class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px]
+                         rounded-[5px] text-[11px] ml-[10px]"
+                                        >
+                                             Offre actuelle
+                                        </span>
                                    </template>
                               </div>
                               <div>
-                                   <span v-if="selectedPlan?.includedModules?.includes(mod.key)" class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px] rounded-[5px] text-[12px] ml-[10px]">{{ t('panel.components.upgrade.subscriptionSummary.included') }}</span>
+                                   <span
+                                        v-if="selectedPlan?.includedModules?.includes(mod.key)"
+                                        class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px]
+                       rounded-[5px] text-[12px] ml-[10px]"
+                                   >
+                                        {{ t('panel.components.upgrade.subscriptionSummary.included') }}
+                                   </span>
                                    <span v-else>
                                         <span class="text-[14px] font-medium">{{ modulePrice(mod) }} €</span>
-                                        <span class="text-[14px] font-medium">{{ billingCycleLocal === 'month' ? '/mois' : '/an' }}</span>
+                                        <span class="text-[14px] font-medium">
+                                             {{ billingCycleLocal === 'month' ? '/mois' : '/an' }}
+                                        </span>
                                    </span>
                               </div>
                          </div>
-
                     </div>
                     <div class="bg-[#e2e8ef] h-px w-full mt-[20px]"></div>
                </div>
 
                <!-- Total -->
                <div class="mt-[20px] flex justify-between items-center">
-                    <h2 class="text-[20px] font-medium">{{ t('panel.components.upgrade.subscriptionSummary.totalLabel') }}</h2>
+                    <h2 class="text-[20px] font-medium">
+                         {{ t('panel.components.upgrade.subscriptionSummary.totalLabel') }}
+                    </h2>
                     <div>
                          <span class="text-[20px] font-medium">{{ totalPriceLocal }} €</span>
-                         <span class="text-[14px] font-medium">{{ billingCycleLocal === 'month' ? t('panel.components.upgrade.subscriptionSummary.perMonth') : t('panel.components.upgrade.subscriptionSummary.perYear') }}</span>
+                         <span class="text-[14px] font-medium">
+                              {{
+                                   billingCycleLocal === 'month'
+                                        ? t('panel.components.upgrade.subscriptionSummary.perMonth')
+                                        : t('panel.components.upgrade.subscriptionSummary.perYear')
+                              }}
+                         </span>
                     </div>
                </div>
 
-               <!-- Bouton final -->
+               <!-- Bouton “Suivant” (et/ou “Valider”) -->
                <div class="mt-[20px]">
                     <button
-                         :disabled="!selectedPlan || (disableIfZero && totalPriceLocal <= 0)"
+                         :disabled="buttonDisabled"
                          @click="goNext"
-                         :class="['rounded-[8px] text-[18px] h-[46px] px-[20px] w-full text-white font-medium',(!selectedPlan || (disableIfZero && totalPriceLocal <= 0)) ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed' : 'bg-[#0566ff] hover:bg-[#0049bd]']">
+                         :class="['rounded-[8px] text-[18px] h-[46px] px-[20px] w-full  font-medium', buttonDisabled
+                         ? 'bg-[#eff2f6] text-[#acb8cb] cursor-not-allowed'
+                         : 'bg-[#0566ff] hover:bg-[#0049bd] text-white']">
                          {{ nextButtonLabel }}
                     </button>
-                    <p class="text-[14px] text-[#647491] text-center mt-[8px]">{{ t('panel.components.upgrade.subscriptionSummary.changeOrCancelInfo') }}</p>
+                    <p class="text-[14px] text-[#647491] text-center mt-[8px]">
+                         {{ t('panel.components.upgrade.subscriptionSummary.changeOrCancelInfo') }}
+                    </p>
                </div>
           </div>
      </div>
 </template>
+
 <script setup lang="ts">
+import { computed, watch, nextTick } from 'vue'
 const { t } = useI18n()
+
+// Interfaces
 interface Plan {
      id: string
      name: string
      monthlyPrice: number
      discountMonths: number
-     includedFeatures: string[],
+     includedFeatures: string[]
      billingYear: boolean
 }
-
 interface ChoiceOption {
      label: string
      monthlyPrice: number
@@ -148,7 +233,7 @@ interface ModuleAddOn {
      selected: boolean
 }
 
-// Props
+// Props reçues depuis le parent
 const props = defineProps<{
      selectedPlan: Plan | null
      billingCycle: 'month' | 'year'
@@ -160,8 +245,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['updateBillingCycle', 'goNext'])
+const upgradeStore = useUpgradeStore()
+const panelStore = usePanelStore()
 
-const billingCycleLocal = computed<'month'|'year'>({
+// data local
+const billingCycleLocal = computed<'month' | 'year'>({
      get() {
           return props.billingCycle
      },
@@ -172,40 +260,48 @@ const billingCycleLocal = computed<'month'|'year'>({
      }
 })
 
+// On regroupe les modules à afficher (ceux inclus + cochés)
 const selectedModules = computed(() => {
-     // Modules sélectionnés
      const selected = props.selectedModules
-     
-     // Modules de l'abonnement actuel
      const subModules = panelStore.project?.subscription?.current_modules || []
-     
-     // Filtrer les modules en fonction de leur état de sélection
-     const allModules = selected.filter(mod => {
-          // Si le module est inclus dans le plan actuel
+     return selected.filter((mod) => {
           const isIncludedInPlan = props.selectedPlan?.includedModules?.includes(mod.key) || false
-          // Si le module est inclus, il est toujours affiché
-          if (isIncludedInPlan) {
-               return true
-          }
-          // Sinon, on vérifie s'il est sélectionné
+          if (isIncludedInPlan) return true
           return mod.selected
      })
-     
-     return allModules
 })
 
+// Est-ce qu’on affiche la section “Modules” ?
 const showModules = computed(() => props.showModules)
-const nextButtonLabel = computed(() => props.nextButtonLabel || t('panel.components.upgrade.subscriptionSummary.defaultButtonLabel'))
 
+// Prix du plan
+const planPrice = computed(() => {
+     if (!props.selectedPlan) return 0
+     const { monthlyPrice, discountMonths } = props.selectedPlan
+     return billingCycleLocal.value === 'month'
+          ? monthlyPrice
+          : monthlyPrice * (12 - discountMonths)
+})
+
+// Prix total (plan + modules)
+const totalPriceLocal = computed(() => {
+     let total = planPrice.value
+     for (const mod of props.selectedModules) {
+          total += modulePrice(mod)
+     }
+     return total
+})
+
+// Première feature du plan
 const firstFeature = computed(() => {
      if (!props.selectedPlan?.includedFeatures.length) return ''
      return props.selectedPlan.includedFeatures[0]
 })
 
+// Calcul du prix d’un module
 function modulePrice(mod: ModuleAddOn): number {
      const isIncluded = props.selectedPlan?.includedModules?.includes(mod.key)
      if (isIncluded) return 0
-
      if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
           const choice = mod.choices[mod.selectedChoiceIndex]
           const disc = choice.discountMonths ?? 0
@@ -220,55 +316,51 @@ function modulePrice(mod: ModuleAddOn): number {
      }
 }
 
-// détecte si le plan sélectionné est l’abonnement en cours
-const panelStore = usePanelStore()
+// Est-ce que le plan affiché est l’abonnement en cours ?
 const isCurrentPlan = computed(() =>
      props.selectedPlan?.id === panelStore.project?.subscription?.current_plan_id
 )
 
-
-// Désactive l’option annuelle pour les plans “Gratuit” et “Plus”
+// Bloquer l’annuel si le plan ne le supporte pas
 const disableAnnual = computed(() =>
-          !props.selectedPlan?.billingYear
-);
-// Si on désactive l’annuel et qu’il était sélectionné, repasser au mensuel
+     !props.selectedPlan?.billingYear
+)
 watch(disableAnnual, (off) => {
      if (off && billingCycleLocal.value === 'year') {
           billingCycleLocal.value = 'month'
      }
-});
-
-// Calculer le prix du plan
-const planPrice = computed(() => {
-     if (!props.selectedPlan) return 0
-     const { monthlyPrice, discountMonths } = props.selectedPlan
-     return billingCycleLocal.value === 'month'
-          ? monthlyPrice
-          : monthlyPrice * (12 - discountMonths)
 })
 
-// Calculer le prix total
-const totalPriceLocal = computed(() => {
-     let total = planPrice.value
-     for (const mod of props.selectedModules) {
-          total += modulePrice(mod)
+// LOGIQUE DU BOUTON
+const buttonDisabled = computed(() => {
+     // ─── 1) SI on est dans l’étape “PLANS” (showModules===false)
+     if (!showModules.value) {
+          // on désactive seulement si :
+          //   • aucun plan sélectionné
+          //   • ou (disableIfZero && totalPriceLocal <= 0) si vous souhaitez garder cette contrainte
+          return !props.selectedPlan || (props.disableIfZero && totalPriceLocal.value <= 0)
      }
-     return total
+
+     // ─── 2) SI on est dans l’étape “MODULES” (showModules===true)
+     // on désactive si :
+     //   • l’utilisateur n’a rien modifié par rapport à l’abonnement en cours
+     //     (upgradeStore.isSameAsCurrent === true)
+     //   • ou aucun plan (au cas où)
+     //   • ou (disableIfZero && totalPriceLocal <= 0)
+     return (
+          upgradeStore.isSameAsCurrent ||
+          !props.selectedPlan ||
+          (props.disableIfZero && totalPriceLocal.value <= 0)
+     )
 })
 
-// Réagir aux changements des modules et du plan
-watch(() => props.selectedPlan, () => {
-     // Mise à jour du prix du plan
-     nextTick(() => {
-          planPrice.value
-     })
-})
-
-watch(() => props.selectedModules, () => {
-     // Mise à jour du prix total
-     nextTick(() => {
-          totalPriceLocal.value
-     })
+// Si vous voulez un libellé différent pour le bouton selon l’étape, vous pouvez aussi faire :
+const nextButtonLabelComputed = computed(() => {
+     if (!showModules.value) {
+          return props.nextButtonLabel || t('panel.components.upgrade.subscriptionSummary.nextStepLabel')
+     } else {
+          return props.nextButtonLabel || t('panel.components.upgrade.subscriptionSummary.finishLabel')
+     }
 })
 
 function goNext() {
