@@ -55,17 +55,39 @@
                          <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ module.description }}</p>
                     </div>
 
-                    <!-- Prix affiché -->
+                    <!-- “Prix affiché” -->
                     <div class="flex flex-col justify-start items-[normal] whitespace-nowrap h-full ml-[12px]">
                          <div class="flex flex-row justify-start items-center">
-                              <span>
-                                   <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ displayedPrice }}<span class="text-[24px] leading-[31px] tracking-[-0.01em] font-medium">€</span></span>
-                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ billingCycle === 'month' ? t('panel.components.upgrade.ModuleCard.perMonth') : t('panel.components.upgrade.ModuleCard.perYear') }}</span>
-                              </span>
-                         </div>
-                         <button v-if="module.displayMore" class="flex flex-row justify-start items-center bg-transparent text-[#0566ff] no-underline text-[13px] leading-[18px] min-w-[64px] py-0 hover:underline hover:text-[#0047b7]">En s'avoir plus
-                         </button>
+                                         <span>
+             <!-- Toujours afficher le prix mensuel -->
+             <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium">
+               {{ displayedPriceMonth }}<span class="text-[24px] leading-[31px] font-medium">€</span>
+             </span>
+             <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">
+               {{ t('panel.components.upgrade.ModuleCard.perMonth') }}
+             </span>
+           </span>
+                                       </div>
 
+                         <!-- Détail du “Prix facturé : X € / an” si annual -->
+                         <p v-if="billingCycle === 'year'"
+                            class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">
+                              <template v-if="true /* remplacer true par condition si besoin (ex : module.billingYear) */">
+                                   Prix facturé :
+                                   <span class="ml-[2px]">
+                                        {{ displayedPriceYear }}<span>€</span>
+                                        <span>{{ t('panel.components.upgrade.ModuleCard.perYear') }}</span>
+                                   </span>
+                              </template>
+                              <template v-else>
+                                   Offre que par mois
+                              </template>
+                         </p>
+
+                         <!-- Bouton “En savoir plus” inchangé -->
+                         <button v-if="module.displayMore" class="flex flex-row justify-start items-center bg-transparent text-[#0566ff] no-underline text-[13px] leading-[18px] min-w-[64px] py-0 hover:underline hover:text-[#0047b7]">
+                              En savoir plus
+                         </button>
                     </div>
                </div>
           </div>
@@ -129,7 +151,7 @@ const overrideChecked = ref<boolean | null>(null)
 const subscriptionState = computed(() => {
      // Vérifier si l'abonnement existe
      if (!panelStore.project?.subscription?.current_modules) return false
-     
+
      // Vérifier si le module est dans l'abonnement
      return panelStore.project.subscription.current_modules.includes(props.module.id)
 })
@@ -159,7 +181,7 @@ function toggle(checkedVal: boolean) {
      }
      // Si le module est comingSoon => do nothing
      if (props.module.comingSoon) return
-     
+
      // Pour les autres modules (abonnement ou sélection manuelle)
      props.onToggle(props.module.id, checkedVal)
 }
@@ -173,6 +195,71 @@ function onChoiceChange(e: Event) {
      const idx = Number((e.target as HTMLSelectElement).value)
      props.onChangeChoice(props.module.id, idx)
 }
+
+     // Fonction utilitaire pour calculer le prix annuel
+          function computeAnnualPrice(): number {
+                 let unitMonthly: number
+                 let discountMonths = 0
+
+                      if (checked.value) {
+                        if (props.module.multipleChoice && props.module.choices) {
+                               const idx = props.module.selectedChoiceIndex ?? 0
+                                    const choix = props.module.choices[idx]
+                              unitMonthly = choix.monthlyPrice
+                               discountMonths = choix.discountMonths ?? 0
+                                  } else {
+                               unitMonthly = props.module.basePrice
+                               discountMonths = props.module.discountMonths ?? 0
+                                  }
+                      } else {
+                        if (props.module.multipleChoice && props.module.choices) {
+                               const minCh = props.module.choices.reduce((prev, curr) =>
+                                      curr.monthlyPrice < prev.monthlyPrice ? curr : prev
+                                         )
+                               unitMonthly = minCh.monthlyPrice
+                               discountMonths = minCh.discountMonths ?? 0
+                                  } else {
+                               unitMonthly = props.module.basePrice
+                               discountMonths = props.module.discountMonths ?? 0
+                                  }
+                      }
+                 return unitMonthly * (12 - discountMonths)
+                    }
+
+//  Arrondi à deux décimales
+     function roundToTwo(num: number) {
+            return Math.round(num * 100) / 100
+               }
+
+// Prix mensuel (ou prorata si cycle = 'year')
+     const displayedPriceMonth = computed(() => {
+            if (props.billingCycle === 'month') {
+                   if (checked.value) {
+                         if (props.module.multipleChoice && props.module.choices) {
+                                 const idx = props.module.selectedChoiceIndex ?? 0
+                                      return props.module.choices[idx].monthlyPrice
+                                    }
+                          return props.module.basePrice
+                             } else {
+                          if (props.module.multipleChoice && props.module.choices) {
+                                 const minCh = props.module.choices.reduce((prev, curr) =>
+                                             curr.monthlyPrice < prev.monthlyPrice ? curr : prev
+                                                )
+                                     return minCh.monthlyPrice
+                                   }
+                          return props.module.basePrice
+                             }
+                 } else {
+                   const annual = computeAnnualPrice()
+                        return roundToTwo(annual / 12)
+                      }
+          })
+
+     // Prix total facturé pour un an
+          const displayedPriceYear = computed(() => {
+            return computeAnnualPrice()
+               })
+
 
 // Calcul du prix à afficher dans la carte
 // S'il est comingSoon ou included, on affiche quand même le "faux" prix (pour info) ?
