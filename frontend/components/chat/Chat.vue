@@ -1,4 +1,12 @@
 <template>
+     <div v-if="!isOpen && !previewMode && notificationMessageAlert" class="hhcss_ChatBoxNotificationMessage bg-white py-[0] px-[20px] max-w-[calc(100%-103px)] absolute bottom-[26px] rounded-[12px] shadow-[0_8px_26px_0_rgba(0,18,46,0.16)] flex flex-col z-[1] max-h-[calc(100%-76px)] right-[48px] ml-[20px]">
+          <div class="message-container w-full text-[17px] pr-[22px] py-[19px] pl-0 pr-[38px] max-w-[290px] bg-white relative break-words overflow-y-auto whitespace-pre-line text-[#06132b] tracking-[-0.24px] antialiased">Text du message</div>
+          <div @click="toggleConversation" class="px-[24px] pb-[16px] pt-[9px] pr-[22px] pl-0 self-end w-full relative bg-white z-[3] flex-[0_0_auto] cursor-pointer">
+               <button class="w-auto min-w-[130px] transition-[min-width] duration-300 px-0 pt-[4px] pb-[8px] leading-[21px] text-left cursor-pointer text-[17px] text-[rgb(136,148,171)] whitespace-nowrap overflow-hidden text-ellipsis">Enter your message...</button>
+          </div>
+          <div></div>
+     </div>
+
      <div
           v-if="isReady"
           id="hellohumans-chat-iframe"
@@ -6,19 +14,11 @@
           :style="previewMode ? wrapperStylePreview : wrapperStyle">
           <!-- bubble -->
           <div class="fixed right-0 bottom-[12px] w-[112px] h-[140px] flex items-center justify-center pointer-events-none z-[1]">
-               <button
-                    v-if="!isOpen"
-                    @click="toggleChat"
-                    class="pointer-events-auto w-[60px] h-[60px] rounded-[30px] flex items-center justify-center shadow-[0_4px_24px_#02061033] transition hover:scale-110"
-                    :style="{ background: chatStore.configChat.backgroundColor }"
-               >
+               <button v-if="!isOpen" @click="toggleChat" class="pointer-events-auto w-[60px] h-[60px] rounded-[30px] flex items-center justify-center shadow-[0_4px_24px_#02061033] transition hover:scale-110" :style="{ background: chatStore.configChat.backgroundColor }">
                     <svgo-chat-button-icon-chat class="w-6 h-6" />
                </button>
-
-               <div
-                    v-if="!isOpen && notificationSnoozed"
-                    class="absolute top-[37px] right-[23px] w-5 h-5 rounded-[10px] flex items-center justify-center bg-white outline outline-1 outline-[#e2e8ef]"
-               >
+               <div v-if="!isOpen && !previewMode && notificationMessageAlert" class="hhcss_newMessage absolute top-[34px] right-[27px] font-bold text-white pointer-events-none rounded-[10px] flex justify-center items-center min-w-[20px] h-[20px] text-[12px] bg-[rgb(232,19,50)] z-[2] leading-[16px] px-[4px] py-[2px]">0</div>
+               <div v-if="!isOpen && notificationSnoozed" class="absolute top-[35px] right-[22px] w-5 h-5 rounded-[10px] flex items-center justify-center bg-white outline outline-1 outline-[#e2e8ef]">
                     <svgo-chat-icon-notification-disabled class="w-4 h-4" />
                </div>
           </div>
@@ -107,6 +107,7 @@ const props = defineProps<{
 if (props.projectPublicKey) chatStore.setProjectPublicKey(props.projectPublicKey)
 
 /* ----- state ----- */
+const notificationMessageAlert = ref(false)
 const isReady = ref(false)
 const message = ref('')
 const messages = computed(() => chatStore.messages)
@@ -214,7 +215,14 @@ function toggleChat() {
      setTimeout(() => (isVisible.value = !isVisible.value), 90)
      if (!isOpen.value) setTimeout(() => (isChatActive.value = false), 300)
 }
+function toggleConversation() {
+     if (props.previewMode) return
 
+     isOpen.value = true
+     isVisible.value = true
+     isChatActive.value = true
+
+}
 function toggleOptions() {
      showOptions.value = !showOptions.value
 }

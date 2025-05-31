@@ -19,7 +19,9 @@ export default defineNuxtConfig({
      css: [
           '@/assets/css/fonts/mulish.css',
           '@/assets/css/fonts/euclidcircularb.css',
-          '@/assets/css/main.css'
+          '@/assets/css/main.css',
+          '@/assets/css/panel.css',
+          '@/assets/css/chat.css'
      ],
      echarts: {
           charts: ['BarChart', 'LineChart'],
