@@ -12,7 +12,7 @@
                          </label>
                     </button>
                </li>
-               <li class="rounded-[6px] flex">
+               <li v-if="isMdUp" class="rounded-[6px] flex">
                     <button @click="!previewMode && $emit('toggleExpend')" class="p-2 px-4 flex m-0 w-full rounded-[6px] hover:bg-[#eff2f6] items-center">
                          <svgo-chat-icon-expand v-if="!isExpanded" class="fill-[#474747] h-[20px] w-[20px]"  />
                          <svgo-chat-icon-collapse v-if="isExpanded" class="fill-[#474747] h-[20px] w-[20px]" />
@@ -58,5 +58,12 @@ function handleClickOutside(event: any) {
           emits('closeOptions');  // On avertit le parent de fermer
      }
 }
+import { useBreakpoints } from '@vueuse/core'
+
+const breakpoints = useBreakpoints({
+     sm: 640, md: 768,
+})
+
+const isMdUp = breakpoints.greaterOrEqual('md')
 
 </script>

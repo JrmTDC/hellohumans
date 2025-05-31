@@ -14,6 +14,7 @@
      "dependencies": {
           "@stripe/stripe-js": "^7.0.0",
           "@vuepic/vue-datepicker": "^11.0.2",
+          "@vueuse/core": "^13.3.0",
           "colord": "^2.9.3",
           "date-fns": "^4.1.0",
           "nuxt": "^3.16.2",
