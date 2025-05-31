@@ -28,9 +28,16 @@
                     </p>
                </div>
 
-               <!-- Choix du cycle de facturation -->
+               <!-- Choix du cycle de facturation avec badge “(mensuel)” ou “(annuel)” -->
                <p class="text-[12px] text-[#647491] mt-[20px] mb-0 font-medium">
-                    {{ t('panel.components.upgrade.subscriptionSummary.billingLabel') }}
+                    FACTURÉ
+                    <template v-if="panelStore.project?.subscription?.billing_cycle">
+                         <span
+                              class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px] rounded-[5px] text-[11px] ml-[10px]"
+                         >
+                              {{ panelStore.project.subscription.billing_cycle === 'year' ? 'Annuel' : 'Mensuel' }}
+                         </span>
+                    </template>
                </p>
                <div class="flex items-center mt-[20px]">
                     <!-- Mensuel -->
@@ -142,7 +149,7 @@
                                    <template v-if="panelStore.project?.subscription?.current_modules.includes(mod.id)">
                                         <span
                                              class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px]
-                         rounded-[5px] text-[11px] ml-[10px]"
+                         rounded-[5px] text-[11px] ml-[10px] font-medium"
                                         >
                                              Offre actuelle
                                         </span>
@@ -205,6 +212,7 @@
 
 <script setup lang="ts">
 import { computed, watch, nextTick } from 'vue'
+
 const { t } = useI18n()
 
 // Interfaces
