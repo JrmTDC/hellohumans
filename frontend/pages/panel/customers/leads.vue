@@ -45,7 +45,7 @@
                                         <div class="mt-[12px] bg-white border border-[#e2e8ef] rounded-[12px]">
                                              <div class="flex flex-row justify-start items-center p-[16px] border-b border-b-[rgb(226,232,239)] ml-auto relative">
                                                   <div class="flex flex-row justify-start items-center w-full">
-                                                       <p class="mt-0 mb-0 mr-auto font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Résultats : {{ panelStore.visitors.length }}</p>
+                                                       <p class="mt-0 mb-0 mr-auto font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Résultats : {{ panelStore.leads.length }}</p>
                                                        <div></div>
                                                   </div>
                                                   <div class="ml-[32px] flex">
@@ -80,38 +80,6 @@ const backgroundNoCustomer = useAssetBase64Loader('panel/customers/backgroundNoC
 const panelStore = usePanelStore()
 onMounted(async () => {
      layoutLoadingPanel.value = false
-
-     panelStore.leads = [
-          {
-               id: 'lead_1',
-               email: 'alice@example.com',
-               radar: 'A',
-               country: 'fr',
-               created_at: new Date().toISOString(),
-          },
-          {
-               id: 'lead_2',
-               email: 'bob@hellohumans.fr',
-               radar: 'B',
-               country: 'us',
-               created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // il y a 5 minutes
-          },
-          {
-               id: 'lead_3',
-               email: 'carla@demo.com',
-               radar: 'C',
-               country: 'de',
-               created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // il y a 1 heure
-          },
-          {
-               id: 'lead_4',
-               email: '',
-               radar: '?',
-               country: null,
-               created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // il y a 1 jour
-          },
-     ]
-
 })
 
 definePageMeta({

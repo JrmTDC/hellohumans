@@ -142,10 +142,9 @@ export const usePanelStore = defineStore('panel', () => {
      const projects = ref<any[]>([])
      const activities = ref<any[]>([])
      const visitors = ref<Visitors[]>([])
-     const leads = ref<{ id: string; name: string }[]>([])
+     const leads = ref<Visitors[]>([])
      const stripe = ref<Stripe | null>(null)
      const config = useRuntimeConfig()
-     const liveVisitors = ref<VisitorsLive[]>([])
      const socket = shallowRef<Socket>()
      const wssKey = `${config.public.wssKey}`
 
@@ -311,6 +310,38 @@ export const usePanelStore = defineStore('panel', () => {
           socket.value.on('visitor_disconnected', ({ id }) => {
                visitors.value = visitors.value.filter(v => v.id !== id)
           })
+
+          leads.value = [
+               {
+                    id: 'lead_1',
+                    email: 'alice@example.com',
+                    radar: 'A',
+                    country: 'fr',
+                    created_at: new Date().toISOString(),
+               },
+               {
+                    id: 'lead_2',
+                    email: 'bob@hellohumans.fr',
+                    radar: 'B',
+                    country: 'us',
+                    created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // il y a 5 minutes
+               },
+               {
+                    id: 'lead_3',
+                    email: 'carla@demo.com',
+                    radar: 'C',
+                    country: 'de',
+                    created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // il y a 1 heure
+               },
+               {
+                    id: 'lead_4',
+                    email: '',
+                    radar: '?',
+                    country: null,
+                    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // il y a 1 jour
+               },
+          ]
+
      }
 
      async function fetchModules() {

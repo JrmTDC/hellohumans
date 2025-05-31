@@ -42,7 +42,8 @@ const menuItems = ref([
           name: 'Tous les contacts',
           isActive: undefined,
           beta: false,
-          disabled: false
+          disabled: false,
+          count: panelStore.leads.length
      }
 ])
 
