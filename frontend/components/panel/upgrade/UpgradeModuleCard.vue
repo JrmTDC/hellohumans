@@ -55,34 +55,34 @@
                          <p class="mt-[8px] mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491]" :class="[ module.comingSoon ? 'text-[#acb8cb]' : '', isIncluded ? 'text-[#acb8cb]' : '' ]">{{ module.description }}</p>
                     </div>
 
-                    <!-- “Prix affiché” -->
-                    <div class="flex flex-col justify-start items-[normal] whitespace-nowrap h-full ml-[12px]">
+                    <!-- “Prix affiché” (caché si Bientôt disponible) -->
+                    <div v-if="!module.comingSoon" class="flex flex-col justify-start items-[normal] whitespace-nowrap h-full ml-[12px]">
                          <div class="flex flex-row justify-start items-center">
-                                         <span>
-             <!-- Toujours afficher le prix mensuel -->
-             <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium">
-               {{ displayedPriceMonth }}<span class="text-[24px] leading-[31px] font-medium">€</span>
-             </span>
-             <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">
-               {{ t('panel.components.upgrade.ModuleCard.perMonth') }}
-             </span>
-           </span>
-                                       </div>
+                              <span>
+                                   <!-- Toujours afficher le prix mensuel -->
+                                   <span class="h-auto relative text-[24px] leading-[31px] tracking-[-0.01em] text-[#080f1a] font-medium">
+                                        {{ displayedPriceMonth }}<span class="text-[24px] leading-[31px] font-medium">€</span>
+                                   </span>
+                                   <span class="text-[12px] leading-[16px] tracking-[-0.01em] text-[#080f1a] font-medium">
+                                        {{ t('panel.components.upgrade.ModuleCard.perMonth') }}
+                                   </span>
+                              </span>
+                         </div>
 
                          <!-- Détail du “Prix facturé : X € / an” si annual -->
                          <p v-if="billingCycle === 'year'"
                             class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)]">
-                              <template v-if="true /* remplacer true par condition si besoin (ex : module.billingYear) */">
-                                   Prix facturé :
-                                   <span class="ml-[2px]">
-                                        {{ displayedPriceYear }}<span>€</span>
-                                        <span>{{ t('panel.components.upgrade.ModuleCard.perYear') }}</span>
-                                   </span>
-                              </template>
-                              <template v-else>
-                                   Offre que par mois
-                              </template>
-                         </p>
+                         <template v-if="true /* remplacer true par condition si besoin (ex : module.billingYear) */">
+                              Prix facturé :
+                              <span class="ml-[2px]">
+                                   {{ displayedPriceYear }}<span>€</span>
+                                   <span>{{ t('panel.components.upgrade.ModuleCard.perYear') }}</span>
+                              </span>
+                         </template>
+                         <template v-else>
+                              Offre que par mois
+                         </template>
+                    </p>
 
                          <!-- Bouton “En savoir plus” inchangé -->
                          <button v-if="module.displayMore" class="flex flex-row justify-start items-center bg-transparent text-[#0566ff] no-underline text-[13px] leading-[18px] min-w-[64px] py-0 hover:underline hover:text-[#0047b7]">
