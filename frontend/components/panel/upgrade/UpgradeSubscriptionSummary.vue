@@ -268,6 +268,14 @@ const billingCycleLocal = computed<'month' | 'year'>({
      }
 })
 
+// Au montage, si l’utilisateur a déjà un abonnement, forcer le radio à son cycle existant
+onMounted(() => {
+     const subCycle = panelStore.project?.subscription?.billing_cycle
+     if (subCycle) {
+          emit('updateBillingCycle', subCycle)
+     }
+})
+
 // On regroupe les modules à afficher (ceux inclus + cochés)
 const selectedModules = computed(() => {
      const selected = props.selectedModules
