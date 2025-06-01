@@ -588,6 +588,8 @@ export const usePanelStore = defineStore('panel', () => {
           modules.value = []
           const isAccountBlocked = useState('isAccountBlocked', () => false)
           isAccountBlocked.value = false
+          const isAccountError = useState('isAccountError', () => false)
+          isAccountError.value = false
           await supabase.auth.signOut()
      }
 

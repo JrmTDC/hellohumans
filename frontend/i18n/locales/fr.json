@@ -339,6 +339,11 @@
                     }
                },
                "layout": {
+                    "accountError": {
+                         "bannedTitle": "Nous rencontrons un problème",
+                         "bannedDescription": "Nous ne parvenons pas à accéder à certaines informations liées à votre profil. Veuillez contacter le support pour que nous puissions résoudre cela rapidement.",
+                         "contactSupport": "Contacter le support"
+                    },
                     "accountBlacked": {
                          "bannedTitle": "Votre compte a été suspendu.",
                          "bannedDescription": "Pour des raisons de sécurité ou de conformité, votre accès a été restreint. Veuillez contacter le support pour en savoir plus.",

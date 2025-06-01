@@ -1,5 +1,6 @@
 <template>
      <PanelCommonLoadingOverlay v-if="layoutLoadingPanel" :progress="progress" />
+     <PanelLayoutAccountError v-if="isAccountError" />
      <PanelLayoutAccountBlocked v-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
           <PanelCommonConnectionBanner :show="showBanner" :countdown="countdown"/>
@@ -26,6 +27,7 @@ const panelStore = usePanelStore()
 const router = useRouter()
 
 const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
+const isAccountError = useState('isAccountError', () => false)
 const isAccountBlocked = useState('isAccountBlocked', () => false)
 const subscriptionPaiement = useState('subscriptionPaiement', () => false)
 
@@ -59,7 +61,7 @@ onMounted(async () => {
      progress.value = 100
 
      try {
-          if(!isAccountBlocked.value){
+          if(!isAccountBlocked.value && !isAccountError.value) {
                const isStartPage = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
                if(isStartPage){
                     await panelStore.fetchUpgrade()
