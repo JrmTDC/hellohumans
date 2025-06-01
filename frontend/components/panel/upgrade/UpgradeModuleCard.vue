@@ -14,7 +14,8 @@
                <div class="flex flex-row justify-start items-center">
                     <div class="flex flex-col mr-auto">
                          <!-- Switch OFF -->
-                         <label v-if="!checked" class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px]" :class="[ module.comingSoon ? 'opacity-60 cursor-not-allowed' : '', isIncluded ? 'opacity-60 cursor-not-allowed' : '', isCurrentModule ? 'bg-[#ff073d]' : '' ]">
+                         <label v-if="!checked" class="relative inline-block align-top rounded-[17px] border border-[#d3dbe5] bg-[#f5f7f9] w-[36px] max-w-[36px] h-[22px]"
+                                :class="[module.comingSoon || isIncluded ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer', isCurrentModule ? 'bg-[#ff073d]' : '']">
                               <input
                                    type="checkbox"
                                    role="switch"
@@ -27,8 +28,10 @@
                          </label>
 
                          <!-- Switch ON -->
-                         <label v-else class="relative inline-block align-top rounded-[17px] border border-[#0566ff] bg-[#0566ff] w-[36px] max-w-[36px] h-[22px] shadow-[inset_0px_0px_0px_11px_#0566ff]" :class="[ module.comingSoon ? 'opacity-60 cursor-not-allowed' : '', isIncluded ? 'opacity-60 cursor-not-allowed' : '' ]">
-                              <input
+                         <label v-else class="relative inline-block align-top rounded-[17px] border border-[#0566ff] bg-[#0566ff] w-[36px] max-w-[36px] h-[22px] shadow-[inset_0px_0px_0px_11px_#0566ff]"
+                                :class="[module.comingSoon || isIncluded ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer']">
+
+                         <input
                                    type="checkbox"
                                    role="switch"
                                    class="absolute w-[0px] h-[0px] m-[-1px] p-0 overflow-hidden clip-[rect(0px,0px,0px,0px)] border-0"
