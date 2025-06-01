@@ -14,11 +14,20 @@ import MenuSetup from "assets/icons/panel/settings/iconMenuSetup.svg";
 import MenuTranslation from "assets/icons/panel/settings/iconMenuTranslation.svg";
 import MenuBilling from "assets/icons/panel/settings/iconMenuBilling.svg";
 import MenuPreferences from "assets/icons/panel/settings/iconMenuPreferences.svg";
+import MenuAccount from "assets/icons/panel/settings/iconMenuAccount.svg";
 
 const menuGroups = ref([
      {
           id: 'chats',
           name: t('panel.components.settingsChildSideMenu.menuGroups.chat')
+     },
+     {
+          id: 'general',
+          name: 'Général'
+     },
+     {
+          id: 'personal',
+          name: 'Personnel'
      },
      {
           id: 'projects',
@@ -55,6 +64,17 @@ const menuItems = ref([
           icon: rawIcon(MenuPreferences),
           routeURL: '/panel/settings/preferences',
           name: 'Préférances',
+          isActive: undefined,
+          beta: false,
+          disabled: false
+     },
+     {
+          id: 'personal-details',
+          group:'personal',
+          type: 'link',
+          icon: rawIcon(MenuAccount),
+          routeURL: '/panel/settings/account/details',
+          name: 'Compte',
           isActive: undefined,
           beta: false,
           disabled: false
