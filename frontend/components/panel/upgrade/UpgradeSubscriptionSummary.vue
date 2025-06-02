@@ -232,6 +232,7 @@ interface ChoiceOption {
 }
 interface ModuleAddOn {
      id: string
+     key: string
      name: string
      description: string
      basePrice: number

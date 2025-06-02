@@ -216,7 +216,7 @@ function onChoiceChange(e: Event) {
                                   }
                       } else {
                         if (props.module.multipleChoice && props.module.choices) {
-                               const minCh = props.module.choices.reduce((prev, curr) =>
+                               const minCh = props.module.choices.reduce((prev: any, curr: any) =>
                                       curr.monthlyPrice < prev.monthlyPrice ? curr : prev
                                          )
                                unitMonthly = minCh.monthlyPrice
@@ -245,7 +245,7 @@ function onChoiceChange(e: Event) {
                           return props.module.basePrice
                              } else {
                           if (props.module.multipleChoice && props.module.choices) {
-                                 const minCh = props.module.choices.reduce((prev, curr) =>
+                                 const minCh = props.module.choices.reduce((prev: any, curr: any) =>
                                              curr.monthlyPrice < prev.monthlyPrice ? curr : prev
                                                 )
                                      return minCh.monthlyPrice
@@ -270,7 +270,7 @@ const displayedPrice = computed(() => {
      // non coché
      if (!checked.value) {
           if (props.module.multipleChoice && props.module.choices) {
-               const minChoice = props.module.choices.reduce((prev, curr) =>
+               const minChoice = props.module.choices.reduce((prev: any, curr: any) =>
                     curr.monthlyPrice < prev.monthlyPrice ? curr : prev
                )
                const disc = minChoice.discountMonths ?? 0

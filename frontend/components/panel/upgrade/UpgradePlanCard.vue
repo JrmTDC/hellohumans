@@ -120,6 +120,7 @@ interface Plan {
      popular?: boolean
      includedFeatures: string[],
      billingYear: boolean
+     baseSubtitle: string
 }
 const { t } = useI18n()
 const props = defineProps<{
