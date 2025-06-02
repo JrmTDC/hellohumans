@@ -44,10 +44,16 @@
 
                                         <div class="mt-[12px] bg-white border border-[#e2e8ef] rounded-[12px]">
                                              <div class="flex flex-row justify-start items-center p-[16px] border-b border-b-[rgb(226,232,239)] ml-auto relative">
+
+
                                                   <div class="flex flex-row justify-start items-center w-full">
                                                        <p class="mt-0 mb-0 mr-auto font-medium text-[16px] leading-[20px] tracking-[-0.01em]">Résultats : {{ panelStore.leads.length }}</p>
                                                        <div></div>
                                                   </div>
+
+                                                  <div>sdqsd</div>
+
+
                                                   <div class="ml-[32px] flex">
                                                        <button class="bg-[rgba(136,148,171,0)] border border-[#d1d9e0] text-[#333] inline-flex items-center justify-center rounded-[8px] text-[14px] h-[34px] leading-[18px] min-w-[64px] px-[14px] py-0 select-none align-middle whitespace-nowrap hover:bg-[#eff2f6] hover:border-[#acb8cb] hover:text-[#333] active:bg-[rgba(136,148,171,0.16)] active:border-[#aeb4c2] active:text-[#333]">
                                                             <SvgoPanelCustomersIconImport class="fill-[rgb(135,150,175)] ml-[-2px] mr-[6px] w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>

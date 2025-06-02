@@ -58,8 +58,6 @@ import iconMenuBulb from '~/assets/icons/panel/iconMenuBulb.svg'
 import iconMenuAnalytic from '~/assets/icons/panel/iconMenuAnalytic.svg'
 import iconMenuCustomerVisitors from '~/assets/icons/panel/iconMenuCustomerVisitors.svg'
 
-
-
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()

@@ -48,6 +48,11 @@
                </div>
           </div>
      </div>
+     <PanelModalConfirme
+          v-if="showCreateProjectModal"
+          @close="showCreateProjectModal = false"
+          :newLanguage="newLanguage"
+     />
 </template>
 <script setup lang="ts">
 const { t } = useI18n()
@@ -72,12 +77,14 @@ const optionLocales = locales.value.map((locale: any) => ({
      value: locale.code,
      label: locale.shortName,
 }))
-
+const showCreateProjectModal = ref(false)
 const selectedOptionLanguage= ref(locale.value)
+const newLanguage = ref('')
 const handleLanguageChange = async (lang: any) => {
+
      if (lang.value !== locale.value) {
-          await panelStore.updateUserLang(lang.value)
-          await router.push('/panel')
+          showCreateProjectModal.value = true
+          newLanguage.value = lang
      }
 }
 const selectedOptionRegion= ref('utc+1')
