@@ -258,6 +258,10 @@ const emit = defineEmits(['updateBillingCycle', 'goNext'])
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 
+const currentBillingCycle = computed(() =>
+     panelStore.project?.subscription?.billing_cycle || 'month'
+)
+
 // data local
 const billingCycleLocal = computed<'month' | 'year'>({
      get() {
@@ -270,10 +274,6 @@ const billingCycleLocal = computed<'month' | 'year'>({
      }
 })
 
-// Au montage, si l’utilisateur a déjà un abonnement, forcer le radio à son cycle existant
-onMounted(() => {
-
-})
 
 // On regroupe les modules à afficher (ceux inclus + cochés)
 const selectedModules = computed(() => {
@@ -348,25 +348,24 @@ watch(disableAnnual, (off) => {
 
 // LOGIQUE DU BOUTON
 const buttonDisabled = computed(() => {
-     // ─── 1) SI on est dans l’étape “PLANS” (showModules===false)
+     // SI on est dans l’étape “PLANS” (showModules===false)
      if (!showModules.value) {
-          // on désactive seulement si :
-          //   • aucun plan sélectionné
-          //   • ou (disableIfZero && totalPriceLocal <= 0) si vous souhaitez garder cette contrainte
           return !props.selectedPlan || (props.disableIfZero && totalPriceLocal.value <= 0)
      }
 
-     // ─── 2) SI on est dans l’étape “MODULES” (showModules===true)
-     // on désactive si :
-     //   • l’utilisateur n’a rien modifié par rapport à l’abonnement en cours
-     //     (upgradeStore.isSameAsCurrent === true)
-     //   • ou aucun plan (au cas où)
-     //   • ou (disableIfZero && totalPriceLocal <= 0)
-     return (
-          upgradeStore.isSameAsCurrent ||
-          !props.selectedPlan ||
-          (props.disableIfZero && totalPriceLocal.value <= 0)
-     )
+     // SI on est dans l’étape “MODULES” (showModules===true)
+     const currentCycle = panelStore.project?.subscription?.billing_cycle
+     const cycleChanged = billingCycleLocal.value !== currentCycle
+     // Si aucun plan n'est sélectionné ou prix à zéro, on désactive
+     if (!props.selectedPlan || (props.disableIfZero && totalPriceLocal.value <= 0)) {
+          return true
+     }
+     // Si ni le plan/modules n'ont changé ET que le cycle n'a pas changé, on désactive
+     if (!cycleChanged && upgradeStore.isSameAsCurrent) {
+          return true
+     }
+     // Sinon, on autorise
+     return false
 })
 
 // Si vous voulez un libellé différent pour le bouton selon l’étape, vous pouvez aussi faire :
