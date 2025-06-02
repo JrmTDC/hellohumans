@@ -1,5 +1,5 @@
 <template>
-     <div ref="menuRef" class="fixed left-0 bottom-0 transform translate-x-[64px] min-w-max z-[100]">
+     <div ref="menuRef" class="fixed left-0 bottom-0 transform translate-x-[64px] min-w-max z-[650]">
           <div class="p-[8px] rounded-[8px] bg-white shadow-[0_8px_20px_rgba(0,20,51,0.24)] w-[256px] max-w-[256px] translate-x-[-10px] translate-y-[-10px]">
                <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] m-0 min-h-[36px] cursor-pointer outline-none px-[8px] py-[6px]">
                     <div class="rounded-full text-white cursor-default shrink-0 float-left text-[18px] h-[30px] leading-[1.66] text-center select-none w-[30px]">

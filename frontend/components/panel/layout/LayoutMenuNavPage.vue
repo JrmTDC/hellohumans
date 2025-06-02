@@ -1,6 +1,6 @@
 <template>
-     <nav class="app-nav z-[99] text-[#8796af] flex flex-row items-stretch justify-start">
-          <ul class="w-[65px] border-r border-[#e2e8ef] m-0 p-[4px] list-none bg-[#f5f7f9] flex flex-col z-[10]">
+     <nav class="app-nav z-[650] text-[#8796af] flex flex-row items-stretch justify-start">
+          <ul class="w-[65px] border-r border-[#e2e8ef] m-0 p-[4px] list-none bg-[#f5f7f9] flex flex-col z-[650]">
 
                <!-- Éléments du haut -->
                <li v-for="item in topItems" >
