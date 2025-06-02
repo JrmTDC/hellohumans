@@ -84,6 +84,7 @@ onMounted(async () => {
      await nextTick()
      measureAllSections()
      upgradeFlow.setStep(1)
+
      layoutLoadingPanel.value = false
 })
 

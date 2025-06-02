@@ -12,6 +12,9 @@ interface User{
 }
 interface ProjectSubscription {
      status: 'active' | 'inactive' | 'canceled' | string
+     current_modules: string[]
+     current_plan_id: string
+     billing_cycle: 'month' | 'year'
 }
 
 interface Project {

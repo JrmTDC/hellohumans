@@ -14,13 +14,17 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      const initSelectedModules = () => {
           // Réinitialiser l'état
           selectedModules.value = {}
-          
+
           // Si un abonnement existe
           const sub = panelStore.project?.subscription
           if (sub?.current_modules) {
                sub.current_modules.forEach(moduleId => {
                     selectedModules.value[moduleId] = true
                })
+          }
+          const subCycle = panelStore.project?.subscription?.billing_cycle
+          if (subCycle) {
+               billingCycle.value = subCycle
           }
      }
 
@@ -105,7 +109,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
      // Initialisation automatique
      onMounted(() => {
           const sub = panelStore.project?.subscription as Subscription | null
-          
+
           // Si pas d'abonnement, sélectionner le plan le plus populaire
           if (!sub) {
                const popularPlan = panelStore.plans.find(p => p.popular)
@@ -118,10 +122,10 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                selectedPlanId.value = sub.current_plan_id
                // Sélectionner les modules existants
                const currentModules = sub.current_modules || []
-               
+
                // D'abord vérifier le plan actuel
                const currentPlan = panelStore.plans.find(p => p.id === selectedPlanId.value)
-               
+
                // Initialiser les modules
                panelStore.modules.forEach(mod => {
                     // Si le module est inclus dans le plan actuel
