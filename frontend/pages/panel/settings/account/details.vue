@@ -73,8 +73,6 @@ const optionLocales = locales.value.map((locale: any) => ({
      label: locale.shortName,
 }))
 
-console.log(locale.value)
-
 const selectedOptionLanguage= ref(locale.value)
 const handleLanguageChange = async (lang: any) => {
      if (lang.value !== locale.value) {
@@ -87,4 +85,3 @@ const optionRegions = [
      { value: 'utc+1', label: 'Europe / Paris' }
 ]
 </script>
-

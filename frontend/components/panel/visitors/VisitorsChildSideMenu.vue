@@ -32,7 +32,8 @@ const menuItems = ref([
           isActive: undefined,
           beta: false,
           disabled: false,
-          count: panelStore.visitors.length
+          count: panelStore.visitors.length,
+          countBadge: true
      },
      {
           id: 'leadsAll',
@@ -43,7 +44,7 @@ const menuItems = ref([
           isActive: undefined,
           beta: false,
           disabled: false,
-          count: panelStore.leads.length
+          count: panelStore.leads.length,
      }
 ])
 

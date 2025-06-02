@@ -33,8 +33,8 @@
                                         <div v-if="item.beta" class="flex ml-auto">
                                              <span class="uppercase text-[9px] leading-[11px] tracking-[0em] bg-[#acb8cb] text-white px-[4px] py-[3px] rounded-[4px] font-medium">{{ t('panel.components.common.childSideMenu.beta') }}</span>
                                         </div>
-                                        <span v-if="item.count" class="opacity-100 ml-auto text-[12px] leading-[16px] tracking-[-0.01em] font-medium transition-opacity duration-200 pl-[6px] whitespace-nowrap">
-                                             <span class="flex items-center justify-center font-medium flex-shrink-0 bg-[rgb(100,116,145)] text-white min-w-[14px] h-[14px] rounded-[5px] px-[4px] py-0 text-[9px] leading-[12px] tracking-[0em]">{{ item.count }}</span>
+                                        <span v-if="item.count" class="opacity-100 ml-auto leading-[16px] tracking-[-0.01em] font-medium transition-opacity duration-200 pl-[6px] whitespace-nowrap">
+                                             <span class="flex items-center justify-center font-medium flex-shrink-0 min-w-[14px] h-[14px] rounded-[5px] px-[4px] py-0 leading-[12px] tracking-[0em]" :class="item.countBadge ? 'bg-[#647491] text-[#ffff] text-[9px]' : 'text-[#001433] text-[12px]'">{{ item.count }}</span>
                                         </span>
                                    </NuxtLink>
                               </template>
@@ -100,6 +100,7 @@ interface SidebarItem {
      disabled?: boolean
      isActive?: (route: any) => boolean
      count?: number
+     countBadge?: boolean
 }
 
 interface SidebarGroup {
