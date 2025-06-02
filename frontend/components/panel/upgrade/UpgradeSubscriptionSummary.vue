@@ -31,11 +31,11 @@
                <!-- Choix du cycle de facturation avec badge “(mensuel)” ou “(annuel)” -->
                <p class="text-[12px] text-[#647491] mt-[20px] mb-0 font-medium">
                     FACTURÉ
-                    <template v-if="panelStore.project?.subscription?.billing_cycle">
+                    <template v-if="panelStore.project?.subscription?.billing_cycle && panelStore.project?.subscription?.billing_cycle != upgradeStore.billingCycle">
                          <span
                               class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px] rounded-[5px] text-[11px] ml-[10px]"
                          >
-                              {{ panelStore.project.subscription.billing_cycle === 'year' ? 'Annuel' : 'Mensuel' }}
+                              {{ panelStore.project.subscription.billing_cycle === 'year' ? 'Anciennement annuel' : 'Anciennement mensuel' }}
                          </span>
                     </template>
                </p>
@@ -223,6 +223,7 @@ interface Plan {
      discountMonths: number
      includedFeatures: string[]
      billingYear: boolean
+     includedModules?: string[]
 }
 interface ChoiceOption {
      label: string
@@ -270,10 +271,7 @@ const billingCycleLocal = computed<'month' | 'year'>({
 
 // Au montage, si l’utilisateur a déjà un abonnement, forcer le radio à son cycle existant
 onMounted(() => {
-     const subCycle = panelStore.project?.subscription?.billing_cycle
-     if (subCycle) {
-          emit('updateBillingCycle', subCycle)
-     }
+
 })
 
 // On regroupe les modules à afficher (ceux inclus + cochés)
