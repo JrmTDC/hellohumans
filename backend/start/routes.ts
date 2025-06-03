@@ -8,7 +8,6 @@ import ChatMessageController from '#controllers/Chat/MessageController'
 import PanelAuthController from '#controllers/Panel/AuthController'
 import PanelUpgradeController from '#controllers/Panel/UpgradeController'
 import PanelUsageController from '#controllers/Panel/UsageController'
-import PanelClientController from '#controllers/Panel/ClientController'
 import PanelProjectController from '#controllers/Panel/ProjectController'
 import PanelUserController from '#controllers/Panel/UserController'
 import PanelOnboardingController from '#controllers/Panel/OnboardingController'
@@ -43,12 +42,9 @@ router.group(() => {
      router.get('/upgrade/modules', (ctx) => PanelUpgradeController.getModules(ctx))
      router.get('/user', (ctx) => PanelUserController.getUser(ctx))
      router.get('/usages', (ctx) => PanelUsageController.index(ctx))
-     router.get('/client', (ctx) => PanelClientController.getClient(ctx))
-     router.get('/clients', (ctx) => PanelClientController.getClients(ctx))
      router.get('/project', (ctx) => PanelProjectController.getProject(ctx))
      router.get('/projects', (ctx) => PanelProjectController.getProjects(ctx))
      router.post('/switch-project/:uuid', (ctx) => PanelProjectController.switchProject(ctx))
-     router.post('/switch-client/:uuid', (ctx) => PanelClientController.switchClient(ctx))
      router.post('/lang', (ctx) => PanelUserController.updateLang(ctx))
      router.get('/onboarding/activities', (ctx) => PanelOnboardingController.getActivities(ctx))
      router.post('/onboarding', (ctx) => PanelOnboardingController.create(ctx))
