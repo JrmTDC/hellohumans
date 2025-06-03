@@ -82,7 +82,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-const backgroundNoCustomer = useAssetBase64Loader('panel/customers/backgroundNoCustomers')
+const backgroundNoCustomer = useBase64Asset('panel/customers/backgroundNoCustomers')
 const panelStore = usePanelStore()
 onMounted(async () => {
      layoutLoadingPanel.value = false

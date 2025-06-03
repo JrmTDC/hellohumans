@@ -1,6 +1,6 @@
 const allAssets = {
-     ...import.meta.glob('~/assets/**/*.svg', { as: 'raw', eager: true }),
-     ...import.meta.glob('~/assets/**/*.{gif,png,jpg,jpeg}', { as: 'arrayBuffer', eager: true }),
+     ...import.meta.glob('~/assets/**/*.svg', { query: '?raw', import: 'default', eager: true }),
+     ...import.meta.glob('~/assets/**/*.{gif,png,jpg,jpeg}', { query: '?arrayBuffer', import: 'default', eager: true }),
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -13,13 +13,19 @@ function svgTextToBase64(svg: string): string {
      const base64 = btoa(String.fromCharCode(...utf8))
      return `data:image/svg+xml;base64,${base64}`
 }
-export function useAssetBase64Loader(name: string): string | null {
+
+function isPromise<T = any>(obj: unknown): obj is Promise<T> {
+     return typeof obj === 'object' && obj !== null && 'then' in obj
+}
+
+export async function useAssetBase64Loader(name: string): Promise<string | null> {
      const entry = Object.entries(allAssets).find(([path]) =>
           path.includes(`/${name}.`)
      )
      if (!entry) return null
 
-     const [path, content] = entry
+     const [path, contentRaw] = entry
+     const content = isPromise(contentRaw) ? await contentRaw : contentRaw
 
      if (path.endsWith('.svg')) {
           return svgTextToBase64(content as string)

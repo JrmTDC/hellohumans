@@ -82,7 +82,7 @@ const props = defineProps<{
      leads: Array<any>
 }>()
 
-const backgroundNoCustomer = useAssetBase64Loader('panel/customers/backgroundNoCustomers')
+const backgroundNoCustomer = useBase64Asset('panel/customers/backgroundNoCustomers')
 
 import flagsFr from "assets/icons/panel/flags/fr.svg";
 import flagsUs from "assets/icons/panel/flags/us.svg";
