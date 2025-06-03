@@ -13,7 +13,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                     if (!ok) {
                          isAccountBlocked.value = true
                          return
-                         // return navigateTo('/panel/login')
                     }
                }
 

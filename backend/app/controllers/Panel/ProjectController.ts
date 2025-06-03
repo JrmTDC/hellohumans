@@ -4,109 +4,14 @@ import supabaseService from '#services/supabaseService'
 class ProjectController{
      public async getProject(ctx: HttpContext) {
           try {
-               let selected_client_id = ctx.user.selected_client_id
-
-               // 1. Vérifier que ce client est bien lié à l'utilisateur
-               let { data: clientUser, error: clientUserError } = await supabaseService
-                    .from('client_users')
-                    .select('id, client_id, selected_project_id')
-                    .eq('user_id', ctx.user.id)
-                    .eq('client_id', selected_client_id)
-                    .maybeSingle()
-
-               if (!clientUser || clientUserError) {
-                    // Si non trouvé → on récupère le dernier client lié
-                    const { data: lastClientUser, error: lastClientError } = await supabaseService
-                         .from('client_users')
-                         .select('client_id, id, selected_project_id')
-                         .eq('user_id', ctx.user.id)
-                         .order('created_at', { ascending: false })
-                         .limit(1)
-                         .maybeSingle()
-
-                    if (!lastClientUser || lastClientError) {
-                         return ctx.response.notFound({
-                              error: { name: 'noClientFound', description: 'Aucun client associé à cet utilisateur.' }
-                         })
-                    }
-
-                    selected_client_id = lastClientUser.client_id
-                    clientUser = lastClientUser
-
-                    // Mise à jour du selected_client_id
-                    await supabaseService
-                         .from('users')
-                         .update({ selected_client_id: selected_client_id })
-                         .eq('id', ctx.user.id)
-               }
-
-               const client_user_id = clientUser.client_id
-               let selected_project_id = clientUser.selected_project_id
-
-               // 2. Vérifie si le projet sélectionné est bien lié au client
-               if (selected_project_id) {
-                    const { data: validProject } = await supabaseService
-                         .from('client_projects')
-                         .select('id')
-                         .eq('id', selected_project_id)
-                         .eq('client_id', client_user_id)
-                         .maybeSingle()
-
-                    if (!validProject) {
-                         selected_project_id = null
-                    }
-               }
-
-               // 3. Si aucun projet sélectionné → on récupère le dernier du client
-               if (!selected_project_id) {
-                    const { data: lastProject } = await supabaseService
-                         .from('client_projects')
-                         .select('id')
-                         .eq('client_id', selected_client_id)
-                         .order('created_at', { ascending: false })
-                         .limit(1)
-                         .maybeSingle()
-
-                    if (!lastProject) {
-                         return ctx.response.notFound({
-                              error: { name: 'noProjectFound', description: 'Aucun projet trouvé pour ce client.' }
-                         })
-                    }
-
-                    selected_project_id = lastProject.id
-
-                    // Mise à jour selected_project_id dans client_users
-                    await supabaseService
-                         .from('client_users')
-                         .update({ selected_project_id: selected_project_id })
-                         .eq('id', client_user_id)
-               }
-
-               // 4. On retourne uniquement le projet sélectionné
-               const { data: selectedProject, error: selectedProjectError } = await supabaseService
-                    .from('client_projects')
-                    .select('*')
-                    .eq('id', selected_project_id)
-                    .single()
-
-               if (selectedProjectError || !selectedProject) {
+               if (!ctx.project) {
                     return ctx.response.notFound({
-                         error: { name: 'projectNotFound', description: 'Projet introuvable.' }
+                         error: { name: 'noProjectFound', description: 'Aucun projet lié à cet utilisateur.' }
                     })
                }
-
-               // 5. On retourne uniquement le projet sélectionné
-               const { data: projectSubscription } = await supabaseService
-                    .from('client_project_subscriptions')
-                    .select('*')
-                    .eq('project_id', selected_project_id)
-                    .maybeSingle()
-
-
                return {
                     project: {
-                         ...selectedProject,
-                         subscription: projectSubscription || null
+                         ...ctx.project
                     }
                }
 
@@ -120,15 +25,15 @@ class ProjectController{
 
      public async getProjects(ctx: HttpContext) {
           try {
-               if (!ctx.user.selected_client_id) {
+               if (!ctx.project) {
                     return ctx.response.notFound({
-                         error: { name: 'noClientFound', description: 'Aucun client lié à cet utilisateur.' }
+                         error: { name: 'noProjectFound', description: 'Aucun projet lié à cet utilisateur.' }
                     })
                }
 
                // Récupération des projets du client
                const { data: projects, error: projectsError } = await supabaseService
-                    .from('client_projects')
+                    .from('projects')
                     .select('*')
                     .eq('client_id', ctx.user.selected_client_id)
                     .order('created_at', { ascending: false })

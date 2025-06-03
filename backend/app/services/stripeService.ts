@@ -9,26 +9,25 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 export type BillingCycle = 'month' | 'year'
 
 /* ──────────────────────── CUSTOMER UTILITIES ────────────────────────────── */
-export async function ensureCustomer(client: {
+export async function ensureCustomer(project: {
      id: string
      email: string | null
-     name: string | null
+     organization_data: { name?: string | null }
      stripe_customer_id?: string | null
 }): Promise<string> {
-     if (client.stripe_customer_id) {
+     if (project.stripe_customer_id) {
           try {
-               const cust = await stripe.customers.retrieve(client.stripe_customer_id)
-               if (!('deleted' in cust && cust.deleted)) return client.stripe_customer_id // ok
+               const cust = await stripe.customers.retrieve(project.stripe_customer_id)
+               if (!('deleted' in cust && cust.deleted)) return project.stripe_customer_id // ok
           } catch (_) {/* fallthrough – recreate below */}
 
-          await supabaseService.from('clients').update({ stripe_customer_id: null }).eq('id', client.id)
+          await supabaseService.from('projects').update({ stripe_customer_id: null }).eq('id', project.id)
      }
-
      const customer = await stripe.customers.create({
-          name: client.name ?? undefined,
-          metadata: { client_id: client.id },
+          name: project.organization_data.name ?? undefined,
+          metadata: { project_id: project.id },
      })
-     await supabaseService.from('clients').update({ stripe_customer_id: customer.id }).eq('id', client.id)
+     await supabaseService.from('projects').update({ stripe_customer_id: customer.id }).eq('id', project.id)
      return customer.id
 }
 
@@ -159,8 +158,8 @@ async function analyzeChanges(currentSub: Stripe.Subscription, desiredPriceIds: 
           }
      })
 
-     return { 
-          immediateProrations: immediate, 
+     return {
+          immediateProrations: immediate,
           futureChanges: future,
           removedItems: removed
      }

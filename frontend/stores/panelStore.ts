@@ -85,11 +85,6 @@ interface Stripe {
      setup_intent?: StripeSetupIntent
      preview?: any
 }
-
-interface Client {
-     id: string
-     name: string
-}
 interface VisitorsLive {
      ip: string
      browser: string
@@ -135,9 +130,7 @@ export const usePanelStore = defineStore('panel', () => {
      const supabase = useSupabaseClient()
      const chatStore = useChatStore()
      const user = ref<User | null>(null)
-     const client = ref<Client | null>(null)
      const project = ref<Project | null>(null)
-     const clients = ref<{ id: string; name: string }[]>([])
      const project_usages = ref<{ id: string; usage: number; limit: number | '∞' }[]>([])
      const project_subscription = ref<{ id: string; name: string; status: string }[]>([])
      const plans = ref<UpgradePlan[]>([])
@@ -482,7 +475,6 @@ export const usePanelStore = defineStore('panel', () => {
                     body: JSON.stringify(data)
                })
                if(res.success) {
-                    client.value = res.success.client
                     project.value = res.success.project
                }
                return !!res.success
@@ -579,8 +571,6 @@ export const usePanelStore = defineStore('panel', () => {
      return {
           // state
           user,
-          client,
-          clients,
           project_usages,
           project_subscription,
           plans,

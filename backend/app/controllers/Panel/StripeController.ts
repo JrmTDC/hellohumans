@@ -17,7 +17,7 @@ class StripeController {
       */
      public async createSetupIntent(ctx: HttpContext) {
           try {
-               const customerId = await ensureCustomer(ctx.client)
+               const customerId = await ensureCustomer(ctx.project)
                const setupIntent = await stripe.setupIntents.create({
                     customer: customerId,
                     payment_method_types: ['card'],
@@ -45,7 +45,7 @@ class StripeController {
       */
      public async paymentMethods(ctx: HttpContext) {
           try {
-               const customerId = await ensureCustomer(ctx.client)
+               const customerId = await ensureCustomer(ctx.project)
                const paymentMethods = await stripe.paymentMethods.list({
                     customer: customerId,
                     type: 'card'
@@ -77,7 +77,6 @@ class StripeController {
       */
      public async previewUpgrade(ctx: HttpContext) {
           try {
-
                /* ---- Validation ---- */
                const schema = vine.object({
                     plan_id: vine.string(),
@@ -87,7 +86,7 @@ class StripeController {
                const { plan_id, modules = [], billing_cycle } = await vine.compile(schema).validate(ctx.request.all())
 
                /* ---- Prix ---- */
-               const customerId = await ensureCustomer(ctx.client)
+               const customerId = await ensureCustomer(ctx.project)
                const planPriceId   = await priceForPlan(plan_id, billing_cycle as BillingCycle)
                const modulePriceIds = await pricesForModules(modules, billing_cycle as BillingCycle)
                const desiredPriceIds = [planPriceId, ...modulePriceIds]
@@ -171,7 +170,7 @@ class StripeController {
                     ctx.subscription.stripe_subscription_id,
                     desiredPriceIds,
                )
-               
+
                /* ------- helpers ------- */
                function euros(c: number | undefined) {
                     return +((c ?? 0) / 100).toFixed(2)
@@ -199,7 +198,7 @@ class StripeController {
                }
 
                const planName = planData.name[ctx.user?.lang] || planData.name['en'] || 'Unknown plan'
-               
+
                const currentPlanPriceId = ctx.subscription.items?.data.find((item: any) =>
                     item.price?.metadata?.is_plan === 'true'
                )?.price.id
@@ -244,14 +243,14 @@ class StripeController {
                     const prorata = debitByPrice[priceId] ?? 0
                     const credit = creditByPrice[priceId] ?? 0
                     const module = priceDetails.data?.find(m => {
-                        const stripePriceId = ctx.subscription.billing_cycle === 'month' 
-                            ? m.stripe_price_id_monthly 
+                        const stripePriceId = ctx.subscription.billing_cycle === 'month'
+                            ? m.stripe_price_id_monthly
                             : m.stripe_price_id_annual
                         return stripePriceId === priceId
                     })
 
-                    const moduleName = module?.name[ctx.user?.lang] 
-                        || module?.name['en'] 
+                    const moduleName = module?.name[ctx.user?.lang]
+                        || module?.name['en']
                         || `Unknown module`
 
                     return {
@@ -275,13 +274,13 @@ class StripeController {
                             priceId: item.price?.id,
                             name: item.price?.metadata?.name
                         }))
-                        .filter((mod: any): mod is { id: string, priceId: string, name: string } => 
+                        .filter((mod: any): mod is { id: string, priceId: string, name: string } =>
                             mod.id !== undefined && mod.priceId !== undefined && mod.name !== undefined) :
                     []
 
                function buildRemovalRow(stripePriceId: string, module: any /* ou null */) {
                     const lang = ctx.user?.lang ?? 'en'
-                    
+
                     return {
                          id:               module?.id   ?? 'unknown',
                          name:             module?.name?.[lang] ?? module?.name?.en ?? 'Unknown module',
@@ -302,11 +301,11 @@ class StripeController {
                         .select('id, name, stripe_price_id_monthly, stripe_price_id_annual')
                         .or(`stripe_price_id_monthly.eq.${stripePriceId},stripe_price_id_annual.eq.${stripePriceId}`)
                         .limit(1)
-                  
+
                       return buildRemovalRow(stripePriceId, data?.[0])
                     }),
                )
-               
+
                /* ------- réponse ------- */
                return ctx.response.ok({
                     preview : {
