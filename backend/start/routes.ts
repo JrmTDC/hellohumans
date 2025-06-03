@@ -1,7 +1,6 @@
 import router from '@adonisjs/core/services/router'
 // Chat
 import ChatProjectController from '#controllers/Chat/ProjectController'
-import ChatClientController from '#controllers/Chat/ClientController'
 import ChatVisitorController from '#controllers/Chat/VisitorController'
 import ChatMessageController from '#controllers/Chat/MessageController'
 // Panel
@@ -19,7 +18,6 @@ import { middleware } from '#start/kernel'
 
 // Routes de chat
 router.group(() => {
-     router.get('/client', (ctx) => ChatClientController.show(ctx))
      router.get('/project', (ctx) => ChatProjectController.show(ctx))
      router.get('/visitor', (ctx) => ChatVisitorController.getVisitor(ctx))
      router.post('/visitor', (ctx) => ChatVisitorController.createVisitor(ctx))
