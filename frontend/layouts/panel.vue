@@ -68,7 +68,7 @@ onMounted(async () => {
                }else{
                     await panelStore.initPanelData()
                }
-               if(!['/panel/simulateVisitor'].includes(router.currentRoute.value.path)) {
+               if(!['/panel/simulateVisitor', '/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)) {
                     watch(() => panelStore.project?.public_key, panelStore.operatorRegisterSocket, {immediate: true})
                }
           }

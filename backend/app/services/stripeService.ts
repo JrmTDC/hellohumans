@@ -23,6 +23,7 @@ export async function ensureCustomer(project: {
 
           await supabaseService.from('projects').update({ stripe_customer_id: null }).eq('id', project.id)
      }
+     console.log('Creating Stripe customer for project', project.id)
      const customer = await stripe.customers.create({
           name: project.organization_data.name ?? undefined,
           metadata: { project_id: project.id },

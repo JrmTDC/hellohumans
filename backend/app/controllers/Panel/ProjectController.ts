@@ -11,7 +11,8 @@ class ProjectController{
                }
                return {
                     project: {
-                         ...ctx.project
+                         ...ctx.project,
+                         subscription: ctx.subscription
                     }
                }
 
@@ -65,7 +66,7 @@ class ProjectController{
 
                // 2. Vérifie que le client est bien lié à cet utilisateur
                const { data: clientUser, error: clientUserError } = await supabaseService
-                    .from('client_users')
+                    .from('project_users')
                     .select('id')
                     .eq('user_id', ctx.user.id)
                     .eq('client_id', ctx.user.selected_client_id)
@@ -79,7 +80,7 @@ class ProjectController{
 
                // 3. Vérifie que le projet est bien lié à ce client
                const { data: validProject, error: projectError } = await supabaseService
-                    .from('client_projects')
+                    .from('project_projects')
                     .select('id')
                     .eq('id', ctx.params.uuid)
                     .eq('client_id', ctx.user.selected_client_id)

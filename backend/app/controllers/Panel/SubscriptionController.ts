@@ -22,7 +22,7 @@ class SubscriptionController {
                /* -------- Création / mise à jour Stripe -------- */
                let subStripe
                if (!ctx.subscription?.stripe_subscription_id) {
-                    const customerId = await ensureCustomer(ctx.client)
+                    const customerId = await ensureCustomer(ctx.project)
                     subStripe = await createSubscription({
                          customerId,
                          plan_id,
@@ -63,7 +63,7 @@ class SubscriptionController {
 
                /* -------- Persistance -------- */
                await supabaseService
-                    .from('client_project_subscriptions')
+                    .from('project_subscriptions')
                     .upsert(
                          {
                               project_id: ctx.project.id,
