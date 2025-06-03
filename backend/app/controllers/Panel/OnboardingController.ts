@@ -8,7 +8,6 @@ class OnboardingController {
                //  Extraction des champs
                const webSite = ctx.request.input('webSite')?.trim() || null
                const organizationName = ctx.request.input('organizationName')?.trim() || null
-               const organizationId = ctx.request.input('organizationId')?.trim() || null
                const organizationType = ctx.request.input('organizationType')?.trim() || null
                const serviceModel = ctx.request.input('serviceModel')?.trim() || null
                const businessModel = ctx.request.input('businessModel')?.trim() || null
@@ -25,26 +24,10 @@ class OnboardingController {
                     })
                }
 
-               if (!organizationId && (!organizationName || !organizationType)) {
+               if (!organizationName || !organizationType) {
                     return ctx.response.badRequest({
                          error: { name: 'clientMissing', description: 'Vous devez créer ou sélectionner un compte client.' }
                     })
-               }
-
-               // Si client existant → Vérifier ownership
-               if (organizationId) {
-                    const { data: existingLink, error: linkError } = await supabaseService
-                         .from('client_users')
-                         .select('id')
-                         .eq('client_id', organizationId)
-                         .eq('user_id', ctx.user.id)
-                         .maybeSingle()
-
-                    if (linkError || !existingLink) {
-                         return ctx.response.unauthorized({
-                              error: { name: 'unauthorizedClient', description: 'Ce client ne vous appartient pas.' }
-                         })
-                    }
                }
 
                // Vérif des autres champs requis
@@ -70,85 +53,36 @@ class OnboardingController {
                     }
                }
 
-               // Création ou récupération du client
-               let clientId: string
-               let createdNewClient = false
-
-               if (organizationName) {
-                    const { data: clientData, error: clientError } = await supabaseService
-                         .from('clients')
-                         .insert({
-                              name: organizationName,
-                              owner_user_id: ctx.user.id,
-                              type: organizationType
-                         })
-                         .select('*')
-                         .single()
-
-                    if (clientError || !clientData) {
-                         return ctx.response.badRequest({
-                              error: { name: 'clientCreationFailed', description: 'Création du client échouée.' }
-                         })
-                    }
-
-                    clientId = clientData.id
-                    createdNewClient = true
-               } else {
-                    clientId = organizationId!
-               }
-
-               // On récupère les infos du client
-               const { data: clientData, error: clientError } = await supabaseService
-                    .from('clients')
-                    .select('*')
-                    .eq('id', clientId)
-                    .single()
-
-               if (clientError || !clientData) {
-                    return ctx.response.notFound({
-                         error: { name: 'clientNotFound', description: 'Client introuvable.' }
-                    })
-               }
-
-               //  Mise à jour du selected_project_id (si lien existant)
-               const { error: updateUserError } = await supabaseService
-                    .from('users')
-                    .update({ selected_client_id: clientId })
-                    .eq('id', ctx.user.id)
-
-               if (updateUserError) {
-                    console.warn('⚠️ Impossible de mettre à jour le selected_client_id')
-               }
-
-               // Lier user et client (si nouveau client)
-               if (createdNewClient) {
-                    await supabaseService.from('client_users').insert({
-                         client_id: clientId,
-                         user_id: ctx.user.id,
-                         role: 'owner'
-                    })
-               }
-
                // Génération automatique d'une clé publique sécurisée
                const publicKey = randomBytes(32).toString('hex')
                const privateKey = randomBytes(32).toString('hex')
 
                // Création du projet principal
+               const onboardingData = {
+                    service_model: serviceModel,
+                    business_model: businessModel,
+                    communication_methods: communicationMethods,
+                    selected_activity: selectedActivity,
+                    conversations_per_month: conversationsPerMonth,
+                    monthly_website_visitors: monthlyWebsiteVisitors,
+                    website_hosting_platform: websiteHostingPlatform,
+                    primary_use: primaryUse,
+               }
+
+               const organizationData = {
+                    name: organizationName,
+                    type: organizationType,
+               }
+
                const { data: projectData, error: projectError } = await supabaseService
-                    .from('client_projects')
+                    .from('projects')
                     .insert({
-                         client_id: clientId,
                          website: webSite,
-                         service_model: serviceModel,
-                         business_model: businessModel,
-                         communication_methods: communicationMethods,
-                         selected_activity: selectedActivity,
-                         conversations_per_month: conversationsPerMonth,
-                         monthly_website_visitors: monthlyWebsiteVisitors,
-                         website_hosting_platform: websiteHostingPlatform,
-                         primary_use: primaryUse,
                          public_key: publicKey,
-                         private_key: privateKey
+                         private_key: privateKey,
+                         onboarding_data: onboardingData,
+                         organization_data: organizationData,
+                         owner_user_id: ctx.user.id,
                     })
                     .select()
                     .single()
@@ -159,19 +93,14 @@ class OnboardingController {
                     })
                }
 
-               //  Mise à jour du selected_project_id (si lien existant)
-               const { error: updateClientUserError } = await supabaseService
-                    .from('client_users')
-                    .update({ selected_project_id: projectData.id })
-                    .eq('client_id', clientId)
-                    .eq('user_id', ctx.user.id)
-
-               if (updateClientUserError) {
-                    console.warn('⚠️ Impossible de mettre à jour le selected_project_id')
-               }
+               // Lier user et le project
+               await supabaseService.from('project_users').insert({
+                    project_id: projectData.id,
+                    user_id: ctx.user.id,
+                    role: 'owner'
+               })
 
                return {
-                    client: clientData,
                     project: {
                          id: projectData.id,
                          website: projectData.website,

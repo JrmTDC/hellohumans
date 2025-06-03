@@ -164,29 +164,9 @@ export const usePanelStore = defineStore('panel', () => {
                }
 
                // 2) Récupérer les infos client, projet, etc.
-               const [clientsRes, clientRes, projectRes] = await Promise.allSettled([
-                    apiFetch('/clients'),
-                    apiFetch('/client'),
+               const [projectRes] = await Promise.allSettled([
                     apiFetch('/project'),
                ])
-
-               // 3) Clients
-               if (clientsRes.status === 'fulfilled' && clientsRes.value.success) {
-                    clients.value = clientsRes.value.success.clients ?? []
-               } else {
-                    clients.value = []
-               }
-
-               // 4) Client courant
-               if (
-                    clientRes.status !== 'fulfilled' ||
-                    !clientRes.value.success ||
-                    !clientRes.value.success.client
-               ) {
-                    client.value = null
-               } else {
-                    client.value = clientRes.value.success.client
-               }
 
                // 5) Projet courant
                if (

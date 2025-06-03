@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
           try {
                // Init session si nécessaire
-               if (!panelStore.user || !panelStore.client || !panelStore.project) {
+               if (!panelStore.user || !panelStore.project) {
                     const ok = await panelStore.initPanelAccessSession()
                     if (!ok) {
                          isAccountBlocked.value = true
@@ -23,8 +23,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                     return
                }
 
-               // Si client ou projet manquant → onboarding
-               if (!panelStore.client || !panelStore.project) {
+               // Si projet manquant → onboarding
+               if (!panelStore.project) {
                     isStopped.value = true
                     if (to.path !== '/panel/onboarding') {
                          return navigateTo('/panel/onboarding')

@@ -10,8 +10,7 @@ class PanelAccessMiddleware {
                })
           }
 
-          // Vérifie via Supabase Auth
-          const { data: authData, error: authError } = await supabaseService .auth.getUser(token)
+          const { data: authData, error: authError } = await supabaseService.auth.getUser(token)
           if (authError || !authData.user) {
                return ctx.response.unauthorized({
                     error: { name: 'invalidToken', description: 'Token invalide' },
@@ -20,119 +19,71 @@ class PanelAccessMiddleware {
 
           const auth_id = authData.user.id
           ctx.user = null
-          ctx.client = null
           ctx.project = null
           ctx.subscription = null
 
-          // 1. User interne
+          // Récupération de l'utilisateur
           const { data: userData } = await supabaseService
                .from('users')
-               .select('id, selected_client_id, blocked, lang, email, display_name')
+               .select('id, selected_project_id, blocked, lang, email, display_name')
                .eq('auth_id', auth_id)
                .maybeSingle()
 
           if (!userData) return ctx.response.unauthorized()
-
-          ctx.user = userData
-
-          if(userData.blocked) {
+          if (userData.blocked) {
                return ctx.response.unauthorized({
-                    error: {
-                         name: 'blockedUser', description: 'Utilisateur bloqué'
-                    },
+                    error: { name: 'blockedUser', description: 'Utilisateur bloqué' },
                })
           }
 
+          ctx.user = userData
+          let selectedProjectId = userData.selected_project_id
 
-          let selectedClientId = userData.selected_client_id
-
-          // 2. Client User (lien utilisateur ↔ client)
-          let { data: clientUser } = await supabaseService
-               .from('client_users')
-               .select('id, client_id, selected_project_id')
+          // Vérifie que l'utilisateur a accès à ce projet
+          let { data: projectUser } = await supabaseService
+               .from('project_users')
+               .select('id, project_id')
                .eq('user_id', userData.id)
-               .eq('client_id', selectedClientId)
+               .eq('project_id', selectedProjectId)
                .maybeSingle()
 
-          if (!clientUser) {
-               // Fallback sur dernier client
-               const { data: fallbackClient } = await supabaseService
-                    .from('client_users')
-                    .select('id, client_id, selected_project_id')
+          if (!projectUser) {
+               // Fallback : dernier projet disponible
+               const { data: fallbackProject } = await supabaseService
+                    .from('project_users')
+                    .select('id, project_id')
                     .eq('user_id', userData.id)
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .maybeSingle()
 
-               if (!fallbackClient) return await next()
+               if (!fallbackProject) return await next()
 
-               selectedClientId = fallbackClient.client_id
-               clientUser = fallbackClient
+               selectedProjectId = fallbackProject.project_id
 
-               // Met à jour selected_client_id dans users
+               // Mise à jour du selected_project_id
                await supabaseService
                     .from('users')
-                    .update({ selected_client_id: selectedClientId })
+                    .update({ selected_project_id: selectedProjectId })
                     .eq('id', userData.id)
           }
 
-          const { data: clientData } = await supabaseService
-               .from('clients')
-               .select('*')
-               .eq('id', selectedClientId)
-               .maybeSingle()
-
-          ctx.client = clientData
-
-          // 3. Project (via selected_project_id)
-          let selectedProjectId = clientUser.selected_project_id
-          if (selectedProjectId) {
-               const { data: project } = await supabaseService
-                    .from('client_projects')
-                    .select('id, website')
-                    .eq('id', selectedProjectId)
-                    .eq('client_id', selectedClientId)
-                    .maybeSingle()
-
-               if (project) {
-                    ctx.project = project
-
-                    // 4. Sub (abonnement projet)
-                    const { data: sub } = await supabaseService
-                         .from('client_project_subscriptions')
-                         .select('*')
-                         .eq('project_id', project.id)
-                         .maybeSingle()
-
-                    ctx.subscription = sub || null
-                    return await next()
-               }
-          }
-
-          // Fallback si projet inexistant / supprimé
-          const { data: fallbackProject } = await supabaseService
-               .from('client_projects')
+          // Récupération du projet
+          const { data: project } = await supabaseService
+               .from('projects')
                .select('id, website')
-               .eq('client_id', selectedClientId)
-               .order('created_at', { ascending: false })
-               .limit(1)
+               .eq('id', selectedProjectId)
                .maybeSingle()
 
-          if (!fallbackProject) return await next()
+          if (!project) return await next()
 
-          // Mise à jour selected_project_id
-          await supabaseService
-               .from('client_users')
-               .update({ selected_project_id: fallbackProject.id })
-               .eq('user_id', userData.id)
-               .eq('client_id', selectedClientId)
+          ctx.project = project
 
-          ctx.project = fallbackProject
-
+          // Récupération de l'abonnement du projet
           const { data: subscriptionData } = await supabaseService
-               .from('client_project_subscriptions')
+               .from('project_subscriptions')
                .select('*')
-               .eq('project_id', fallbackProject.id)
+               .eq('project_id', project.id)
                .maybeSingle()
 
           ctx.subscription = subscriptionData || null
@@ -140,4 +91,5 @@ class PanelAccessMiddleware {
           await next()
      }
 }
+
 export default PanelAccessMiddleware

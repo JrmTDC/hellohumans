@@ -67,9 +67,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           1: {
                1: () => {
                     const { organizationId, organizationName, organizationType } = answers.value
-                    const panel = usePanelStore()
-                    const isValidClient = !!panel.clients.find((c) => c.id === organizationId)
-                    return isValidClient || (organizationName.trim().length > 0 && organizationType.trim().length > 0)
+                    return organizationName.trim().length > 0 && organizationType.trim().length > 0
                },
                2: () => {
                     const { webSite } = answers.value
@@ -189,7 +187,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                section.completed--
           }
      }
-     function prepareNewFromDashboard(data: { webSite?: string, newClient?: boolean }) {
+     function prepareNewFromDashboard(data: { webSite?: string}) {
           resetStore()
           currentStep.value = 1
           disabledRedirect.value = true
@@ -197,34 +195,16 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                answers.value.webSite = data.webSite
                createMode.value = false
           }
-          if(data.newClient){
-               answers.value.organizationId = null
-               answers.value.organizationName = ''
-               answers.value.organizationType = ''
-               createMode.value = true
-          }
+          answers.value.organizationName = ''
+          answers.value.organizationType = ''
+          createMode.value = true
           saveToStorage()
-     }
-
-     function autoSelectClient() {
-          const panel = usePanelStore()
-
-          // Si on est en mode création, on ne sélectionne pas automatiquement le client
-          if (createMode.value) return
-
-          const noClientSelected = !answers.value.organizationId && !answers.value.organizationName
-          const validClient = panel.client?.id && panel.clients.some(c => c.id === panel.client?.id)
-
-          if (noClientSelected && validClient) {
-               answers.value.organizationId = panel.client?.id ?? null
-          }
      }
 
      function initialize() {
           try {
                const raw = localStorage.getItem('onboardingStore')
                if (!raw) {
-                    autoSelectClient()
                     return
                }
                const parsed = JSON.parse(raw)
@@ -232,8 +212,6 @@ export const useOnboardingStore = defineStore('onboarding', () => {
                if (parsed.currentStep) currentStep.value = parsed.currentStep
                if (parsed.disabledRedirect) disabledRedirect.value = parsed.disabledRedirect
                if (parsed.answers) Object.assign(answers.value, parsed.answers)
-
-               autoSelectClient()
 
                for (const [step, _] of Object.entries(stepSections)) {
                     validateSections(Number(step))
@@ -285,7 +263,6 @@ export const useOnboardingStore = defineStore('onboarding', () => {
           goPrevious,
           submitOnboarding,
           resetStore,
-          autoSelectClient,
           prepareNewFromDashboard,
           initialize,
      }

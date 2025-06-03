@@ -152,7 +152,7 @@ const handleCreateProject = async (website: string) => {
 }
 
 const handleCreateClient = () => {
-     onboardingStore.prepareNewFromDashboard({ newClient: true })
+     onboardingStore.prepareNewFromDashboard()
      router.push('/panel/onboarding')
 }
 </script>
