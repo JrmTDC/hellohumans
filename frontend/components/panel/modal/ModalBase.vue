@@ -1,7 +1,7 @@
 <template>
      <div
           id="hellohumans-panel-modal"
-          class="fixed inset-0 bg-[rgba(8,15,26,0.8)] z-[132] flex items-center justify-center p-[30px]"
+          class="fixed inset-0 bg-[rgba(8,15,26,0.8)] z-[800] flex items-center justify-center p-[30px]"
           :class="['transition-opacity duration-[150ms] ease-linear backdrop-blur-sm', show ? 'opacity-100' : 'opacity-0']"
      >
           <div class="m-auto transition duration-300 ease-out outline-none" :class="[show ? 'translate-y-0' : 'translate-y-[-25%]']">
