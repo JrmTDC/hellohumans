@@ -11,20 +11,6 @@
                          <div class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-[#647491]">{{ userEmail }}</div>
                     </div>
                </div>
-               <div>
-                    <div class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] m-0 min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group" @click="toggleClientMenu">
-                         <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-[1_1_0%] text-left text-[14px]">{{ currentClientName }}</span>
-                         <span class="flex items-center ml-[12px]">
-                         <svgo-panel-icon-arrow-to class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" />
-                    </span>
-                    </div>
-                    <PanelLayoutSideMenuClients
-                         v-if="showClientsMenu"
-                         @close="showClientsMenu = false"
-                         @open-create-client="handleOpenCreateClient"
-                         @closeAllMenus="emits('closeSideUserMenu')"
-                    />
-               </div>
                <div class="m-[8px] bg-[rgb(226,232,239)] h-[1px]"></div>
 
                <div class="text-[#647491] text-[12px] leading-[16px] tracking-[-0.01em] pt-[12px] px-[8px] pb-[4px]">{{ t('panel.components.layout.sideMenu.project') }}</div>
