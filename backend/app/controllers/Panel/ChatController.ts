@@ -10,7 +10,7 @@ class ChatController{
           }
 
           const { error } = await supabaseService
-               .from('client_projects')
+               .from('projects')
                .update({ config })
                .eq('id', ctx.project.id)
 
