@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                if (!panelStore.user || !panelStore.project) {
                     const ok = await panelStore.initPanelAccessSession()
                     if (!ok) {
-                         isAccountBlocked.value = true
+                         isAccountError.value = true
                          return
                     }
                }

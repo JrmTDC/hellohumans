@@ -342,6 +342,7 @@
                     "accountError": {
                          "bannedTitle": "Nous rencontrons un problème",
                          "bannedDescription": "Nous ne parvenons pas à accéder à certaines informations liées à votre profil. Veuillez contacter le support pour que nous puissions résoudre cela rapidement.",
+                         "logout": "Se déconnecter",
                          "contactSupport": "Contacter le support"
                     },
                     "accountBlacked": {

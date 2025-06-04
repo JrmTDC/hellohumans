@@ -1,7 +1,7 @@
 <template>
      <PanelCommonLoadingOverlay v-if="layoutLoadingPanel" :progress="progress" />
      <PanelLayoutAccountError v-if="isAccountError" />
-     <PanelLayoutAccountBlocked v-if="isAccountBlocked" />
+     <PanelLayoutAccountBlocked v-else-if="isAccountBlocked" />
      <div v-else class="flex flex-col h-screen">
           <PanelCommonConnectionBanner :show="showBanner" :countdown="countdown"/>
           <PanelCommonToastContainer />
@@ -64,17 +64,25 @@ onMounted(async () => {
           if(!isAccountBlocked.value && !isAccountError.value) {
                const isStartPage = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)
                if(isStartPage){
-                    await panelStore.fetchUpgrade()
+                    const ok = await panelStore.fetchUpgrade()
+                    if(!ok) {
+                         isAccountError.value = true
+                         return
+                    }
                }else{
-                    await panelStore.initPanelData()
+                    const ok = await panelStore.initPanelData()
+                    if(!ok) {
+                         isAccountError.value = true
+                         return
+                    }
                }
+
                if(!['/panel/simulateVisitor', '/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules'].includes(router.currentRoute.value.path)) {
                     watch(() => panelStore.project?.public_key, panelStore.operatorRegisterSocket, {immediate: true})
                }
           }
           return
      } catch (e) {
-          console.error('Erreur layout panel initPanelData:', e)
           await router.push('/panel/login')
      }
 })

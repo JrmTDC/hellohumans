@@ -153,7 +153,6 @@ export const usePanelStore = defineStore('panel', () => {
                user.value = userRes?.success?.user ?? null
 
                if (!user.value) {
-                    await logout()
                     return false
                }
 
@@ -182,10 +181,8 @@ export const usePanelStore = defineStore('panel', () => {
                } else {
                     project_subscription.value = []
                }
-
                return true
           } catch (err: any) {
-               console.error('[initPanelAccessSession] Erreur :', err)
                await logout()
                return false
           }
@@ -196,7 +193,6 @@ export const usePanelStore = defineStore('panel', () => {
           try {
                // 1) Vérifier la session / récupérer l’utilisateur
                if (!user.value) {
-                    await logout()
                     return false
                }
 
@@ -208,9 +204,14 @@ export const usePanelStore = defineStore('panel', () => {
                project_usages.value = usagesRes.success.usages || []
                projects.value = projectsRes.success.projects || []
                //modules.value = usagesRes.modules || []
-               return true
+               if(!projects.value || projects.value.length === 0) {
+                    return false
+               }
+               if(!project_usages.value) {
+                    return false
+               }
+
           } catch (err: any) {
-               console.error('[initPanelData] Erreur :', err)
                await logout()
                return false
           }

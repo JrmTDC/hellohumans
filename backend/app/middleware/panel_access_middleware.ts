@@ -71,8 +71,7 @@ class PanelAccessMiddleware {
           // Récupération du projet
           const { data: project } = await supabaseService
                .from('projects')
-               .select('*')
-               .eq('id', selectedProjectId)
+               .select('id, public_key, config, widget_installed, website, stripe_customer_id, owner_user_id, organization_data, onboarding_data, created_at').eq('id', selectedProjectId)
                .maybeSingle()
 
           if (!project) return await next()
