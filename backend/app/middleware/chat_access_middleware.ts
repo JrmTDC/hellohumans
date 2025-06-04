@@ -17,26 +17,14 @@ export default class ChatAccessMiddleware {
           }
 
           const { data: project } = await supabaseService
-               .from('client_projects')
-               .select('*, clients(*)')
+               .from('projects')
+               .select('id, public_key, config, widget_installed, website, stripe_customer_id, owner_user_id, organization_data, onboarding_data, created_at')
                .eq('public_key', projectPublicKey)
                .maybeSingle()
 
           if (!project) {
                return response.unauthorized({ error: { name: 'project_not_found' } })
           }
-
-          // Récupération du client lié
-          const { data: client } = await supabaseService
-               .from('clients')
-               .select('*')
-               .eq('id', project.client_id)
-               .maybeSingle()
-
-          if (!client) {
-               return response.unauthorized({ error: { name: 'client_not_found' } })
-          }
-
 
           let visitor = null
           let visitorMessages = []
@@ -64,7 +52,6 @@ export default class ChatAccessMiddleware {
 
           // 5. Contexte
           ctx.project = project
-          ctx.client = client
           ctx.visitor = visitor
           ctx.visitorMessages = visitorMessages || []
           ctx.visitorIp = visitorIp || ''
