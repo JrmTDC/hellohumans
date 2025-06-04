@@ -143,6 +143,7 @@ export const usePanelStore = defineStore('panel', () => {
      const config = useRuntimeConfig()
      const socket = shallowRef<Socket>()
      const wssKey = `${config.public.wssKey}`
+     const wssActive = `${config.public.wssActive}`
 
      async function initPanelAccessSession(): Promise<boolean> {
           const { apiFetch } = usePanelApi()
@@ -258,7 +259,7 @@ export const usePanelStore = defineStore('panel', () => {
      }
 
      async function operatorRegisterSocket() {
-          if (socket.value || !project.value?.public_key) return
+          if (wssActive === 'false' || !socket.value || !project.value?.public_key) return
           socket.value = useSocket(project.value.public_key, 'operator', 'desktop')
 
           socket.value.on('connect', () => {
