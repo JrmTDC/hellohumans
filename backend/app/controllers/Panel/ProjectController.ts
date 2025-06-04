@@ -64,12 +64,12 @@ class ProjectController{
                     })
                }
 
-               // 2. Vérifie que le client est bien lié à cet utilisateur
+               // 2. Vérifie que l'utilisateur est bien lié à ce projet
                const { data: clientUser, error: clientUserError } = await supabaseService
                     .from('project_users')
                     .select('id')
                     .eq('user_id', ctx.user.id)
-                    .eq('client_id', ctx.user.selected_client_id)
+                    .eq('project_id', ctx.params.uuid)
                     .maybeSingle()
 
                if (!clientUser || clientUserError) {
@@ -78,23 +78,9 @@ class ProjectController{
                     })
                }
 
-               // 3. Vérifie que le projet est bien lié à ce client
-               const { data: validProject, error: projectError } = await supabaseService
-                    .from('project_projects')
-                    .select('id')
-                    .eq('id', ctx.params.uuid)
-                    .eq('client_id', ctx.user.selected_client_id)
-                    .maybeSingle()
-
-               if (!validProject || projectError) {
-                    return ctx.response.notFound({
-                         error: { name: 'invalidProject', description: 'Ce projet n\'est pas lié à votre compte client.' }
-                    })
-               }
-
                // 4. Mise à jour de selected_project_id dans client_users
                const { error: updateError } = await supabaseService
-                    .from('client_users')
+                    .from('users')
                     .update({ selected_project_id: ctx.params.uuid })
                     .eq('id', clientUser.id)
 
