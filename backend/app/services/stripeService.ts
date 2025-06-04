@@ -48,9 +48,24 @@ export async function pricesForModules(moduleIds: string[], billing: BillingCycl
      if (!moduleIds.length) return []
      const { data } = await supabaseService
           .from('subscription_modules')
-          .select('id, stripe_price_id_monthly, stripe_price_id_annual')
+          .select('id, stripe_price_id_monthly, stripe_price_id_annual,stripe_price_once, stripe_many_options, stripe_type_price')
           .in('id', moduleIds)
-     return (data ?? []).map(m => billing === 'month' ? m.stripe_price_id_monthly : m.stripe_price_id_annual)
+
+     if(data?.stripe_type_price === 'once') {
+          if(data?.stripe_many_options === true) {
+               //todo: handle multiple options for once payment
+          }
+          return data?.map(m => m.stripe_price_once.default ?? null).filter(Boolean)
+     }else{
+          if(data?.stripe_many_options === true) {
+               //todo: handle multiple options for monthly/annual payment
+          }
+          return (data ?? []).map(m => billing === 'month' ?
+               m.stripe_price_id_monthly.default :
+               m.stripe_price_id_annual.default)
+     }
+
+
 }
 
 export async function priceIdsForSelection(planId: string, moduleIds: string[], billing: BillingCycle) {
