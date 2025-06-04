@@ -88,7 +88,7 @@ const menuItems = ref([
           position: 'top',
           type: 'link',
           icon: rawIcon(iconMenuCustomerVisitors),
-          routeURL: '/panel/customers',
+          routeURL: '/panel/customers/visitors',
           tooltip: t('panel.components.layout.menuNavPage.visitors'),
           tooltipKey: 'panel.components.layout.menuNavPage.visitors',
           count: panelStore.visitors.length

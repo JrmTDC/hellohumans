@@ -1,5 +1,4 @@
-<template>
-</template>
+<template></template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 const { t } = useI18n()

@@ -1,5 +1,4 @@
-<template>
-</template>
+<template></template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 const { t } = useI18n()
@@ -7,8 +6,8 @@ const router = useRouter()
 router.push("/panel/customers/visitors")
 
 const { pageMenuPanel, setMeta } = usePanelPageMeta()
-const pageTitle = computed(() => t('panel.pages.customers.index.metaTitle'));
-const pageDescription = computed(() => t('panel.pages.customers.index.metaDescription'));
+const pageTitle = computed(() => t('panel.pages.customers.metaTitle'));
+const pageDescription = computed(() => t('panel.pages.customers.metaDescription'));
 
 watchEffect(() => {
      setMeta({
