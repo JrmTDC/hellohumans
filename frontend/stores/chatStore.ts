@@ -187,13 +187,15 @@ export const useChatStore = defineStore('chat', () => {
           projectPublicKey.value = key
      }
 
-     async function fetchChatProject() {
+     async function initChatData() {
           const {apiFetch} = useChatApi()
           try {
 
                const projectRes = await apiFetch('/project')
                project.value = projectRes.success.project || null
-
+               if(!project.value) {
+                    return false
+               }
                Object.assign(configChat, project.value?.config ?? {})
 
                if (Array.isArray(configChat.suggestedQuestions)) {
@@ -335,7 +337,7 @@ export const useChatStore = defineStore('chat', () => {
           updateStorage,
           clearMessages,
           setProjectPublicKey,
-          fetchChatProject,
+          initChatData,
           visitorCreate,
           messageSend,
           addSuggestion,

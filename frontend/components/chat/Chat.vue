@@ -172,8 +172,11 @@ onMounted(async () => {
      if (!props.previewMode) {
           chatStore.loadFromStorage()
      }
-     await chatStore.fetchChatProject()
-
+     const chatData = await chatStore.initChatData()
+     if(!chatData && !props.previewMode) {
+          console.error('[Chat] Failed to initialize chat data')
+          return
+     }
      isReady.value = true
 
      if (props.previewMode) {
