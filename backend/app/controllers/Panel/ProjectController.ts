@@ -26,17 +26,29 @@ class ProjectController{
 
      public async getProjects(ctx: HttpContext) {
           try {
-               if (!ctx.project) {
-                    return ctx.response.notFound({
-                         error: { name: 'noProjectFound', description: 'Aucun projet lié à cet utilisateur.' }
+               // 1. Récupération des ID de projets liés à l’utilisateur
+               const { data: projectLinks, error: linkError } = await supabaseService
+                    .from('project_users')
+                    .select('project_id')
+                    .eq('user_id', ctx.user.id)
+
+               if (linkError || !projectLinks) {
+                    return ctx.response.internalServerError({
+                         error: { name: 'projectLinkError', description: 'Erreur lors de la récupération des liens projets.' }
                     })
                }
 
-               // Récupération des projets du client
+               const projectIds = projectLinks.map(link => link.project_id)
+
+               if (projectIds.length === 0) {
+                    return { projects: [] }
+               }
+
+               // 2. Récupération des projets
                const { data: projects, error: projectsError } = await supabaseService
                     .from('projects')
-                    .select('*')
-                    .eq('client_id', ctx.user.selected_client_id)
+                    .select('id, public_key, config, widget_installed, website, stripe_customer_id, owner_user_id, organization_data, onboarding_data, created_at')
+                    .in('id', projectIds)
                     .order('created_at', { ascending: false })
 
                if (projectsError) {
@@ -44,12 +56,11 @@ class ProjectController{
                          error: { name: 'projectFetchError', description: 'Erreur lors de la récupération des projets.' }
                     })
                }
-
                return {
                     projects
                }
           } catch (error) {
-               console.error('Erreur ClientController.getProjects:', error)
+               console.error('Erreur ProjectController.getProjects:', error)
                return ctx.response.internalServerError({
                     error: { name: 'internalError', description: 'Erreur interne.' }
                })

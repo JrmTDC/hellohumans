@@ -6,7 +6,7 @@ class UsageController {
           try {
                // 1. Récupérer les usages liés à ce projet
                const { data: project_usages, error: usageError } = await supabase
-                    .from('client_project_usages')
+                    .from('project_usages')
                     .select('id, usage, limit')
                     .eq('project_id', ctx.project.id)
 

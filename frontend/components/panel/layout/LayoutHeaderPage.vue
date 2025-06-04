@@ -65,12 +65,7 @@
                     <div v-if="isUsageMenuOpen" class="usage-dropdown">
                          <div class="absolute right-[8px] top-[42px] z-[2]"><svgo-panel-icon-triangle-up class="w-[17px] h-[7px] fill-[#ffff]" /></div>
                          <div class="absolute top-[49px] right-[0] box-content w-[412px] bg-white p-[24px] shadow-[0_8px_20px_rgba(0,20,51,0.24)] rounded-[8px] overflow-auto max-h-[calc(-150px+100vh)] z-[1]">
-                              <PanelCommonHeaderUsageItem
-                                   v-for="(item, index) in usages"
-                                   :key="index"
-                                   :item="item"
-                                   :class="index > 0 ? 'mt-[16px]' : ''"
-                              />
+                              <PanelCommonHeaderUsageItem v-for="(item, index) in usages" :key="index" :item="item" :class="index > 0 ? 'mt-[16px]' : ''"/>
                               <p class="mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[#647491] mt-[16px]">
                                    <span>{{ t('panel.components.layout.herderPage.UsageMenu.usageNote') }}</span>
                               </p>

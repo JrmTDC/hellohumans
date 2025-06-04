@@ -204,13 +204,7 @@ export const usePanelStore = defineStore('panel', () => {
                project_usages.value = usagesRes.success.usages || []
                projects.value = projectsRes.success.projects || []
                //modules.value = usagesRes.modules || []
-               if(!projects.value || projects.value.length === 0) {
-                    return false
-               }
-               if(!project_usages.value) {
-                    return false
-               }
-
+               return !(!projects.value || projects.value.length === 0 || !project_usages.value)
           } catch (err: any) {
                await logout()
                return false
