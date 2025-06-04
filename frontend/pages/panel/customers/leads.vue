@@ -82,9 +82,38 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
-const backgroundNoCustomer = useBase64Asset('panel/customers/backgroundNoCustomers')
 const panelStore = usePanelStore()
 onMounted(async () => {
+     panelStore.leads = [
+          {
+               id: 'lead_1',
+               email: 'alice@example.com',
+               radar: 'A',
+               country: 'fr',
+               created_at: new Date().toISOString(),
+          },
+          {
+               id: 'lead_2',
+               email: 'bob@hellohumans.fr',
+               radar: 'B',
+               country: 'us',
+               created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // il y a 5 minutes
+          },
+          {
+               id: 'lead_3',
+               email: 'carla@demo.com',
+               radar: 'C',
+               country: 'de',
+               created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // il y a 1 heure
+          },
+          {
+               id: 'lead_4',
+               email: '',
+               radar: '?',
+               country: null,
+               created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // il y a 1 jour
+          },
+     ]
      layoutLoadingPanel.value = false
 })
 

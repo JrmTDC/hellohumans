@@ -72,7 +72,7 @@
           </table>
      </div>
 
-     <div v-else class="text-[22px] pt-[170px] pb-[115px] text-center bg-[position:50%_55px] bg-no-repeat bg-[length:80px_80px]" :style="{ backgroundImage: `url('${backgroundNoCustomer}')` }">
+     <div v-else class="text-[22px] pt-[170px] pb-[115px] text-center bg-[position:50%_55px] bg-no-repeat bg-[length:80px_80px]" :style="backgroundNoCustomer ? { backgroundImage: `url('${backgroundNoCustomer}')` } : {}">
           Désolé, aucun contact n’a été identifié
      </div>
 </template>

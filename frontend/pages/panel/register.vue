@@ -1,5 +1,5 @@
 <template>
-     <div id="hellohumans-panel" class="w-full min-h-screen grid [grid-template-rows:auto_auto_32px_1fr] [grid-template-areas:'header''main''.''aside'] [grid-template:'header_header''aside_main'_1fr_/505px_1fr] bg-[position:-60px_top] bg-no-repeat bg-[rgb(0,20,51)]" :style="{ backgroundImage: `url('${backgroundImage}')` }">
+     <div id="hellohumans-panel" class="w-full min-h-screen grid [grid-template-rows:auto_auto_32px_1fr] [grid-template-areas:'header''main''.''aside'] [grid-template:'header_header''aside_main'_1fr_/505px_1fr] bg-[position:-60px_top] bg-no-repeat bg-[rgb(0,20,51)]" :style="backgroundImage ? { backgroundImage: `url('${backgroundImage}')` } : {}">
           <!-- Header -->
           <div class="flex flex-row justify-start items-center relative [grid-area:header] px-[40px] py-[32px] z-[1]">
                <div class="mr-auto">
@@ -87,8 +87,7 @@
                                              class="sr-only peer"
                                         />
                                         <span
-                                             class="float-left block w-[20px] h-[20px] rounded-[3px] border-[2px] border-[rgb(226,232,239)] cursor-pointer mr-[14px] mb-[16px] translate-y-[1px] transition-all duration-100 ease-in-out peer-checked:bg-[rgb(5,102,255)] peer-checked:border-[rgb(5,102,255)] peer-checked:bg-center peer-checked:bg-no-repeat peer-checked:bg-[length:16px_16px]" :class="{ 'border-[rgb(232,19,50)]': errors.agreed }" :style="{ backgroundImage: `url('${checkSvg}')` }"
-                                        ></span>
+                                             class="float-left block w-[20px] h-[20px] rounded-[3px] border-[2px] border-[rgb(226,232,239)] cursor-pointer mr-[14px] mb-[16px] translate-y-[1px] transition-all duration-100 ease-in-out peer-checked:bg-[rgb(5,102,255)] peer-checked:border-[rgb(5,102,255)] peer-checked:bg-center peer-checked:bg-no-repeat peer-checked:bg-[length:16px_16px]" :class="{ 'border-[rgb(232,19,50)]': errors.agreed }" :style="checkSvg ? { backgroundImage: `url('${checkSvg}')` } : {}"></span>
                                         <span class="mt-0 mb-0">
                                             {{ t('panel.pages.register.acceptLabel') }}
                                              <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.terms') }}</a> {{ t('panel.pages.register.andLabel') }} <a href="#" class="underline text-[#0566ff]">{{ t('panel.pages.register.privacy') }}</a> {{ appName }}.

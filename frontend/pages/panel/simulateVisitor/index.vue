@@ -1,5 +1,5 @@
 <template>
-     <div id="hellohumans-simulateVisitor" class="bg-no-repeat bg-[position:center_140px] absolute bg-[rgb(228,230,235)] bg-[position:center_50px] h-full w-full " :style="{ backgroundImage: `url('${backgroundPlaceHodlder}')`}">
+     <div id="hellohumans-simulateVisitor" class="bg-no-repeat bg-[position:center_140px] absolute bg-[rgb(228,230,235)] bg-[position:center_50px] h-full w-full " :style="backgroundPlaceHodlder ? { backgroundImage: `url('${backgroundPlaceHodlder}')` } : {}">
           <ChatModalModulesModalRandoMore
                v-if="showModuleRandoMoreModal"
                @close="showModuleRandoMoreModal = false" />
