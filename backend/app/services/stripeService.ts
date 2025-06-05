@@ -36,11 +36,16 @@ export async function ensureCustomer(project: {
 export async function priceForPlan(planId: string, billing: BillingCycle) {
      const { data } = await supabaseService
           .from('subscription_plans')
-          .select('stripe_price_id_monthly, stripe_price_id_annual')
+          .select('stripe_price_id_monthly, stripe_price_id_annual, stripe_many_options')
           .eq('id', planId)
           .single()
-     const priceId = billing === 'month' ? data?.stripe_price_id_monthly : data?.stripe_price_id_annual
+
+     if(data?.stripe_many_options === true) {
+          //todo: handle multiple options for monthly/annual payment plans
+     }
+     const priceId = billing === 'month' ? data?.stripe_price_id_monthly.default : data?.stripe_price_id_annual.default
      if (!priceId) throw new Error(`Plan ${planId} missing price for ${billing}`)
+
      return priceId
 }
 
@@ -53,12 +58,12 @@ export async function pricesForModules(moduleIds: string[], billing: BillingCycl
 
      if(data?.stripe_type_price === 'once') {
           if(data?.stripe_many_options === true) {
-               //todo: handle multiple options for once payment
+               //todo: handle multiple options for once payment modules
           }
           return data?.map(m => m.stripe_price_once.default ?? null).filter(Boolean)
      }else{
           if(data?.stripe_many_options === true) {
-               //todo: handle multiple options for monthly/annual payment
+               //todo: handle multiple options for monthly/annual payment modules
           }
           return (data ?? []).map(m => billing === 'month' ?
                m.stripe_price_id_monthly.default :

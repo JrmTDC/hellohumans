@@ -254,7 +254,7 @@ export const usePanelStore = defineStore('panel', () => {
      }
 
      async function operatorRegisterSocket() {
-          if (wssActive === 'false' || !socket.value || !project.value?.public_key) return
+          if (wssActive !== 'true' || !project.value?.public_key) return
           socket.value = useSocket(project.value.public_key, 'operator', 'desktop')
 
           socket.value.on('connect', () => {
