@@ -300,6 +300,12 @@ const planPrice = computed(() => {
 
 // Prix total (plan + modules)
 const totalPriceLocal = computed(() => {
+     // Si on est encore sur l’étape “Plans”, on ne compte que le plan
+     if (!showModules.value) {
+          return planPrice.value
+     }
+
+     // Sinon (étape “Modules”), on cumule plan + modules cochés
      let total = planPrice.value
      for (const mod of props.selectedModules) {
           total += modulePrice(mod)
