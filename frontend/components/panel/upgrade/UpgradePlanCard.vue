@@ -115,7 +115,8 @@ interface Plan {
      id: string
      name: string
      description: string
-     monthlyPrice: number
+     price_month: number
+     price_year: number
      discountMonths: number
      popular?: boolean
      includedFeatures: string[],
@@ -160,17 +161,17 @@ onMounted(() => {
 // Calcul du prix
 const displayedPriceMonth = computed(() => {
      if (props.billingCycle === 'month') {
-          return props.plan.monthlyPrice
+          return props.plan.price_month
      } else {
           if(props.plan?.billingYear){
-               return roundUpToTwoDecimals(props.plan.monthlyPrice * (12 - props.plan.discountMonths) / 12)
+               return roundUpToTwoDecimals(props.plan.price_year / 12)
           }else{
-               return props.plan.monthlyPrice
+               return props.plan.price_month
           }
      }
 })
 const displayedPriceYear = computed(() => {
-     return props.plan.monthlyPrice * (12 - props.plan.discountMonths)
+     return props.plan.price_year
 })
 
 // Gérer la bordure : verte si c’est l’offre actuelle **ET** sélectionnée, bleu si sélectionnée seulement, gris sinon

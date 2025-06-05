@@ -199,115 +199,23 @@ function onChoiceChange(e: Event) {
      props.onChangeChoice(props.module.id, idx)
 }
 
-     // Fonction utilitaire pour calculer le prix annuel
-          function computeAnnualPrice(): number {
-                 let unitMonthly: number
-                 let discountMonths = 0
-
-                      if (checked.value) {
-                        if (props.module.multipleChoice && props.module.choices) {
-                               const idx = props.module.selectedChoiceIndex ?? 0
-                                    const choix = props.module.choices[idx]
-                              unitMonthly = choix.monthlyPrice
-                               discountMonths = choix.discountMonths ?? 0
-                                  } else {
-                               unitMonthly = props.module.basePrice
-                               discountMonths = props.module.discountMonths ?? 0
-                                  }
-                      } else {
-                        if (props.module.multipleChoice && props.module.choices) {
-                               const minCh = props.module.choices.reduce((prev: any, curr: any) =>
-                                      curr.monthlyPrice < prev.monthlyPrice ? curr : prev
-                                         )
-                               unitMonthly = minCh.monthlyPrice
-                               discountMonths = minCh.discountMonths ?? 0
-                                  } else {
-                               unitMonthly = props.module.basePrice
-                               discountMonths = props.module.discountMonths ?? 0
-                                  }
-                      }
-                 return unitMonthly * (12 - discountMonths)
-                    }
-
-//  Arrondi à deux décimales
+     //  Arrondi à deux décimales
      function roundToTwo(num: number) {
-            return Math.round(num * 100) / 100
-               }
-
-// Prix mensuel (ou prorata si cycle = 'year')
-     const displayedPriceMonth = computed(() => {
-            if (props.billingCycle === 'month') {
-                   if (checked.value) {
-                         if (props.module.multipleChoice && props.module.choices) {
-                                 const idx = props.module.selectedChoiceIndex ?? 0
-                                      return props.module.choices[idx].monthlyPrice
-                                    }
-                          return props.module.basePrice
-                             } else {
-                          if (props.module.multipleChoice && props.module.choices) {
-                                 const minCh = props.module.choices.reduce((prev: any, curr: any) =>
-                                             curr.monthlyPrice < prev.monthlyPrice ? curr : prev
-                                                )
-                                     return minCh.monthlyPrice
-                                   }
-                          return props.module.basePrice
-                             }
-                 } else {
-                   const annual = computeAnnualPrice()
-                        return roundToTwo(annual / 12)
-                      }
-          })
-
-     // Prix total facturé pour un an
-          const displayedPriceYear = computed(() => {
-            return computeAnnualPrice()
-               })
-
-
-// Calcul du prix à afficher dans la carte
-// S'il est comingSoon ou included, on affiche quand même le "faux" prix (pour info) ?
-const displayedPrice = computed(() => {
-     // non coché
-     if (!checked.value) {
-          if (props.module.multipleChoice && props.module.choices) {
-               const minChoice = props.module.choices.reduce((prev: any, curr: any) =>
-                    curr.monthlyPrice < prev.monthlyPrice ? curr : prev
-               )
-               const disc = minChoice.discountMonths ?? 0
-               if (props.billingCycle === 'month') {
-                    return minChoice.monthlyPrice
-               } else {
-                    return minChoice.monthlyPrice * (12 - disc)
-               }
-          }
-          // single
-          const disc = props.module.discountMonths ?? 0
-          if (props.billingCycle === 'month') {
-               return props.module.basePrice
-          } else {
-               return props.module.basePrice * (12 - disc)
-          }
-     } else {
-          // coché
-          if (props.module.multipleChoice && props.module.choices) {
-               const idx = props.module.selectedChoiceIndex || 0
-               const choice = props.module.choices[idx]
-               const disc = choice.discountMonths ?? 0
-               if (props.billingCycle === 'month') {
-                    return choice.monthlyPrice
-               } else {
-                    return choice.monthlyPrice * (12 - disc)
-               }
-          }
-          // single
-          const disc = props.module.discountMonths ?? 0
-          if (props.billingCycle === 'month') {
-               return props.module.basePrice
-          } else {
-               return props.module.basePrice * (12 - disc)
-          }
+          return Math.round(num * 100) / 100
      }
-})
+     // Prix mensuel
+     const displayedPriceMonth = computed(() => {
+          if (props.billingCycle === 'month') {
+               return props.module.price_month
+          } else {
+               return roundToTwo(props.module.price_year / 12)
+          }
+     })
+     // Prix total facturé pour un an
+     const displayedPriceYear = computed(() => {
+          return props.module.price_year
+     })
+
 // en haut du <script setup>
 const borderClasses = computed(() => {
      if (isCurrentModule.value) {

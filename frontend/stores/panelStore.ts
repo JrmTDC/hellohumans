@@ -35,8 +35,8 @@ export interface UpgradePlan {
      id: string
      name: string
      description: string
-     monthlyPrice: number
-     discountMonths: number
+     price_month: number
+     price_year: number
      includedFeatures: string[]
      baseSubtitle: string
      popular?: boolean
@@ -49,8 +49,8 @@ export interface ModuleAddOn {
      name: string
      key: string
      description: string
-     basePrice: number
-     discountMonths?: number
+     price_month: number
+     price_year: number
      multipleChoice?: boolean
      choices?: Array<{
           label: string

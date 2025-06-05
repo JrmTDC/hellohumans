@@ -3,6 +3,20 @@ import supabase from '#services/supabaseService'
 
 class UpgradeController {
      public async getPlans(ctx: HttpContext) {
+          function getPriceAmount(priceData: any, cycle: 'month' | 'year'): number | null {
+               try {
+                    const priceField = cycle === 'month' ? 'stripe_price_id_month' : 'stripe_price_id_year'
+
+                    if (!priceData?.[priceField]?.default?.amount) {
+                         return null
+                    }
+
+                    return Number(priceData[priceField].default.amount) / 100
+               } catch (e) {
+                    console.error(`Erreur lors de la récupération du prix ${cycle}:`, e)
+                    return null
+               }
+          }
           try {
                const { data, error } = await supabase
                     .from('subscription_plans')
@@ -21,8 +35,8 @@ class UpgradeController {
                     id: plan.id,
                     name: plan.name?.[ctx.user.lang] || plan.name?.['en'] || 'No name',
                     description: plan.description?.[ctx.user.lang] || plan.description?.['en'] || '',
-                    monthlyPrice: Number(plan.monthly_price),
-                    discountMonths: plan.discount_months || 0,
+                    price_month: getPriceAmount(plan, 'month'),
+                    price_year: getPriceAmount(plan, 'year'),
                     includedFeatures: plan.included_features?.[ctx.user.lang] || [],
                     baseSubtitle: plan.base_subtitle?.[ctx.user.lang] || '',
                     popular: plan.popular || false,
@@ -42,6 +56,20 @@ class UpgradeController {
      }
 
      public async getModules(ctx: HttpContext) {
+          function getPriceAmount(priceData: any, cycle: 'month' | 'year'): number | null {
+               try {
+                    const priceField = cycle === 'month' ? 'stripe_price_id_month' : 'stripe_price_id_year'
+
+                    if (!priceData?.[priceField]?.default?.amount) {
+                         return null
+                    }
+
+                    return Number(priceData[priceField].default.amount) / 100
+               } catch (e) {
+                    console.error(`Erreur lors de la récupération du prix ${cycle}:`, e)
+                    return null
+               }
+          }
           try {
                const { data, error } = await supabase
                     .from('subscription_modules')
@@ -61,8 +89,8 @@ class UpgradeController {
                     name: mod.name?.[ctx.user.lang] || mod.name?.['fr'] || 'Sans nom',
                     key: mod.key,
                     description: mod.description?.[ctx.user.lang] || mod.description?.['fr'] || '',
-                    basePrice: Number(mod.base_price),
-                    discountMonths: mod.discount_months || 0,
+                    price_month: getPriceAmount(mod, 'month'),
+                    price_year: getPriceAmount(mod, 'year'),
                     selected: false,
                     multipleChoice: mod.stripe_many_options || false,
                     choices: mod.choices || [],

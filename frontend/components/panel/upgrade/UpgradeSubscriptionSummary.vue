@@ -219,8 +219,8 @@ const { t } = useI18n()
 interface Plan {
      id: string
      name: string
-     monthlyPrice: number
-     discountMonths: number
+     price_month: number
+     price_year: number
      includedFeatures: string[]
      billingYear: boolean
      includedModules?: string[]
@@ -235,8 +235,8 @@ interface ModuleAddOn {
      key: string
      name: string
      description: string
-     basePrice: number
-     discountMonths?: number
+     price_month: number
+     price_year: number
      multipleChoice?: boolean
      choices?: ChoiceOption[]
      selectedChoiceIndex?: number
@@ -292,10 +292,10 @@ const showModules = computed(() => props.showModules)
 // Prix du plan
 const planPrice = computed(() => {
      if (!props.selectedPlan) return 0
-     const { monthlyPrice, discountMonths } = props.selectedPlan
+     const { price_month, price_year } = props.selectedPlan
      return billingCycleLocal.value === 'month'
-          ? monthlyPrice
-          : monthlyPrice * (12 - discountMonths)
+          ? price_month
+          : price_year
 })
 
 // Prix total (plan + modules)
@@ -317,18 +317,10 @@ const firstFeature = computed(() => {
 function modulePrice(mod: ModuleAddOn): number {
      const isIncluded = props.selectedPlan?.includedModules?.includes(mod.key)
      if (isIncluded) return 0
-     if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
-          const choice = mod.choices[mod.selectedChoiceIndex]
-          const disc = choice.discountMonths ?? 0
-          return billingCycleLocal.value === 'month'
-               ? choice.monthlyPrice
-               : choice.monthlyPrice * (12 - disc)
-     } else {
-          const disc = mod.discountMonths ?? 0
-          return billingCycleLocal.value === 'month'
-               ? mod.basePrice
-               : mod.basePrice * (12 - disc)
-     }
+     return billingCycleLocal.value === 'month'
+          ? mod.price_month
+          : mod.price_year
+
 }
 
 // Est-ce que le plan affiché est l’abonnement en cours ?

@@ -228,7 +228,7 @@ class StripeController {
                // Récupérer les prix et leurs IDs correspondants
                const priceDetails = await supabaseService
                     .from('subscription_modules')
-                    .select('id, name, stripe_price_id_monthly, stripe_price_id_annual,stripe_price_once, stripe_many_options, stripe_type_price')
+                    .select('id, name, stripe_price_id_month, stripe_price_id_year, stripe_many_options')
                     .in('id', modules)
 
                if (priceDetails.error) {
@@ -239,22 +239,14 @@ class StripeController {
                     const prorata = debitByPrice[priceId] ?? 0
                     const credit = creditByPrice[priceId] ?? 0
                     const module = priceDetails.data?.find(m => {
-                         if(m.stripe_type_price === 'once') {
-                              const stripe_price_once = m.stripe_price_once
-                              if(m.stripe_many_options === true) {
-                                   //todo: handle multiple options for once payment
-                              }
-                              return stripe_price_once.default === priceId
-                         }else{
-                              if(m.stripe_many_options === true) {
-                                   //todo: handle multiple options for monthly/annual payment
-                              }
-                              const stripe_price_recurring = ctx.subscription.billing_cycle === 'month'
-                                   ? m.stripe_price_id_monthly
-                                   : m.stripe_price_id_annual
-                              return stripe_price_recurring.default === priceId
-                         }
+                         const stripe_price_recurring = ctx.subscription.billing_cycle === 'month'
+                              ? m.stripe_price_id_month
+                              : m.stripe_price_id_year
 
+                         if (m.stripe_many_options) {
+                              //todo: handle multiple options for monthly/annual payment
+                         }
+                         return stripe_price_recurring?.default.id === priceId
                     })
 
                     const moduleName = module?.name[ctx.user?.lang]
@@ -306,7 +298,7 @@ class StripeController {
                     removedModules.map(async (stripePriceId: string) => {
                       const { data } = await supabaseService
                         .from('subscription_modules')
-                        .select('id, name, stripe_price_id_monthly, stripe_price_id_annual,stripe_price_once, stripe_many_options, stripe_type_price')
+                        .select('id, name, stripe_price_id_month, stripe_price_id_year, stripe_many_options')
                         .or(`stripe_price_id_monthly.eq.${stripePriceId},stripe_price_id_annual.eq.${stripePriceId}`)
                         .limit(1)
 
