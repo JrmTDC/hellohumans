@@ -1,240 +1,329 @@
 import Stripe from 'stripe'
 import supabaseService from '#services/supabaseService'
+import { HttpContext } from '@adonisjs/core/http'
 
-/* ─────────────────────────── CONFIG STRIPE ──────────────────────────────── */
+/* ───────── CONFIG ───────── */
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
      apiVersion: '2025-04-30.basil',
 })
-
 export type BillingCycle = 'month' | 'year'
+type OptKey = 'default' | string
+const centsToEuro = (c: number) => Number((c / 100).toFixed(2))
 
-/* ──────────────────────── CUSTOMER UTILITIES ────────────────────────────── */
-export async function ensureCustomer(project: {
-     id: string
-     email: string | null
-     organization_data: { name?: string | null }
-     stripe_customer_id?: string | null
-}): Promise<string> {
+/* ───── Customer helper ───── */
+export async function ensureCustomer(project: { id:string; organization_data:any; stripe_customer_id?:string|null }) {
      if (project.stripe_customer_id) {
           try {
-               const cust = await stripe.customers.retrieve(project.stripe_customer_id)
-               if (!('deleted' in cust && cust.deleted)) return project.stripe_customer_id // ok
-          } catch (_) {/* fallthrough – recreate below */}
-
-          await supabaseService.from('projects').update({ stripe_customer_id: null }).eq('id', project.id)
+               const c = await stripe.customers.retrieve(project.stripe_customer_id)
+               if (!('deleted' in c && c.deleted)) return project.stripe_customer_id
+          } catch (_) {/* recreate */}
+          await supabaseService.from('projects').update({ stripe_customer_id:null }).eq('id', project.id)
      }
-     console.log('Creating Stripe customer for project', project.id)
-     const customer = await stripe.customers.create({
-          name: project.organization_data.name ?? undefined,
-          metadata: { project_id: project.id },
+     const cust = await stripe.customers.create({
+          name: project.organization_data?.name ?? undefined,
+          metadata:{ project_id: project.id },
      })
-     await supabaseService.from('projects').update({ stripe_customer_id: customer.id }).eq('id', project.id)
-     return customer.id
+     await supabaseService.from('projects').update({ stripe_customer_id:cust.id }).eq('id', project.id)
+     return cust.id
 }
 
-/* ───────────────────────── PRICE HELPERS ─────────────────────────────────── */
-export async function priceForPlan(planId: string, billing: BillingCycle) {
-     const { data } = await supabaseService
+/* ───── Price helpers ───── */
+async function pickPriceId(row:any, cycle:BillingCycle, opt:OptKey='default'){
+     const fld = cycle==='month' ? 'stripe_price_id_month':'stripe_price_id_year'
+     const block=row?.[fld] ?? {}
+     if (row?.stripe_many_options && opt!=='default') return block?.[opt]?.id ?? null
+     return block?.default?.id ?? null
+}
+export async function priceIdsForSelection(planId: string, modules: { id: string; opt?: OptKey }[], cycle: BillingCycle): Promise<string[]> {
+     const { data: plan } = await supabaseService
           .from('subscription_plans')
           .select('stripe_price_id_month, stripe_price_id_year, stripe_many_options')
-          .eq('id', planId)
-          .single()
+          .eq('id', planId).single()
 
-     if(data?.stripe_many_options === true) {
-          //todo: handle multiple options for monthly/annual payment plans
-     }
-     const priceId = billing === 'month' ? data?.stripe_price_id_month.default.id : data?.stripe_price_id_year.default.id
-     if (!priceId) throw new Error(`Plan ${planId} missing price for ${billing}`)
+     const planPrice = await pickPriceId(plan, cycle)
 
-     return priceId
-}
-
-
-export async function pricesForModules(moduleIds: string[], billing: BillingCycle) {
-     if (!moduleIds.length) return []
-     const { data } = await supabaseService
+     const { data: mods } = await supabaseService
           .from('subscription_modules')
           .select('id, stripe_price_id_month, stripe_price_id_year, stripe_many_options')
-          .in('id', moduleIds)
+          .in('id', modules.map(m => m.id))
 
-     return (data ?? []).map(m => {
-          const priceData = billing === 'month' ? m.stripe_price_id_month : m.stripe_price_id_year
+     const modPrices = await Promise.all(modules.map(async sel => {
+          const row = mods!.find(m => m.id === sel.id)!
+          return await pickPriceId(row, cycle, sel.opt ?? 'default')
+     }))
 
-          if (m.stripe_many_options) {
-               //todo: handle multiple options for monthly/annual payment plans
-          }
-          return priceData?.default.id ?? null
-     }).filter(Boolean)
+     return [planPrice, ...modPrices].filter(Boolean) as string[]
 }
 
-export async function priceIdsForSelection(planId: string, moduleIds: string[], billing: BillingCycle) {
-     return [await priceForPlan(planId, billing), ...(await pricesForModules(moduleIds, billing))].filter(Boolean) as string[]
-}
+/* ───── small utils ───── */
+const split=(cur:string[],des:string[])=>({
+     add: des.filter(p=>!cur.includes(p)),
+     remove: cur.filter(p=>!des.includes(p)),
+     keep: des.filter(p=>cur.includes(p)),
+})
+const isProration = (l:any)=>
+     l.parent?.subscription_item_details?.proration === true
+     || l.parent?.invoice_item_details?.proration === true
 
-/* ───────────────────────── SUBSCRIPTION CRUD ────────────────────────────── */
-export async function createSubscription(opts: {
-     customerId: string; plan_id: string; modules: string[]; billing: BillingCycle; paymentMethodId?: string | null; projectId: string;
-}) {
-     const priceIds = await priceIdsForSelection(opts.plan_id, opts.modules, opts.billing)
-     const items: Stripe.SubscriptionCreateParams.Item[] = priceIds.map(price => ({ price }))
+/* ───── PREVIEW main ───── */
+export async function previewChange(opts:{ planId:string; modules:{id:string;opt?:OptKey}[]; cycle:BillingCycle }, ctx: HttpContext){
+     const customerId=await ensureCustomer(ctx.project)
+     const desiredRaw = await priceIdsForSelection(opts.planId, opts.modules, opts.cycle)
+     const desired = desiredRaw.filter(Boolean) // safety
+     const userLang = ctx.user?.lang ?? 'en'
 
-     return stripe.subscriptions.create({
-          customer: opts.customerId,
-          items,
-          payment_behavior: 'default_incomplete',
-          ...(opts.paymentMethodId ? { default_payment_method: opts.paymentMethodId } : {}),
-          metadata: { project_id: opts.projectId },
-          expand: ['latest_invoice.confirmation_secret', 'items.data'],
-     })
-}
-
-function buildUpdateItems(current: Stripe.Subscription, desiredPriceIds: string[]): Stripe.SubscriptionUpdateParams.Item[] {
-     const items: Stripe.SubscriptionUpdateParams.Item[] = []
-     for (const it of current.items.data) {
-          if (desiredPriceIds.includes(it.price.id)) {
-               items.push({ id: it.id })
-               desiredPriceIds.splice(desiredPriceIds.indexOf(it.price.id), 1)
-          } else {
-               items.push({ id: it.id, deleted: true })
-          }
+     /* ---------------- NO SUB ---------------- */
+     if(!ctx.subscription?.stripe_subscription_id){
+          const tot = await Promise.all(desired.map(id=>stripe.prices.retrieve(id)))
+               .then(a=>a.reduce((s,p)=>s+(p.unit_amount??0),0))
+          return { today_debit:centsToEuro(tot), today_credit:0, today_amount:centsToEuro(tot),
+               cycle_amount:centsToEuro(tot), is_new_subscription:true, ends_at:null,
+               changes:{}, invoice_preview_id:null }
      }
-     desiredPriceIds.forEach(price => items.push({ price }))
-     return items
-}
 
-/* ──────────────────────── CHANGE DETECTION ──────────────────────────────── */
-export async function detectChangeType(currentSub: Stripe.Subscription, desiredPriceIds: string[]): Promise<'increase' | 'decrease'> {
-     const currentPrices = await Promise.all(currentSub.items.data.map(i => stripe.prices.retrieve(i.price.id)))
-     const desiredPrices = await Promise.all(desiredPriceIds.map(id => stripe.prices.retrieve(id)))
-     const sum = (acc: number, p: Stripe.Price) => acc + (p.unit_amount ?? 0)
-     const currentTotal = currentPrices.reduce(sum, 0)
-     const desiredTotal = desiredPrices.reduce(sum, 0)
-     return desiredTotal > currentTotal ? 'increase' : 'decrease'
-}
+     /* ---------------- EXISTING SUB ---------------- */
+     const sub = await stripe.subscriptions.retrieve(ctx.subscription?.stripe_subscription_id ?? null,{expand:['items.data',  'latest_invoice.payment_intent']})
+     const currentIds = sub.items.data.map(i=>i.price.id).filter(Boolean)
+     const {add,remove,keep}=split(currentIds,desired)
 
-export async function updateSubscription(opts: {
-     subscriptionId: string; plan_id: string; modules: string[]; billing: BillingCycle; paymentMethodId?: string | null; projectId: string;
-}) {
-     const sub = await stripe.subscriptions.retrieve(opts.subscriptionId, { expand: ['items.data'] })
-     const desiredPriceIds = await priceIdsForSelection(opts.plan_id, opts.modules, opts.billing)
-     const changeType = await detectChangeType(sub, desiredPriceIds)
-     const itemsPayload = buildUpdateItems(sub, [...desiredPriceIds])
+     /* ---- preview immediate (add) ---- */
+     let debitBy:Record<string,number>={}, creditBy:Record<string,number>={}, invNow=''
+     if(add.length){
+          /* reconcile — on référence les items existants pour remove */
+          const itemsForPrev = [
+               ...sub.items.data.map(it=>{
+                    if(remove.includes(it.price.id))
+                         return { id: it.id, quantity: 0 }
+                    if(keep.includes(it.price.id))
+                         return { id: it.id }
+                    return null
+               }).filter(Boolean),
+               ...add.map(price=>({ price })),
+          ] as Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[]
 
-     return stripe.subscriptions.update(opts.subscriptionId, {
-          items: itemsPayload,
-          proration_behavior: changeType === 'increase' ? 'create_prorations' : 'none',
-          ...(changeType === 'increase' && { proration_date: Math.floor(Date.now() / 1000) }),
-          ...(opts.paymentMethodId ? { default_payment_method: opts.paymentMethodId } : {}),
-          metadata: { project_id: opts.projectId },
-          expand: ['latest_invoice.confirmation_secret', 'items.data'],
-     })
-}
-
-/* ─────────────────────────── PREVIEW HELPERS ────────────────────────────── */
-function buildPreviewItems(sub: Stripe.Subscription, desiredPriceIds: string[]): Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[] {
-     const items: Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[] = []
-     for (const it of sub.items.data) {
-          if (desiredPriceIds.includes(it.price.id)) {
-               items.push({ id: it.id })
-               desiredPriceIds.splice(desiredPriceIds.indexOf(it.price.id), 1)
-          } else {
-               items.push({ id: it.id, quantity: 0 })
-          }
+          const prev = await stripe.invoices.createPreview({
+               customer:customerId,
+               subscription:sub.id,
+               subscription_details:{
+                    items:itemsForPrev,
+                    proration_behavior:'create_prorations',
+                    proration_date:Math.floor(Date.now()/1000),
+               }, expand:['lines.data'],
+          })
+          invNow = prev.id
+          prev.lines.data.forEach((l:any)=>{
+               if(!isProration(l)) return
+               const pid=l.pricing?.price_details?.price
+               if(!pid) return
+               const amt=l.amount??0
+               if (amt >= 0) {
+                    debitBy[pid] = (debitBy[pid] ?? 0) + amt
+               } else {
+                    const isPlanChange = pid === desired[0] && pid !== currentIds[0] // plan modifié
+                    if (isPlanChange) {
+                         creditBy[pid] = (creditBy[pid] ?? 0) + Math.abs(amt)
+                    }
+                    // sinon on ignore les crédits dus aux modules supprimés ou au downgrade de plan
+               }
+          })
      }
-     desiredPriceIds.forEach(price => items.push({ price }))
-     return items
-}
 
-type Line = Stripe.InvoiceLineItem & {
-     parent?: { subscription_item_details?: { proration?: boolean }; invoice_item_details?: { proration?: boolean } }
-     pricing?: { price_details?: { price: string } }
-}
+     /* ---- preview recurring (post-renewal) ---- */
+     const itemsRecurring = [
+          ...sub.items.data.map(it=>{
+               if(remove.includes(it.price.id))
+                    return { id: it.id, quantity: 0 }
+               if(keep.includes(it.price.id))
+                    return { id: it.id }
+               return null
+          }).filter(Boolean),
+          ...add.map(price=>({ price })),
+     ] as Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[]
 
-async function analyzeChanges(currentSub: Stripe.Subscription, desiredPriceIds: string[]) {
-     const immediate: string[] = []
-     const future: string[] = []
-     const removed: string[] = []
-     const existingIds = currentSub.items.data.map(i => i.price.id)
-
-     // Analyser les nouveaux items
-     desiredPriceIds.forEach(id => {
-          if (!existingIds.includes(id)) immediate.push(id) // new price → immediate
+     const recur = await stripe.invoices.createPreview({
+          customer:customerId,
+          subscription:sub.id,
+          subscription_details:{ items:itemsRecurring, proration_behavior:'none' },
+          preview_mode:'recurring',
+          expand:['lines.data'],
+     })
+     const recurBy:Record<string,number>={}
+     recur.lines.data.forEach((l:any)=>{
+          const pid=l.pricing?.price_details?.price
+          if(pid) recurBy[pid]=(recurBy[pid]??0)+(l.amount??0)
      })
 
-     // Analyser les items existants
-     existingIds.forEach(id => {
-          if (!desiredPriceIds.includes(id)) {
-               // Item supprimé
-               removed.push(id)
-               // Si c'est un module, facturation future
-               if (!id.startsWith('plan_')) {
-                    future.push(id)
+
+     /* ---- lookup names ---- */
+     const {data:planRow} = await supabaseService
+          .from('subscription_plans')
+          .select('id,name,stripe_price_id_month,stripe_price_id_year')
+          .eq('id',opts.planId)
+          .single()
+
+     const planName = planRow?.name?.[userLang]
+          ?? planRow?.name?.['en']
+          ?? 'Plan'
+
+
+
+     const {data:modsRows} = await supabaseService
+          .from('subscription_modules')
+          .select('id,name,stripe_price_id_month,stripe_price_id_year')
+
+     const modName = (id: string) =>
+          modsRows?.find(m => m.id === id)?.name?.[userLang]
+          ?? modsRows?.find(m => m.id === id)?.name?.['en']
+          ?? 'Module'
+
+
+     /* map price→module via metadata */
+     const priceToModule: Record<string, string> = {}
+     const endOfPeriodDate = sub.current_period_end
+          ? new Date(sub.current_period_end * 1000)
+          : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+
+     modsRows?.forEach((mod) => {
+          const block = opts.cycle === 'month' ? mod.stripe_price_id_month : mod.stripe_price_id_year
+          if (block && typeof block === 'object') {
+               for (const optKey in block) {
+                    const priceId = block[optKey]?.id
+                    if (priceId) priceToModule[priceId] = mod.id
                }
           }
      })
 
-     return {
-          immediateProrations: immediate,
-          futureChanges: future,
-          removedItems: removed
+
+     const planCur = currentIds[0]
+     const planNext = desired[0]
+     const planChangeType = planCur === planNext ? null : remove.includes(planCur) ? 'end_of_period' : 'immediate'
+
+     let planChange = null
+     let planNextObj = null
+
+     if (planCur === planNext) {
+          planChange = {
+               id: opts.planId,
+               name: planName,
+               effective_date: endOfPeriodDate,
+               effective_action: 'same',
+               price_now: 0,
+               credit_amount: 0,
+               price_cycle: centsToEuro(recurBy[planCur] ?? 0),
+          }
+     } else if (remove.includes(planCur)) {
+          // downgrade → plan actuel reste jusqu'à la fin
+          planChange = {
+               id: ctx.subscription.plan_id,
+               name: planName,
+               effective_date: endOfPeriodDate,
+               effective_action: 'end_of_period',
+               price_now: 0,
+               credit_amount: centsToEuro(creditBy[planCur] ?? 0),
+               price_cycle: centsToEuro(recurBy[planCur] ?? 0),
+          }
+          planNextObj = {
+               id: opts.planId,
+               name: planName,
+               effective_date: endOfPeriodDate,
+               effective_action: 'start_of_next_cycle',
+               price_now: 0,
+               credit_amount: 0,
+               price_cycle: centsToEuro(recurBy[planNext] ?? 0),
+          }
+     } else {
+          // upgrade → immédiat
+          planChange = {
+               id: opts.planId,
+               name: planName,
+               effective_date: new Date().toISOString(),
+               effective_action: 'immediate',
+               price_now: centsToEuro(debitBy[planNext] ?? 0),
+               credit_amount: centsToEuro(creditBy[planCur] ?? 0),
+               price_cycle: centsToEuro(recurBy[planNext] ?? 0),
+          }
      }
-}
 
-export async function getUpcomingInvoicePreview(customerId: string, subId: string, desiredPriceIds: string[]) {
-     const sub = await stripe.subscriptions.retrieve(subId, { expand: ['items.data'] })
-     const items = buildPreviewItems(sub, [...desiredPriceIds])
-     const { immediateProrations, removedItems } = await analyzeChanges(sub, desiredPriceIds)
-     const now = Math.floor(Date.now() / 1000)
+// Ajoute cette ligne AVANT moduleCurrent pour éviter que le plan ne soit pris dedans
+     const planPriceIds: string[] = []
+     const planBlock = opts.cycle === 'month' ? planRow?.stripe_price_id_month : planRow?.stripe_price_id_year
+     if (planBlock && typeof planBlock === 'object') {
+          for (const key in planBlock) {
+               const priceId = planBlock[key]?.id
+               if (priceId) planPriceIds.push(priceId)
+          }
+     }
 
-     /* preview with prorations (if any) */
-     const preview = await stripe.invoices.createPreview({
-          customer: customerId,
-          subscription: subId,
-          subscription_details: {
-               items,
-               proration_behavior: immediateProrations.length ? 'create_prorations' : 'none',
-               ...(immediateProrations.length && { proration_date: now }),
+     const moduleCurrent = keep
+          .filter(pid => !planPriceIds.includes(pid)) // exclut les plans
+          .map(pid => {
+               const mid = priceToModule[pid] ?? 'unknown'
+               return {
+                    id: mid,
+                    name: modName(mid),
+                    stripe_price_id: pid,
+                    effective_date: endOfPeriodDate,
+                    effective_action: 'same',
+                    price_now: 0,
+                    credit_amount: 0,
+                    price_cycle: centsToEuro(recurBy[pid] ?? 0),
+               }
+          })
+
+
+     const moduleAdded = add
+          .filter(pid => !planPriceIds.includes(pid))
+          .map(pid => {
+               const mid = priceToModule[pid] ?? 'unknown'
+               return {
+                    id: mid,
+                    name: modName(mid),
+                    stripe_price_id: pid,
+                    effective_date: new Date().toISOString(),
+                    effective_action: 'immediate',
+                    price_now: centsToEuro(debitBy[pid] ?? 0),
+                    credit_amount: 0,
+                    price_cycle: centsToEuro(recurBy[pid] ?? 0),
+               }
+          })
+
+     const moduleRemoved = remove
+          .filter(pid => !planPriceIds.includes(pid))
+          .map(pid => {
+               const mid = priceToModule[pid] ?? 'unknown'
+               return {
+                    id: mid,
+                    name: modName(mid),
+                    stripe_price_id: pid,
+                    effective_date: endOfPeriodDate,
+                    effective_action: 'end_of_period',
+                    price_now: 0,
+                    credit_amount: 0,
+                    price_cycle: 0,
+               }
+          })
+
+     const totalDebit = Object.values(debitBy).reduce((s, n) => s + n, 0)
+     const totalCredit = Object.values(creditBy).reduce((s, n) => s + n, 0)
+
+     return {
+          total: centsToEuro(totalDebit),
+          credit: centsToEuro(totalCredit),
+          today_amount: centsToEuro(totalDebit - totalCredit),
+          cycle_amount: centsToEuro(recur.total ?? 0),
+          is_new_subscription: false,
+          ends_at: endOfPeriodDate,
+          changes: {
+               plan: {
+                    current: planChange,
+                    next: planNextObj,
+               },
+               modules: {
+                    current: moduleCurrent,
+                    added: moduleAdded,
+                    removed: moduleRemoved,
+               },
           },
-          expand: ['lines.data.pricing'],
-     })
-
-     /* helper to sum cents */
-     const sum = (obj: Record<string, number>) => Object.values(obj).reduce((s, n) => s + n, 0)
-
-     const debit: Record<string, number> = {}
-     const credit: Record<string, number> = {}
-     for (const l of preview.lines.data as Line[]) {
-          if (!(l.parent?.subscription_item_details?.proration ?? l.parent?.invoice_item_details?.proration)) continue
-          const pid = l.pricing?.price_details?.price
-          if (!pid) continue
-          const amt = l.amount ?? 0
-          if (amt >= 0) debit[pid] = (debit[pid] ?? 0) + amt
-          else          credit[pid] = (credit[pid] ?? 0) + Math.abs(amt)
-     }
-
-     /* recurring preview */
-     const recurring = await stripe.invoices.createPreview({
-          customer: customerId,
-          subscription: subId,
-          subscription_details: { items },
-          preview_mode: 'recurring',
-          expand: ['lines.data.pricing'],
-     })
-     const recurringByPrice: Record<string, number> = {}
-     for (const l of recurring.lines.data as Line[]) {
-          const pid = l.pricing?.price_details?.price
-          if (pid) recurringByPrice[pid] = (recurringByPrice[pid] ?? 0) + (l.amount ?? 0)
-     }
-
-     return {
-          invoice: preview,
-          totalAmount: Math.max(0, sum(debit) - sum(credit)),
-          totalDebit: sum(debit),
-          totalCredit: sum(credit),
-          recurringAmount: Math.max(0, recurring.total ?? 0),
-          debitByPrice: debit,
-          creditByPrice: credit,
-          recurringByPrice,
-          removedModules: removedItems.filter(id => !id.startsWith('plan_'))
+          invoice_preview_id: invNow,
      }
 }
