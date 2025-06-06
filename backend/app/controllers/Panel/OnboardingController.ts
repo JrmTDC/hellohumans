@@ -100,6 +100,10 @@ class OnboardingController {
                     role: 'owner'
                })
 
+               await supabaseService.from('users').update({
+                    selected_project_id: projectData.id
+               }).eq('id', ctx.user.id)
+
                return {
                     project: {
                          id: projectData.id,

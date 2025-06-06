@@ -135,6 +135,7 @@ export const useOnboardingStore = defineStore('onboarding', () => {
 
                if (success) {
                     resetStore()
+                    await panelStore.initPanelData()
                     await router.push('/panel/upgrade')
                } else {
                     resetStore()

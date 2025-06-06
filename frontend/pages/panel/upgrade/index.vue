@@ -77,7 +77,7 @@ const trialActive = ref(false)
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const upgradeFlow = useUpgradeFlow()
 const from = router.options.history.state.back as string | null
-const noInitPages = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules']
+const noInitPages = ['/panel/upgrade', '/panel/upgrade/modules']
 
 // Redirection forcée vers index.vue quand on rafraîchit la page
 onMounted(async () => {

@@ -82,7 +82,7 @@ const trialActive = ref(false)
 const showPaymentModal = ref(false)
 const upgradeFlow = useUpgradeFlow()
 const from = router.options.history.state.back as string | null
-const noInitPages = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules']
+const noInitPages = ['/panel/upgrade', '/panel/upgrade/modules']
 
 onMounted(async () => {
 

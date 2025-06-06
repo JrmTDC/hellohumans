@@ -197,10 +197,15 @@ export const usePanelStore = defineStore('panel', () => {
                }
 
                // 2) On récupère d’autres informations
-               const [projectsRes, usagesRes] = await Promise.all([
+               const [projectRes, projectsRes, usagesRes] = await Promise.all([
+                    apiFetch('/project'),
                     apiFetch('/projects'),
                     apiFetch('/usages'),
                ])
+               project.value = projectRes.success.project
+               if(!project.value) {
+                    return false
+               }
                project_usages.value = usagesRes.success.usages || []
                projects.value = projectsRes.success.projects || []
                //modules.value = usagesRes.modules || []
