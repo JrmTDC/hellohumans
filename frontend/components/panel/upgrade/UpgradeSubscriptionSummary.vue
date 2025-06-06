@@ -258,10 +258,6 @@ const emit = defineEmits(['updateBillingCycle', 'goNext'])
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 
-const currentBillingCycle = computed(() =>
-     panelStore.project?.subscription?.billing_cycle || 'month'
-)
-
 // data local
 const billingCycleLocal = computed<'month' | 'year'>({
      get() {

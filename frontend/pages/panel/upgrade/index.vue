@@ -76,15 +76,22 @@ const router = useRouter()
 const trialActive = ref(false)
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const upgradeFlow = useUpgradeFlow()
+const from = router.options.history.state.back as string | null
+const noInitPages = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules']
 
 // Redirection forcée vers index.vue quand on rafraîchit la page
 onMounted(async () => {
-     if (!panelStore.plans.length) await panelStore.fetchPlans()
-
+     if(!panelStore.plans.length || !panelStore.modules.length) {
+          await panelStore.fetchUpgrade()
+          upgradeStore.initialiseStore()
+     }
+     const shouldInit = !noInitPages.includes(from || '')
+     if (shouldInit) {
+          upgradeStore.initialiseStore()
+     }
      await nextTick()
      measureAllSections()
      upgradeFlow.setStep(1)
-
      layoutLoadingPanel.value = false
 })
 

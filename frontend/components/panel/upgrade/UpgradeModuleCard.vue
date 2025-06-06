@@ -132,12 +132,9 @@ const panelStore  = usePanelStore()
 
 const { t } = useI18n()
 
-onMounted(() => {
-     props.module.selected = subscriptionState.value
-})
-
 const props = defineProps<{
      module: any
+     selected: boolean
      billingCycle: 'month' | 'year'
      onToggle: (moduleId: string, checked: boolean) => void
      onChangeChoice: (moduleId: string, choiceIndex: number) => void

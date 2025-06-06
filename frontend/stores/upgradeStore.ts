@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 interface Subscription {
      current_plan_id: string
      current_modules: string[]
+     billing_cycle: 'month' | 'year'
 }
 export const useUpgradeStore = defineStore('upgrade', () => {
      const panelStore = usePanelStore()
@@ -22,7 +23,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                     selectedModules.value[moduleId] = true
                })
           }
-          const subCycle = panelStore.project?.subscription?.billing_cycle
+          const subCycle = panelStore.project?.subscription?.billing_cycle || 'month'
           if (subCycle) {
                billingCycle.value = subCycle
           }
@@ -92,6 +93,11 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           }
      }
 
+     function isModuleSelected(moduleId: string) {
+          const mod = panelStore.modules.find((m) => m.id === moduleId)
+          return mod ? mod.selected : false
+     }
+
      function setModuleChoice(moduleId: string, index: number) {
           const mod = panelStore.modules.find((m) => m.id === moduleId)
           if (mod?.multipleChoice && mod.choices) {
@@ -106,9 +112,10 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           panelStore.modules = []
      }
 
-     // Initialisation automatique
-     onMounted(() => {
+     function initialiseStore() {
           const sub = panelStore.project?.subscription as Subscription | null
+
+          billingCycle.value = sub?.billing_cycle ? sub?.billing_cycle : 'month'
 
           // Si pas d'abonnement, sélectionner le plan le plus populaire
           if (!sub) {
@@ -137,15 +144,25 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                     // Sinon, on vérifie s'il est dans l'abonnement
                     else {
                          // D'abord vérifier l'état persistant
-                         const persistedState = selectedModules.value[mod.id]
+                         //const persistedState = selectedModules.value[mod.id]
+
+                         mod.selected = currentModules.includes(mod.id)
+                         /*
                          if (persistedState !== undefined) {
                               mod.selected = persistedState
                          } else {
                               mod.selected = currentModules.includes(mod.id)
                          }
+                         */
+
                     }
                })
           }
+     }
+
+     // Initialisation automatique
+     onMounted(() => {
+
      })
 
      return {
@@ -160,10 +177,12 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           canValidateUpgrade,
 
           // actions
+          initialiseStore,
           setPlan,
           setBillingCycle,
           toggleModule,
           setModuleChoice,
+          isModuleSelected,
           resetAll
      }
 })

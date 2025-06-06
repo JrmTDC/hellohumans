@@ -111,6 +111,8 @@
 </template>
 
 <script setup lang="ts">
+import {computed} from "vue";
+
 interface Plan {
      id: string
      name: string
@@ -150,13 +152,6 @@ function handleSelectPlan() {
 const hasSubscription = computed(() =>
      Boolean(panelStore.project?.subscription?.current_plan_id)
 )
-
-// Au chargement, si c'est l'offre actuelle, on la sélectionne automatiquement
-onMounted(() => {
-     if (isCurrent.value) {
-          handleSelectPlan()
-     }
-})
 
 // Calcul du prix
 const displayedPriceMonth = computed(() => {

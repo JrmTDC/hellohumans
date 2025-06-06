@@ -30,7 +30,7 @@ const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const isAccountError = useState('isAccountError', () => false)
 const isAccountBlocked = useState('isAccountBlocked', () => false)
 const subscriptionPaiement = useState('subscriptionPaiement', () => false)
-
+const upgradeStore = useUpgradeStore()
 const progress = ref(0)
 const { locale, setLocale } = useI18n()
 const { showBanner, countdown, triggerManualCheck } = useConnectionBanner()
@@ -69,6 +69,7 @@ onMounted(async () => {
                          isAccountError.value = true
                          return
                     }
+                    upgradeStore.initialiseStore()
                }else{
                     const ok = await panelStore.initPanelData()
                     if(!ok) {

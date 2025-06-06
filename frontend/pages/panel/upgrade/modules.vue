@@ -39,6 +39,7 @@
                                         v-for="(module, idx) in panelStore.modules.filter(m => !m.disabled)"
                                         :key="module.id"
                                         :module="module"
+                                        :selected="upgradeStore.isModuleSelected(module.id)"
                                         :index="idx"
                                         :billingCycle="upgradeStore.billingCycle"
                                         :onToggle="toggleModule"
@@ -72,6 +73,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const route = useRoute()
 const router = useRouter()
 const layoutLoadingPanel = useState('layoutLoadingPanel')
 const panelStore = usePanelStore()
@@ -79,18 +81,26 @@ const upgradeStore = useUpgradeStore()
 const trialActive = ref(false)
 const showPaymentModal = ref(false)
 const upgradeFlow = useUpgradeFlow()
+const from = router.options.history.state.back as string | null
+const noInitPages = ['/panel/onboarding', '/panel/upgrade', '/panel/upgrade/modules']
 
 onMounted(async () => {
-     if (!panelStore.plans.length) await panelStore.fetchPlans()
-     if (!panelStore.modules.length) await panelStore.fetchModules()
 
+     if(!panelStore.plans.length || !panelStore.modules.length) {
+          await panelStore.fetchUpgrade()
+          upgradeStore.initialiseStore()
+     }
      if (!upgradeStore.currentPlan) {
           await router.replace('/panel/upgrade')
           return
      }
      if (upgradeFlow.currentStep < 1 || !upgradeStore.currentPlan) {
-          router.replace('/panel/upgrade')
+          await router.replace('/panel/upgrade')
           return
+     }
+     const shouldInit = !noInitPages.includes(from || '')
+     if (shouldInit) {
+          upgradeStore.initialiseStore()
      }
      upgradeFlow.setStep(2)
      layoutLoadingPanel.value = false
