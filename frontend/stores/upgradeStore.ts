@@ -123,6 +123,9 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                if (popularPlan) {
                     selectedPlanId.value = popularPlan.id
                }
+               panelStore.modules.forEach(mod => {
+                    mod.selected = false
+               })
           }
           // Si abonnement, sélectionner le plan et modules existants
           else {
