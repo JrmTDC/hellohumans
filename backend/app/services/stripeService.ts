@@ -193,13 +193,43 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
           }
      })
 
+     // Ajoute cette ligne AVANT moduleCurrent pour éviter que le plan ne soit pris dedans
+     const planPriceIds: string[] = []
+     const planBlock = opts.cycle === 'month' ? planRow?.stripe_price_id_month : planRow?.stripe_price_id_year
+     if (planBlock && typeof planBlock === 'object') {
+          for (const key in planBlock) {
+               const priceId = planBlock[key]?.id
+               if (priceId) planPriceIds.push(priceId)
+          }
+     }
 
-     const planCur = currentIds[0]
-     const planNext = desired[0]
-     const planChangeType = planCur === planNext ? null : remove.includes(planCur) ? 'end_of_period' : 'immediate'
+     const { data: currentPlanRow } = await supabaseService
+          .from('subscription_plans')
+          .select('id, name, stripe_price_id_month, stripe_price_id_year')
+          .eq('id', ctx.subscription.current_plan_id)
+          .single()
+
+     const planPriceIdsCurrent: string[] = []
+     const currentPlanBlock = opts.cycle === 'month'
+          ? currentPlanRow?.stripe_price_id_month
+          : currentPlanRow?.stripe_price_id_year
+
+     if (currentPlanBlock && typeof currentPlanBlock === 'object') {
+          for (const key in currentPlanBlock) {
+               const priceId = currentPlanBlock[key]?.id
+               if (priceId) planPriceIdsCurrent.push(priceId)
+          }
+     }
+
+     const planCur = currentIds.find(pid => planPriceIdsCurrent.includes(pid)) ?? null
+     const planNext = desired.find(pid => planPriceIds.includes(pid)) ?? null
 
      let planChange = null
      let planNextObj = null
+     console.log(ctx.subscription)
+     console.log('[previewChange] planCur:', planCur, 'planNext:', planNext)
+     //console.log(planRow)
+     console.log(remove)
 
      if (planCur === planNext) {
           planChange = {
@@ -214,8 +244,8 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
      } else if (remove.includes(planCur)) {
           // downgrade → plan actuel reste jusqu'à la fin
           planChange = {
-               id: ctx.subscription.plan_id,
-               name: planName,
+               id: ctx.subscription.current_plan_id,
+               name: currentPlanRow.name?.[userLang] ?? currentPlanRow.name?.['en'] ?? 'Plan',
                effective_date: endOfPeriodDate,
                effective_action: 'end_of_period',
                price_now: 0,
@@ -241,16 +271,6 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
                price_now: centsToEuro(debitBy[planNext] ?? 0),
                credit_amount: centsToEuro(creditBy[planCur] ?? 0),
                price_cycle: centsToEuro(recurBy[planNext] ?? 0),
-          }
-     }
-
-// Ajoute cette ligne AVANT moduleCurrent pour éviter que le plan ne soit pris dedans
-     const planPriceIds: string[] = []
-     const planBlock = opts.cycle === 'month' ? planRow?.stripe_price_id_month : planRow?.stripe_price_id_year
-     if (planBlock && typeof planBlock === 'object') {
-          for (const key in planBlock) {
-               const priceId = planBlock[key]?.id
-               if (priceId) planPriceIds.push(priceId)
           }
      }
 
