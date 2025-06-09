@@ -25,6 +25,7 @@ interface Project {
      public_key: string,
      private_key: string,
      widget_installed: boolean
+     owner_user_id: string
 }
 interface UpgradePreviewResponse {
      today_amount: number
