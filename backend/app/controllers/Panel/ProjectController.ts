@@ -93,7 +93,7 @@ class ProjectController{
                const { error: updateError } = await supabaseService
                     .from('users')
                     .update({ selected_project_id: ctx.params.uuid })
-                    .eq('id', clientUser.id)
+                    .eq('id', ctx.user.id)
 
                if (updateError) {
                     return ctx.response.internalServerError({

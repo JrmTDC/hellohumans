@@ -2,8 +2,9 @@
      <div ref="projectMenuRef" class="absolute z-[110] bg-white shadow-[0px_8px_20px_rgba(0,20,51,0.24)] rounded-[8px] p-[8px] w-[256px] max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#d3dbe5] scrollbar-track-transparent" :style="menuStyle">
           <div v-for="project in projects" :key="project.id">
                <div role="menuitemradio" class="w-full flex items-center text-[#080f1a] bg-transparent border-none rounded-[4px] min-h-[36px] px-[8px] py-[6px] cursor-pointer outline-none hover:bg-[#dce9ff] hover:text-[#001433] group" @click="selectProject(project.id)">
-                    <span v-if="project.owner_user_id == panelStore?.user?.id" class="flex items-center mr-[5px]">
-                         <SvgoPanelCommonMenuIconOwner class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" />
+                    <span class="flex items-center mr-[5px]">
+                         <SvgoPanelCommonMenuIconOwner class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" v-if="project.owner_user_id == panelStore?.user?.id" />
+                         <SvgoPanelCommonMenuIconTeam class="w-[24px] h-[24px] fill-[#647491] group-hover:fill-[#0566ff]" v-else />
                     </span>
                     <span class="whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left text-[14px]">
                     {{ project.website || t('panel.components.layout.sideMenuProjects.noName') }}
