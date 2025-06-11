@@ -51,6 +51,7 @@
                <!-- Titre -->
                <div class="flex flex-row justify-start items-center">
                     <h2 class="mt-0 mb-0 font-medium text-[20px] leading-[26px] tracking-[-0.01em]">{{ plan.name }}</h2>
+
                </div>
           </div>
 
@@ -103,6 +104,38 @@
                </div>
           </div>
 
+          <!-- ───────── Modules inclus ───────── -->
+          <template v-if="plan.includedModules?.length">
+
+
+               <div
+                    data-section="included-modules"
+                    :class="['bg-white px-[20px] pb-[16px] pt-[8px] flex justify-center items-center', borderClasses, orderClass(7)]"
+               >
+                    <div class="flex items-center w-full">
+                         <div class="flex-1 h-px bg-[#000]"></div>
+                         <span class="mx-[8px] text-[12px] font-medium text-[#000]">Modules inclus</span>
+                         <div class="flex-1 h-px bg-[#000]"></div>
+                    </div>
+               </div>
+
+
+
+               <div
+                    v-for="(mod, idx) in plan.includedModules"
+                    :key="mod"
+                    :class="['bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start',borderClasses,orderClass(7000 + props.index + 1 + plan.includedFeatures.length + idx)]">
+                    <div class="flex flex-row justify-start items-center">
+                         <svgo-panel-icon-option-included
+                              class="w-[14px] h-[14px] min-w-[14px] min-h-[14px] fill-[#080f1a]"/>
+                         <span class="block w-[8px] min-w-[8px]"></span>
+                         <p class="mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">
+                              {{ mod }}
+                         </p>
+                    </div>
+               </div>
+          </template>
+
           <div class="h-[inherit]" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
           <!-- Bas arrondi -->
           <div data-section="footer" class="mt-auto bg-white px-[20px] pb-[18px] text-center flex flex-col justify-center items-start mb-[20px] [border-radius:0px_0px_12px_12px]" :class="[orderClass(8),borderBottomClasses]">
@@ -122,6 +155,7 @@ interface Plan {
      discountMonths: number
      popular?: boolean
      includedFeatures: string[],
+     includedModules?: string[],
      billingYear: boolean
      baseSubtitle: string
 }
