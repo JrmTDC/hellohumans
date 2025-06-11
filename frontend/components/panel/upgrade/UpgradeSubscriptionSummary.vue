@@ -12,19 +12,18 @@
                     {{ t('panel.components.upgrade.subscriptionSummary.title') }}
                </p>
 
-               <!-- Encadré “Diamant” -->
-               <div
-                    class="mt-[20px] flex flex-row justify-center items-center
-               bg-[#e5e7f7] px-[20px] py-[16px] rounded-[12px]"
-               >
-                    <svgo-panel-upgrade-icon-diamon
-                         class="min-w-[24px] min-h-[24px] h-[24px] w-[24px] fill-[#303f9f]"
-                    />
+               <!-- Boîte explicative statique -->
+               <div v-if="panelStore.project?.subscription?.billing_cycle && panelStore.project.subscription.billing_cycle !== upgradeStore.billingCycle"
+                    class="mt-[20px] flex flex-row justify-center items-center bg-[#e5e7f7] px-[20px] py-[16px] rounded-[12px]">
+                    <!-- icône info ; remplacez par votre composant si besoin -->
+                    <svgo-panel-upgrade-icon-warning
+                         class="min-w-[24px] min-h-[24px] h-[24px] w-[24px]"
+                         />
                     <p class="mt-0 mb-0 text-[14px] leading-[18px] tracking-[-0.01em] text-[#151c46] ml-[8px]">
                          <strong>
-                              {{ t('panel.components.upgrade.subscriptionSummary.highlight') }}
+                              Vous changez de mode de facturation.
                          </strong>
-                         {{ t('panel.components.upgrade.subscriptionSummary.highlightFull') }}
+                         Votre abonnement actuel sera résilié de suite et le nouveau prendra effet automatiquement.
                     </p>
                </div>
 
@@ -39,6 +38,7 @@
                          </span>
                     </template>
                </p>
+
                <div class="flex items-center mt-[20px]">
                     <!-- Mensuel -->
                     <label class="flex items-center cursor-pointer">
