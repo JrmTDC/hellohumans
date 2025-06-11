@@ -106,21 +106,16 @@
 
           <!-- ───────── Modules inclus ───────── -->
           <template v-if="plan.includedModules?.length">
-
-
                <div
                     data-section="included-modules"
-                    :class="['bg-white px-[20px] pb-[16px] pt-[8px] flex justify-center items-center', borderClasses, orderClass(7)]"
+                    :class="['bg-white px-[20px] pb-[16px] flex justify-center items-center', borderClasses, orderClass(7)]"
                >
                     <div class="flex items-center w-full">
-                         <div class="flex-1 h-px bg-[#000]"></div>
+                         <div class="flex-1 h-px bg-[#dce9ff]"></div>
                          <span class="mx-[8px] text-[12px] font-medium text-[#000]">Modules inclus</span>
-                         <div class="flex-1 h-px bg-[#000]"></div>
+                         <div class="flex-1 h-px bg-[#dce9ff]"></div>
                     </div>
                </div>
-
-
-
                <div
                     v-for="(mod, idx) in plan.includedModules"
                     :key="mod"
