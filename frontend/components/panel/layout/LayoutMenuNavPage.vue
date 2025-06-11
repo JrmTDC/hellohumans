@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import iconMenuLogo from '~/assets/icons/panel/logoHelloHumansMini.svg'
+import iconMenuInbox from '~/assets/icons/panel/iconMenuInbox.svg'
 import iconMenuRobot from '~/assets/icons/panel/iconMenuRobot.svg'
 import iconMenuFlow from '~/assets/icons/panel/iconMenuFlow.svg'
 import iconMenuSetting from '~/assets/icons/panel/iconMenuSetting.svg'
@@ -75,6 +76,14 @@ const menuItems = ref([
           routeURL: '/panel/dashboard',
           tooltip: t('panel.components.layout.menuNavPage.dashboard'),
           tooltipKey: 'panel.components.layout.menuNavPage.dashboard'
+     },
+     {
+          position: 'top',
+          type: 'link',
+          icon: rawIcon(iconMenuInbox),
+          routeURL: '/panel/inbox/conversations/unassigned',
+          tooltip: t('panel.components.layout.menuNavPage.inbox'),
+          tooltipKey: 'panel.components.layout.menuNavPage.inbox'
      },
      {
           position: 'top',

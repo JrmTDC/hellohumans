@@ -300,6 +300,19 @@
                          "settings": "Paramtère"
                     }
                },
+               "inboxChildSideMenu": {
+                    "title": "Boîte de réception",
+                    "metaTitle": "Boîte de réception",
+                    "metaDescription": "Consultez les conversations en cours et les messages non lus.",
+                    "menuItems": {
+                         "conversations": "Conversations en direct"
+                    },
+                    "menuSubs": {
+                         "unassigned": "Non attribués",
+                         "open": "Ouverts",
+                         "solved": "Résolus"
+                    }
+               },
                "common": {
                     "dataPicker": {
                          "today": "Aujourd'hui",
@@ -366,6 +379,7 @@
                     },
                     "menuNavPage": {
                          "dashboard": "Tableau de bord",
+                         "inbox": "Boîte de réception",
                          "siteAnalysis": "Agent IA {botName} ",
                          "visitors": "Visiteurs",
                          "analytics": "Analytique",
