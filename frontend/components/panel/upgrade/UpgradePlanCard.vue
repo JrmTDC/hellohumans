@@ -118,14 +118,14 @@
                </div>
                <div
                     v-for="(mod, idx) in plan.includedModules"
-                    :key="mod"
+                    :key="mod.key"
                     :class="['bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start',borderClasses,orderClass(7000 + props.index + 1 + plan.includedFeatures.length + idx)]">
                     <div class="flex flex-row justify-start items-center">
                          <svgo-panel-icon-option-included
                               class="w-[14px] h-[14px] min-w-[14px] min-h-[14px] fill-[#080f1a]"/>
                          <span class="block w-[8px] min-w-[8px]"></span>
                          <p class="mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">
-                              {{ mod }}
+                              {{ mod.name }}
                          </p>
                     </div>
                </div>
