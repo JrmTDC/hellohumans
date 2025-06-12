@@ -206,8 +206,8 @@
                     },
                     "modules": {
                          "trialRemainingZero": "Votre essai complet se termine dans 0 jours",
-                         "title": "Sélectionner votre offre",
-                         "description": "Choisissez une offre et choisissez des modules à l'étape suivante.",
+                         "title": "Sélectionner vos modules",
+                         "description": "Choisissez les modules complémentaires qui répondent le mieux aux besoins de votre entreprise. Vous pouvez les modifier à tout moment.",
                          "chooseModules": "Choisissez les modules complémentaires",
                          "nextButtonLabel": "Paiement",
                          "metaTitle": "Ajoutez des modules complémentaires",
