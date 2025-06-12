@@ -78,6 +78,15 @@
                     </template>
                </p>
           </div>
+          <!-- Sélecteur du nombre d'agent -->
+          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start px-[20px] pb-[16px] pt-0', borderClasses, orderClass(4) ]">
+               <PanelCommonSelectField v-model="conversationSelected" :options="conversationSelectField" option-key="value" option-label="label" placeholder="Sélectionnez le nombre de conversation" dropdown-class="min-w-[581px] max-w-[256px]">
+                    <template #option="{ option }">
+                         <div class="css-1cctv59 e1et3p7j1" style="flex-shrink: 1; min-width: 0px;">
+                              <p class="e1et3p7j5 css-13w33j3 eimqq0f0">400 conversations facturables / mois</p><p color="subdued" class="css-1yjik4h eimqq0f0"><span class="css-0 e1q33r5y0"><span class="e1q33r5y2 css-m36gg3 e19wav3s0">+<span class="currency">€</span>25</span><span class="css-0 e1q33r5y1">/mois</span></span></p></div>
+                    </template>
+               </PanelCommonSelectField>
+          </div>
 
           <!-- Bouton (ou étiquette) Sélectionné -->
           <div data-section="button" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(5) ]">
@@ -161,6 +170,15 @@ const props = defineProps<{
      billingCycle: 'month' | 'year'
      index: number
 }>()
+
+const conversationSelected = ref('400')
+const conversationSelectField = [
+     {
+          value: '400',
+          label: `400 conversations facturables / mois`,
+          price: '+ 25 € / mois',
+     }
+]
 
 const emit = defineEmits(['selectPlan'])
 const panelStore = usePanelStore()
