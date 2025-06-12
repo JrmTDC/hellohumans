@@ -113,6 +113,9 @@ function toggleModule(moduleId: string, checked: boolean) {
 function changeModuleChoice(moduleId: string, choiceIndex: number) {
      upgradeStore.setModuleChoice(moduleId, choiceIndex)
 }
+function isModuleIncluded(module: ModuleAddOn, includedModules: IncludedModules[]): boolean {
+     return includedModules.some(includedModule => includedModule.key === module.key)
+}
 
 const computedTotalPrice = computed(() => {
      let total = 0
@@ -126,12 +129,12 @@ const computedTotalPrice = computed(() => {
           }
      }
      // Modules
-     const includedIds = off?.includedModules || []
      for (const mod of upgradeStore.selectedAddOns) {
           // Si c’est inclus dans l’offre => on l’affiche, mais pas de prix
-          if (includedIds.includes(mod.key)) {
+          if (isModuleIncluded(mod, off?.includedModules || [])) {
                continue
           }
+
           // Sinon, on calcule
           if (mod.multipleChoice && mod.choices && mod.selectedChoiceIndex != null) {
                const choice = mod.choices[mod.selectedChoiceIndex]

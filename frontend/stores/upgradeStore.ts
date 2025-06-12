@@ -34,16 +34,24 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           initSelectedModules()
      })
 
+     function isModuleIncluded(module: ModuleAddOn, includedModules: IncludedModules[] | undefined): boolean {
+          if (!includedModules || !Array.isArray(includedModules)) return false;
+          return includedModules.some(includedModule => includedModule.key === module.key);
+     }
+
+
+
      const currentPlan = computed(() =>
           panelStore.plans.find((p) => p.id === selectedPlanId.value) || null
      )
 
      const selectedAddOns = computed(() => {
-          const included = currentPlan.value?.includedModules || []
-          return panelStore.modules.filter(
-               (m) => m.selected || included.includes(m.key)
-          )
-     })
+          return panelStore.modules.filter((m) => {
+               const included = isModuleIncluded(m, currentPlan.value?.includedModules || []);
+               return m.selected || included;
+          });
+     });
+
 
      const isSameAsCurrent = computed(() => {
 
@@ -83,7 +91,7 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           const mod = panelStore.modules.find((m) => m.id === moduleId)
           if (mod) {
                // Si le module est inclus dans le plan
-               if (currentPlan.value?.includedModules?.includes(mod.key)) {
+               if (isModuleIncluded(mod.key, currentPlan.value?.includedModules)) {
                     mod.selected = true
                } else {
                     mod.selected = checked
@@ -139,9 +147,9 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                // Initialiser les modules
                panelStore.modules.forEach(mod => {
                     // Si le module est inclus dans le plan actuel
-                    const isIncludedInPlan = currentPlan?.includedModules?.includes(mod.key) || false
+                    mod.selected = false
                     // Si le module est inclus, il est toujours sélectionné
-                    if (isIncludedInPlan) {
+                    if (isModuleIncluded(mod.key, currentPlan?.includedModules)) {
                          mod.selected = true
                     }
                     // Sinon, on vérifie s'il est dans l'abonnement

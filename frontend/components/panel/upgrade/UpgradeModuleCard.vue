@@ -127,6 +127,11 @@
 </template>
 <script setup lang="ts">
 
+interface IncludedModules {
+     id: string
+     key: string
+     name: string
+}
 const upgradeStore = useUpgradeStore()
 const panelStore  = usePanelStore()
 
@@ -139,7 +144,7 @@ const props = defineProps<{
      onToggle: (moduleId: string, checked: boolean) => void
      onChangeChoice: (moduleId: string, choiceIndex: number) => void
      index: number
-     includedModules: string[]
+     includedModules: IncludedModules[]
 }>()
 
 const currentModules = computed(() => panelStore.project?.subscription?.current_modules || [])
@@ -156,11 +161,16 @@ const subscriptionState = computed(() => {
      return panelStore.project.subscription.current_modules.includes(props.module.id)
 })
 
+function isModuleIncluded(module: ModuleAddOn, includedModules: IncludedModules[]): boolean {
+     return includedModules.some(includedModule => includedModule.key === module.key)
+}
+
 const checked = computed(() => {
      // Si le module est inclus dans le plan (toujours coché)
-     if (props.includedModules.includes(props.module.key)) {
+     if (isModuleIncluded(props.module, props.includedModules)) {
           return true
      }
+
 
      // Utiliser l'état persistant si disponible
      return props.module.selected
@@ -169,12 +179,12 @@ const checked = computed(() => {
 // Le module est "inclus" => input disabled, pas togglable
 const isIncluded = computed(() => {
      // Seul les modules inclus dans le plan sont désactivés
-     return props.includedModules.includes(props.module.key)
+     return isModuleIncluded(props.module, props.includedModules)
 })
 
 function toggle(checkedVal: boolean) {
      // Si le module est inclus dans le plan => ne peut pas être désélectionné
-     if (props.includedModules.includes(props.module.key)) {
+     if (isModuleIncluded(props.module, props.includedModules)) {
           if (!checkedVal) return // empêche la désélection
           props.onToggle(props.module.id, true)
           return

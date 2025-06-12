@@ -32,6 +32,11 @@ interface UpgradePreviewResponse {
      cycle_amount: number
      ends_at: number | null
 }
+export interface IncludedModules {
+     id: string
+     key: string
+     name: string
+}
 export interface UpgradePlan {
      id: string
      name: string
@@ -41,7 +46,7 @@ export interface UpgradePlan {
      includedFeatures: string[]
      baseSubtitle: string
      popular?: boolean
-     includedModules?: string[],
+     includedModules?: IncludedModules[],
      billingYear?: boolean
 }
 

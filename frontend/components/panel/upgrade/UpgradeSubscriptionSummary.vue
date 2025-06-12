@@ -23,7 +23,7 @@
                          <strong>
                               Vous changez de mode de facturation.
                          </strong>
-                         Votre abonnement actuel sera résilié de suite et le nouveau prendra effet automatiquement.
+                         Votre abonnement actuel sera résilié immédiatement et le nouveau prendra effet automatiquement. (Le temps restant de votre abonnement actuel sera perdu.)
                     </p>
                </div>
 
@@ -157,7 +157,7 @@
                               </div>
                               <div>
                                    <span
-                                        v-if="selectedPlan?.includedModules?.includes(mod.key)"
+                                        v-if="isModuleIncluded(mod.key, selectedPlan?.includedModules)"
                                         class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px]
                        rounded-[5px] text-[12px] ml-[10px]"
                                    >
@@ -216,6 +216,11 @@ import { computed, watch, nextTick } from 'vue'
 const { t } = useI18n()
 
 // Interfaces
+interface IncludedModules {
+     id: string
+     key: string
+     name: string
+}
 interface Plan {
      id: string
      name: string
@@ -223,7 +228,7 @@ interface Plan {
      price_year: number
      includedFeatures: string[]
      billingYear: boolean
-     includedModules?: string[]
+     includedModules?: IncludedModules[]
 }
 interface ChoiceOption {
      label: string
@@ -258,6 +263,13 @@ const emit = defineEmits(['updateBillingCycle', 'goNext'])
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
 
+function isModuleIncluded(moduleKey: string, includedModules: IncludedModules[] | undefined): boolean {
+     if (!includedModules || !Array.isArray(includedModules)) return false;
+     return includedModules.some(includedModule => includedModule.key === moduleKey);
+}
+
+
+
 // data local
 const billingCycleLocal = computed<'month' | 'year'>({
      get() {
@@ -276,8 +288,9 @@ const selectedModules = computed(() => {
      const selected = props.selectedModules
      const subModules = panelStore.project?.subscription?.current_modules || []
      return selected.filter((mod) => {
-          const isIncludedInPlan = props.selectedPlan?.includedModules?.includes(mod.key) || false
-          if (isIncludedInPlan) return true
+          if(isModuleIncluded(mod.key, props.selectedPlan?.includedModules)){
+               return true
+          }
           return mod.selected
      })
 })
@@ -317,7 +330,7 @@ const firstFeature = computed(() => {
 
 // Calcul du prix d’un module
 function modulePrice(mod: ModuleAddOn): number {
-     const isIncluded = props.selectedPlan?.includedModules?.includes(mod.key)
+     const isIncluded =  isModuleIncluded(mod.key, props.selectedPlan?.includedModules)
      if (isIncluded) return 0
      return billingCycleLocal.value === 'month'
           ? mod.price_month
