@@ -25,18 +25,22 @@
                <div class="w-full h-[calc(100%-12px)] overflow-hidden bg-white border border-[rgb(226,232,239)] m-[0_12px_12px_0] rounded-r-[16px] flex relative">
                     <div class="flex-[3_1_0%] px-[12px] pr-[12px] pl-[60px] py-[60px] max-w-[812px]">
 
-                         <div >
-
+                         <div v-if="conversationsUnassigned" class="flex flex-col h-full relative">
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                              <div></div>
                          </div>
 
-                         <PanelInboxEmpty v-if="!conversations"
+                         <PanelInboxEmpty v-if="!conversationsUnassigned && !conversations"
                               title="Aucune conversation non attribuée"
                               description="Accédez au dossier Ouverts pour travailler sur les conversations qui vous sont attribuées."
                               button="Accéder aux Ouverts"
                               :onClick="() => navigateTo('/panel/inbox/operator')"
                          />
 
-                         <PanelInboxEmpty v-if="conversations"
+                         <PanelInboxEmpty v-if="!conversationsUnassigned && conversations"
                               title="Aucune conversation active"
                               description="Avant de commencer une vraie conversation avec vos visiteurs, simulez-en une pour voir le fonctionnement !."
                               button="Simuler une conversation"
@@ -54,7 +58,15 @@ const backgroundConversationEmpty = useBase64Asset('panel/inbox/conversations/em
 const inboxStore = useInboxStore()
 const panelStore = usePanelStore()
 const conversations = ref([])
-const conversationsUnassigned = ref([])
+const conversationsUnassigned = [
+     {
+          id: 'V-gdDFSD582dv',
+          timeAgo: '10 min',
+          lastMessage: 'Bonjour',
+          agent: 'Jeremy',
+          link: '/panel/inbox/conversation/1'
+     }
+]
 
 onMounted(async () => {
      //await inboxStore.fetchData()

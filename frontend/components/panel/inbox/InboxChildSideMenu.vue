@@ -35,7 +35,7 @@ const menuSubs = ref([
      {
           sub: 'live',
           icon: rawIcon(MenuOpen),
-          routeURL: '/panel/inbox/conversations/operatormoney(n: number',
+          routeURL: '/panel/inbox/conversations/operator',
           name: t('panel.components.inboxChildSideMenu.menuSubs.open'),
      },
      {
