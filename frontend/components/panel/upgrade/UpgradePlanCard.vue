@@ -82,17 +82,9 @@
           <div data-section="agent" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start pt-0 w-full', borderClasses, orderClass(4) ]">
                <PanelCommonSelectField v-model="conversationSelected" :options="conversationSelectField" option-key="value" option-label="label" placeholder="Sélectionnez le nombre d'agent " class="w-full">
                     <template #option="{ option }">
-                         <div class="flex flex-row justify-start items-center">
-                              <p class="text-[14px]">{{ option.label }}</p>
-                              <p
-                                   v-if="agentPrice(option.value) !== 0"
-                                   class="text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)] ml-[10px]"
-                              >
-                                   <span>
-                                        {{ agentPrice(option.value) > 0 ? "+" : "-" }}
-                                        {{ Math.abs(agentPrice(option.value) / 100) }} €
-                                   </span>
-                              </p>
+                         <div class="flex-shrink min-w-0 flex flex-col justify-start items-[normal] flex-grow text-left">
+                              <p class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] flex-grow">{{ option.label }}</p>
+                              <p v-if="agentPrice(option.value) !== 0" class="mt-0 mb-0 font-normal text-[14px] leading-[18px] tracking-[-0.01em] text-[rgb(100,116,145)]">{{ agentPrice(option.value) > 0 ? "+" : "-" }}{{ Math.abs(agentPrice(option.value) / 100) }}€/mois</p>
                          </div>
                     </template>
 
@@ -210,7 +202,7 @@ const conversationSelectField = computed(() => {
      if (included > 0) {
           opts.push({
                value: String(included),
-               label: `${included} agent${included > 1 ? 's' : ''} inclus`,
+               label: `${included} agent${included > 1 ? 's' : ''} compris dans l'offre`,
                price: '0',
           })
      } else {
@@ -225,7 +217,7 @@ const conversationSelectField = computed(() => {
      for (let i = included + 1; i <= limit; i++) {
           opts.push({
                value: String(i),
-               label: `${i} agent${i > 1 ? 's' : ''}`,
+               label: `${i} agent${i > 1 ? 's' : ''} supplémentaire${i > 1 ? 's' : ''}`,
                // calcul du prix additionnel : (i - inclus) × tarif unitaire
                price: String((i - included) * 2500),
           })
