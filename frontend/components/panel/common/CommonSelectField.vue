@@ -52,6 +52,7 @@
                                    :key="index"
                                    class="px-[8px] py-[9px] rounded-[4px] cursor-pointer hover:bg-[rgb(220,233,255)] transition-colors"
                                    :class="{ 'bg-[rgb(245,247,249)]': isOptionSelected(option) }"
+                                   :data-selected="isOptionSelected(option) ? true : null"
                                    @click.stop="selectOption(option)"
                               >
                                    <slot name="option" :option="option">
@@ -132,5 +133,21 @@ onBeforeUnmount(() => {
 
 watch(() => props.modelValue, (newValue) => {
      selectedOption.value = props.options.find(option => option[props.optionKey] === newValue) || null
+})
+watch(isOpen, async (open) => {
+     if (open) {
+          await nextTick()
+
+          const dropdownEl = selectContainer.value?.querySelector('div.absolute')
+          if (!dropdownEl) return
+
+          const activeOption: HTMLElement | null = dropdownEl.querySelector('[data-selected="true"]')
+          if (activeOption) {
+               // on centre l’élément actif au milieu du conteneur
+               activeOption.scrollIntoView({ block: 'center' })
+               // si tu veux aussi le focus clavier sans scroll supplémentaire :
+               activeOption.focus({ preventScroll: true })
+          }
+     }
 })
 </script>
