@@ -151,7 +151,8 @@
 </template>
 
 <script setup lang="ts">
-import {computed} from "vue";
+import { computed, watch } from 'vue'
+import { useUpgradeStore } from '@/stores/upgradeStore'
 
 interface Plan {
      id: string
@@ -169,16 +170,31 @@ interface Plan {
      agentIncluded: number
 }
 const { t } = useI18n()
+
 const props = defineProps<{
      plan: Plan
      selected: boolean
      billingCycle: 'month' | 'year'
      index: number
+     agentCount: number
 }>()
 
+const upgradeStore = useUpgradeStore()
 
-// Valeur sélectionnée par défaut = nombre d’agents inclus
-const conversationSelected = ref(String(props.plan.agentIncluded || 0))
+const emit = defineEmits<{ (e: 'selectPlan', planId: string): void }>()
+
+const conversationSelected = computed<string>({
+     get() {
+          // agentIncluded = inclus par défaut pour ce plan
+          return String(upgradeStore.getAgentCount(
+               props.plan.id,
+               props.plan.agentIncluded
+          ))
+     },
+     set(v) {
+          upgradeStore.setAgentCount(props.plan.id, Number(v))
+     }
+})
 
 // Tarif unitaire d’un agent (en centimes)
 const unitPrice = 2500
@@ -226,7 +242,6 @@ const conversationSelectField = computed(() => {
      return opts
 })
 
-const emit = defineEmits(['selectPlan'])
 const panelStore = usePanelStore()
 
 const isCurrent = computed(() =>
@@ -236,6 +251,12 @@ const isCurrent = computed(() =>
 function roundUpToTwoDecimals(num: number): number {
      return Math.ceil(num * 100) / 100;
 }
+
+// dès que l’utilisateur change le select, on ré-émet le nouveau nombre
+watch(conversationSelected, newVal => {
+     // stocke dans le store
+     upgradeStore.setAgentCount(Number(newVal))
+}, { immediate: true })
 
 function handleSelectPlan() {
      emit('selectPlan', props.plan.id)

@@ -30,6 +30,8 @@
                                              :billingCycle="upgradeStore.billingCycle"
                                              :index="index"
                                              @selectPlan="upgradeStore.setPlan"
+                                             @update:agentCount="agentCount = $event"
+                                             v-model:agentCount="agentCount"
                                         />
                                    </div>
 
@@ -62,6 +64,7 @@
                          @updateBillingCycle="upgradeStore.setBillingCycle"
                          :disableIfZero="false"
                          @goNext="goNext"
+                         :agentCount="agentCount"
                     />
                </div>
           </div>
@@ -69,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+
+const agentCount = ref(0)
 const { t } = useI18n()
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()

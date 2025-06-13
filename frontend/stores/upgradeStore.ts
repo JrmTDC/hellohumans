@@ -170,6 +170,17 @@ export const useUpgradeStore = defineStore('upgrade', () => {
                })
           }
      }
+     const agentCounts = ref<Record<string, number>>({})
+
+// Récupère le nombre d'agents pour un plan (ou la valeur « incluse » par défaut)
+     function getAgentCount(planId: string, included: number): number {
+          return agentCounts.value[planId] ?? included
+     }
+
+// Affecte un nombre d'agents pour un plan donné
+     function setAgentCount(planId: string, count: number) {
+          agentCounts.value[planId] = count
+     }
 
      // Initialisation automatique
      onMounted(() => {
@@ -194,6 +205,10 @@ export const useUpgradeStore = defineStore('upgrade', () => {
           toggleModule,
           setModuleChoice,
           isModuleSelected,
-          resetAll
+          setAgentCount,
+          agentCounts,
+          getAgentCount,
+          resetAll,
+
      }
 })

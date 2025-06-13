@@ -45,8 +45,7 @@
                          <input type="radio" value="month" v-model="billingCycleLocal" class="hidden" />
                          <span
                               v-if="billingCycleLocal === 'month'"
-                              class="w-[20px] h-[20px] rounded-full bg-[#0566ff]
-                   border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"
+                              class="w-[20px] h-[20px] rounded-full bg-[#0566ff] border-[6px] border-[#0566ff] shadow-[inset_0_0_0_4px_#fff]"
                          ></span>
                          <span
                               v-else
@@ -112,8 +111,7 @@
                                    <h2 class="text-[16px] font-medium">{{ selectedPlan.name }}</h2>
                                    <template v-if="isCurrentPlan">
                                         <span
-                                             class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px]
-                         rounded-[5px] text-[11px] ml-[10px]"
+                                             class="bg-[#dbe9ff] text-[#0766ff] py-[4px] px-[7px] rounded-[5px] text-[11px] ml-[10px]"
                                         >
                                              Offre actuelle
                                         </span>
@@ -127,12 +125,20 @@
                               </div>
                          </div>
                          <p class="text-[14px] text-[#647491] mt-[4px]">{{ firstFeature }}</p>
-                    </div>
-                    <div v-else>
-                         <p class="text-[14px] text-[#647491]">
-                              {{ t('panel.components.upgrade.subscriptionSummary.planNoneSelected') }}
-                         </p>
-                    </div>
+                   </div>
+                   <div v-else>
+                        <p class="text-[14px] text-[#647491]">
+                             {{ t('panel.components.upgrade.subscriptionSummary.planNoneSelected') }}
+                        </p>
+                   </div>
+              </div>
+
+              <!-- Récap’ agents sup. (uniquement si > 0) -->
+               <div
+                    v-if="extraAgents > 0"
+                    class="text-[14px] text-[#647491] mt-[10px]"
+               >
+                    {{ extraAgents }} agent{{ extraAgents > 1 ? 's' : '' }} supplémentaires
                </div>
 
                <div class="bg-[#e2e8ef] h-px w-full mt-[20px]"></div>
@@ -212,6 +218,7 @@
 
 <script setup lang="ts">
 import { computed, watch, nextTick } from 'vue'
+import { useUpgradeStore } from '@/stores/upgradeStore'
 
 const { t } = useI18n()
 
@@ -229,6 +236,7 @@ interface Plan {
      includedFeatures: string[]
      billingYear: boolean
      includedModules?: IncludedModules[]
+     agentIncluded: number
 }
 interface ChoiceOption {
      label: string
@@ -257,18 +265,18 @@ const props = defineProps<{
      totalPrice: number
      nextButtonLabel?: string
      disableIfZero?: boolean
+     agentCount: number
 }>()
 
-const emit = defineEmits(['updateBillingCycle', 'goNext'])
+const emit = defineEmits(['updateBillingCycle','goNext'])
 const upgradeStore = useUpgradeStore()
 const panelStore = usePanelStore()
+
 
 function isModuleIncluded(moduleKey: string, includedModules: IncludedModules[] | undefined): boolean {
      if (!includedModules || !Array.isArray(includedModules)) return false;
      return includedModules.some(includedModule => includedModule.key === moduleKey);
 }
-
-
 
 // data local
 const billingCycleLocal = computed<'month' | 'year'>({
@@ -281,7 +289,6 @@ const billingCycleLocal = computed<'month' | 'year'>({
           }
      }
 })
-
 
 // On regroupe les modules à afficher (ceux inclus + cochés)
 const selectedModules = computed(() => {
@@ -383,8 +390,18 @@ const nextButtonLabelComputed = computed(() => {
           return props.nextButtonLabel || t('panel.components.upgrade.subscriptionSummary.finishLabel')
      }
 })
-
 function goNext() {
      emit('goNext')
 }
+
+const extraAgents = computed(() => {
+     if (!props.selectedPlan) return 0
+     const included = props.selectedPlan.agentIncluded
+     const actual    = upgradeStore.getAgentCount(
+          props.selectedPlan.id,
+          included
+     )
+     return Math.max(0, actual - included)
+})
+
 </script>
