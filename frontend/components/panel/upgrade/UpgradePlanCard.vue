@@ -60,7 +60,7 @@
                <p class="mt-0 mb-0 font-normal text-[12px] leading-[16px] tracking-[-0.01em] text-left">{{ plan.description }}</p>
           </div>
 
-          <div data-section="spacer" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
+          <div data-section="spacer" :class="[ 'bg-white px-[20px] pb-[0px] text-center flex flex-col justify-center items-start', borderClasses, orderClass(3) ]"></div>
 
           <!-- Prix -->
           <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start px-[20px] pb-[16px] pt-0', borderClasses, orderClass(4) ]">
@@ -79,12 +79,23 @@
                </p>
           </div>
           <!-- Sélecteur du nombre d'agent -->
-          <div data-section="price" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start px-[20px] pb-[16px] pt-0', borderClasses, orderClass(4) ]">
-               <PanelCommonSelectField v-model="conversationSelected" :options="conversationSelectField" option-key="value" option-label="label" placeholder="Sélectionnez le nombre de conversation" dropdown-class="min-w-[581px] max-w-[256px]">
+          <div data-section="agent" :class="[ 'bg-white px-[20px] pb-[16px] text-center flex flex-col justify-start items-start pt-0 w-full', borderClasses, orderClass(4) ]">
+               <PanelCommonSelectField v-model="conversationSelected" :options="conversationSelectField" option-key="value" option-label="label" placeholder="Sélectionnez le nombre d'agent " class="w-full">
                     <template #option="{ option }">
-                         <div class="css-1cctv59 e1et3p7j1" style="flex-shrink: 1; min-width: 0px;">
-                              <p class="e1et3p7j5 css-13w33j3 eimqq0f0">400 conversations facturables / mois</p><p color="subdued" class="css-1yjik4h eimqq0f0"><span class="css-0 e1q33r5y0"><span class="e1q33r5y2 css-m36gg3 e19wav3s0">+<span class="currency">€</span>25</span><span class="css-0 e1q33r5y1">/mois</span></span></p></div>
+                         <div class="flex flex-row justify-start items-center">
+                              <p class="text-[14px]">{{ option.label }}</p>
+                              <p
+                                   v-if="agentPrice(option.value) !== 0"
+                                   class="text-[12px] leading-[16px] tracking-[-0.01em] text-[rgb(100,116,145)] ml-[10px]"
+                              >
+                                   <span>
+                                        {{ agentPrice(option.value) > 0 ? "+" : "-" }}
+                                        {{ Math.abs(agentPrice(option.value) / 100) }} €
+                                   </span>
+                              </p>
+                         </div>
                     </template>
+
                </PanelCommonSelectField>
           </div>
 
@@ -162,6 +173,8 @@ interface Plan {
      includedModules?: string[],
      billingYear: boolean
      baseSubtitle: string
+     agentLimit: number
+     agentIncluded: number
 }
 const { t } = useI18n()
 const props = defineProps<{
@@ -171,14 +184,55 @@ const props = defineProps<{
      index: number
 }>()
 
-const conversationSelected = ref('400')
-const conversationSelectField = [
-     {
-          value: '400',
-          label: `400 conversations facturables / mois`,
-          price: '+ 25 € / mois',
+
+// Valeur sélectionnée par défaut = nombre d’agents inclus
+const conversationSelected = ref(String(props.plan.agentIncluded || 0))
+
+// Tarif unitaire d’un agent (en centimes)
+const unitPrice = 2500
+
+/**
+ * Calcule la différence de prix (en centimes) entre l’option
+ * et la sélection actuelle.
+ * >0 => supplément, <0 => remise
+ */
+function agentPrice(optionValue: string): number {
+     return (Number(optionValue) - Number(conversationSelected.value)) * unitPrice
+}
+
+// Génère les options à partir du nombre inclus jusqu'à la limite
+const conversationSelectField = computed(() => {
+     const included = props.plan.agentIncluded || 0
+     const limit    = props.plan.agentLimit
+     const opts = []
+
+     // 1) l’option baseline (inclus ou zéro)
+     if (included > 0) {
+          opts.push({
+               value: String(included),
+               label: `${included} agent${included > 1 ? 's' : ''} inclus`,
+               price: '0',
+          })
+     } else {
+          opts.push({
+               value: '0',
+               label: 'Aucun agent',
+               price: '0',
+          })
      }
-]
+
+     // 2) les agents supplémentaires (au-delà de l’inclus)
+     for (let i = included + 1; i <= limit; i++) {
+          opts.push({
+               value: String(i),
+               label: `${i} agent${i > 1 ? 's' : ''}`,
+               // calcul du prix additionnel : (i - inclus) × tarif unitaire
+               price: String((i - included) * 2500),
+          })
+     }
+
+     return opts
+})
 
 const emit = defineEmits(['selectPlan'])
 const panelStore = usePanelStore()

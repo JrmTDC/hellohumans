@@ -56,6 +56,8 @@ class UpgradeController {
                     popular: p.popular,
                     includedModules: p.included_modules,
                     billingYear: p.billing_year,
+                    agentLimit: p.agent_limit,
+                    agentIncluded: p.agent_included
                })),
           }
 
