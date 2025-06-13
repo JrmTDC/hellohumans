@@ -1,10 +1,17 @@
 import { HttpContext } from '@adonisjs/core/http'
 import supabase from '#services/supabaseService'
 
-function priceToNumber(row: any, cycle: 'month' | 'year'): number | null {
+function priceSubscriptionToNumber(row: any, cycle: 'month' | 'year'): number | null {
      try {
           const field = cycle === 'month' ? 'stripe_price_id_month' : 'stripe_price_id_year'
-          return row?.[field]?.default?.amount ? Number(row[field].default.amount) / 100 : null
+          return row?.[field]?.default?.amount_subscription ? Number(row[field].default.amount_subscription) / 100 : null
+     } catch (_) { return null }
+}
+
+function priceParUnitToNumber(row: any, cycle: 'month' | 'year'): number | null {
+     try {
+          const field = cycle === 'month' ? 'stripe_price_id_month' : 'stripe_price_id_year'
+          return row?.[field]?.default?.amount_per_unit ? Number(row[field].default.amount_per_unit) / 100 : null
      } catch (_) { return null }
 }
 
@@ -49,8 +56,10 @@ class UpgradeController {
                     id: p.id,
                     name: p.name?.[ctx.user.lang] ?? p.name?.en ?? 'Plan',
                     description: p.description?.[ctx.user.lang] ?? '',
-                    price_month: priceToNumber(p, 'month'),
-                    price_year: priceToNumber(p, 'year'),
+                    price_month: priceSubscriptionToNumber(p, 'month'),
+                    price_year: priceSubscriptionToNumber(p, 'year'),
+                    price_per_agent_month: priceParUnitToNumber(p, 'month'),
+                    price_per_agent_year: priceParUnitToNumber(p, 'year'),
                     includedFeatures: p.included_features?.[ctx.user.lang] ?? [],
                     baseSubtitle: p.base_subtitle?.[ctx.user.lang] ?? '',
                     popular: p.popular,
@@ -78,8 +87,8 @@ class UpgradeController {
                     key: m.key,
                     name: m.name?.[ctx.user.lang] ?? m.name?.fr ?? 'Module',
                     description: m.description?.[ctx.user.lang] ?? '',
-                    price_month: priceToNumber(m, 'month'),
-                    price_year:  priceToNumber(m, 'year'),
+                    price_month: priceSubscriptionToNumber(m, 'month'),
+                    price_year:  priceSubscriptionToNumber(m, 'year'),
                     multipleChoice: m.stripe_many_options,
                     choices: m.choices ?? [],
                     comingSoon: m.coming_soon,
