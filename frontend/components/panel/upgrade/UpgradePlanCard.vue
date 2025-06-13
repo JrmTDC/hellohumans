@@ -214,12 +214,12 @@ const conversationSelectField = computed(() => {
      }
 
      // 2) les agents supplémentaires (au-delà de l’inclus)
-     for (let i = included + 1; i <= limit; i++) {
+     const maxExtra = limit - included
+     for (let extra = 1; extra <= maxExtra; extra++) {
           opts.push({
-               value: String(i),
-               label: `${i} agent${i > 1 ? 's' : ''} supplémentaire${i > 1 ? 's' : ''}`,
-               // calcul du prix additionnel : (i - inclus) × tarif unitaire
-               price: String((i - included) * 2500),
+               value: String(included + extra),
+               label: `${extra} agent${extra > 1 ? 's' : ''} supplémentaire${extra > 1 ? 's' : ''}`,
+               price: String(extra * unitPrice),
           })
      }
 
