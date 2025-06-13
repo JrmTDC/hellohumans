@@ -1,0 +1,10 @@
+.hhcss_inbox_boxMessage .hhcss_boxMessage_lastDate::before {
+     content: "";
+     display: block;
+     border-top: 1px solid rgb(211, 219, 229);
+     position: relative;
+     top: 10px;
+}
+.hhcss_panel-inbox-conversations-unassigned, .hhcss_panel-inbox-conversations-operator, .hhcss_panel-inbox-conversations-solved{
+     height: 100%;
+}

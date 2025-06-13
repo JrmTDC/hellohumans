@@ -1,5 +1,5 @@
 <template>
-     <div class="text-[18px] leading-[23px] tracking-[-0.01em] min-w-[550px] max-w-[550px]">
+     <div class="text-[18px] leading-[23px] tracking-[-0.01em] max-w-[550px]">
           <h4 class="mt-0 mb-0 font-medium text-[32px] leading-[41px] tracking-[-0.01em]">{{ title }}</h4>
           <span class="block w-[32px] min-w-[32px] h-[32px] min-h-[32px]"></span>
           <p>{{ description }}</p>

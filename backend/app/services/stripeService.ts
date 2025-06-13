@@ -72,6 +72,13 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
      const desired = desiredRaw.filter(Boolean) // safety
      const userLang = ctx.user?.lang ?? 'en'
 
+     const checkSameCycle = async (priceIds: string[]) => {
+          const prices = await Promise.all(priceIds.map(id => stripe.prices.retrieve(id)))
+          const intervals = prices.map(p => p.recurring?.interval + ':' + p.recurring?.interval_count)
+          const unique = [...new Set(intervals)]
+          if (unique.length > 1) throw new Error('Mixed billing intervals are not allowed in a subscription')
+     }
+
      /* ---------------- NO SUB ---------------- */
      if(!ctx.subscription?.stripe_subscription_id){
           const tot = await Promise.all(desired.map(id=>stripe.prices.retrieve(id)))
@@ -89,6 +96,24 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
      /* ---- preview immediate (add) ---- */
      let debitBy:Record<string,number>={}, creditBy:Record<string,number>={}, invNow=''
      if(add.length){
+
+          const currentInterval = sub.items.data[0]?.price.recurring?.interval
+          const currentIntervalCount = sub.items.data[0]?.price.recurring?.interval_count
+          const validAdd = await Promise.all(
+               add.map(async priceId => {
+                    const price = await stripe.prices.retrieve(priceId)
+                    if (
+                         price.recurring?.interval === currentInterval &&
+                         price.recurring?.interval_count === currentIntervalCount
+                    ) {
+                         return price.id
+                    } else {
+                         console.warn(`❌ Prix ignoré (interval non compatible) : ${price.id}`)
+                         return null
+                    }
+               })
+          ).then(res => res.filter(Boolean))
+
           /* reconcile — on référence les items existants pour remove */
           const itemsForPrev = [
                ...sub.items.data.map(it=>{
@@ -98,7 +123,7 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
                          return { id: it.id }
                     return null
                }).filter(Boolean),
-               ...add.map(price=>({ price })),
+               ...validAdd.map(price=>({ price })),
           ] as Stripe.InvoiceCreatePreviewParams.SubscriptionDetails.Item[]
 
           const prev = await stripe.invoices.createPreview({
@@ -185,17 +210,20 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
 
      modsRows?.forEach((mod) => {
           const block = opts.cycle === 'month' ? mod.stripe_price_id_month : mod.stripe_price_id_year
-          if (block && typeof block === 'object') {
-               for (const optKey in block) {
-                    const priceId = block[optKey]?.id
-                    if (priceId) priceToModule[priceId] = mod.id
-               }
-          }
+          if (!block || typeof block !== 'object') return
+
+          Object.entries(block).forEach(([key, val]) => {
+               if (val?.id) priceToModule[val.id] = mod.id
+          })
      })
 
      // Ajoute cette ligne AVANT moduleCurrent pour éviter que le plan ne soit pris dedans
      const planPriceIds: string[] = []
      const planBlock = opts.cycle === 'month' ? planRow?.stripe_price_id_month : planRow?.stripe_price_id_year
+
+     console.log('ooooooooooooooooo')
+     console.log('planBlock', planBlock)
+
      if (planBlock && typeof planBlock === 'object') {
           for (const key in planBlock) {
                const priceId = planBlock[key]?.id
@@ -214,6 +242,8 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
           ? currentPlanRow?.stripe_price_id_month
           : currentPlanRow?.stripe_price_id_year
 
+     console.log('ooooooooooooooooo')
+     console.log('currentPlanBlock', currentPlanBlock)
      if (currentPlanBlock && typeof currentPlanBlock === 'object') {
           for (const key in currentPlanBlock) {
                const priceId = currentPlanBlock[key]?.id
@@ -226,10 +256,6 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
 
      let planChange = null
      let planNextObj = null
-     console.log(ctx.subscription)
-     console.log('[previewChange] planCur:', planCur, 'planNext:', planNext)
-     //console.log(planRow)
-     console.log(remove)
 
      if (planCur === planNext) {
           // Aucun changement de plan
@@ -343,6 +369,8 @@ export async function previewChange(opts:{ planId:string; modules:{id:string;opt
 
      const totalDebit = Object.values(debitBy).reduce((s, n) => s + n, 0)
      const totalCredit = Object.values(creditBy).reduce((s, n) => s + n, 0)
+
+     await checkSameCycle(desired)
 
      return {
           total: centsToEuro(totalDebit),

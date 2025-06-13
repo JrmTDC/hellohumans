@@ -9,7 +9,7 @@
                <PanelLayoutMenuNavPage />
                <div class="app-content-wrapper items-stretch bg-[#f5f7f9] flex flex-1 flex-col justify-start max-w-[calc(100%-65px)] overflow-hidden relative">
                     <PanelLayoutHeaderPage :title="pageHeaderTitle" :isBilled="pageHeaderBilled" :isPaid="pageHeaderPaid" />
-                    <div class="app-content">
+                    <div class="app-content" :class="`hhcss_${pageSlug}`">
                          <slot />
                     </div>
                </div>
@@ -25,6 +25,10 @@
 const { t } = useI18n()
 const panelStore = usePanelStore()
 const router = useRouter()
+const route = useRoute()
+const pageSlug = computed(() => {
+     return route.name?.toString().toLowerCase().replace(/\s+/g, '-') || 'default'
+})
 
 const layoutLoadingPanel = useState('layoutLoadingPanel', () => true)
 const isAccountError = useState('isAccountError', () => false)
