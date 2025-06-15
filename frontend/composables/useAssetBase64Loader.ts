@@ -1,6 +1,10 @@
 const allAssets = {
      ...import.meta.glob('~/assets/**/*.svg', { query: '?raw', import: 'default', eager: true }),
-     ...import.meta.glob('~/assets/**/*.{gif,png,jpg,jpeg}', { query: '?arrayBuffer', import: 'default', eager: true }),
+     ...import.meta.glob('~/assets/**/*.{gif,png,jpg,jpeg}', {
+          query: '?url',
+          import: 'default',
+          eager: true
+     }),
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -27,11 +31,20 @@ export async function useAssetBase64Loader(name: string): Promise<string | null>
      const [path, contentRaw] = entry
      const content = isPromise(contentRaw) ? await contentRaw : contentRaw
 
+
+     function getExtension(path: string): string {
+          const match = path.match(/\.(gif|png|jpe?g)$/i)
+          return match?.[1] ?? 'jpeg' // fallback si jamais
+     }
+
      if (path.endsWith('.svg')) {
           return svgTextToBase64(content as string)
-     } else if (/\.(gif|png|jpe?g)$/.test(path)) {
-          const ext = path.split('.').pop()
-          const base64 = arrayBufferToBase64(content as ArrayBuffer)
+     } else if (/\.(gif|png|jpe?g)$/i.test(path)) {
+          const ext = getExtension(path)
+          const response = await fetch(content as string)
+          const buffer = await response.arrayBuffer()
+
+          const base64 = arrayBufferToBase64(buffer)
           return `data:image/${ext};base64,${base64}`
      }
 
