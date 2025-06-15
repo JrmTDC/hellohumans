@@ -93,6 +93,12 @@
                                    </div>
                                    <div class="text-[#647491] cursor-default italic break-words p-[8px] text-center select-none text-[14px]">Le visiteur a rouvert la conversation à 14:00</div>
                               </div>
+                              <div class="grid grid-rows-[1fr] items-start transition-[grid-template-rows] duration-200 ease-in-out">
+                                   <div class="relative px-[8px] py-[8px] pl-[34px] rounded-tl-[4px] rounded-tr-[4px] bg-[rgb(220,233,255)] text-[rgb(0,20,51)] text-[14px] leading-[1.28571429] tracking-[-0.01em]">
+                                        <SvgoPanelInboxIconInfo class="absolute top-[8px] left-[8px] w-[18px] h-[18px] min-w-[18px] min-h-[18px] fill-[#0566ff] " />
+                                        Le visiteur est hors ligne et sera informé par e-mail des messages non lus.
+                                   </div>
+                              </div>
                               <div>
                                    <div class="w-full bg-white transition-[border-color,background-color] relative min-h-[143px] flex-shrink-0 flex flex-col h-full">
                                         <div class="flex items-center px-[16px] pt-[4px] pb-[3px] border-b border-[rgb(239,242,246)]"></div>

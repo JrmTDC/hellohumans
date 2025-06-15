@@ -6,6 +6,10 @@
                     :key="item.id"
                     class="relative max-h-[130px]"
                >
+                    <div class="absolute inset-0 bg-[rgb(239,242,246)] z-[6] opacity-90 flex justify-center items-center text-[rgb(8,15,26)] px-[20px] pt-[16px] pb-[12px] mx-[12px] my-0 rounded-[8px] text-center text-[14px] leading-[1.28571429] tracking-[-0.01em]">
+                         Déplacé vers&nbsp;<SvgoPanelInboxIconOpen class="w-[12px] h-[12px] ml-[5px] mr-[5px]" />&nbsp;Ouverts !
+                    </div>
+
                     <NuxtLink
                          :to="item.link"
                          class="m-[0px_12px_4px] p-[12px_12px_12px_40px] block relative rounded-[8px] text-[#080f1a] bg-[#f5f7f9]"
